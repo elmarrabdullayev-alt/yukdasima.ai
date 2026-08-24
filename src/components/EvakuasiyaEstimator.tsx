@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { EvakuasiyaFormData, EvakuasiyaResult, CarType } from '../types';
 import { calculateEvakuasiyaEstimate, generateWhatsAppLink } from '../utils/calculator';
+import { findDestinationSuggestions } from '../services/destinationResolver';
 import { POPULAR_LOCATIONS } from '../data/mockData';
 
 interface EvakuasiyaEstimatorProps {
@@ -62,14 +63,24 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({ onOpen
   };
 
   const handleWhatsAppOrder = () => {
-    const msg = `Salam, yukdasima.ai üzərindən evakuasiya xidməti sifariş etmək istəyirəm.\n` +
+    const isMissing = result?.hasMissingTariff;
+    const distancePart = result?.distanceKm ? `📏 Təxmini məsafə: ${result.distanceKm} km\n` : '';
+    const notesPart = formData.conditionNotes ? `📝 Vəziyyət: ${formData.conditionNotes}\n` : '';
+
+    let msg = `Salam, yukdasima.ai üzərindən evakuasiya xidməti sifariş etmək istəyirəm.\n` +
       `📍 Marşrut: ${formData.fromAddress} ➔ ${formData.toAddress}\n` +
-      `📏 Təxmini məsafə: ${result?.distanceKm || 18} km\n` +
+      distancePart +
       `🚗 Avtomobil: ${formData.carType}\n` +
       `⚙️ Hərəkət vəziyyəti: ${formData.canMove}\n` +
-      (formData.conditionNotes ? `📝 Vəziyyət: ${formData.conditionNotes}\n` : '') +
-      `💰 İlkin qiymət: ${result?.estimatedPrice || '35-45 AZN'}\n` +
-      `Zəhmət olmasa təcili evakuator göndərə bilərsiniz?`;
+      notesPart;
+
+    if (isMissing) {
+      msg += `💰 Qiymət: Dəqiq qiymət tələb olunur\n` +
+        `Zəhmət olmasa bu marşrut üçün dəqiq evakuator qiymətini və mövcudluğunu bildirə bilərsiniz?`;
+    } else {
+      msg += `💰 İlkin qiymət: ${result?.estimatedPrice || '35 AZN-dən'}\n` +
+        `Zəhmət olmasa təcili evakuator göndərə bilərsiniz?`;
+    }
 
     window.open(generateWhatsAppLink(msg), '_blank');
   };
@@ -138,6 +149,26 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({ onOpen
               placeholder="Məsələn: Xırdalan"
               className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm bg-slate-50/50 outline-none"
             />
+            {/* Dynamic Search Suggestions */}
+            {formData.toAddress.trim().length >= 2 && (() => {
+              const dynamicSuggestions = findDestinationSuggestions(formData.toAddress, 5);
+              if (dynamicSuggestions.length === 0) return null;
+              return (
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="text-[11px] text-blue-700 font-bold">Təkliflər:</span>
+                  {dynamicSuggestions.map((s) => (
+                    <button
+                      key={s.canonicalName}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, toAddress: s.canonicalName })}
+                      className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[11px] text-blue-700 font-bold hover:bg-blue-100 transition-colors cursor-pointer"
+                    >
+                      {s.canonicalName}
+                    </button>
+                  ))}
+                </div>
+              );
+            })()}
             {/* Quick Location Chips */}
             <div className="flex flex-wrap gap-1.5 pt-1">
               {['Xırdalan', 'Sumqayıt', 'Əhmədli', 'Masazır', 'Mərdəkan'].map((loc) => (
@@ -274,23 +305,40 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({ onOpen
       {result && !isCalculating && (
         <div
           id="evakuasiya-result-card"
-          className="mt-10 rounded-2xl border-2 border-blue-600 bg-linear-to-b from-white to-blue-50/40 p-6 sm:p-8 shadow-xl animate-in fade-in zoom-in-95 duration-300"
+          className={`mt-10 rounded-2xl border-2 p-6 sm:p-8 shadow-xl animate-in fade-in zoom-in-95 duration-300 ${
+            result.hasMissingTariff
+              ? 'border-amber-400 bg-linear-to-b from-white to-amber-50/30'
+              : 'border-blue-600 bg-linear-to-b from-white to-blue-50/40'
+          }`}
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-200">
             <div>
-              <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold uppercase tracking-wide mb-1">
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Marşrut təyin edildi</span>
-              </div>
+              {result.hasMissingTariff ? (
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wide mb-1">
+                  <AlertCircle className="w-3.5 h-3.5 text-amber-700" />
+                  <span>Operator dəqiqləşdirməsi</span>
+                </div>
+              ) : (
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold uppercase tracking-wide mb-1">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>Marşrut təyin edildi</span>
+                </div>
+              )}
               <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
                 İlkin evakuasiya qiyməti
               </h3>
             </div>
             <div className="text-left sm:text-right">
               <span className="text-xs text-slate-500 font-bold uppercase tracking-wider block">İlkin qiymət</span>
-              <span className="text-3xl sm:text-4xl font-black text-blue-600 tracking-tight">
-                {result.estimatedPrice}
-              </span>
+              {result.hasMissingTariff ? (
+                <span className="text-base sm:text-lg font-bold text-amber-700 tracking-tight block">
+                  {result.estimatedPrice}
+                </span>
+              ) : (
+                <span className="text-3xl sm:text-4xl font-black text-blue-600 tracking-tight block">
+                  {result.estimatedPrice}
+                </span>
+              )}
             </div>
           </div>
 
@@ -306,7 +354,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({ onOpen
             <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs">
               <span className="text-xs text-slate-500 font-medium block">Təxmini məsafə</span>
               <span className="text-base sm:text-lg font-bold text-slate-900 mt-1 block">
-                {result.distanceKm} km
+                {result.distanceKm ? `${result.distanceKm} km` : 'Dəqiqləşdirilir'}
               </span>
             </div>
 
@@ -319,12 +367,26 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({ onOpen
           </div>
 
           {/* DISCLAIMER */}
-          <div className="mt-5 p-3.5 rounded-xl bg-slate-100/90 border border-slate-200/80 flex items-start gap-2.5 text-xs text-slate-600">
-            <AlertCircle className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
-            <p>
-              <strong>Qeyd:</strong> Qiymət marşrut və təqdim olunan məlumatlar əsasında ilkin hesablamadır. Yekun qiymət operator tərəfindən təsdiqlənir.
-            </p>
-          </div>
+          {result.hasMissingTariff ? (
+            <div className="mt-5 p-3.5 rounded-xl bg-amber-50 border border-amber-200/80 flex items-start gap-2.5 text-xs text-amber-900">
+              <AlertCircle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+              <div>
+                <p className="font-semibold">
+                  {result.tariffDisclaimer || 'Bu istiqamət üçün avtomatik evakuasiya tarifi mövcud deyil.'}
+                </p>
+                <p className="mt-0.5 text-amber-800">
+                  Dəqiq qiymət üçün bizimlə əlaqə saxlayın.
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-5 p-3.5 rounded-xl bg-slate-100/90 border border-slate-200/80 flex items-start gap-2.5 text-xs text-slate-600">
+              <AlertCircle className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
+              <p>
+                <strong>Qeyd:</strong> Qiymət marşrut və mərkəzləşdirilmiş tarif bazası əsasında ilkin hesablamadır. Yekun qiymət operator tərəfindən təsdiqlənir.
+              </p>
+            </div>
+          )}
 
           {/* ACTIONS */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3.5">

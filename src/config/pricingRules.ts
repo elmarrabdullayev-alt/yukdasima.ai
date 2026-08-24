@@ -51,7 +51,7 @@ export const BUSINESS_PRICING_RULES: BusinessPricingRules = {
 
   assemblyDisclaimer: 'Mebelin sökülməsi və yığılması usta xidmətidir və ayrıca hesablanır.',
   intercityWorkerDisclaimer: 'Rayonlararası sifarişlərdə fəhlə xidmətinin qiyməti ayrıca hesablanır.',
-  missingTariffDisclaimer: 'Bu istiqamət üçün avtomatik tarif mövcud deyil. Dəqiq qiymət üçün bizimlə əlaqə saxlayın.',
+  missingTariffDisclaimer: 'Bu marşrut üçün avtomatik qiymət mövcud deyil. Dəqiq qiymət üçün bizimlə əlaqə saxlayın.',
   overloadMessage: 'Yük həcminiz böyükdür. Uyğun avtomobil və ya bir neçə reys üçün mütəxəssis təsdiqi tələb olunur.',
   largeItemFitWarning: 'Yük həcminə əsasən avtomobil seçilib, lakin iri ölçülü əşya aşkarlandığı üçün avtomobil ölçüsü mütəxəssis tərəfindən təsdiqlənməlidir.',
 

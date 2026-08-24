@@ -122,10 +122,14 @@ export interface EvakuasiyaFormData {
 export interface EvakuasiyaResult {
   fromAddress: string;
   toAddress: string;
-  distanceKm: number;
+  distanceKm?: number;
   carType: string;
   canMove: 'Bəli' | 'Xeyr';
   estimatedPrice: string;
+  hasMissingTariff?: boolean;
+  tariffDisclaimer?: string;
+  isIntercity?: boolean;
+  rawPrice?: number | null;
 }
 
 export interface FaqItem {

@@ -11,6 +11,13 @@
  */
 
 import tariffDatabaseV1 from '../data/yukdasima_ai_tarif_bazasi_v1.json';
+import {
+  resolveDestination,
+  getCanonicalDestinations,
+  isBakuOrigin,
+  classifyRoute,
+  DestinationResolutionResult
+} from './destinationResolver';
 
 export interface RoutePriceMatrix {
   '2m': number | null;
@@ -52,6 +59,14 @@ function generateAliases(name: string): string[] {
   const aliases = new Set<string>();
   aliases.add(clean);
 
+  // Split by / or , or -
+  if (clean.includes('/')) {
+    clean.split('/').forEach((part) => {
+      const p = part.trim();
+      if (p) aliases.add(p);
+    });
+  }
+
   // Strip parentheses e.g. "Qobustan (Şamaxı)" -> "qobustan", "şamaxı"
   if (clean.includes('(') && clean.includes(')')) {
     const main = clean.replace(/\([^)]*\)/g, '').trim();
@@ -61,17 +76,30 @@ function generateAliases(name: string): string[] {
   }
 
   // Transliteration variants: ə -> e, ı -> i, ö -> o, ü -> u, ğ -> g, ç -> c, ş -> s
-  const translit = clean
-    .replace(/ə/g, 'e')
-    .replace(/ı/g, 'i')
-    .replace(/ö/g, 'o')
-    .replace(/ü/g, 'u')
-    .replace(/ğ/g, 'g')
-    .replace(/ç/g, 'c')
-    .replace(/ş/g, 's');
-  aliases.add(translit);
+  Array.from(aliases).forEach((a) => {
+    const translit = a
+      .replace(/ə/g, 'e')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ü/g, 'u')
+      .replace(/ğ/g, 'g')
+      .replace(/ç/g, 'c')
+      .replace(/ş/g, 's');
+    aliases.add(translit);
 
-  return Array.from(aliases);
+    const latinShCh = a
+      .replace(/ş/g, 'sh')
+      .replace(/ç/g, 'ch')
+      .replace(/x/g, 'kh')
+      .replace(/ə/g, 'e')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ü/g, 'u')
+      .replace(/ğ/g, 'gh');
+    aliases.add(latinShCh);
+  });
+
+  return Array.from(aliases).filter((a) => a.length >= 2);
 }
 
 /**
@@ -102,7 +130,14 @@ function loadActiveTariffDatabase(): TariffDatabase {
       'bakı', 'baki', 'baku', 'şəhərdaxili', 'seherdaxili', 'nərimanov', 'yasamal', 'nəsimi', 'xətai', 'səbail', 
       'binəqədi', 'nizami', 'sabunçu', 'suraxanı', 'xəzər', 'pirallahı',
       'nerimanov', 'nesimi', 'xetai', 'sebail', 'bineqedi', 'sabuncu', 'suraxani', 'xezer',
-      'əhmədli', 'ehmedli', 'həzi aslanov', 'elmlər', '28 may', 'gənclik', 'genclik'
+      'əhmədli', 'ehmedli', 'həzi aslanov', 'elmlər', '28 may', 'gənclik', 'genclik',
+      'koroğlu', 'koroglu', 'bakıxanov', 'bakixanov', 'inşaatçılar', 'insaatcilar', 'sahil',
+      'içərişəhər', 'iceriseher', 'memar əcəmi', 'memar ecemi', 'dərnəgül', 'dernegul',
+      'xalqlar dostluğu', 'xalqlar dostlugu', 'neftçilər', 'neftciler', 'qara qarayev',
+      'köhnə günəşli', 'kohne gunesli', 'yeni günəşli', 'yeni gunesli', 'badamdar', 'bayıl', 'bayil',
+      'bibiheybət', 'bibiheybet', 'lökbatan', 'lokbatan', 'hövsan', 'hovsan', 'zığ', 'zig',
+      'bülbülə', 'bulbule', 'əmircan', 'emircan', 'ramana', 'zabrat', 'kürdəxanı', 'kurdexani',
+      'pirşağı', 'pirsagi', 'nardaran', 'biləcəri', 'bileceri', 'binə', 'bine'
     ],
   });
 
@@ -123,7 +158,7 @@ function loadActiveTariffDatabase(): TariffDatabase {
       evacuator: 40,
       tir: 190,
     },
-    aliases: ['xırdalan', 'xirdalan', 'masazır', 'masazir', 'saray', 'qobu', 'hökməli', 'hokmeli', 'sulutəpə', 'sulutepe'],
+    aliases: ['xırdalan', 'xirdalan', 'khirdalan', 'masazır', 'masazir', 'saray', 'qobu', 'hökməli', 'hokmeli', 'sulutəpə', 'sulutepe'],
   });
 
   routes.push({
@@ -143,7 +178,30 @@ function loadActiveTariffDatabase(): TariffDatabase {
       evacuator: 55,
       tir: 220,
     },
-    aliases: ['sumqayıt', 'sumqayit', 'novxanı', 'novxani', 'corat', 'hacı zeynalabdin', 'tagiyev', 'yaşma', 'yasma'],
+    aliases: ['sumqayıt', 'sumqayit', 'sumgayit', 'novxanı', 'novxani', 'corat', 'jorat', 'hacı zeynalabdin', 'tagiyev'],
+  });
+
+  routes.push({
+    id: 'route-absheron-peninsula',
+    zone: 'Bakı və Abşeron',
+    origin: 'Bakı',
+    destination: 'Abşeron qəsəbələri (Mərdəkan, Bilgəh, Şüvəlan)',
+    distanceKm: 32,
+    isIntercity: false,
+    prices: {
+      '2m': 35,
+      '3m': 50,
+      '4m': 70,
+      '5m': 90,
+      '6m': 115,
+      '7m': 140,
+      evacuator: 45,
+      tir: 200,
+    },
+    aliases: [
+      'mərdəkan', 'merdekan', 'bilgəh', 'bilgeh', 'şüvəlan', 'suvelan', 'shuvelan', 'zagulba', 'zağulba', 
+      'buzovna', 'qala', 'türkan', 'turkan', 'zirə', 'zire', 'dübəndi', 'dubendi', 'maştağa', 'mastaga', 'mashtaga'
+    ],
   });
 
   // 2. Parse Regional Tariffs from V1 JSON
@@ -187,66 +245,110 @@ function loadActiveTariffDatabase(): TariffDatabase {
 export const ACTIVE_TARIFF_DATABASE = loadActiveTariffDatabase();
 
 /**
+ * Helper to clean and normalize search text
+ */
+function cleanSearchText(text: string): string {
+  return (text || '')
+    .toLowerCase()
+    .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/**
  * Get all destination names available for autocomplete/search
  */
 export function getAvailableDestinations(): string[] {
-  return ACTIVE_TARIFF_DATABASE.routes.map((r) => r.destination);
+  return getCanonicalDestinations();
 }
 
 /**
  * Deterministic Route Lookup Service
- * Finds a matching route from the active tariff database.
+ * Finds a matching route from the active tariff database via centralized destinationResolver.
  * Does NOT guess or interpolate. Returns null if not found.
+ * 
+ * Precedence and Rules:
+ * 1. Both fromAddress and toAddress empty -> return null.
+ * 2. Origin classification via isBakuOrigin(fromAddress):
+ *    - The current regional tariff database strictly represents routes originating from BAKI.
+ *    - If origin is NOT Bakı (e.g. Sumqayıt, Gəncə, Quba, Xırdalan, etc.):
+ *      Check for an explicit origin-destination matching route. In V1 database, none exist, so return null.
+ * 3. When origin IS Bakı:
+ *    - If toAddress resolves to 'Bakı (şəhərdaxili)' or is empty -> return route-baku-local
+ *    - If toAddress resolves to a regional or suburban canonical destination (e.g., Ağdaş, Gəncə, Sumqayıt, Xırdalan):
+ *      Find route in database where origin is 'Bakı' and destination matches canonical name.
+ *    - If toAddress has Baku street/district markers without regional keywords -> return route-baku-local
+ * 4. Return null if no route is found in the database.
  */
 export function lookupRouteTariff(fromAddress: string, toAddress: string): UnifiedRouteTariff | null {
-  const normFrom = (fromAddress || '').trim().toLowerCase();
-  const normTo = (toAddress || '').trim().toLowerCase();
+  const normFrom = cleanSearchText(fromAddress);
+  const normTo = cleanSearchText(toAddress);
 
   if (!normTo && !normFrom) {
     return null;
   }
 
-  // Priority 1: Match toAddress against specific regional/suburban routes (excluding generic Baku local)
-  for (const route of ACTIVE_TARIFF_DATABASE.routes) {
-    if (route.id === 'route-baku-local') continue;
+  // Check if origin resolves to Bakı
+  const originIsBaku = isBakuOrigin(fromAddress);
 
-    if (normTo.includes(route.destination.toLowerCase())) {
-      return route;
+  // If origin is NOT Bakı (e.g. Sumqayıt -> Ağdaş, Gəncə -> Ağdaş, Quba -> Gəncə)
+  if (!originIsBaku) {
+    // Only return if an explicit non-Baku origin-destination tariff exists
+    const resolvedFrom = resolveDestination(fromAddress);
+    const resolvedTo = normTo ? resolveDestination(toAddress) : null;
+
+    if (resolvedFrom && resolvedTo) {
+      const explicitRoute = ACTIVE_TARIFF_DATABASE.routes.find(
+        (r) =>
+          r.origin.toLowerCase() === resolvedFrom.canonicalName.toLowerCase() &&
+          r.destination.toLowerCase() === resolvedTo.canonicalName.toLowerCase()
+      );
+      if (explicitRoute) {
+        return explicitRoute;
+      }
     }
-    for (const alias of route.aliases) {
-      if (alias.length >= 3 && normTo.includes(alias)) {
+    // No explicit route configured for non-Bakı origin -> strictly null (no fallback to Bakı)
+    return null;
+  }
+
+  // Origin IS Bakı: match destination
+  if (normTo) {
+    const resolvedTo = resolveDestination(toAddress);
+    if (resolvedTo) {
+      if (resolvedTo.canonicalName === 'Bakı (şəhərdaxili)') {
+        const localBaku = ACTIVE_TARIFF_DATABASE.routes.find((r) => r.id === 'route-baku-local');
+        if (localBaku) return localBaku;
+      }
+
+      // Find matching route in database originating from Bakı
+      const route = ACTIVE_TARIFF_DATABASE.routes.find(
+        (r) =>
+          r.origin.toLowerCase() === 'bakı' &&
+          r.destination.toLowerCase() === resolvedTo.canonicalName.toLowerCase()
+      );
+      if (route) {
         return route;
       }
     }
-  }
 
-  // Priority 2: Match fromAddress against specific regional/suburban routes (excluding generic Baku local)
-  for (const route of ACTIVE_TARIFF_DATABASE.routes) {
-    if (route.id === 'route-baku-local') continue;
+    // Check Baku local districts/markers
+    const localBaku = ACTIVE_TARIFF_DATABASE.routes.find((r) => r.id === 'route-baku-local');
+    if (localBaku) {
+      const isToLocal = localBaku.aliases.some((alias) => normTo === alias || normTo.includes(alias));
+      const bakuMarkers = ['küç', 'kuc', 'pr ', 'prospekt', 'mkr', 'mikrorayon', 'bina', 'otaq', 'mərkəz', 'merkez'];
+      const hasMarker = bakuMarkers.some((m) => normTo.includes(m));
 
-    if (normFrom.includes(route.destination.toLowerCase())) {
-      return route;
-    }
-    for (const alias of route.aliases) {
-      if (alias.length >= 3 && normFrom.includes(alias)) {
-        return route;
+      if (isToLocal || hasMarker) {
+        return localBaku;
       }
     }
+  } else {
+    // Destination is empty, origin is Baku -> default to Baku local
+    const localBaku = ACTIVE_TARIFF_DATABASE.routes.find((r) => r.id === 'route-baku-local');
+    if (localBaku) return localBaku;
   }
 
-  // Priority 3: Match Baku local route
-  const localRoute = ACTIVE_TARIFF_DATABASE.routes.find((r) => r.id === 'route-baku-local');
-  if (localRoute) {
-    const isToLocal = localRoute.aliases.some((alias) => normTo.includes(alias));
-    const isFromLocal = localRoute.aliases.some((alias) => normFrom.includes(alias));
-    const bakuMarkers = ['küç', 'kuc', 'pr.', 'prospekt', 'mkr', 'mikrorayon', 'bina', 'otaq', 'mərkəz', 'merkez'];
-    const hasMarker = bakuMarkers.some((m) => normTo.includes(m) || normFrom.includes(m));
-
-    if (isToLocal || isFromLocal || hasMarker || (normFrom && !normTo)) {
-      return localRoute;
-    }
-  }
-
+  // Unsupported route -> return null
   return null;
 }
 
@@ -265,4 +367,95 @@ export function lookupVehiclePrice(
     return null;
   }
   return price;
+}
+
+export interface EvacuatorPriceLookupResult {
+  price: number | null;
+  displayPrice: string;
+  hasMissingTariff: boolean;
+  disclaimer?: string;
+  isIntercity: boolean;
+  distanceKm?: number;
+}
+
+/**
+ * Deterministic Evacuator Tariff Lookup
+ * 
+ * Rules:
+ * 1. For Bakı -> rayon (regional routes): reads ONLY prices_azn.evacuator from the regional database.
+ * 2. If evacuator tariff is null/missing or route unsupported:
+ *    display: "Dəqiq qiymət üçün bizimlə əlaqə saxlayın."
+ *    disclaimer: "Bu marşrut üçün avtomatik qiymət mövcud deyil."
+ * 3. For Bakı local area:
+ *    - Bakı şəhərdaxili: "35 AZN-dən" (35 AZN base)
+ *    - Xırdalan: 40 AZN
+ *    - Sumqayıt: 55 AZN
+ *    - Abşeron qəsəbələri: 45 AZN
+ * 4. NEVER falls back to 50 AZN or Bakı regional tariffs for non-Bakı origins.
+ */
+export function lookupEvacuatorTariff(fromAddress: string, toAddress: string): EvacuatorPriceLookupResult {
+  const route = lookupRouteTariff(fromAddress, toAddress);
+
+  if (!route) {
+    return {
+      price: null,
+      displayPrice: 'Dəqiq qiymət üçün bizimlə əlaqə saxlayın.',
+      hasMissingTariff: true,
+      disclaimer: 'Bu marşrut üçün avtomatik qiymət mövcud deyil.',
+      isIntercity: false,
+    };
+  }
+
+  const evacPrice = route.prices.evacuator;
+
+  if (route.isIntercity) {
+    if (evacPrice !== null && evacPrice !== undefined && evacPrice > 0) {
+      return {
+        price: evacPrice,
+        displayPrice: `${evacPrice} AZN`,
+        hasMissingTariff: false,
+        isIntercity: true,
+        distanceKm: route.distanceKm || undefined,
+      };
+    } else {
+      return {
+        price: null,
+        displayPrice: 'Dəqiq qiymət üçün bizimlə əlaqə saxlayın.',
+        hasMissingTariff: true,
+        disclaimer: 'Bu marşrut üçün avtomatik qiymət mövcud deyil.',
+        isIntercity: true,
+        distanceKm: route.distanceKm || undefined,
+      };
+    }
+  }
+
+  // Local Baku & suburban routes
+  if (route.id === 'route-baku-local') {
+    return {
+      price: 35,
+      displayPrice: '35 AZN-dən',
+      hasMissingTariff: false,
+      isIntercity: false,
+      distanceKm: 15,
+    };
+  }
+
+  if (evacPrice !== null && evacPrice !== undefined && evacPrice > 0) {
+    return {
+      price: evacPrice,
+      displayPrice: `${evacPrice} AZN`,
+      hasMissingTariff: false,
+      isIntercity: false,
+      distanceKm: route.distanceKm || undefined,
+    };
+  }
+
+  return {
+    price: null,
+    displayPrice: 'Dəqiq qiymət üçün bizimlə əlaqə saxlayın.',
+    hasMissingTariff: true,
+    disclaimer: 'Bu marşrut üçün avtomatik qiymət mövcud deyil.',
+    isIntercity: false,
+    distanceKm: route.distanceKm || undefined,
+  };
 }

@@ -1,8 +1,9 @@
 import React from 'react';
-import { Truck, Car, Phone, MessageSquare, MapPin, Clock, ShieldCheck, Heart } from 'lucide-react';
+import { Truck, Car, Phone, MessageSquare, MapPin, Clock } from 'lucide-react';
 import { ServiceType } from '../types';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { CONTACT_INFO } from '../constants/contact';
+import { Link } from '../router/RouterContext';
 
 interface FooterProps {
   onSelectService: (service: ServiceType) => void;
@@ -10,34 +11,24 @@ interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback }) => {
-  const scrollToSection = (id: string) => {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  const handleNavService = (service: ServiceType) => {
-    onSelectService(service);
-    scrollToSection('estimator-section');
-  };
-
   const handleWhatsApp = () => {
     window.open(generateWhatsAppLink('Salam, yukdasima.ai xidmətləri ilə bağlı məlumat almaq istəyirəm.'), '_blank');
   };
 
   return (
-    <footer className="bg-white text-slate-500 pt-16 pb-28 md:pb-16 border-t border-slate-200">
+    <footer className="bg-white text-slate-500 pt-16 pb-28 md:pb-16 border-t border-slate-200" aria-label="Sayt Haşiyəsi">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           {/* Brand Col */}
           <div className="lg:col-span-2 space-y-4">
-            <div className="flex items-center gap-2.5">
+            <Link href="/" className="inline-flex items-center gap-2.5">
               <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-xl shadow-xs">
                 <Truck className="w-5 h-5" />
               </div>
               <span className="text-2xl font-bold tracking-tight text-blue-700">
                 yukdasima<span className="text-slate-900">.ai</span>
               </span>
-            </div>
+            </Link>
 
             <p className="text-sm text-slate-500 leading-relaxed max-w-sm">
               Azərbaycan üzrə yükdaşıma və 24/7 operativ evakuasiya xidmətlərinin ilkin qiymətləndirilməsi və sürətli sifariş platforması.
@@ -70,49 +61,62 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-600">
               <li>
-                <button
-                  type="button"
-                  onClick={() => handleNavService('yukdasima')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                <Link
+                  href="/yukdasima"
+                  onClick={() => onSelectService('yukdasima')}
+                  className="hover:text-blue-600 transition-colors"
                 >
-                  Mənzil daşınması
-                </button>
+                  Yükdaşıma Xidməti
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => handleNavService('yukdasima')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                <Link
+                  href="/evden-eve-yukdasima"
+                  className="hover:text-blue-600 transition-colors"
+                >
+                  Evdən evə yükdaşıma
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/mebel-dasinmasi"
+                  className="hover:text-blue-600 transition-colors"
                 >
                   Mebel daşınması & Usta
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => handleNavService('yukdasima')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                <Link
+                  href="/ofis-dasinmasi"
+                  className="hover:text-blue-600 transition-colors"
                 >
-                  Ofis köçürülməsi
-                </button>
+                  Ofis daşınması
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => handleNavService('yukdasima')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                <Link
+                  href="/yuk-masini"
+                  className="hover:text-blue-600 transition-colors"
                 >
-                  Fəhlə briqadası
-                </button>
+                  Yük maşını sifarişi
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => handleNavService('evakuasiya')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer font-semibold text-slate-800"
+                <Link
+                  href="/fehle-xidmeti"
+                  className="hover:text-blue-600 transition-colors"
                 >
-                  24/7 Evakuator
-                </button>
+                  Fəhlə xidməti
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/evakuasiya"
+                  onClick={() => onSelectService('evakuasiya')}
+                  className="hover:text-blue-600 transition-colors font-semibold text-slate-800"
+                >
+                  24/7 Evakuasiya
+                </Link>
               </li>
             </ul>
           </div>
@@ -124,48 +128,36 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
             </h4>
             <ul className="space-y-2.5 text-sm text-slate-600">
               <li>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('estimator-section')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                <Link
+                  href="/qiymetler"
+                  className="hover:text-blue-600 transition-colors"
                 >
-                  Qiymət hesabla
-                </button>
+                  Tariflər və Qiymətlər
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('how-it-works-section')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                <Link
+                  href="/"
+                  className="hover:text-blue-600 transition-colors"
                 >
                   Necə işləyir?
-                </button>
+                </Link>
               </li>
               <li>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('ai-question-section')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                <Link
+                  href="/elaqe"
+                  className="hover:text-blue-600 transition-colors"
                 >
-                  Sual-Cavab (AI)
-                </button>
-              </li>
-              <li>
-                <button
-                  type="button"
-                  onClick={() => scrollToSection('faq-section')}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
-                >
-                  Tez-tez verilən suallar
-                </button>
+                  Əlaqə & Zəng sifarişi
+                </Link>
               </li>
               <li>
                 <button
                   type="button"
                   onClick={onOpenCallback}
-                  className="hover:text-blue-600 transition-colors cursor-pointer"
+                  className="hover:text-blue-600 transition-colors cursor-pointer text-left"
                 >
-                  Əlaqə & Zəng sifarişi
+                  Operatorla Əlaqə
                 </button>
               </li>
             </ul>
@@ -204,8 +196,8 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
         <div className="mt-12 pt-8 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-500">
           <div className="flex gap-6">
             <span>© {new Date().getFullYear()} yukdasima.ai — Bütün hüquqlar qorunur</span>
-            <span className="hover:text-slate-700 cursor-pointer">Xidmət şərtləri</span>
-            <span className="hover:text-slate-700 cursor-pointer">Məxfilik siyasəti</span>
+            <Link href="/qiymetler" className="hover:text-slate-700">Tariflər</Link>
+            <Link href="/elaqe" className="hover:text-slate-700">Əlaqə</Link>
           </div>
           <div className="flex items-center gap-4">
             <span className="px-2.5 py-1 rounded bg-blue-50 text-blue-700 font-bold text-xs">24/7 Xidmət</span>

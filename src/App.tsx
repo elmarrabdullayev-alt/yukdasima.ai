@@ -6,21 +6,33 @@
 import React, { useState } from 'react';
 import { ServiceType } from './types';
 import { Navbar } from './components/Navbar';
-import { HeroSection } from './components/HeroSection';
-import { EstimatorSection } from './components/EstimatorSection';
-import { HowItWorks } from './components/HowItWorks';
-import { AiQuestionBox } from './components/AiQuestionBox';
-import { ServicesSection } from './components/ServicesSection';
-import { TrustSection } from './components/TrustSection';
-import { FaqSection } from './components/FaqSection';
 import { MobileStickyBar } from './components/MobileStickyBar';
 import { ContactCallbackModal } from './components/ContactCallbackModal';
 import { Footer } from './components/Footer';
+import { RouterProvider, useRouter } from './router/RouterContext';
+import { useSeo } from './seo/useSeo';
 
-export default function App() {
+// Page Components
+import { HomePage } from './pages/HomePage';
+import { YukdasimaPage } from './pages/YukdasimaPage';
+import { EvakuasiyaPage } from './pages/EvakuasiyaPage';
+import { EvdenEveYukdasimaPage } from './pages/EvdenEveYukdasimaPage';
+import { MebelDasinmasiPage } from './pages/MebelDasinmasiPage';
+import { OfisDasinmasiPage } from './pages/OfisDasinmasiPage';
+import { YukMasiniPage } from './pages/YukMasiniPage';
+import { FehleXidmetiPage } from './pages/FehleXidmetiPage';
+import { QiymetlerPage } from './pages/QiymetlerPage';
+import { ElaqePage } from './pages/ElaqePage';
+import { EvakuatorRoutePage } from './pages/EvakuatorRoutePage';
+
+function AppContent() {
+  const { pathname } = useRouter();
   const [activeService, setActiveService] = useState<ServiceType>('yukdasima');
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
   const [callbackPhone, setCallbackPhone] = useState('');
+
+  // Dynamically update document head (meta tags, title, canonical link, JSON-LD)
+  useSeo(pathname);
 
   const handleOpenCallback = (phone?: string) => {
     if (phone) setCallbackPhone(phone);
@@ -32,6 +44,45 @@ export default function App() {
     setCallbackPhone('');
   };
 
+  // Route router switcher
+  const renderCurrentPage = () => {
+    // 1. Programmatic dynamic evacuator routes (e.g. /evakuator/baki-agdas)
+    if (pathname.startsWith('/evakuator/')) {
+      const slug = pathname.replace('/evakuator/', '');
+      return <EvakuatorRoutePage routeSlug={slug} onOpenCallback={handleOpenCallback} />;
+    }
+
+    switch (pathname) {
+      case '/yukdasima':
+        return <YukdasimaPage onOpenCallback={handleOpenCallback} />;
+      case '/evakuasiya':
+        return <EvakuasiyaPage onOpenCallback={handleOpenCallback} />;
+      case '/evden-eve-yukdasima':
+        return <EvdenEveYukdasimaPage onOpenCallback={handleOpenCallback} />;
+      case '/mebel-dasinmasi':
+        return <MebelDasinmasiPage onOpenCallback={handleOpenCallback} />;
+      case '/ofis-dasinmasi':
+        return <OfisDasinmasiPage onOpenCallback={handleOpenCallback} />;
+      case '/yuk-masini':
+        return <YukMasiniPage onOpenCallback={handleOpenCallback} />;
+      case '/fehle-xidmeti':
+        return <FehleXidmetiPage onOpenCallback={handleOpenCallback} />;
+      case '/qiymetler':
+        return <QiymetlerPage onOpenCallback={handleOpenCallback} />;
+      case '/elaqe':
+        return <ElaqePage onOpenCallback={handleOpenCallback} />;
+      case '/':
+      default:
+        return (
+          <HomePage
+            activeService={activeService}
+            onSelectService={setActiveService}
+            onOpenCallback={handleOpenCallback}
+          />
+        );
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans antialiased">
       {/* 1. Header / Navbar */}
@@ -41,55 +92,37 @@ export default function App() {
         onOpenCallback={() => handleOpenCallback()}
       />
 
-      {/* Main Content Flow */}
+      {/* 2. Main Page Content View */}
       <main className="grow">
-        {/* 2. Hero Section with 2 prominent service cards */}
-        <HeroSection
-          activeService={activeService}
-          onSelectService={setActiveService}
-        />
-
-        {/* 3. Quick Price Section & Service-Specific Estimator Flow */}
-        <EstimatorSection
-          activeService={activeService}
-          onSelectService={setActiveService}
-          onOpenCallback={handleOpenCallback}
-        />
-
-        {/* 4. How It Works (Necə işləyir?) */}
-        <HowItWorks onSelectService={setActiveService} />
-
-        {/* 5. AI Question Box (Daşıma ilə bağlı sualınız var?) */}
-        <AiQuestionBox onSelectService={setActiveService} />
-
-        {/* 6. Services Section (Xidmətlərimiz) */}
-        <ServicesSection onSelectService={setActiveService} />
-
-        {/* 7. Trust Section (Niyə yukdasima.ai?) */}
-        <TrustSection />
-
-        {/* 8. FAQ Section (Tez-tez verilən suallar) */}
-        <FaqSection onOpenCallback={() => handleOpenCallback()} />
+        {renderCurrentPage()}
       </main>
 
-      {/* 9. Footer */}
+      {/* 3. Global Footer */}
       <Footer
         onSelectService={setActiveService}
         onOpenCallback={() => handleOpenCallback()}
       />
 
-      {/* 10. Persistent Mobile Sticky Bottom Bar */}
+      {/* 4. Persistent Mobile Sticky Bottom Bar */}
       <MobileStickyBar
         activeService={activeService}
         onSelectService={setActiveService}
       />
 
-      {/* 11. Quick Contact Callback Modal */}
+      {/* 5. Quick Contact Callback Modal */}
       <ContactCallbackModal
         isOpen={isCallbackOpen}
         initialPhone={callbackPhone}
         onClose={handleCloseCallback}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <RouterProvider>
+      <AppContent />
+    </RouterProvider>
   );
 }

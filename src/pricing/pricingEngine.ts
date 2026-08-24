@@ -255,7 +255,11 @@ export function calculateTransportationPricing(
     stairsNotice,
     specialItems: detectedSpecialItems,
     notices,
-    routeSummary: matchedRoute ? `${matchedRoute.origin} → ${matchedRoute.destination}` : undefined,
+    routeSummary: matchedRoute
+      ? `${matchedRoute.origin} → ${matchedRoute.destination}`
+      : (formData.fromAddress || formData.toAddress
+          ? `${formData.fromAddress || 'Bakı'} → ${formData.toAddress || 'Təyin edilməyib'}`
+          : undefined),
     distanceKm: matchedRoute?.distanceKm,
   };
 }

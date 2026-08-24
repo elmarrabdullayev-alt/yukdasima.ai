@@ -38,6 +38,7 @@ import { generateWhatsAppLink } from '../utils/calculator';
 import { calculateTransportationPricing } from '../pricing/pricingEngine';
 import { ROUTE_TARIFFS } from '../config/tariffs';
 import { DEFAULT_VEHICLE_CONFIG } from '../config/vehicles';
+import { findDestinationSuggestions } from '../services/destinationResolver';
 import { BUSINESS_PRICING_RULES } from '../config/pricingRules';
 import { CONTACT_INFO } from '../constants/contact';
 import { DirectYukdasimaOrder } from './DirectYukdasimaOrder';
@@ -70,73 +71,109 @@ const SAMPLE_DEMO_IMAGES = [
 // Helper function to resize and compress uploaded images before sending to AI
 function compressImageFile(file: File, maxDim = 1600, quality = 0.85): Promise<{ base64: string; mimeType: string }> {
   return new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onload = (readerEvent) => {
-      const img = new Image();
-      img.onload = () => {
-        let width = img.width;
-        let height = img.height;
+    try {
+      const reader = new FileReader();
+      reader.onload = (readerEvent) => {
+        try {
+          const img = new Image();
+          img.onload = () => {
+            try {
+              let width = img.width || 800;
+              let height = img.height || 600;
 
-        if (width > maxDim || height > maxDim) {
-          if (width > height) {
-            height = Math.round((height * maxDim) / width);
-            width = maxDim;
-          } else {
-            width = Math.round((width * maxDim) / height);
-            height = maxDim;
-          }
-        }
+              if (width > maxDim || height > maxDim) {
+                if (width > height) {
+                  height = Math.round((height * maxDim) / width);
+                  width = maxDim;
+                } else {
+                  width = Math.round((width * maxDim) / height);
+                  height = maxDim;
+                }
+              }
 
-        const canvas = document.createElement('canvas');
-        canvas.width = width;
-        canvas.height = height;
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
+              const canvas = document.createElement('canvas');
+              canvas.width = Math.max(1, width);
+              canvas.height = Math.max(1, height);
+              const ctx = canvas.getContext('2d');
+              if (!ctx) {
+                resolve({
+                  base64: (readerEvent.target?.result as string) || '',
+                  mimeType: file.type || 'image/jpeg',
+                });
+                return;
+              }
+
+              ctx.drawImage(img, 0, 0, width, height);
+              const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
+              const compressedBase64 = canvas.toDataURL(mimeType, quality);
+              resolve({
+                base64: compressedBase64,
+                mimeType,
+              });
+            } catch (canvasErr) {
+              console.warn('[compressImageFile] Canvas processing fallback:', canvasErr);
+              resolve({
+                base64: (readerEvent.target?.result as string) || '',
+                mimeType: file.type || 'image/jpeg',
+              });
+            }
+          };
+          img.onerror = () => {
+            resolve({
+              base64: (readerEvent.target?.result as string) || '',
+              mimeType: file.type || 'image/jpeg',
+            });
+          };
+          img.src = (readerEvent.target?.result as string) || '';
+        } catch (imgErr) {
+          console.warn('[compressImageFile] Image instantiation fallback:', imgErr);
           resolve({
-            base64: readerEvent.target?.result as string,
+            base64: (readerEvent.target?.result as string) || '',
             mimeType: file.type || 'image/jpeg',
           });
-          return;
         }
-
-        ctx.drawImage(img, 0, 0, width, height);
-        const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
-        const compressedBase64 = canvas.toDataURL(mimeType, quality);
-        resolve({
-          base64: compressedBase64,
-          mimeType,
-        });
       };
-      img.onerror = () => {
+      reader.onerror = () => {
         resolve({
-          base64: readerEvent.target?.result as string,
+          base64: '',
           mimeType: file.type || 'image/jpeg',
         });
       };
-      img.src = readerEvent.target?.result as string;
-    };
-    reader.onerror = () => {
+      reader.readAsDataURL(file);
+    } catch (err) {
+      console.warn('[compressImageFile] FileReader fallback:', err);
       resolve({
         base64: '',
         mimeType: file.type || 'image/jpeg',
       });
-    };
-    reader.readAsDataURL(file);
+    }
   });
 }
 
-// Helper to convert remote URL to Base64
+// Helper to convert remote URL to Base64 safely
 async function urlToBase64(url: string): Promise<string> {
-  const response = await fetch(url);
-  const blob = await response.blob();
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      resolve(reader.result as string);
-    };
-    reader.onerror = reject;
-    reader.readAsDataURL(blob);
-  });
+  try {
+    const response = await fetch(url, { mode: 'cors' }).catch(() => null);
+    if (!response || !response.ok) {
+      return '';
+    }
+    const blob = await response.blob().catch(() => null);
+    if (!blob) return '';
+
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve((reader.result as string) || '');
+      };
+      reader.onerror = () => {
+        resolve('');
+      };
+      reader.readAsDataURL(blob);
+    });
+  } catch (err) {
+    console.warn('[urlToBase64] Could not convert url to base64:', err);
+    return '';
+  }
 }
 
 export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({ onOpenCallback }) => {
@@ -466,8 +503,8 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({ onOpenCa
         }
       }, 150);
     } catch (err: any) {
-      console.error('Gemini cargo analysis failed:', err);
-      setErrorMessage('Şəkilləri analiz etmək mümkün olmadı. Zəhmət olmasa yenidən cəhd edin.');
+      console.error('[Gemini Cargo Analysis Failed]:', err);
+      setErrorMessage('Əməliyyatı tamamlamaq mümkün olmadı. Zəhmət olmasa yenidən cəhd edin.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -797,6 +834,26 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({ onOpenCa
               placeholder="Məs: Gəncə, Xırdalan, Sumqayıt..."
               className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm outline-none"
             />
+            {/* Dynamic Search Suggestions */}
+            {formData.toAddress.trim().length >= 2 && (() => {
+              const dynamicSuggestions = findDestinationSuggestions(formData.toAddress, 5);
+              if (dynamicSuggestions.length === 0) return null;
+              return (
+                <div className="flex flex-wrap items-center gap-1.5 pt-1">
+                  <span className="text-[11px] text-blue-700 font-bold">Təkliflər:</span>
+                  {dynamicSuggestions.map((s) => (
+                    <button
+                      key={s.canonicalName}
+                      type="button"
+                      onClick={() => setFormData({ ...formData, toAddress: s.canonicalName })}
+                      className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[11px] text-blue-700 font-bold hover:bg-blue-100 transition-colors cursor-pointer"
+                    >
+                      {s.canonicalName}
+                    </button>
+                  ))}
+                </div>
+              );
+            })()}
             {/* Quick Regional Suggestions */}
             <div className="flex flex-wrap gap-1.5 pt-0.5">
               {['Gəncə', 'Xırdalan', 'Sumqayıt', 'Şəki', 'Quba', 'Lənkəran'].map((loc) => (

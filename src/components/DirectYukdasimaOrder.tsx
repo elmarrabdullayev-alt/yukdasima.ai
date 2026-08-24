@@ -15,6 +15,7 @@ import {
 import { DEFAULT_VEHICLE_CONFIG, VehicleSpec } from '../config/vehicles';
 import { calculateTransportationPricing } from '../pricing/pricingEngine';
 import { getAvailableDestinations } from '../services/tariffService';
+import { findDestinationSuggestions } from '../services/destinationResolver';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { POPULAR_LOCATIONS } from '../data/mockData';
 
@@ -44,16 +45,11 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
   const [customerPhone, setCustomerPhone] = useState<string>('');
 
   const vehicles = DEFAULT_VEHICLE_CONFIG.vehicles;
-  const availableDestinations = useMemo(() => getAvailableDestinations(), []);
-
-  // Filtered destination suggestions
+  // Filtered destination suggestions with alias matching & canonical suggestions
   const destinationSuggestions = useMemo(() => {
     if (!toAddress.trim() || toAddress.length < 2) return [];
-    const query = toAddress.toLowerCase();
-    return availableDestinations
-      .filter((d) => d.toLowerCase().includes(query))
-      .slice(0, 5);
-  }, [toAddress, availableDestinations]);
+    return findDestinationSuggestions(toAddress, 5).map((s) => s.canonicalName);
+  }, [toAddress]);
 
   // Selected vehicle spec from central config
   const currentVehicle: VehicleSpec = useMemo(() => {

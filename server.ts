@@ -6,6 +6,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+// Global server process error resilience
+process.on("unhandledRejection", (reason) => {
+  console.warn("[Server Process] Handled unhandled rejection safely:", reason);
+});
+
+process.on("uncaughtException", (err) => {
+  console.error("[Server Process] Uncaught exception:", err);
+});
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
@@ -37,6 +46,74 @@ async function startServer() {
       status: "ok",
       hasGeminiKey: Boolean(process.env.GEMINI_API_KEY),
     });
+  });
+
+  // SEO Route: robots.txt
+  app.get("/robots.txt", (_req, res) => {
+    res.type("text/plain").send(`User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://yukdasima.ai/sitemap.xml
+`);
+  });
+
+  // SEO Route: sitemap.xml
+  app.get("/sitemap.xml", (_req, res) => {
+    res.type("application/xml").send(`<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://yukdasima.ai/</loc>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/yukdasima</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/evakuasiya</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/evden-eve-yukdasima</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/mebel-dasinmasi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/ofis-dasinmasi</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/yuk-masini</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/fehle-xidmeti</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/qiymetler</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://yukdasima.ai/elaqe</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+</urlset>
+`);
   });
 
   // API Route: Gemini Cargo Multimodal Analysis

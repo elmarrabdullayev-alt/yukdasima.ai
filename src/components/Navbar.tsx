@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Phone, ArrowRight, Menu, X, Truck, Car, Shield } from 'lucide-react';
 import { ServiceType } from '../types';
 import { CONTACT_INFO } from '../constants/contact';
+import { Link, useRouter } from '../router/RouterContext';
 
 interface NavbarProps {
   activeService: ServiceType;
@@ -15,18 +16,26 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenCallback,
 }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { pathname, navigate } = useRouter();
 
-  const scrollToSection = (id: string) => {
+  const handleNavClick = (targetPath: string, sectionId?: string) => {
     setMobileMenuOpen(false);
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (pathname === targetPath) {
+      if (sectionId) {
+        const element = document.getElementById(sectionId);
+        if (element) element.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    } else {
+      navigate(targetPath);
+      if (sectionId) {
+        setTimeout(() => {
+          const element = document.getElementById(sectionId);
+          if (element) element.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
     }
-  };
-
-  const handleNavService = (service: ServiceType) => {
-    onSelectService(service);
-    scrollToSection('estimator-section');
   };
 
   return (
@@ -35,13 +44,9 @@ export const Navbar: React.FC<NavbarProps> = ({
         <div className="flex items-center justify-between h-18 sm:h-20">
           {/* Logo & Brand */}
           <div className="flex items-center gap-3">
-            <a
+            <Link
               id="brand-logo-link"
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
+              href="/"
               className="group flex items-center gap-2.5 focus:outline-none"
             >
               <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm group-hover:bg-blue-700 transition-colors">
@@ -50,57 +55,68 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="text-2xl font-bold tracking-tight text-blue-700">
                 yukdasima<span className="text-slate-900">.ai</span>
               </span>
-            </a>
+            </Link>
           </div>
 
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-600">
-            <button
+            <Link
               id="nav-home"
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="hover:text-blue-600 transition-colors cursor-pointer"
+              href="/"
+              className={`hover:text-blue-600 transition-colors ${pathname === '/' ? 'text-blue-600 font-semibold' : 'text-slate-600'}`}
             >
               Ana səhifə
-            </button>
-            <button
+            </Link>
+            <Link
               id="nav-yukdasima"
-              onClick={() => handleNavService('yukdasima')}
-              className={`hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                activeService === 'yukdasima' ? 'text-blue-600 font-semibold' : 'text-slate-600'
+              href="/yukdasima"
+              onClick={() => onSelectService('yukdasima')}
+              className={`hover:text-blue-600 transition-colors flex items-center gap-1.5 ${
+                pathname === '/yukdasima' ? 'text-blue-600 font-semibold' : 'text-slate-600'
               }`}
             >
               Yükdaşıma
-            </button>
-            <button
+            </Link>
+            <Link
               id="nav-evakuasiya"
-              onClick={() => handleNavService('evakuasiya')}
-              className={`hover:text-blue-600 transition-colors cursor-pointer flex items-center gap-1.5 ${
-                activeService === 'evakuasiya' ? 'text-blue-600 font-semibold' : 'text-slate-600'
+              href="/evakuasiya"
+              onClick={() => onSelectService('evakuasiya')}
+              className={`hover:text-blue-600 transition-colors flex items-center gap-1.5 ${
+                pathname === '/evakuasiya' ? 'text-blue-600 font-semibold' : 'text-slate-600'
               }`}
             >
               Evakuasiya
-            </button>
+            </Link>
+            <Link
+              id="nav-qiymetler"
+              href="/qiymetler"
+              className={`hover:text-blue-600 transition-colors ${pathname === '/qiymetler' ? 'text-blue-600 font-semibold' : 'text-slate-600'}`}
+            >
+              Qiymətlər
+            </Link>
             <button
               id="nav-services"
-              onClick={() => scrollToSection('services-section')}
+              type="button"
+              onClick={() => handleNavClick('/', 'services-section')}
               className="hover:text-blue-600 transition-colors cursor-pointer"
             >
               Xidmətlər
             </button>
             <button
               id="nav-faq"
-              onClick={() => scrollToSection('faq-section')}
+              type="button"
+              onClick={() => handleNavClick('/', 'faq-section')}
               className="hover:text-blue-600 transition-colors cursor-pointer"
             >
               FAQ
             </button>
-            <button
+            <Link
               id="nav-contact"
-              onClick={onOpenCallback}
-              className="hover:text-blue-600 transition-colors cursor-pointer"
+              href="/elaqe"
+              className={`hover:text-blue-600 transition-colors ${pathname === '/elaqe' ? 'text-blue-600 font-semibold' : 'text-slate-600'}`}
             >
               Əlaqə
-            </button>
+            </Link>
           </nav>
 
           {/* Right Action: Info Center & Primary CTA */}
@@ -117,7 +133,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             <button
               id="header-calculate-cta"
-              onClick={() => scrollToSection('estimator-section')}
+              onClick={() => handleNavClick('/', 'estimator-section')}
               className="bg-blue-600 text-white px-5 py-2.5 rounded-lg text-sm font-semibold shadow-sm hover:bg-blue-700 transition-colors cursor-pointer"
             >
               Qiymət hesabla
@@ -152,63 +168,87 @@ export const Navbar: React.FC<NavbarProps> = ({
       {mobileMenuOpen && (
         <div className="sm:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2">
           <div className="grid grid-cols-2 gap-2 pt-2 pb-2">
-            <button
-              onClick={() => handleNavService('yukdasima')}
+            <Link
+              href="/yukdasima"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onSelectService('yukdasima');
+              }}
               className={`p-3 rounded-xl border flex flex-col items-center gap-1 text-xs font-bold ${
-                activeService === 'yukdasima' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700'
+                pathname === '/yukdasima' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700'
               }`}
             >
               <Truck className="w-5 h-5 text-blue-600" />
               Yükdaşıma
-            </button>
-            <button
-              onClick={() => handleNavService('evakuasiya')}
+            </Link>
+            <Link
+              href="/evakuasiya"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onSelectService('evakuasiya');
+              }}
               className={`p-3 rounded-xl border flex flex-col items-center gap-1 text-xs font-bold ${
-                activeService === 'evakuasiya' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700'
+                pathname === '/evakuasiya' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700'
               }`}
             >
               <Car className="w-5 h-5 text-blue-600" />
               Evakuasiya
-            </button>
+            </Link>
           </div>
 
-          <button
-            onClick={() => scrollToSection('services-section')}
-            className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
+          <Link
+            href="/evden-eve-yukdasima"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
           >
-            Xidmətlərimiz
-          </button>
-          <button
-            onClick={() => scrollToSection('how-it-works-section')}
-            className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
+            Evdən Evə Daşıma
+          </Link>
+          <Link
+            href="/mebel-dasinmasi"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
           >
-            Necə işləyir?
-          </button>
-          <button
-            onClick={() => scrollToSection('ai-question-section')}
-            className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
+            Mebel Daşınması
+          </Link>
+          <Link
+            href="/ofis-dasinmasi"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
           >
-            Sual-Cavab (AI)
-          </button>
-          <button
-            onClick={() => scrollToSection('faq-section')}
-            className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
+            Ofis Daşınması
+          </Link>
+          <Link
+            href="/yuk-masini"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
           >
-            Tez-tez verilən suallar (FAQ)
-          </button>
-          <button
-            onClick={() => {
-              setMobileMenuOpen(false);
-              onOpenCallback();
-            }}
-            className="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
+            Yük Maşını Sifarişi
+          </Link>
+          <Link
+            href="/fehle-xidmeti"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
           >
-            Mənimlə əlaqə saxlayın
-          </button>
+            Fəhlə Xidməti
+          </Link>
+          <Link
+            href="/qiymetler"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
+          >
+            Qiymətlər
+          </Link>
+          <Link
+            href="/elaqe"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
+          >
+            Əlaqə
+          </Link>
 
           <div className="pt-2">
             <button
-              onClick={() => scrollToSection('estimator-section')}
+              onClick={() => handleNavClick('/', 'estimator-section')}
               className="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-md text-center flex items-center justify-center gap-2"
             >
               <span>Qiymət hesabla</span>

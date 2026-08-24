@@ -13,6 +13,8 @@
  * 5. If a tariff is missing: returns undefined and triggers "Dəqiq qiymət üçün bizimlə əlaqə saxlayın."
  */
 
+import { resolveDestination, isBakuOrigin } from '../services/destinationResolver';
+
 export const TARIFF_DATABASE_VERSION = 'v1.0';
 
 export interface RouteTariff {
@@ -789,7 +791,8 @@ export const ROUTE_TARIFFS: RouteTariff[] = ACTIVE_TARIFF_DATABASE_V1;
 
 /**
  * Match a destination/origin string to a configured route tariff in the active database.
- * Prioritizes destination (toAddress), then origin (fromAddress).
+ * The active tariff database represents routes originating from BAKI.
+ * If origin is not Baku and no explicit route exists, returns null.
  * AI NEVER guesses prices — if no route matches, returns null.
  */
 export function findRouteTariff(fromAddress: string, toAddress: string): RouteTariff | null {
@@ -800,61 +803,62 @@ export function findRouteTariff(fromAddress: string, toAddress: string): RouteTa
     return null;
   }
 
-  // Priority 1: Check if toAddress matches an intercity or specific route (excluding generic local)
-  for (const route of ROUTE_TARIFFS) {
-    if (route.id === 'route-baku-local') continue;
+  // Check if origin resolves to Bakı
+  const originIsBaku = isBakuOrigin(fromAddress);
 
-    if (normTo.includes(route.destination.toLowerCase())) {
-      return route;
-    }
-    for (const alias of route.aliases) {
-      if (normTo.includes(alias.toLowerCase())) {
-        return route;
+  // If origin is NOT Bakı (e.g. Sumqayıt -> Ağdaş, Gəncə -> Ağdaş, Quba -> Gəncə)
+  if (!originIsBaku) {
+    const resolvedFrom = resolveDestination(fromAddress);
+    const resolvedTo = normTo ? resolveDestination(toAddress) : null;
+
+    if (resolvedFrom && resolvedTo) {
+      const explicitRoute = ROUTE_TARIFFS.find(
+        (r) =>
+          r.origin.toLowerCase() === resolvedFrom.canonicalName.toLowerCase() &&
+          r.destination.toLowerCase() === resolvedTo.canonicalName.toLowerCase()
+      );
+      if (explicitRoute) {
+        return explicitRoute;
       }
     }
+    return null;
   }
 
-  // Priority 2: Check if fromAddress matches an intercity or specific route (excluding generic local)
-  for (const route of ROUTE_TARIFFS) {
-    if (route.id === 'route-baku-local') continue;
+  // Origin IS Bakı: resolve destination (toAddress)
+  if (normTo) {
+    const resolvedTo = resolveDestination(toAddress);
+    if (resolvedTo) {
+      if (resolvedTo.canonicalName === 'Bakı (şəhərdaxili)') {
+        const localRoute = ROUTE_TARIFFS.find((r) => r.id === 'route-baku-local');
+        if (localRoute) return localRoute;
+      }
 
-    if (normFrom.includes(route.destination.toLowerCase())) {
-      return route;
+      const matched = ROUTE_TARIFFS.find(
+        (r) =>
+          r.origin.toLowerCase() === 'bakı' &&
+          r.destination.toLowerCase() === resolvedTo.canonicalName.toLowerCase()
+      );
+      if (matched) return matched;
     }
-    for (const alias of route.aliases) {
-      if (normFrom.includes(alias.toLowerCase())) {
-        return route;
+
+    // Check Baku local route markers
+    const localRoute = ROUTE_TARIFFS.find((r) => r.id === 'route-baku-local');
+    if (localRoute) {
+      const toIsBakuLocal = localRoute.aliases.some((alias) => normTo.includes(alias.toLowerCase()));
+      if (toIsBakuLocal || normTo === 'bakı' || normTo === 'baki' || normTo === 'baku' || normTo === 'şəhərdaxili' || normTo === 'seherdaxili') {
+        return localRoute;
+      }
+
+      const bakuAddressMarkers = ['küç', 'kuc', 'pr.', 'prospekt', 'mkr', 'mikrorayon', 'bina', 'otaq', 'mərkəz', 'merkez'];
+      const toHasBakuMarker = bakuAddressMarkers.some((m) => normTo.includes(m));
+      if (toHasBakuMarker) {
+        return localRoute;
       }
     }
-  }
-
-  // Priority 3: Check Baku local route
-  const localRoute = ROUTE_TARIFFS.find((r) => r.id === 'route-baku-local');
-  if (localRoute) {
-    // If destination matches specific Baku districts or aliases
-    const toIsBakuLocal = localRoute.aliases.some((alias) => normTo.includes(alias.toLowerCase()));
-    if (toIsBakuLocal) {
-      return localRoute;
-    }
-
-    // If destination is explicitly "Bakı" or "şəhərdaxili"
-    if (normTo === 'bakı' || normTo === 'baki' || normTo === 'baku' || normTo === 'şəhərdaxili' || normTo === 'seherdaxili') {
-      return localRoute;
-    }
-
-    // If both origin and destination have Baku address keywords
-    const bakuAddressMarkers = ['küç', 'kuc', 'pr.', 'prospekt', 'mkr', 'mikrorayon', 'bina', 'otaq', 'mərkəz', 'merkez'];
-    const toHasBakuMarker = bakuAddressMarkers.some((m) => normTo.includes(m));
-    const fromHasBakuMarker = bakuAddressMarkers.some((m) => normFrom.includes(m)) || normFrom.includes('bakı') || normFrom.includes('baki');
-    
-    if (toHasBakuMarker && fromHasBakuMarker) {
-      return localRoute;
-    }
-
-    // If toAddress is not provided, but fromAddress is within Baku
-    if (!normTo && (normFrom.includes('bakı') || normFrom.includes('baki') || localRoute.aliases.some((a) => normFrom.includes(a)))) {
-      return localRoute;
-    }
+  } else {
+    // Destination not specified, origin is Baku -> return Baku local
+    const localRoute = ROUTE_TARIFFS.find((r) => r.id === 'route-baku-local');
+    if (localRoute) return localRoute;
   }
 
   return null;

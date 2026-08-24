@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import { ServiceType } from '../types';
 import { SERVICES_DATA } from '../data/mockData';
+import { Link } from '../router/RouterContext';
 
 interface ServicesSectionProps {
   onSelectService: (service: ServiceType) => void;
@@ -36,15 +37,22 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
     }
   };
 
-  const handleCardClick = (id: string) => {
-    if (id === 'srv-6') {
-      onSelectService('evakuasiya');
-    } else {
-      onSelectService('yukdasima');
-    }
-    const element = document.getElementById('estimator-section');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+  const getServicePath = (id: string): string => {
+    switch (id) {
+      case 'srv-1':
+        return '/evden-eve-yukdasima';
+      case 'srv-2':
+        return '/mebel-dasinmasi';
+      case 'srv-3':
+        return '/ofis-dasinmasi';
+      case 'srv-4':
+        return '/fehle-xidmeti';
+      case 'srv-5':
+        return '/yuk-masini';
+      case 'srv-6':
+        return '/evakuasiya';
+      default:
+        return '/yukdasima';
     }
   };
 
@@ -65,42 +73,45 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
 
         {/* 6 SERVICES GRID */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {SERVICES_DATA.map((srv) => (
-            <div
-              key={srv.id}
-              onClick={() => handleCardClick(srv.id)}
-              className="group rounded-2xl p-6 sm:p-7 bg-slate-50/70 border border-slate-200/90 hover:border-blue-500 hover:bg-white hover:shadow-lg transition-all duration-200 flex flex-col justify-between cursor-pointer"
-            >
-              <div>
-                <div className="w-13 h-13 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-xs">
-                  {getIcon(srv.iconName)}
+          {SERVICES_DATA.map((srv) => {
+            const href = getServicePath(srv.id);
+            return (
+              <Link
+                key={srv.id}
+                href={href}
+                className="group rounded-2xl p-6 sm:p-7 bg-slate-50/70 border border-slate-200/90 hover:border-blue-500 hover:bg-white hover:shadow-lg transition-all duration-200 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="w-13 h-13 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-xs">
+                    {getIcon(srv.iconName)}
+                  </div>
+
+                  <h3 className="text-xl font-bold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
+                    {srv.title}
+                  </h3>
+
+                  <p className="mt-2.5 text-sm text-slate-600 leading-relaxed">
+                    {srv.description}
+                  </p>
+
+                  {/* Features list */}
+                  <div className="mt-5 space-y-2">
+                    {srv.features.map((feat, i) => (
+                      <div key={i} className="flex items-center gap-2 text-xs font-semibold text-slate-700">
+                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span>{feat}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
-                <h3 className="text-xl font-bold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
-                  {srv.title}
-                </h3>
-
-                <p className="mt-2.5 text-sm text-slate-600 leading-relaxed">
-                  {srv.description}
-                </p>
-
-                {/* Features list */}
-                <div className="mt-5 space-y-2">
-                  {srv.features.map((feat, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs font-semibold text-slate-700">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                      <span>{feat}</span>
-                    </div>
-                  ))}
+                <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs font-bold text-blue-600 group-hover:text-blue-700">
+                  <span>Ətraflı və qiymət hesabla</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs font-bold text-blue-600 group-hover:text-blue-700">
-                <span>Qiymət hesabla</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </div>
-            </div>
-          ))}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </section>
