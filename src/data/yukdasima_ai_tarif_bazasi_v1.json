@@ -1,0 +1,2067 @@
+{
+  "schema_version": "1.0",
+  "dataset_status": "V1_current_approx_90_percent_correct",
+  "source_file": "qiymət təklifi son..xlsx",
+  "important": [
+    "Do not let Gemini invent prices.",
+    "Missing tariffs must return operator/WhatsApp confirmation.",
+    "Current data may contain errors and will be replaced by a future V2 tariff dataset.",
+    "Regional matrix prices are vehicle transport/order prices only."
+  ],
+  "vehicles": {
+    "2m_transit": {
+      "label": "2m Ford Transit",
+      "length_m": 2.4,
+      "width_m": 1.3,
+      "height_m": 1.3,
+      "theoretical_volume_m3": 4.06,
+      "practical_capacity_m3": 3.2,
+      "minimum_starting_vehicle_price_azn": 20
+    },
+    "3m": {
+      "label": "3m yük maşını",
+      "length_m": 3.0,
+      "width_m": 1.5,
+      "height_m": 1.8,
+      "theoretical_volume_m3": 8.1,
+      "practical_capacity_m3": 6.5
+    },
+    "4m": {
+      "label": "4m yük maşını",
+      "length_m": 4.0,
+      "width_m": 2.0,
+      "height_m": 2.0,
+      "theoretical_volume_m3": 16.0,
+      "practical_capacity_m3": 12.8
+    },
+    "5m": {
+      "label": "5m yük maşını",
+      "length_m": 5.0,
+      "width_m": 2.0,
+      "height_m": 2.0,
+      "theoretical_volume_m3": 20.0,
+      "practical_capacity_m3": 16.0
+    },
+    "6m": {
+      "label": "6m yük maşını",
+      "length_m": 6.0,
+      "width_m": 2.4,
+      "height_m": 2.4,
+      "theoretical_volume_m3": 34.56,
+      "practical_capacity_m3": 27.5
+    },
+    "7m": {
+      "label": "7m yük maşını",
+      "length_m": 7.0,
+      "width_m": 2.4,
+      "height_m": 2.4,
+      "theoretical_volume_m3": 40.32,
+      "practical_capacity_m3": 32.0
+    }
+  },
+  "business_rules": {
+    "currency": "AZN",
+    "pricing_note": "Regional matrix values are vehicle transport/order prices, not guaranteed final moving-service prices.",
+    "worker_service": {
+      "local_starting_price_per_worker_azn": 20,
+      "intercity_worker_price": "excluded_from_automatic_pricing",
+      "note": "Rayonlararası sifarişlərdə fəhlə xidməti ayrıca hesablanır."
+    },
+    "floor_elevator": {
+      "usable_elevator": "normal_initial_worker_pricing",
+      "no_usable_elevator_from_floor": 3,
+      "typical_additional_starting_range_azn": [
+        25,
+        30
+      ],
+      "note": "Yükün ağırlığına və işin çətinliyinə görə dəyişir."
+    },
+    "craftsman_service": {
+      "furniture_disassembly_assembly": "excluded_from_automatic_pricing",
+      "note": "Mebelin sökülməsi/yığılması usta xidmətidir və ayrıca hesablanır."
+    },
+    "special_items": {
+      "piano_starting_price_azn": 80,
+      "safe": "operator_confirmation",
+      "large_refrigerator": "operator_confirmation"
+    },
+    "vehicle_selection_basis": "use_upper_end_of_ai_volume_range",
+    "practical_utilization_factor": 0.8
+  },
+  "regional_tariffs": [
+    {
+      "zone": "Zona 1 Gəncə - Qazax",
+      "source_row": 27,
+      "routes": [
+        {
+          "destination": "Naftalan",
+          "distance_km": 340,
+          "prices_azn": {
+            "2m": 200,
+            "3m": 260,
+            "4m": 270,
+            "5m": 290,
+            "6m": 320,
+            "7m": 370,
+            "evacuator": 240,
+            "tir": 430
+          },
+          "source_row": 28
+        },
+        {
+          "destination": "Goranboy",
+          "distance_km": 327,
+          "prices_azn": {
+            "2m": 190,
+            "3m": 250,
+            "4m": 270,
+            "5m": 280,
+            "6m": 300,
+            "7m": 350,
+            "evacuator": 240,
+            "tir": 410
+          },
+          "source_row": 29
+        },
+        {
+          "destination": "Gəncə",
+          "distance_km": 362,
+          "prices_azn": {
+            "2m": 200,
+            "3m": 260,
+            "4m": 280,
+            "5m": 300,
+            "6m": 330,
+            "7m": 350,
+            "evacuator": 240,
+            "tir": 430
+          },
+          "source_row": 30
+        },
+        {
+          "destination": "Samux",
+          "distance_km": 371,
+          "prices_azn": {
+            "2m": 230,
+            "3m": 270,
+            "4m": 280,
+            "5m": 300,
+            "6m": 350,
+            "7m": 400,
+            "evacuator": 260,
+            "tir": 450
+          },
+          "source_row": 31
+        },
+        {
+          "destination": "Daşkəsən",
+          "distance_km": 407,
+          "prices_azn": {
+            "2m": 300,
+            "3m": 370,
+            "4m": 370,
+            "5m": 410,
+            "6m": 430,
+            "7m": 480,
+            "evacuator": 350,
+            "tir": 630
+          },
+          "source_row": 32
+        },
+        {
+          "destination": "Şəmkir",
+          "distance_km": 409,
+          "prices_azn": {
+            "2m": 240,
+            "3m": 290,
+            "4m": 330,
+            "5m": 340,
+            "6m": 360,
+            "7m": 380,
+            "evacuator": 260,
+            "tir": 480
+          },
+          "source_row": 33
+        },
+        {
+          "destination": "Tovuz",
+          "distance_km": 451,
+          "prices_azn": {
+            "2m": 280,
+            "3m": 330,
+            "4m": 350,
+            "5m": 360,
+            "6m": 390,
+            "7m": 410,
+            "evacuator": 290,
+            "tir": 510
+          },
+          "source_row": 34
+        },
+        {
+          "destination": "Gədəbəy",
+          "distance_km": 454,
+          "prices_azn": {
+            "2m": 270,
+            "3m": 330,
+            "4m": 370,
+            "5m": 380,
+            "6m": 420,
+            "7m": 460,
+            "evacuator": 290,
+            "tir": 630
+          },
+          "source_row": 35
+        },
+        {
+          "destination": "Ağstafa",
+          "distance_km": 472,
+          "prices_azn": {
+            "2m": 280,
+            "3m": 340,
+            "4m": 350,
+            "5m": 380,
+            "6m": 390,
+            "7m": 450,
+            "evacuator": 290,
+            "tir": 540
+          },
+          "source_row": 36
+        },
+        {
+          "destination": "Qazax",
+          "distance_km": 482,
+          "prices_azn": {
+            "2m": 310,
+            "3m": 370,
+            "4m": 380,
+            "5m": 390,
+            "6m": 430,
+            "7m": 480,
+            "evacuator": 290,
+            "tir": 560
+          },
+          "source_row": 37
+        },
+        {
+          "destination": "Qırmızı Körpü",
+          "distance_km": 525,
+          "prices_azn": {
+            "2m": 320,
+            "3m": 390,
+            "4m": 400,
+            "5m": 430,
+            "6m": 490,
+            "7m": 530,
+            "evacuator": 340,
+            "tir": 610
+          },
+          "source_row": 38
+        },
+        {
+          "destination": "Göygül (Hacıkənd)",
+          "distance_km": 388,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 39
+        },
+        {
+          "destination": "Göygöl (Xanlar)",
+          "distance_km": 375,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 40
+        }
+      ]
+    },
+    {
+      "zone": "Zona 2 Mərkəzi Aran",
+      "source_row": 41,
+      "routes": [
+        {
+          "destination": "Kürdəmir",
+          "distance_km": 206,
+          "prices_azn": {
+            "2m": 150,
+            "3m": 190,
+            "4m": 210,
+            "5m": 230,
+            "6m": 240,
+            "7m": 270,
+            "evacuator": 180,
+            "tir": 350
+          },
+          "source_row": 42
+        },
+        {
+          "destination": "Ucar",
+          "distance_km": 253,
+          "prices_azn": {
+            "2m": 170,
+            "3m": 200,
+            "4m": 240,
+            "5m": 260,
+            "6m": 260,
+            "7m": 300,
+            "evacuator": 200,
+            "tir": 380
+          },
+          "source_row": 43
+        },
+        {
+          "destination": "İmişli",
+          "distance_km": 210,
+          "prices_azn": {
+            "2m": 190,
+            "3m": 260,
+            "4m": 290,
+            "5m": 300,
+            "6m": 330,
+            "7m": 350,
+            "evacuator": 210,
+            "tir": 400
+          },
+          "source_row": 44
+        },
+        {
+          "destination": "Beyləqan",
+          "distance_km": 280,
+          "prices_azn": {
+            "2m": 230,
+            "3m": 260,
+            "4m": 280,
+            "5m": 290,
+            "6m": 330,
+            "7m": 350,
+            "evacuator": 240,
+            "tir": 410
+          },
+          "source_row": 45
+        },
+        {
+          "destination": "Ağdaş",
+          "distance_km": 281,
+          "prices_azn": {
+            "2m": 200,
+            "3m": 240,
+            "4m": 270,
+            "5m": 280,
+            "6m": 290,
+            "7m": 330,
+            "evacuator": 210,
+            "tir": 400
+          },
+          "source_row": 46
+        },
+        {
+          "destination": "Zərdab",
+          "distance_km": 257,
+          "prices_azn": {
+            "2m": 230,
+            "3m": 250,
+            "4m": 280,
+            "5m": 300,
+            "6m": 330,
+            "7m": 360,
+            "evacuator": 210,
+            "tir": 400
+          },
+          "source_row": 47
+        },
+        {
+          "destination": "Yevlax",
+          "distance_km": 295,
+          "prices_azn": {
+            "2m": 200,
+            "3m": 230,
+            "4m": 260,
+            "5m": 280,
+            "6m": 300,
+            "7m": 340,
+            "evacuator": 210,
+            "tir": 400
+          },
+          "source_row": 48
+        },
+        {
+          "destination": "Ağcabədi",
+          "distance_km": 293,
+          "prices_azn": {
+            "2m": 210,
+            "3m": 240,
+            "4m": 260,
+            "5m": 280,
+            "6m": 290,
+            "7m": 360,
+            "evacuator": 240,
+            "tir": 430
+          },
+          "source_row": 49
+        },
+        {
+          "destination": "Mingəçevir",
+          "distance_km": 320,
+          "prices_azn": {
+            "2m": 230,
+            "3m": 260,
+            "4m": 280,
+            "5m": 290,
+            "6m": 310,
+            "7m": 340,
+            "evacuator": 210,
+            "tir": 410
+          },
+          "source_row": 50
+        },
+        {
+          "destination": "Bərdə",
+          "distance_km": 319,
+          "prices_azn": {
+            "2m": 230,
+            "3m": 250,
+            "4m": 280,
+            "5m": 300,
+            "6m": 330,
+            "7m": 380,
+            "evacuator": 240,
+            "tir": 430
+          },
+          "source_row": 51
+        },
+        {
+          "destination": "Tərtər",
+          "distance_km": 336,
+          "prices_azn": {
+            "2m": 230,
+            "3m": 270,
+            "4m": 290,
+            "5m": 310,
+            "6m": 340,
+            "7m": 380,
+            "evacuator": 240,
+            "tir": 440
+          },
+          "source_row": 52
+        },
+        {
+          "destination": "Ağdam (Quzanlı)",
+          "distance_km": 329,
+          "prices_azn": {
+            "2m": 240,
+            "3m": 280,
+            "4m": 300,
+            "5m": 330,
+            "6m": 350,
+            "7m": 410,
+            "evacuator": 400,
+            "tir": 480
+          },
+          "source_row": 53
+        },
+        {
+          "destination": "Horadiz",
+          "distance_km": 316,
+          "prices_azn": {
+            "2m": 250,
+            "3m": 330,
+            "4m": 350,
+            "5m": 360,
+            "6m": 380,
+            "7m": 410,
+            "evacuator": 290,
+            "tir": 530
+          },
+          "source_row": 54
+        }
+      ]
+    },
+    {
+      "zone": "Zona 3 Şimal Qərb",
+      "source_row": 55,
+      "routes": [
+        {
+          "destination": "Qəbələ",
+          "distance_km": 216,
+          "prices_azn": {
+            "2m": 180,
+            "3m": 210,
+            "4m": 260,
+            "5m": 270,
+            "6m": 290,
+            "7m": 330,
+            "evacuator": 210,
+            "tir": 430
+          },
+          "source_row": 56
+        },
+        {
+          "destination": "Oğuz",
+          "distance_km": 264,
+          "prices_azn": {
+            "2m": 210,
+            "3m": 250,
+            "4m": 280,
+            "5m": 300,
+            "6m": 330,
+            "7m": 360,
+            "evacuator": 240,
+            "tir": 460
+          },
+          "source_row": 57
+        },
+        {
+          "destination": "Şəki",
+          "distance_km": 297,
+          "prices_azn": {
+            "2m": 230,
+            "3m": 280,
+            "4m": 300,
+            "5m": 330,
+            "6m": 350,
+            "7m": 390,
+            "evacuator": 240,
+            "tir": 480
+          },
+          "source_row": 58
+        },
+        {
+          "destination": "Qax",
+          "distance_km": 335,
+          "prices_azn": {
+            "2m": 260,
+            "3m": 290,
+            "4m": 330,
+            "5m": 350,
+            "6m": 380,
+            "7m": 400,
+            "evacuator": 260,
+            "tir": 490
+          },
+          "source_row": 59
+        },
+        {
+          "destination": "Zaqatala",
+          "distance_km": 365,
+          "prices_azn": {
+            "2m": 290,
+            "3m": 330,
+            "4m": 360,
+            "5m": 380,
+            "6m": 400,
+            "7m": 420,
+            "evacuator": 290,
+            "tir": 500
+          },
+          "source_row": 60
+        },
+        {
+          "destination": "Balakən",
+          "distance_km": 393,
+          "prices_azn": {
+            "2m": 320,
+            "3m": 360,
+            "4m": 380,
+            "5m": 400,
+            "6m": 420,
+            "7m": 470,
+            "evacuator": 350,
+            "tir": 580
+          },
+          "source_row": 61
+        }
+      ]
+    },
+    {
+      "zone": "Zona 4 Şamaxı",
+      "source_row": 62,
+      "routes": [
+        {
+          "destination": "Qobustan (Şamaxı)",
+          "distance_km": 40,
+          "prices_azn": {
+            "2m": 90,
+            "3m": 110,
+            "4m": 120,
+            "5m": 130,
+            "6m": 150,
+            "7m": 190,
+            "evacuator": 130,
+            "tir": 240
+          },
+          "source_row": 63
+        },
+        {
+          "destination": "Cəngi",
+          "distance_km": 58,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 64
+        },
+        {
+          "destination": "Mərəzə",
+          "distance_km": 91,
+          "prices_azn": {
+            "2m": 90,
+            "3m": 110,
+            "4m": 120,
+            "5m": 130,
+            "6m": 150,
+            "7m": 190,
+            "evacuator": 120,
+            "tir": 300
+          },
+          "source_row": 65
+        },
+        {
+          "destination": "Şamaxı",
+          "distance_km": 122,
+          "prices_azn": {
+            "2m": 100,
+            "3m": 140,
+            "4m": 160,
+            "5m": 180,
+            "6m": 200,
+            "7m": 270,
+            "evacuator": 150,
+            "tir": 350
+          },
+          "source_row": 66
+        },
+        {
+          "destination": "Pirqulu",
+          "distance_km": 144,
+          "prices_azn": {
+            "2m": 120,
+            "3m": 170,
+            "4m": 190,
+            "5m": 210,
+            "6m": 250,
+            "7m": 290,
+            "evacuator": 180,
+            "tir": 460
+          },
+          "source_row": 67
+        },
+        {
+          "destination": "İsmayıllı",
+          "distance_km": 175,
+          "prices_azn": {
+            "2m": 270,
+            "3m": 200,
+            "4m": 220,
+            "5m": 260,
+            "6m": 280,
+            "7m": 310,
+            "evacuator": 180,
+            "tir": 410
+          },
+          "source_row": 68
+        },
+        {
+          "destination": "Ağsu",
+          "distance_km": 157,
+          "prices_azn": {
+            "2m": 170,
+            "3m": 210,
+            "4m": 240,
+            "5m": 250,
+            "6m": 260,
+            "7m": 300,
+            "evacuator": 180,
+            "tir": 400
+          },
+          "source_row": 69
+        },
+        {
+          "destination": "Göyçay",
+          "distance_km": 260,
+          "prices_azn": {
+            "2m": 180,
+            "3m": 210,
+            "4m": 260,
+            "5m": 270,
+            "6m": 290,
+            "7m": 330,
+            "evacuator": 200,
+            "tir": 400
+          },
+          "source_row": 70
+        }
+      ]
+    },
+    {
+      "zone": "Zona 5 Cənub bölgəsi",
+      "source_row": 71,
+      "routes": [
+        {
+          "destination": "Bilasuvar",
+          "distance_km": 180,
+          "prices_azn": {
+            "2m": 130,
+            "3m": 150,
+            "4m": 170,
+            "5m": 190,
+            "6m": 210,
+            "7m": 250,
+            "evacuator": 180,
+            "tir": 360
+          },
+          "source_row": 72
+        },
+        {
+          "destination": "Cəlilabad",
+          "distance_km": 203,
+          "prices_azn": {
+            "2m": 140,
+            "3m": 170,
+            "4m": 190,
+            "5m": 210,
+            "6m": 240,
+            "7m": 270,
+            "evacuator": 190,
+            "tir": 380
+          },
+          "source_row": 73
+        },
+        {
+          "destination": "Masallı",
+          "distance_km": 215,
+          "prices_azn": {
+            "2m": 170,
+            "3m": 200,
+            "4m": 230,
+            "5m": 240,
+            "6m": 260,
+            "7m": 300,
+            "evacuator": 200,
+            "tir": 400
+          },
+          "source_row": 74
+        },
+        {
+          "destination": "Lənkəran",
+          "distance_km": 249,
+          "prices_azn": {
+            "2m": 200,
+            "3m": 230,
+            "4m": 240,
+            "5m": 260,
+            "6m": 280,
+            "7m": 330,
+            "evacuator": 210,
+            "tir": 440
+          },
+          "source_row": 75
+        },
+        {
+          "destination": "Yardımlı",
+          "distance_km": 267,
+          "prices_azn": {
+            "2m": 260,
+            "3m": 280,
+            "4m": 300,
+            "5m": 320,
+            "6m": 400,
+            "7m": 400,
+            "evacuator": 290,
+            "tir": 530
+          },
+          "source_row": 76
+        },
+        {
+          "destination": "Astara",
+          "distance_km": 283,
+          "prices_azn": {
+            "2m": 230,
+            "3m": 240,
+            "4m": 260,
+            "5m": 280,
+            "6m": 300,
+            "7m": 360,
+            "evacuator": 290,
+            "tir": 480
+          },
+          "source_row": 77
+        },
+        {
+          "destination": "Lerik",
+          "distance_km": 296,
+          "prices_azn": {
+            "2m": 270,
+            "3m": 300,
+            "4m": 330,
+            "5m": 270,
+            "6m": 400,
+            "7m": 430,
+            "evacuator": 290,
+            "tir": 560
+          },
+          "source_row": 78
+        }
+      ]
+    },
+    {
+      "zone": "Zona 6 Şirvan",
+      "source_row": 79,
+      "routes": [
+        {
+          "destination": "Qobustan (Qaradağ)",
+          "distance_km": 61,
+          "prices_azn": {
+            "2m": 70,
+            "3m": 90,
+            "4m": 90,
+            "5m": 120,
+            "6m": 130,
+            "7m": 160,
+            "evacuator": 100,
+            "tir": 230
+          },
+          "source_row": 80
+        },
+        {
+          "destination": "Hacıqabul",
+          "distance_km": 125,
+          "prices_azn": {
+            "2m": 100,
+            "3m": 120,
+            "4m": 140,
+            "5m": 150,
+            "6m": 160,
+            "7m": 210,
+            "evacuator": 130,
+            "tir": 270
+          },
+          "source_row": 81
+        },
+        {
+          "destination": "Şirvan",
+          "distance_km": 132,
+          "prices_azn": {
+            "2m": 100,
+            "3m": 120,
+            "4m": 140,
+            "5m": 150,
+            "6m": 160,
+            "7m": 250,
+            "evacuator": 140,
+            "tir": 270
+          },
+          "source_row": 82
+        },
+        {
+          "destination": "Salyan",
+          "distance_km": 139,
+          "prices_azn": {
+            "2m": 110,
+            "3m": 140,
+            "4m": 150,
+            "5m": 170,
+            "6m": 180,
+            "7m": 230,
+            "evacuator": 150,
+            "tir": 270
+          },
+          "source_row": 83
+        },
+        {
+          "destination": "Sabirabad",
+          "distance_km": 171,
+          "prices_azn": {
+            "2m": 120,
+            "3m": 150,
+            "4m": 180,
+            "5m": 190,
+            "6m": 200,
+            "7m": 240,
+            "evacuator": 180,
+            "tir": 350
+          },
+          "source_row": 84
+        },
+        {
+          "destination": "Neftçala",
+          "distance_km": 180,
+          "prices_azn": {
+            "2m": 130,
+            "3m": 150,
+            "4m": 180,
+            "5m": 200,
+            "6m": 200,
+            "7m": 250,
+            "evacuator": 180,
+            "tir": 350
+          },
+          "source_row": 85
+        },
+        {
+          "destination": "Saatlı",
+          "distance_km": 185,
+          "prices_azn": {
+            "2m": 140,
+            "3m": 160,
+            "4m": 190,
+            "5m": 200,
+            "6m": 210,
+            "7m": 260,
+            "evacuator": 190,
+            "tir": 350
+          },
+          "source_row": 86
+        },
+        {
+          "destination": "Nəvai",
+          "distance_km": 106,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 87
+        }
+      ]
+    },
+    {
+      "zone": "Zona 7 Şimal bölgəsi",
+      "source_row": 88,
+      "routes": [
+        {
+          "destination": "Zarat",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 89
+        },
+        {
+          "destination": "Yaşma",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 90
+        },
+        {
+          "destination": "Sitalçay",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 91
+        },
+        {
+          "destination": "SDK",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 92
+        },
+        {
+          "destination": "Giləzi",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 93
+        },
+        {
+          "destination": "Siyəzən",
+          "distance_km": 115,
+          "prices_azn": {
+            "2m": 100,
+            "3m": 120,
+            "4m": 150,
+            "5m": 170,
+            "6m": 180,
+            "7m": 190,
+            "evacuator": 120,
+            "tir": 240
+          },
+          "source_row": 94
+        },
+        {
+          "destination": "Xızı",
+          "distance_km": 102,
+          "prices_azn": {
+            "2m": 120,
+            "3m": 140,
+            "4m": 160,
+            "5m": 170,
+            "6m": 190,
+            "7m": 200,
+            "evacuator": 130,
+            "tir": 270
+          },
+          "source_row": 95
+        },
+        {
+          "destination": "Şabran",
+          "distance_km": 127,
+          "prices_azn": {
+            "2m": 100,
+            "3m": 120,
+            "4m": 140,
+            "5m": 150,
+            "6m": 170,
+            "7m": 180,
+            "evacuator": 120,
+            "tir": 270
+          },
+          "source_row": 96
+        },
+        {
+          "destination": "Qəndob",
+          "distance_km": 128,
+          "prices_azn": {
+            "2m": 130,
+            "3m": 150,
+            "4m": 170,
+            "5m": 180,
+            "6m": 190,
+            "7m": 190,
+            "evacuator": 130,
+            "tir": 270
+          },
+          "source_row": 97
+        },
+        {
+          "destination": "Quba",
+          "distance_km": 169,
+          "prices_azn": {
+            "2m": 130,
+            "3m": 150,
+            "4m": 170,
+            "5m": 200,
+            "6m": 220,
+            "7m": 220,
+            "evacuator": 150,
+            "tir": 310
+          },
+          "source_row": 98
+        },
+        {
+          "destination": "Xaçmaz",
+          "distance_km": 163,
+          "prices_azn": {
+            "2m": 130,
+            "3m": 150,
+            "4m": 180,
+            "5m": 200,
+            "6m": 210,
+            "7m": 220,
+            "evacuator": 140,
+            "tir": 310
+          },
+          "source_row": 99
+        },
+        {
+          "destination": "Xudat",
+          "distance_km": 180,
+          "prices_azn": {
+            "2m": 140,
+            "3m": 170,
+            "4m": 190,
+            "5m": 210,
+            "6m": 220,
+            "7m": 240,
+            "evacuator": 160,
+            "tir": 370
+          },
+          "source_row": 100
+        },
+        {
+          "destination": "Qusar",
+          "distance_km": 183,
+          "prices_azn": {
+            "2m": 140,
+            "3m": 170,
+            "4m": 190,
+            "5m": 210,
+            "6m": 220,
+            "7m": 240,
+            "evacuator": 160,
+            "tir": 370
+          },
+          "source_row": 101
+        },
+        {
+          "destination": "Yalama",
+          "distance_km": 200,
+          "prices_azn": {
+            "2m": 180,
+            "3m": 210,
+            "4m": 260,
+            "5m": 270,
+            "6m": 290,
+            "7m": 290,
+            "evacuator": 190,
+            "tir": 390
+          },
+          "source_row": 102
+        },
+        {
+          "destination": "Nabran",
+          "distance_km": 203,
+          "prices_azn": {
+            "2m": 180,
+            "3m": 210,
+            "4m": 260,
+            "5m": 270,
+            "6m": 290,
+            "7m": 290,
+            "evacuator": 190,
+            "tir": 390
+          },
+          "source_row": 103
+        },
+        {
+          "destination": "Şahdağ",
+          "distance_km": 211,
+          "prices_azn": {
+            "2m": 210,
+            "3m": 230,
+            "4m": 290,
+            "5m": 310,
+            "6m": 330,
+            "7m": 320,
+            "evacuator": 260,
+            "tir": 420
+          },
+          "source_row": 104
+        }
+      ]
+    },
+    {
+      "zone": "Zona 8 Qarabağ",
+      "source_row": 105,
+      "routes": [
+        {
+          "destination": "Füzuli",
+          "distance_km": 310,
+          "prices_azn": {
+            "2m": 270,
+            "3m": 310,
+            "4m": 340,
+            "5m": 350,
+            "6m": 450,
+            "7m": 470,
+            "evacuator": 310,
+            "tir": 600
+          },
+          "source_row": 106
+        },
+        {
+          "destination": "Hadrut",
+          "distance_km": 357,
+          "prices_azn": {
+            "2m": 260,
+            "3m": 300,
+            "4m": 320,
+            "5m": 340,
+            "6m": 450,
+            "7m": 500,
+            "evacuator": 420,
+            "tir": 540
+          },
+          "source_row": 107
+        },
+        {
+          "destination": "Suqovuşan",
+          "distance_km": 385,
+          "prices_azn": {
+            "2m": 290,
+            "3m": 340,
+            "4m": 360,
+            "5m": 370,
+            "6m": 500,
+            "7m": 520,
+            "evacuator": 470,
+            "tir": 590
+          },
+          "source_row": 108
+        },
+        {
+          "destination": "Ağbənd",
+          "distance_km": 432,
+          "prices_azn": {
+            "2m": 340,
+            "3m": 380,
+            "4m": 400,
+            "5m": 420,
+            "6m": 500,
+            "7m": 530,
+            "evacuator": 480,
+            "tir": 740
+          },
+          "source_row": 109
+        },
+        {
+          "destination": "Ağdərə",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 110
+        },
+        {
+          "destination": "Cəbrayıl",
+          "distance_km": 347,
+          "prices_azn": {
+            "2m": 260,
+            "3m": 300,
+            "4m": 310,
+            "5m": 340,
+            "6m": 450,
+            "7m": 500,
+            "evacuator": 470,
+            "tir": 590
+          },
+          "source_row": 111
+        },
+        {
+          "destination": "Qubadlı",
+          "distance_km": 393,
+          "prices_azn": {
+            "2m": 350,
+            "3m": 400,
+            "4m": 420,
+            "5m": 440,
+            "6m": 520,
+            "7m": 560,
+            "evacuator": 470,
+            "tir": 660
+          },
+          "source_row": 112
+        },
+        {
+          "destination": "Şuşa",
+          "distance_km": 401,
+          "prices_azn": {
+            "2m": 370,
+            "3m": 490,
+            "4m": 540,
+            "5m": 590,
+            "6m": 650,
+            "7m": 750,
+            "evacuator": 470,
+            "tir": 900
+          },
+          "source_row": 113
+        },
+        {
+          "destination": "Zəngilan",
+          "distance_km": 401,
+          "prices_azn": {
+            "2m": 360,
+            "3m": 410,
+            "4m": 430,
+            "5m": 450,
+            "6m": 540,
+            "7m": 560,
+            "evacuator": 470,
+            "tir": 700
+          },
+          "source_row": 114
+        },
+        {
+          "destination": "Kəlbəcər",
+          "distance_km": 445,
+          "prices_azn": {
+            "2m": 390,
+            "3m": 490,
+            "4m": 540,
+            "5m": 590,
+            "6m": 650,
+            "7m": 790,
+            "evacuator": 570,
+            "tir": 840
+          },
+          "source_row": 115
+        },
+        {
+          "destination": "Kəlbəcər İstisu",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 116
+        },
+        {
+          "destination": "Laçın",
+          "distance_km": 452,
+          "prices_azn": {
+            "2m": 360,
+            "3m": 420,
+            "4m": 490,
+            "5m": 560,
+            "6m": 620,
+            "7m": 690,
+            "evacuator": 570,
+            "tir": 1200
+          },
+          "source_row": 117
+        },
+        {
+          "destination": "Laçın Qorçu",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 118
+        },
+        {
+          "destination": "Ağdam",
+          "distance_km": 331,
+          "prices_azn": {
+            "2m": 300,
+            "3m": 360,
+            "4m": 400,
+            "5m": 420,
+            "6m": 500,
+            "7m": 520,
+            "evacuator": 420,
+            "tir": 600
+          },
+          "source_row": 119
+        },
+        {
+          "destination": "Böyük Tağlar",
+          "distance_km": 351,
+          "prices_azn": {
+            "2m": 290,
+            "3m": 320,
+            "4m": 370,
+            "5m": 400,
+            "6m": 430,
+            "7m": 460,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 120
+        },
+        {
+          "destination": "Sığnaq",
+          "distance_km": 379,
+          "prices_azn": {
+            "2m": 310,
+            "3m": 340,
+            "4m": 460,
+            "5m": 560,
+            "6m": 610,
+            "7m": 700,
+            "evacuator": 580,
+            "tir": 830
+          },
+          "source_row": 121
+        },
+        {
+          "destination": "Toğana",
+          "distance_km": 396,
+          "prices_azn": {
+            "2m": 260,
+            "3m": 310,
+            "4m": 340,
+            "5m": 370,
+            "6m": 450,
+            "7m": 540,
+            "evacuator": 630,
+            "tir": 780
+          },
+          "source_row": 122
+        },
+        {
+          "destination": "Daşaltı",
+          "distance_km": 388,
+          "prices_azn": {
+            "2m": 310,
+            "3m": 340,
+            "4m": 460,
+            "5m": 560,
+            "6m": 610,
+            "7m": 760,
+            "evacuator": 480,
+            "tir": 920
+          },
+          "source_row": 123
+        },
+        {
+          "destination": "Xocavənd",
+          "distance_km": 354,
+          "prices_azn": {
+            "2m": 310,
+            "3m": 330,
+            "4m": 440,
+            "5m": 540,
+            "6m": 590,
+            "7m": 610,
+            "evacuator": 550,
+            "tir": 650
+          },
+          "source_row": 124
+        },
+        {
+          "destination": "Mincivan",
+          "distance_km": 403,
+          "prices_azn": {
+            "2m": 340,
+            "3m": 390,
+            "4m": 400,
+            "5m": 450,
+            "6m": 500,
+            "7m": 700,
+            "evacuator": 600,
+            "tir": 680
+          },
+          "source_row": 125
+        },
+        {
+          "destination": "Minkənd",
+          "distance_km": 371,
+          "prices_azn": {
+            "2m": 370,
+            "3m": 450,
+            "4m": 500,
+            "5m": 590,
+            "6m": 660,
+            "7m": 870,
+            "evacuator": 770,
+            "tir": 1250
+          },
+          "source_row": 126
+        },
+        {
+          "destination": "Şükürbəyli",
+          "distance_km": 312,
+          "prices_azn": {
+            "2m": 240,
+            "3m": 280,
+            "4m": 300,
+            "5m": 320,
+            "6m": 400,
+            "7m": 450,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 127
+        },
+        {
+          "destination": "Xocalı",
+          "distance_km": 382,
+          "prices_azn": {
+            "2m": 300,
+            "3m": 320,
+            "4m": 390,
+            "5m": 470,
+            "6m": 530,
+            "7m": 580,
+            "evacuator": 560,
+            "tir": 680
+          },
+          "source_row": 128
+        },
+        {
+          "destination": "Xankəndi",
+          "distance_km": 391,
+          "prices_azn": {
+            "2m": 310,
+            "3m": 330,
+            "4m": 440,
+            "5m": 540,
+            "6m": 590,
+            "7m": 660,
+            "evacuator": 600,
+            "tir": 700
+          },
+          "source_row": 129
+        },
+        {
+          "destination": "Qırmızı Bazar",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": 310,
+            "3m": 340,
+            "4m": 380,
+            "5m": 450,
+            "6m": 500,
+            "7m": 550,
+            "evacuator": 380,
+            "tir": 750
+          },
+          "source_row": 130
+        },
+        {
+          "destination": "Sanqaçal",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 131
+        },
+        {
+          "destination": "Ələt (Qaradağ)",
+          "distance_km": null,
+          "prices_azn": {
+            "2m": null,
+            "3m": null,
+            "4m": null,
+            "5m": null,
+            "6m": null,
+            "7m": null,
+            "evacuator": null,
+            "tir": null
+          },
+          "source_row": 132
+        }
+      ]
+    }
+  ],
+  "local_tariffs_raw": [
+    {
+      "area": "Bakı şəhər daxili",
+      "vehicles": [
+        {
+          "vehicle": "Ford Tranzit",
+          "length_m": 2.3,
+          "width_m": 1.3,
+          "height_m": 1.3,
+          "weight": "0-700kq",
+          "volume_text": "(5-10m3 )",
+          "price_column_1_raw": "35 man.",
+          "price_column_2_raw": "50 man.",
+          "source_row": 137
+        },
+        {
+          "vehicle": "Avtokar",
+          "length_m": "məbləğ işə görə dəyişir",
+          "width_m": null,
+          "height_m": null,
+          "weight": "3,5t",
+          "volume_text": null,
+          "price_column_1_raw": "80 man.",
+          "price_column_2_raw": "140  man.+",
+          "source_row": 138
+        },
+        {
+          "vehicle": "Yük maşını (3m)",
+          "length_m": 3,
+          "width_m": 1.7,
+          "height_m": 1.7,
+          "weight": "1t",
+          "volume_text": "(0-9m3 )",
+          "price_column_1_raw": "50 man.",
+          "price_column_2_raw": "70 man.",
+          "source_row": 139
+        },
+        {
+          "vehicle": "Yük maşını (4m)-liftli",
+          "length_m": 4.4,
+          "width_m": 2.1,
+          "height_m": 2.3,
+          "weight": "0-2t",
+          "volume_text": "(15-18m3 )",
+          "price_column_1_raw": "55 man.",
+          "price_column_2_raw": "80 man.",
+          "source_row": 140
+        },
+        {
+          "vehicle": "Yük maşını (5m)",
+          "length_m": 5,
+          "width_m": 2,
+          "height_m": 2,
+          "weight": "0-5t",
+          "volume_text": "(18-21m3 )",
+          "price_column_1_raw": "70 man.",
+          "price_column_2_raw": "100 man.",
+          "source_row": 141
+        },
+        {
+          "vehicle": "Yük maşını (6m)- liftli",
+          "length_m": 6,
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "0-7t",
+          "volume_text": "(21-28m3 )",
+          "price_column_1_raw": "110 man.",
+          "price_column_2_raw": "140 man.",
+          "source_row": 142
+        },
+        {
+          "vehicle": "Yük maşını (7m)- liftli",
+          "length_m": 7.25,
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "10-11t",
+          "volume_text": "(38-40m3 )",
+          "price_column_1_raw": "140 man.",
+          "price_column_2_raw": "170 man.",
+          "source_row": 143
+        },
+        {
+          "vehicle": "Tır",
+          "length_m": "12,6-13",
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "25t",
+          "volume_text": "(74-75m3 )",
+          "price_column_1_raw": "200 man.",
+          "price_column_2_raw": "220 man.",
+          "source_row": 144
+        },
+        {
+          "vehicle": "Evakuator",
+          "length_m": 6,
+          "width_m": 2.2,
+          "height_m": " - ",
+          "weight": "5t",
+          "volume_text": "(20-21m3 )",
+          "price_column_1_raw": "25man.",
+          "price_column_2_raw": "75 man.",
+          "source_row": 145
+        }
+      ]
+    },
+    {
+      "area": "Bakı-Abşeron daxili",
+      "vehicles": [
+        {
+          "vehicle": "Ford Tranzit",
+          "length_m": 2.3,
+          "width_m": 1.3,
+          "height_m": 1.3,
+          "weight": "0-700kq",
+          "volume_text": "(5-10m3 )",
+          "price_column_1_raw": "40 man.",
+          "price_column_2_raw": "60 man.",
+          "source_row": 149
+        },
+        {
+          "vehicle": "Avtokar",
+          "length_m": "məbləğ işə görə dəyişir",
+          "width_m": null,
+          "height_m": null,
+          "weight": "3,5t",
+          "volume_text": null,
+          "price_column_1_raw": "100 man.",
+          "price_column_2_raw": "160 man.+",
+          "source_row": 150
+        },
+        {
+          "vehicle": "Yük maşını (3m)",
+          "length_m": 3,
+          "width_m": 1.7,
+          "height_m": 1.7,
+          "weight": "1t",
+          "volume_text": "(0-9m3 )",
+          "price_column_1_raw": "55 man.",
+          "price_column_2_raw": "75 man.",
+          "source_row": 152
+        },
+        {
+          "vehicle": "Yük maşını (4m)-liftli",
+          "length_m": 4.4,
+          "width_m": 2.1,
+          "height_m": 2.3,
+          "weight": "0-2t",
+          "volume_text": "(15-18m3 )",
+          "price_column_1_raw": "70 man.",
+          "price_column_2_raw": "100 man.",
+          "source_row": 153
+        },
+        {
+          "vehicle": "Yük maşını (5m)",
+          "length_m": 5,
+          "width_m": 2,
+          "height_m": 2,
+          "weight": "0-5t",
+          "volume_text": "(18-21m3 )",
+          "price_column_1_raw": "80 man.",
+          "price_column_2_raw": "110 man.",
+          "source_row": 154
+        },
+        {
+          "vehicle": "Yük maşını (6m)- liftli",
+          "length_m": 6,
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "0-7t",
+          "volume_text": "(21-28m3 )",
+          "price_column_1_raw": "120 man.",
+          "price_column_2_raw": "150 man.",
+          "source_row": 155
+        },
+        {
+          "vehicle": "Yük maşını (7m) - liftli ",
+          "length_m": 7.25,
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "10-11t",
+          "volume_text": "(38-40m3 )",
+          "price_column_1_raw": "150 man.",
+          "price_column_2_raw": "180 man.",
+          "source_row": 156
+        },
+        {
+          "vehicle": "Tır",
+          "length_m": "12,6-13",
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "25t",
+          "volume_text": "(74-75m3 )",
+          "price_column_1_raw": "220 man.",
+          "price_column_2_raw": "280 man.",
+          "source_row": 157
+        },
+        {
+          "vehicle": "Evakuator",
+          "length_m": 6,
+          "width_m": 2.2,
+          "height_m": " - ",
+          "weight": "5t",
+          "volume_text": "(20-21m3 )",
+          "price_column_1_raw": "35 man.",
+          "price_column_2_raw": "80 man.",
+          "source_row": 158
+        }
+      ]
+    },
+    {
+      "area": "Bakı-Sumqayıt daxili",
+      "vehicles": [
+        {
+          "vehicle": "Ford Tranzit",
+          "length_m": 2.3,
+          "width_m": 1.3,
+          "height_m": 1.3,
+          "weight": "0-700kq",
+          "volume_text": "(5-10m3 )",
+          "price_column_1_raw": "40 man.",
+          "price_column_2_raw": "60 man.",
+          "source_row": 162
+        },
+        {
+          "vehicle": "Avtokar",
+          "length_m": "məbləğ işə görə dəyişir",
+          "width_m": null,
+          "height_m": null,
+          "weight": "3,5t",
+          "volume_text": null,
+          "price_column_1_raw": "120 man.",
+          "price_column_2_raw": "200 man.+",
+          "source_row": 163
+        },
+        {
+          "vehicle": "Yük maşını (3m)",
+          "length_m": 3,
+          "width_m": 1.7,
+          "height_m": 1.7,
+          "weight": "1t",
+          "volume_text": "(0-9m3 )",
+          "price_column_1_raw": "50 man.",
+          "price_column_2_raw": "70 man.",
+          "source_row": 164
+        },
+        {
+          "vehicle": "Yük maşını (4m)",
+          "length_m": 4.4,
+          "width_m": 2.1,
+          "height_m": 2.3,
+          "weight": "2.5t-4t",
+          "volume_text": "(15-18m3 )",
+          "price_column_1_raw": "70 man.",
+          "price_column_2_raw": "95 man.",
+          "source_row": 165
+        },
+        {
+          "vehicle": "Yük maşını (5m)",
+          "length_m": 5,
+          "width_m": 2,
+          "height_m": 2,
+          "weight": "0-5t",
+          "volume_text": "(18-21m3 )",
+          "price_column_1_raw": "80 man.",
+          "price_column_2_raw": "110 man.",
+          "source_row": 166
+        },
+        {
+          "vehicle": "Yük maşını (6m)- liftli",
+          "length_m": 6,
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "6t-7t",
+          "volume_text": "(21-28m3 )",
+          "price_column_1_raw": "110 man.",
+          "price_column_2_raw": "130 man.",
+          "source_row": 167
+        },
+        {
+          "vehicle": "Yük maşını (7m) - liftli ",
+          "length_m": 7.25,
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "10-11t",
+          "volume_text": "(38-40m3 )",
+          "price_column_1_raw": "140 man.",
+          "price_column_2_raw": "180 man.",
+          "source_row": 168
+        },
+        {
+          "vehicle": "Tır",
+          "length_m": "12,6-13",
+          "width_m": 2.4,
+          "height_m": 2.4,
+          "weight": "25t",
+          "volume_text": "(74-75m3 )",
+          "price_column_1_raw": "220 man.",
+          "price_column_2_raw": "280 man.",
+          "source_row": 169
+        },
+        {
+          "vehicle": "Evakuator",
+          "length_m": 6,
+          "width_m": 2.2,
+          "height_m": " - ",
+          "weight": "5t",
+          "volume_text": "(20-21m3 )",
+          "price_column_1_raw": "35 man.",
+          "price_column_2_raw": "80 man.",
+          "source_row": 170
+        }
+      ]
+    }
+  ],
+  "loading_unloading_rules_raw": [
+    {
+      "vehicle": "Ford Tranzit",
+      "operation": "Yükləmə üçün",
+      "allowed_time": "0,5 saat",
+      "delay_charge_raw": "₼ 5,00",
+      "source_row": 176
+    },
+    {
+      "vehicle": "Ford Tranzit",
+      "operation": "Boşaltma üçün",
+      "allowed_time": "0,5 saat",
+      "delay_charge_raw": "₼ 5,00",
+      "source_row": 177
+    },
+    {
+      "vehicle": "Evakuator",
+      "operation": "Yükləmə üçün",
+      "allowed_time": "0,5 saat",
+      "delay_charge_raw": "₼ 5,00",
+      "source_row": 178
+    },
+    {
+      "vehicle": "Evakuator",
+      "operation": "Boşaltma üçün",
+      "allowed_time": "0,5 saat",
+      "delay_charge_raw": "₼ 5,00",
+      "source_row": 179
+    },
+    {
+      "vehicle": "Avtokar",
+      "operation": "Yükləmə üçün",
+      "allowed_time": null,
+      "delay_charge_raw": "₼ 10,00",
+      "source_row": 181
+    },
+    {
+      "vehicle": "Avtokar",
+      "operation": "Boşaltma üçün",
+      "allowed_time": null,
+      "delay_charge_raw": "₼ 10,00",
+      "source_row": 182
+    },
+    {
+      "vehicle": "Yük maşını (3m )",
+      "operation": "Yükləmə üçün",
+      "allowed_time": "1 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 184
+    },
+    {
+      "vehicle": "Yük maşını (3m )",
+      "operation": "Boşaltma üçün",
+      "allowed_time": "1 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 185
+    },
+    {
+      "vehicle": "Yük maşını (4m )",
+      "operation": "Yükləmə üçün",
+      "allowed_time": "1 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 186
+    },
+    {
+      "vehicle": "Yük maşını (4m )",
+      "operation": "Boşaltma üçün",
+      "allowed_time": "1 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 187
+    },
+    {
+      "vehicle": "Yük maşını (5m )",
+      "operation": "Yükləmə üçün",
+      "allowed_time": "1 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 188
+    },
+    {
+      "vehicle": "Yük maşını (5m )",
+      "operation": "Boşaltma üçün",
+      "allowed_time": "1 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 189
+    },
+    {
+      "vehicle": "Yük maşını (6m )",
+      "operation": "Yükləmə üçün",
+      "allowed_time": "2 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 190
+    },
+    {
+      "vehicle": "Yük maşını (6m )",
+      "operation": "Boşaltma üçün",
+      "allowed_time": "2 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 191
+    },
+    {
+      "vehicle": "Yük maşını (7m)",
+      "operation": "Yükləmə üçün",
+      "allowed_time": "2 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 192
+    },
+    {
+      "vehicle": "Yük maşını (7m)",
+      "operation": "Boşaltma üçün",
+      "allowed_time": "2 saat",
+      "delay_charge_raw": "₼ 20,00",
+      "source_row": 193
+    },
+    {
+      "vehicle": "Tır",
+      "operation": "Yükləmə üçün",
+      "allowed_time": "3 saat",
+      "delay_charge_raw": "₼ 30,00",
+      "source_row": 194
+    },
+    {
+      "vehicle": "Tır",
+      "operation": "Boşaltma üçün",
+      "allowed_time": "3 saat",
+      "delay_charge_raw": "₼ 30,00",
+      "source_row": 195
+    }
+  ],
+  "known_suspicious_current_values": [
+    {
+      "destination": "İsmayıllı",
+      "field": "2m",
+      "value": 270,
+      "note": "User confirmed some current tariffs are wrong; keep V1 as-is until new list."
+    },
+    {
+      "destination": "Lerik",
+      "field": "5m",
+      "value": 270,
+      "note": "User confirmed some current tariffs are wrong; keep V1 as-is until new list."
+    }
+  ]
+}

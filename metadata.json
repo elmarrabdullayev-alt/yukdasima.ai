@@ -1,0 +1,6 @@
+{
+  "name": "yukdasima.ai",
+  "description": "Azərbaycan üzrə müasir və etibarlı yükdaşıma və evakuasiya xidmətlərinin ilkin qiymətləndirilməsi və sifarişi.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
