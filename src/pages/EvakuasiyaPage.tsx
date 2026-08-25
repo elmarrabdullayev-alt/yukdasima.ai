@@ -691,6 +691,39 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
             </Link>
 
             <Link
+              href="/evakuator/baki-qebele"
+              className="p-5 rounded-2xl bg-white border border-blue-200 hover:border-blue-500 hover:shadow-sm transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Bakı – Qəbələ Evakuator</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">216 km məsafəyə sabit 210 AZN rəsmi tarif ilə operativ daşıma.</p>
+            </Link>
+
+            <Link
+              href="/evakuator/baki-seki"
+              className="p-5 rounded-2xl bg-white border border-blue-200 hover:border-blue-500 hover:shadow-sm transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Bakı – Şəki Evakuator</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">297 km məsafəyə sabit 240 AZN rəsmi tarif ilə operativ daşıma.</p>
+            </Link>
+
+            <Link
+              href="/evakuator/baki-gence"
+              className="p-5 rounded-2xl bg-white border border-blue-200 hover:border-blue-500 hover:shadow-sm transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Bakı – Gəncə Evakuator</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">362 km məsafəyə sabit 240 AZN rəsmi tarif ilə operativ daşıma.</p>
+            </Link>
+
+            <Link
               href="/qiymetler"
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >

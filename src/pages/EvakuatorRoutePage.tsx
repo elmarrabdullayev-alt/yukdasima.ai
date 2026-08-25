@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { ApprovedRouteConfig, getApprovedEvakuatorRoute } from '../seo/routeRegistry';
+import {
+  ApprovedRouteConfig,
+  getApprovedEvakuatorRoute,
+  getAllApprovedEvakuatorRoutes,
+} from '../seo/routeRegistry';
 import { lookupEvacuatorTariff, lookupRouteTariff } from '../services/tariffService';
 import { EvakuasiyaEstimator } from '../components/EvakuasiyaEstimator';
 import { Link } from '../router/RouterContext';
@@ -540,7 +544,55 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           </div>
         </section>
 
-        {/* Section 7: Contextual Internal Links to Other Relevant Pages */}
+        {/* Section 7: Other Popular Evakuasiya Routes */}
+        <section aria-labelledby="other-routes-heading" className="space-y-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 id="other-routes-heading" className="text-xl sm:text-2xl font-bold text-slate-900">
+                Digər Rayonlar Üzrə Evakuasiya Marşrutları
+              </h2>
+              <p className="text-slate-600 text-xs sm:text-sm mt-1">
+                Bakıdan Azərbaycanın digər şəhər və rayonlarına 24/7 operativ evakuator xidmətləri:
+              </p>
+            </div>
+            <Link
+              href="/evakuasiya"
+              className="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1 shrink-0"
+            >
+              <span>Bütün rayonlar</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {getAllApprovedEvakuatorRoutes()
+              .filter((r) => r.slug !== routeConfig.slug)
+              .slice(0, 8)
+              .map((r) => {
+                const tariff = lookupEvacuatorTariff(r.origin, r.destination);
+                return (
+                  <Link
+                    key={r.slug}
+                    href={r.routePath}
+                    className="p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors text-sm">
+                        {r.origin} – {r.destination}
+                      </span>
+                      <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                    </div>
+                    <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+                      <span>{tariff.distanceKm ? `${tariff.distanceKm} km` : 'Magistral'}</span>
+                      <span className="font-bold text-blue-600">{tariff.price ? `${tariff.price} AZN` : 'Tarif'}</span>
+                    </div>
+                  </Link>
+                );
+              })}
+          </div>
+        </section>
+
+        {/* Section 8: Contextual Internal Links to Other Relevant Pages */}
         <section aria-labelledby="related-services-heading" className="bg-slate-100/70 rounded-2xl p-6 sm:p-8 border border-slate-200 space-y-4">
           <h2 id="related-services-heading" className="text-lg sm:text-xl font-bold text-slate-900">
             Digər Əlaqəli Xidmətlər və Qiymət Cədvəlləri

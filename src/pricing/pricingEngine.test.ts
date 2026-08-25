@@ -29,6 +29,16 @@ import {
   isBakuOrigin,
   classifyRoute
 } from '../services/destinationResolver';
+import {
+  getApprovedEvakuatorRoute,
+  getAllApprovedEvakuatorRoutes,
+  generateRouteSeoConfig,
+  APPROVED_EVAKUATOR_ROUTES,
+  getApprovedYukdasimaRoute,
+  getAllApprovedYukdasimaRoutes,
+  generateYukdasimaRouteSeoConfig,
+  APPROVED_YUKDASIMA_ROUTES,
+} from '../seo/routeRegistry';
 
 function createMockAnalysis(minVol: number, maxVol: number, items: Array<{ name: string; qty: number; vol: number }> = []): CargoAnalysisData {
   return {
@@ -586,6 +596,263 @@ export function runPricingEngineVerificationTests(): boolean {
     );
   }
 
+  // --- PROGRAMMATIC SEO ROUTE REGISTRY & TARIFF INTEGRITY TESTS ---
+
+  // Test 36: Canonical SEO route retrieval for key regional destinations
+  {
+    const agdasRoute = getApprovedEvakuatorRoute('baki-agdas');
+    const qebeleRoute = getApprovedEvakuatorRoute('baki-qebele');
+    const sekiRoute = getApprovedEvakuatorRoute('baki-seki');
+    const genceRoute = getApprovedEvakuatorRoute('baki-gence');
+    const qubaRoute = getApprovedEvakuatorRoute('baki-quba');
+
+    assert(
+      agdasRoute !== null &&
+      agdasRoute.destination === 'Ağdaş' &&
+      qebeleRoute !== null &&
+      qebeleRoute.destination === 'Qəbələ' &&
+      sekiRoute !== null &&
+      sekiRoute.destination === 'Şəki' &&
+      genceRoute !== null &&
+      genceRoute.destination === 'Gəncə' &&
+      qubaRoute !== null &&
+      qubaRoute.destination === 'Quba',
+      'Test 36: Programmatic SEO route retrieval for Ağdaş, Qəbələ, Şəki, Gəncə, and Quba succeeds'
+    );
+  }
+
+  // Test 37: Transliteration & alias matching for SEO routes ("baki-qabala", "qabala", "sheki", "baki-ganja")
+  {
+    const qabalaRoute = getApprovedEvakuatorRoute('baki-qabala');
+    const bareQabalaRoute = getApprovedEvakuatorRoute('qabala');
+    const shekiRoute = getApprovedEvakuatorRoute('baki-sheki');
+    const ganjaRoute = getApprovedEvakuatorRoute('ganja');
+    const agdashRoute = getApprovedEvakuatorRoute('baki-agdash');
+
+    assert(
+      qabalaRoute?.slug === 'baki-qebele' &&
+      bareQabalaRoute?.slug === 'baki-qebele' &&
+      shekiRoute?.slug === 'baki-seki' &&
+      ganjaRoute?.slug === 'baki-gence' &&
+      agdashRoute?.slug === 'baki-agdas',
+      'Test 37: Transliterated slugs and town names ("baki-qabala", "qabala", "baki-sheki", "ganja", "baki-agdash") resolve to canonical routes'
+    );
+  }
+
+  // Test 38: Unapproved / unsupported route lookups return null
+  {
+    const invalidRoute1 = getApprovedEvakuatorRoute('baki-unknowncity');
+    const invalidRoute2 = getApprovedEvakuatorRoute('sumqayit-agdas');
+    const invalidRoute3 = getApprovedEvakuatorRoute('');
+
+    assert(
+      invalidRoute1 === null &&
+      invalidRoute2 === null &&
+      invalidRoute3 === null,
+      'Test 38: Non-existent, unsupported or non-Baku routes return null from route registry'
+    );
+  }
+
+  // Test 39: Dynamic SEO metadata generation preserves live prices and structured data
+  {
+    const qebeleRoute = getApprovedEvakuatorRoute('baki-qebele')!;
+    const qebeleSeo = generateRouteSeoConfig(qebeleRoute);
+    const genceRoute = getApprovedEvakuatorRoute('baki-gence')!;
+    const genceSeo = generateRouteSeoConfig(genceRoute);
+
+    assert(
+      qebeleSeo.title.includes('210 AZN') &&
+      qebeleSeo.h1 === 'Bakıdan Qəbələyə Evakuator Xidməti və Qiyməti' &&
+      qebeleSeo.canonicalUrl === 'https://yukdasima.ai/evakuator/baki-qebele' &&
+      qebeleSeo.schemaType === 'Service' &&
+      (qebeleSeo.faqs?.length || 0) >= 5 &&
+      genceSeo.title.includes('240 AZN') &&
+      genceSeo.h1 === 'Bakıdan Gəncəyə Evakuator Xidməti və Qiyməti' &&
+      genceSeo.canonicalUrl === 'https://yukdasima.ai/evakuator/baki-gence',
+      'Test 39: Dynamic SEO metadata generates truthful prices, semantic H1, canonical URL, and FAQ structured data'
+    );
+  }
+
+  // Test 40: Centralized database integrity check across all approved routes
+  {
+    const allRoutes = getAllApprovedEvakuatorRoutes();
+    const allValid = allRoutes.every((r) => {
+      const tariff = lookupEvacuatorTariff(r.origin, r.destination);
+      return (
+        r.origin === 'Bakı' &&
+        typeof tariff.price === 'number' &&
+        tariff.price > 0 &&
+        tariff.hasMissingTariff === false &&
+        r.destinationDative.length > 0 &&
+        r.destinationAblative.length > 0 &&
+        r.destinationLocative.length > 0
+      );
+    });
+
+    assert(
+      allRoutes.length >= 80 && allValid,
+      `Test 40: Centralized database integrity check passed for all ${allRoutes.length} approved evakuator routes`
+    );
+  }
+
+  // --- PROGRAMMATIC YUKDASIMA SEO ROUTES & TARIFFS REGRESSION TESTS ---
+
+  // Test 41: Approved Yukdasima routes registry count
+  {
+    const allYukRoutes = getAllApprovedYukdasimaRoutes();
+    assert(
+      allYukRoutes.length === 84,
+      `Test 41: Exactly 84 canonical Bakı -> region yukdasima routes built from database (found: ${allYukRoutes.length})`
+    );
+  }
+
+  // Test 42: Key destinations full vehicle pricing matrix from central database
+  {
+    const gence = getApprovedYukdasimaRoute('baki-gence');
+    const qebele = getApprovedYukdasimaRoute('baki-qebele');
+    const seki = getApprovedYukdasimaRoute('baki-seki');
+    const quba = getApprovedYukdasimaRoute('baki-quba');
+    const lenkeran = getApprovedYukdasimaRoute('baki-lenkeran');
+    const agdas = getApprovedYukdasimaRoute('baki-agdas');
+
+    assert(
+      gence?.prices['2m'] === 200 &&
+      gence?.prices['3m'] === 260 &&
+      gence?.prices['4m'] === 280 &&
+      gence?.prices['5m'] === 300 &&
+      gence?.prices['6m'] === 330 &&
+      gence?.prices['7m'] === 350 &&
+      qebele?.prices['2m'] === 180 &&
+      qebele?.prices['4m'] === 260 &&
+      qebele?.prices['7m'] === 330 &&
+      seki?.prices['2m'] === 230 &&
+      seki?.prices['5m'] === 330 &&
+      quba?.prices['2m'] === 130 &&
+      quba?.prices['4m'] === 170 &&
+      quba?.prices['7m'] === 220 &&
+      lenkeran?.prices['2m'] === 200 &&
+      lenkeran?.prices['5m'] === 260 &&
+      agdas?.prices['2m'] === 200 &&
+      agdas?.prices['4m'] === 270 &&
+      agdas?.prices['7m'] === 330,
+      'Test 42: Verified exact multi-vehicle tariffs (2m, 3m, 4m, 5m, 6m, 7m) for key destinations (Gəncə, Qəbələ, Şəki, Quba, Lənkəran, Ağdaş)'
+    );
+  }
+
+  // Test 43: Transliterated slugs and city name aliases for Yukdasima routes
+  {
+    const bareGanja = getApprovedYukdasimaRoute('ganja');
+    const bareGence = getApprovedYukdasimaRoute('gence');
+    const slugQabala = getApprovedYukdasimaRoute('baki-qabala');
+    const bareQabala = getApprovedYukdasimaRoute('qabala');
+    const bareSeki = getApprovedYukdasimaRoute('seki');
+    const slugSheki = getApprovedYukdasimaRoute('baki-sheki');
+    const bareAgdas = getApprovedYukdasimaRoute('agdas');
+    const slugAgdash = getApprovedYukdasimaRoute('baki-agdash');
+
+    assert(
+      bareGanja?.slug === 'baki-gence' &&
+      bareGence?.slug === 'baki-gence' &&
+      slugQabala?.slug === 'baki-qebele' &&
+      bareQabala?.slug === 'baki-qebele' &&
+      bareSeki?.slug === 'baki-seki' &&
+      slugSheki?.slug === 'baki-seki' &&
+      bareAgdas?.slug === 'baki-agdas' &&
+      slugAgdash?.slug === 'baki-agdas',
+      'Test 43: Yukdasima aliases and transliterations ("ganja", "qabala", "sheki", "agdash") resolve to canonical routes'
+    );
+  }
+
+  // Test 44: Unsupported non-Baku or invalid routes return null
+  {
+    const invalid1 = getApprovedYukdasimaRoute('sumqayit-agdas');
+    const invalid2 = getApprovedYukdasimaRoute('quba-seki');
+    const invalid3 = getApprovedYukdasimaRoute('gence-agdas');
+    const invalid4 = getApprovedYukdasimaRoute('baki-unknowncity');
+    const invalid5 = getApprovedYukdasimaRoute('');
+
+    assert(
+      invalid1 === null &&
+      invalid2 === null &&
+      invalid3 === null &&
+      invalid4 === null &&
+      invalid5 === null,
+      'Test 44: Region -> region (Sumqayıt -> Ağdaş, Quba -> Şəki) and invalid routes strictly return null'
+    );
+  }
+
+  // Test 45: Dynamic Yukdasima SEO config generation with accurate H1, meta, and FAQs
+  {
+    const genceRoute = getApprovedYukdasimaRoute('baki-gence')!;
+    const genceSeo = generateYukdasimaRouteSeoConfig(genceRoute);
+    const qebeleRoute = getApprovedYukdasimaRoute('baki-qebele')!;
+    const qebeleSeo = generateYukdasimaRouteSeoConfig(qebeleRoute);
+
+    assert(
+      genceSeo.title === 'Bakı Gəncə Yükdaşıma Qiymətləri | yukdasima.ai' &&
+      genceSeo.h1 === 'Bakıdan Gəncəyə Yükdaşıma Xidməti və Qiymətləri' &&
+      genceSeo.canonicalUrl === 'https://yukdasima.ai/yukdasima/baki-gence' &&
+      genceSeo.metaDescription.includes('Bakıdan Gəncəyə') &&
+      genceSeo.schemaType === 'Service' &&
+      genceSeo.breadcrumbs.length === 3 &&
+      (genceSeo.faqs?.length || 0) === 5 &&
+      qeSeoMatches(qebeleSeo),
+      'Test 45: Yukdasima SEO config produces clean canonical titles, H1s, meta descriptions, and 5 dynamic FAQs'
+    );
+
+    function qeSeoMatches(seo: any) {
+      return (
+        seo.title === 'Bakı Qəbələ Yükdaşıma Qiymətləri | yukdasima.ai' &&
+        seo.h1 === 'Bakıdan Qəbələyə Yükdaşıma Xidməti və Qiymətləri' &&
+        seo.canonicalUrl === 'https://yukdasima.ai/yukdasima/baki-qebele'
+      );
+    }
+  }
+
+  // Test 46: Direct ordering pricing calculation with pre-set vehicle and destination
+  {
+    const analysis = createMockAnalysis(10.0, 10.0);
+    const form = createMockForm({
+      fromAddress: 'Bakı',
+      toAddress: 'Gəncə',
+    });
+    const result = calculateTransportationPricing(analysis, form);
+    assert(
+      result.vehicleCategory === '4m' &&
+      result.vehicleTransportPrice === 280 &&
+      result.routeSummary === 'Bakı → Gəncə',
+      'Test 46: Direct pricing engine correctly resolves Bakı -> Gəncə 4m vehicle to 280 AZN'
+    );
+  }
+
+  // Test 47: Database price completeness check
+  {
+    const allYukRoutes = getAllApprovedYukdasimaRoutes();
+    const hasInvalidPrices = allYukRoutes.some((r) => {
+      const validP = Object.values(r.prices).filter((v): v is number => typeof v === 'number' && v > 0);
+      return validP.length === 0;
+    });
+    assert(
+      !hasInvalidPrices,
+      'Test 47: Every approved yukdasima route has at least one valid vehicle tariff > 0'
+    );
+  }
+
+  // Test 48: Sitemap uniqueness across evakuator and yukdasima routes
+  {
+    const allEvac = getAllApprovedEvakuatorRoutes().map((r) => `/evakuator/${r.slug}`);
+    const allYuk = getAllApprovedYukdasimaRoutes().map((r) => `/yukdasima/${r.slug}`);
+    const totalSet = new Set([...allEvac, ...allYuk]);
+
+    assert(
+      totalSet.size === allEvac.length + allYuk.length &&
+      allEvac.length === 82 &&
+      allYuk.length === 84,
+      `Test 48: All 82 evacuator and 84 yukdasima URLs are completely unique with 0 collisions (Total: ${totalSet.size})`
+    );
+  }
+
   console.log(`[Pricing Engine Verification] ${passed}/${total} tests passed.`);
   return passed === total;
 }
+

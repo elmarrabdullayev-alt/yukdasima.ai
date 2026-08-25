@@ -1,4 +1,9 @@
-import { getApprovedEvakuatorRoute, generateRouteSeoConfig } from './routeRegistry';
+import {
+  getApprovedEvakuatorRoute,
+  generateRouteSeoConfig,
+  getApprovedYukdasimaRoute,
+  generateYukdasimaRouteSeoConfig,
+} from './routeRegistry';
 
 export type FAQItem = PageFaqItem;
 
@@ -272,6 +277,14 @@ export function getPageSeo(pathname: string): PageSeoConfig {
     const approvedRoute = getApprovedEvakuatorRoute(normalizedPath);
     if (approvedRoute) {
       return generateRouteSeoConfig(approvedRoute);
+    }
+  }
+
+  // 3. Check programmatic approved yukdasima route SEO configs
+  if (normalizedPath.startsWith('/yukdasima/')) {
+    const approvedRoute = getApprovedYukdasimaRoute(normalizedPath);
+    if (approvedRoute) {
+      return generateYukdasimaRouteSeoConfig(approvedRoute);
     }
   }
 

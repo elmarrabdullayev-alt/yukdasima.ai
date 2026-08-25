@@ -24,12 +24,14 @@ import {
 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { YUKDASIMA_FAQS } from '../seo/metadata';
+import { getAllApprovedYukdasimaRoutes } from '../seo/routeRegistry';
 
 interface YukdasimaPageProps {
   onOpenCallback: (phone?: string) => void;
 }
 
 export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) => {
+  const regionalRoutes = getAllApprovedYukdasimaRoutes();
   // State for active FAQ accordion items (first two expanded by default for best user engagement)
   const [openFaqIndexes, setOpenFaqIndexes] = useState<number[]>([0, 1]);
 
@@ -591,7 +593,57 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
           </div>
         </section>
 
-        {/* Section 8: Related Internal Links Navigation */}
+        {/* Section 8: Regional Intercity Cargo Routes */}
+        <section className="space-y-6" aria-label="Bakıdan Rayonlara Populyar Yükdaşıma Marşrutları">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <MapPin className="w-4 h-4" />
+                <span>Rayonlararası Xətlər</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+                Bakıdan Rayonlara Yükdaşıma Marşrutları
+              </h2>
+              <p className="text-slate-600 text-xs sm:text-sm mt-1">
+                Azərbaycanın bütün bölgələrinə rəsmi sabit tariflərlə yükdaşıma xidməti:
+              </p>
+            </div>
+            <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl">
+              {regionalRoutes.length} Təsdiqlənmiş Marşrut
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {regionalRoutes.slice(0, 16).map((r) => {
+              const rValidPrices = Object.values(r.prices).filter((p): p is number => typeof p === 'number' && p > 0);
+              const rMinPrice = rValidPrices.length > 0 ? Math.min(...rValidPrices) : null;
+
+              return (
+                <Link
+                  key={r.slug}
+                  href={r.routePath}
+                  className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group block space-y-1.5"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-blue-600">Bakı → {r.destination}</span>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                  </div>
+                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
+                    Bakı–{r.destination} Yükdaşıma
+                  </h3>
+                  <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
+                    <span className="text-slate-500">{r.distanceKm ? `${r.distanceKm} km` : 'Rayon'}</span>
+                    <span className="font-extrabold text-slate-900">
+                      {rMinPrice ? `${rMinPrice} AZN-dən` : 'Tariflə'}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Section 9: Related Internal Links Navigation */}
         <section className="space-y-6" aria-label="Əlaqəli Xidmətlər və Keçidlər">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>

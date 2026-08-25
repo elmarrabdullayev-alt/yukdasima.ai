@@ -45,6 +45,9 @@ import { DirectYukdasimaOrder } from './DirectYukdasimaOrder';
 
 interface YukdasimaEstimatorProps {
   onOpenCallback: (initialPhone?: string) => void;
+  initialFromAddress?: string;
+  initialToAddress?: string;
+  initialMode?: 'ai' | 'direct';
 }
 
 const LOADING_MESSAGES = [
@@ -176,13 +179,18 @@ async function urlToBase64(url: string): Promise<string> {
   }
 }
 
-export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({ onOpenCallback }) => {
-  const [yukdasimaMode, setYukdasimaMode] = useState<'ai' | 'direct'>('ai');
+export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
+  onOpenCallback,
+  initialFromAddress = '',
+  initialToAddress = '',
+  initialMode = 'ai',
+}) => {
+  const [yukdasimaMode, setYukdasimaMode] = useState<'ai' | 'direct'>(initialMode);
   const [formData, setFormData] = useState<YukdasimaFormData>({
     images: [],
     details: '',
-    fromAddress: '',
-    toAddress: '',
+    fromAddress: initialFromAddress,
+    toAddress: initialToAddress,
     fromFloor: '1',
     toFloor: '1',
     hasElevator: 'yes',
@@ -653,6 +661,8 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({ onOpenCa
         <DirectYukdasimaOrder
           onOpenCallback={onOpenCallback}
           onSwitchToAi={() => setYukdasimaMode('ai')}
+          initialFromAddress={initialFromAddress || formData.fromAddress || 'Bakı'}
+          initialToAddress={initialToAddress || formData.toAddress || ''}
         />
       ) : (
         <>

@@ -24,6 +24,7 @@ import { FehleXidmetiPage } from './pages/FehleXidmetiPage';
 import { QiymetlerPage } from './pages/QiymetlerPage';
 import { ElaqePage } from './pages/ElaqePage';
 import { EvakuatorRoutePage } from './pages/EvakuatorRoutePage';
+import { YukdasimaRoutePage } from './pages/YukdasimaRoutePage';
 
 function AppContent() {
   const { pathname } = useRouter();
@@ -50,6 +51,12 @@ function AppContent() {
     if (pathname.startsWith('/evakuator/')) {
       const slug = pathname.replace('/evakuator/', '');
       return <EvakuatorRoutePage routeSlug={slug} onOpenCallback={handleOpenCallback} />;
+    }
+
+    // 2. Programmatic dynamic yukdasima routes (e.g. /yukdasima/baki-gence)
+    if (pathname.startsWith('/yukdasima/') && pathname !== '/yukdasima') {
+      const slug = pathname.replace('/yukdasima/', '');
+      return <YukdasimaRoutePage routeSlug={slug} onOpenCallback={handleOpenCallback} />;
     }
 
     switch (pathname) {

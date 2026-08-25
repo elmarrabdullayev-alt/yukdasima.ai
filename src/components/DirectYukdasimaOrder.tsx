@@ -22,18 +22,24 @@ import { POPULAR_LOCATIONS } from '../data/mockData';
 interface DirectYukdasimaOrderProps {
   onOpenCallback: (initialPhone?: string) => void;
   onSwitchToAi: () => void;
+  initialFromAddress?: string;
+  initialToAddress?: string;
+  initialSelectedCategory?: '2m' | '3m' | '4m' | '5m' | '6m' | '7m';
 }
 
 export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
   onOpenCallback,
   onSwitchToAi,
+  initialFromAddress = 'Bakı',
+  initialToAddress = '',
+  initialSelectedCategory = '4m',
 }) => {
   // Vehicle selection state (default to 4m as it's the most common)
-  const [selectedCategory, setSelectedCategory] = useState<'2m' | '3m' | '4m' | '5m' | '6m' | '7m'>('4m');
+  const [selectedCategory, setSelectedCategory] = useState<'2m' | '3m' | '4m' | '5m' | '6m' | '7m'>(initialSelectedCategory);
 
   // Route state
-  const [fromAddress, setFromAddress] = useState<string>('Bakı');
-  const [toAddress, setToAddress] = useState<string>('');
+  const [fromAddress, setFromAddress] = useState<string>(initialFromAddress || 'Bakı');
+  const [toAddress, setToAddress] = useState<string>(initialToAddress || '');
 
   // Optional services
   const [needsWorkers, setNeedsWorkers] = useState<boolean>(false);
