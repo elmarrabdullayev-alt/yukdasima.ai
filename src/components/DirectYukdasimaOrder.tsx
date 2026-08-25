@@ -21,10 +21,11 @@ import { POPULAR_LOCATIONS } from '../data/mockData';
 
 interface DirectYukdasimaOrderProps {
   onOpenCallback: (initialPhone?: string) => void;
-  onSwitchToAi: () => void;
+  onSwitchToAi?: () => void;
   initialFromAddress?: string;
   initialToAddress?: string;
-  initialSelectedCategory?: '2m' | '3m' | '4m' | '5m' | '6m' | '7m';
+  initialSelectedCategory?: '2m' | '3m' | '4m' | '5m' | '6m' | '7m' | 'tir';
+  defaultVehicle?: VehicleSpec;
 }
 
 export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
@@ -33,9 +34,12 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
   initialFromAddress = 'Bakı',
   initialToAddress = '',
   initialSelectedCategory = '4m',
+  defaultVehicle,
 }) => {
-  // Vehicle selection state (default to 4m as it's the most common)
-  const [selectedCategory, setSelectedCategory] = useState<'2m' | '3m' | '4m' | '5m' | '6m' | '7m'>(initialSelectedCategory);
+  // Vehicle selection state (default to defaultVehicle.category or initialSelectedCategory)
+  const [selectedCategory, setSelectedCategory] = useState<'2m' | '3m' | '4m' | '5m' | '6m' | '7m' | 'tir'>(
+    defaultVehicle?.category || initialSelectedCategory
+  );
 
   // Route state
   const [fromAddress, setFromAddress] = useState<string>(initialFromAddress || 'Bakı');
@@ -87,17 +91,20 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
 
   // Handle WhatsApp Submission
   const handleWhatsAppOrder = () => {
-    let msg = `Salam. yukdasima.ai saytından yük maşını sifariş etmək istəyirəm.\n\n`;
+    let msg = `Salam. yukdasima.ai saytından ${selectedCategory === 'tir' ? 'TIR' : 'yük maşını'} sifariş etmək istəyirəm.\n\n`;
     
     const routeDisplay = pricingResult.routeSummary
       ? pricingResult.routeSummary
       : `${fromAddress.trim() || 'Bakı'} → ${toAddress.trim() || 'Təyin edilməyib'}`;
 
-    msg += `Avtomobil: ${currentVehicle.name} (${currentVehicle.category})\n`;
+    msg += `Avtomobil: ${currentVehicle.category === 'tir' ? 'TIR' : `${currentVehicle.name} (${currentVehicle.category})`}\n`;
     msg += `Marşrut: ${routeDisplay}\n`;
     msg += `Avtomobil üçün ilkin qiymət: ${pricingResult.vehicleTransportPriceDisplay}\n`;
     msg += `Fəhlə: ${needsWorkers ? `Bəli (${workerCount} nəfər)` : 'Xeyr'}\n`;
     msg += `Mebel sökülməsi/yığılması: ${needsAssembly ? 'Bəli' : 'Xeyr'}\n`;
+    if (selectedCategory === 'tir') {
+      msg += `Qeyd: TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operatorla dəqiqləşdirilir.\n`;
+    }
 
     if (customerName.trim()) {
       msg += `Ad: ${customerName.trim()}\n`;
@@ -125,19 +132,22 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
               Ehtiyacınıza uyğun olan yük maşınını seçin.
             </p>
           </div>
-          <button
-            type="button"
-            onClick={onSwitchToAi}
-            className="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 py-1.5 px-3 rounded-lg self-start sm:self-auto transition-colors cursor-pointer"
-          >
-            ✨ Avtomobili seçməkdə çətinlik çəkirsiniz? AI ilə təyin edin
-          </button>
+          {onSwitchToAi && (
+            <button
+              type="button"
+              onClick={onSwitchToAi}
+              className="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 py-1.5 px-3 rounded-lg self-start sm:self-auto transition-colors cursor-pointer"
+            >
+              ✨ Avtomobili seçməkdə çətinlik çəkirsiniz? AI ilə təyin edin
+            </button>
+          )}
         </div>
 
         {/* VEHICLE CARDS GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5">
           {vehicles.map((v) => {
             const isSelected = v.category === selectedCategory;
+            const isTir = v.category === 'tir';
             return (
               <div
                 key={v.id}
@@ -159,7 +169,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                           : 'bg-slate-100 text-slate-700'
                       }`}
                     >
-                      {v.category}
+                      {isTir ? 'TIR' : v.category}
                     </span>
                     {isSelected && (
                       <span className="flex items-center gap-1 text-xs font-bold text-blue-700">
@@ -173,24 +183,32 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                   </h4>
 
                   {/* Specifications */}
-                  <div className="mt-3 space-y-1.5 text-xs text-slate-600 bg-slate-100/70 p-2.5 rounded-xl border border-slate-200/60">
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Kuzov ölçüsü:</span>
-                      <span className="font-semibold text-slate-900">
-                        {v.lengthM.toFixed(2)} × {v.widthM.toFixed(2)} × {v.heightM.toFixed(2)} m
-                      </span>
+                  {isTir ? (
+                    <div className="mt-3 text-xs text-slate-600 bg-slate-100/70 p-2.5 rounded-xl border border-slate-200/60 font-medium">
+                      Marşrut üzrə TIR qiymətini öyrənin.
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-500">Təxmini tutum:</span>
-                      <span className="font-semibold text-slate-900">
-                        {v.practicalCapacityM3} m³
-                      </span>
+                  ) : (
+                    <div className="mt-3 space-y-1.5 text-xs text-slate-600 bg-slate-100/70 p-2.5 rounded-xl border border-slate-200/60">
+                      <div className="flex justify-between">
+                        <span className="text-slate-500">Kuzov ölçüsü:</span>
+                        <span className="font-semibold text-slate-900">
+                          {v.lengthM.toFixed(2)} × {v.widthM.toFixed(2)} × {v.heightM.toFixed(2)} m
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-slate-500">Təxmini tutum:</span>
+                        <span className="font-semibold text-slate-900">
+                          {v.practicalCapacityM3} m³
+                        </span>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
-                  <p className="mt-2.5 text-xs text-slate-500 line-clamp-2">
-                    {v.description}
-                  </p>
+                  {!isTir && (
+                    <p className="mt-2.5 text-xs text-slate-500 line-clamp-2">
+                      {v.description}
+                    </p>
+                  )}
                 </div>
 
                 {/* Selection Button */}
@@ -315,7 +333,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
 
           <div className="text-xs text-slate-500 sm:text-right">
             <span className="font-semibold text-slate-700 block">
-              {currentVehicle.name} ({currentVehicle.category})
+              {currentVehicle.category === 'tir' ? 'TIR' : `${currentVehicle.name} (${currentVehicle.category})`}
             </span>
             <span>
               {pricingResult.routeSummary || `${fromAddress || 'Bakı'} → ${toAddress || 'Təyin edilməyib'}`}
@@ -323,9 +341,17 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
           </div>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 pt-1">
-          ℹ️ Bu məbləğ avtomobilin sifariş/daşınma qiymətidir. Əlavə xidmətlər ayrıca hesablana bilər.
-        </p>
+        {selectedCategory === 'tir' ? (
+          <div className="p-3 rounded-xl bg-blue-50/80 border border-blue-200/80 text-blue-900 text-xs sm:text-sm">
+            <p className="font-medium text-slate-800">
+              ℹ️ TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.
+            </p>
+          </div>
+        ) : (
+          <p className="text-xs sm:text-sm text-slate-600 pt-1">
+            ℹ️ Bu məbləğ avtomobilin sifariş/daşınma qiymətidir. Əlavə xidmətlər ayrıca hesablana bilər.
+          </p>
+        )}
 
         {pricingResult.hasMissingTariff && (
           <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm space-y-1">
@@ -334,7 +360,9 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
               <span>Bu marşrut üçün avtomatik qiymət mövcud deyil.</span>
             </div>
             <p className="text-amber-800">
-              Dəqiq qiymət üçün bizimlə əlaqə saxlayın.
+              {selectedCategory === 'tir'
+                ? 'TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.'
+                : 'Dəqiq qiymət üçün bizimlə əlaqə saxlayın.'}
             </p>
           </div>
         )}
@@ -505,14 +533,16 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
         <h3 className="text-lg sm:text-xl font-black tracking-tight text-white flex items-center justify-between">
           <span>Sifarişiniz</span>
           <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-500/30 text-blue-200">
-            {currentVehicle.category}
+            {currentVehicle.category === 'tir' ? 'TIR' : currentVehicle.category}
           </span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm pt-1 border-t border-slate-800">
           <div className="space-y-1">
             <span className="text-slate-400 block text-xs">Avtomobil:</span>
-            <span className="font-bold text-white text-base">{currentVehicle.name}</span>
+            <span className="font-bold text-white text-base">
+              {currentVehicle.category === 'tir' ? 'TIR' : currentVehicle.name}
+            </span>
           </div>
 
           <div className="space-y-1">
@@ -544,6 +574,12 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
           </div>
         </div>
 
+        {selectedCategory === 'tir' && (
+          <div className="p-3 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300">
+            ℹ️ TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.
+          </div>
+        )}
+
         {/* ACTION BUTTONS: WHATSAPP & CALLBACK */}
         <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-slate-800">
           <button
@@ -553,7 +589,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
             className="flex-1 py-3.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base shadow-md shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
           >
             <MessageSquare className="w-5 h-5" />
-            <span>💬 WhatsApp ilə sifariş et</span>
+            <span>{selectedCategory === 'tir' ? '💬 Operatorla dəqiqləşdir' : '💬 WhatsApp ilə sifariş et'}</span>
           </button>
 
           <button
@@ -563,7 +599,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
             className="py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-md shadow-blue-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
           >
             <Phone className="w-4 h-4" />
-            <span>📞 Zəng sifariş et</span>
+            <span>{selectedCategory === 'tir' ? '📞 Operatorla əlaqə' : '📞 Zəng sifariş et'}</span>
           </button>
         </div>
       </div>

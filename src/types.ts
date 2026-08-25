@@ -57,7 +57,7 @@ export interface DeterministicPricingResult {
   volumeRangeDisplay: string;
   
   /** Recommended vehicle info */
-  vehicleCategory?: '2m' | '3m' | '4m' | '5m' | '6m' | '7m';
+  vehicleCategory?: '2m' | '3m' | '4m' | '5m' | '6m' | '7m' | 'tir';
   vehicleName: string;
   vehicleDimensionsDisplay?: string;
   vehicleTheoreticalVolumeM3?: number;

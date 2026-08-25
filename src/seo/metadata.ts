@@ -44,7 +44,7 @@ export const YUKDASIMA_FAQS: PageFaqItem[] = [
   {
     question: 'Bakı daxilində yükdaşıma neçə manatdır?',
     answer:
-      'Bakı şəhəri daxilində ilkin yükdaşıma tarifləri kiçik həcmli yüklər (2m Ford Transit) üçün 25 AZN-dən, standart 3–4 metrlik yük maşınları üçün isə 35–45 AZN-dən başlayır. Dəqiq qiymət yükün növünə və ünvanlar arasındakı məsafəyə görə onlayn kalkulyatorda dərhal təyin edilir.',
+      'Bakı şəhəri daxilində və rayonlararası yükdaşıma qiymətləri yükün həcminə, seçilən maşın növünə və məsafəyə əsasən hesablanır. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
   },
   {
     question: 'Rayonlara yükdaşıma xidməti göstərirsiniz?',
@@ -82,7 +82,7 @@ export const EVAKUASIYA_FAQS: PageFaqItem[] = [
   {
     question: 'Bakı daxilində evakuator qiyməti neçədir?',
     answer:
-      'Bakı şəhəri daxilində standart sedan avtomobillər üçün evakuasiya qiyməti 35 AZN-dən başlayır. Dəqiq qiymət çıxış və çatdırılma ünvanlarını seçərək onlayn kalkulyatorda dərhal müəyyən edilir.',
+      'Bakı şəhəri daxilində və rayonlara evakuasiya xidməti 24/7 operativ şəkildə həyata keçirilir. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
   },
   {
     question: 'Bakıdan rayonlara evakuator qiyməti necə müəyyən olunur?',

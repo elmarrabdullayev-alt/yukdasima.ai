@@ -82,7 +82,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   24/7 Evakuasiya
                 </h3>
                 <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  35 AZN-dən başlayan operativ evakuator xidməti. Bakı və bütün rayonlara təcili çıxış.
+                  24/7 operativ və etibarlı evakuator xidməti. Bakı və bütün rayonlara təcili çıxış.
                 </p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">

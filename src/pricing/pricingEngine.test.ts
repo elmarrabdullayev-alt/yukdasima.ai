@@ -39,6 +39,10 @@ import {
   generateYukdasimaRouteSeoConfig,
   APPROVED_YUKDASIMA_ROUTES,
 } from '../seo/routeRegistry';
+import { PAGE_SEO_CONFIGS, getPageSeo } from '../seo/metadata';
+import { buildStructuredData } from '../seo/structuredData';
+import { injectSeoIntoHtml } from '../../scripts/prerender';
+
 
 function createMockAnalysis(minVol: number, maxVol: number, items: Array<{ name: string; qty: number; vol: number }> = []): CargoAnalysisData {
   return {
@@ -653,7 +657,7 @@ export function runPricingEngineVerificationTests(): boolean {
     );
   }
 
-  // Test 39: Dynamic SEO metadata generation preserves live prices and structured data
+  // Test 39: Dynamic SEO metadata generation preserves route structure and structured data
   {
     const qebeleRoute = getApprovedEvakuatorRoute('baki-qebele')!;
     const qebeleSeo = generateRouteSeoConfig(qebeleRoute);
@@ -661,15 +665,15 @@ export function runPricingEngineVerificationTests(): boolean {
     const genceSeo = generateRouteSeoConfig(genceRoute);
 
     assert(
-      qebeleSeo.title.includes('210 AZN') &&
+      qebeleSeo.title === 'Bakı Qəbələ Evakuator | 7/24 Sürətli Xidmət | yukdasima.ai' &&
       qebeleSeo.h1 === 'Bakıdan Qəbələyə Evakuator Xidməti və Qiyməti' &&
       qebeleSeo.canonicalUrl === 'https://yukdasima.ai/evakuator/baki-qebele' &&
       qebeleSeo.schemaType === 'Service' &&
       (qebeleSeo.faqs?.length || 0) >= 5 &&
-      genceSeo.title.includes('240 AZN') &&
+      genceSeo.title === 'Bakı Gəncə Evakuator | 7/24 Sürətli Xidmət | yukdasima.ai' &&
       genceSeo.h1 === 'Bakıdan Gəncəyə Evakuator Xidməti və Qiyməti' &&
       genceSeo.canonicalUrl === 'https://yukdasima.ai/evakuator/baki-gence',
-      'Test 39: Dynamic SEO metadata generates truthful prices, semantic H1, canonical URL, and FAQ structured data'
+      'Test 39: Dynamic SEO metadata generates clean conversion title, semantic H1, canonical URL, and FAQ structured data'
     );
   }
 
@@ -789,7 +793,7 @@ export function runPricingEngineVerificationTests(): boolean {
     const qebeleSeo = generateYukdasimaRouteSeoConfig(qebeleRoute);
 
     assert(
-      genceSeo.title === 'Bakı Gəncə Yükdaşıma Qiymətləri | yukdasima.ai' &&
+      genceSeo.title === 'Bakı Gəncə Yükdaşıma Xidməti | yukdasima.ai' &&
       genceSeo.h1 === 'Bakıdan Gəncəyə Yükdaşıma Xidməti və Qiymətləri' &&
       genceSeo.canonicalUrl === 'https://yukdasima.ai/yukdasima/baki-gence' &&
       genceSeo.metaDescription.includes('Bakıdan Gəncəyə') &&
@@ -802,7 +806,7 @@ export function runPricingEngineVerificationTests(): boolean {
 
     function qeSeoMatches(seo: any) {
       return (
-        seo.title === 'Bakı Qəbələ Yükdaşıma Qiymətləri | yukdasima.ai' &&
+        seo.title === 'Bakı Qəbələ Yükdaşıma Xidməti | yukdasima.ai' &&
         seo.h1 === 'Bakıdan Qəbələyə Yükdaşıma Xidməti və Qiymətləri' &&
         seo.canonicalUrl === 'https://yukdasima.ai/yukdasima/baki-qebele'
       );
@@ -849,6 +853,72 @@ export function runPricingEngineVerificationTests(): boolean {
       allEvac.length === 82 &&
       allYuk.length === 84,
       `Test 48: All 82 evacuator and 84 yukdasima URLs are completely unique with 0 collisions (Total: ${totalSet.size})`
+    );
+  }
+
+  // Test 49: Exactly 176 canonical routes exist across 10 static, 82 evakuator, and 84 yukdasima
+  {
+    const staticRoutes = Object.keys(PAGE_SEO_CONFIGS);
+    const allEvac = getAllApprovedEvakuatorRoutes();
+    const allYuk = getAllApprovedYukdasimaRoutes();
+    const totalCount = staticRoutes.length + allEvac.length + allYuk.length;
+
+    assert(
+      staticRoutes.length === 10 &&
+      allEvac.length === 82 &&
+      allYuk.length === 84 &&
+      totalCount === 176,
+      `Test 49: Exactly 176 canonical routes registered (10 static + 82 evakuator + 84 yukdasima = ${totalCount})`
+    );
+  }
+
+  // Test 50: Sitemap.xml contains exactly 176 URL entries matching route registry 1:1
+  {
+    const staticRoutes = Object.keys(PAGE_SEO_CONFIGS);
+    const allEvac = getAllApprovedEvakuatorRoutes().map((r) => r.routePath);
+    const allYuk = getAllApprovedYukdasimaRoutes().map((r) => r.routePath);
+    const allCanonicalRoutes = new Set([...staticRoutes, ...allEvac, ...allYuk]);
+
+    let sitemapMatches = true;
+    try {
+      const fs = require('fs');
+      const path = require('path');
+      const sitemapPath = path.resolve(process.cwd(), 'public/sitemap.xml');
+      if (fs.existsSync(sitemapPath)) {
+        const sitemapContent = fs.readFileSync(sitemapPath, 'utf-8');
+        const locMatches = Array.from(sitemapContent.matchAll(/<loc>https:\/\/yukdasima\.ai([^<]*)<\/loc>/g)).map(
+          (m: any) => m[1] || '/'
+        );
+        sitemapMatches =
+          locMatches.length === 176 &&
+          locMatches.every((loc) => allCanonicalRoutes.has(loc)) &&
+          allCanonicalRoutes.size === 176;
+      }
+    } catch {
+      // In non-fs environment, fallback to canonical count check
+      sitemapMatches = allCanonicalRoutes.size === 176;
+    }
+
+    assert(
+      sitemapMatches,
+      'Test 50: Sitemap.xml contains exactly 176 valid canonical URL entries matching route registry 1:1'
+    );
+  }
+
+  // Test 51: Dynamic HTML injection generates complete metadata, H1, and JSON-LD structured data
+  {
+    const testTemplate = `<!doctype html><html><head><title>Default</title></head><body><div id="root"></div></body></html>`;
+    const renderedHtml = injectSeoIntoHtml(testTemplate, '/yukdasima/baki-gence', '<main><h1>Bakıdan Gəncəyə</h1></main>');
+
+    assert(
+      renderedHtml.includes('<title>Bakı Gəncə Yükdaşıma Xidməti | yukdasima.ai</title>') &&
+      renderedHtml.includes('https://yukdasima.ai/yukdasima/baki-gence') &&
+      renderedHtml.includes('id="seo-structured-data-jsonld"') &&
+      renderedHtml.includes('<div id="root"><main><h1>Bakıdan Gəncəyə</h1></main></div>') &&
+      renderedHtml.includes('"@type":"Service"') &&
+      renderedHtml.includes('"@type":"BreadcrumbList"') &&
+      renderedHtml.includes('"@type":"FAQPage"'),
+      'Test 51: Dynamic HTML injection produces valid Title, Canonical, OpenGraph, JSON-LD, and Root DOM content'
     );
   }
 

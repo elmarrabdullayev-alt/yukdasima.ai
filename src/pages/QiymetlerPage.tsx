@@ -38,8 +38,8 @@ export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) 
                 <Truck className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-slate-900">Yükdaşıma Xidməti Qiymətləri</h2>
-                <p className="text-xs text-slate-500">Avtomobil kateqoriyaları və ilkin tariflər</p>
+                <h2 className="text-xl font-bold text-slate-900">Yükdaşıma Xidməti</h2>
+                <p className="text-xs text-slate-500">Avtomobil kateqoriyaları və cari tariflər</p>
               </div>
             </div>
 
@@ -49,41 +49,41 @@ export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) 
                   <tr>
                     <th className="py-3 px-3">Avtomobil Növü</th>
                     <th className="py-3 px-3">Həcm</th>
-                    <th className="py-3 px-3 text-right">Bakı Daxili</th>
+                    <th className="py-3 px-3 text-right">Tarif</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">2m Ford Transit</td>
                     <td className="py-3 px-3 text-slate-500">~3.2 m³</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">25 AZN-dən</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Qiyməti öyrən</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">3m Yük Maşını</td>
                     <td className="py-3 px-3 text-slate-500">~6.5 m³</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">35 AZN-dən</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Qiyməti öyrən</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">4m Yük Maşını</td>
                     <td className="py-3 px-3 text-slate-500">~12.8 m³</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">45 AZN-dən</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Qiyməti öyrən</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">5m Yük Maşını</td>
                     <td className="py-3 px-3 text-slate-500">~16.0 m³</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">60 AZN-dən</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Qiyməti öyrən</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">Fəhlə Xidməti</td>
                     <td className="py-3 px-3 text-slate-500">1 nəfər</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">20 AZN-dən</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Qiyməti öyrən</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <p className="text-xs text-slate-500 italic">
-              * Mebellərin sökülməsi və yığılması usta xidmətidir və mürəkkəbliyə görə ayrıca hesablanır.
+              * Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.
             </p>
           </div>
 
@@ -94,7 +94,7 @@ export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) 
                 <Car className="w-5 h-5" />
               </div>
               <div>
-                <h2 className="text-xl font-bold text-slate-900">Evakuasiya Xidməti Qiymətləri</h2>
+                <h2 className="text-xl font-bold text-slate-900">Evakuasiya Xidməti</h2>
                 <p className="text-xs text-slate-500">Marşrutlar və standart minik tarifləri</p>
               </div>
             </div>
@@ -112,34 +112,34 @@ export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) 
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">Bakı Şəhərdaxili</td>
                     <td className="py-3 px-3 text-slate-500">Standart Minik</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">35 AZN-dən</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Cari qiyməti yoxla</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">Bakı → Xırdalan</td>
                     <td className="py-3 px-3 text-slate-500">Standart Minik</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">40 AZN</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Cari qiyməti yoxla</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">Bakı → Sumqayıt</td>
                     <td className="py-3 px-3 text-slate-500">Standart Minik</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">55 AZN</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Cari qiyməti yoxla</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">Bakı → Quba</td>
                     <td className="py-3 px-3 text-slate-500">Standart Minik</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">150 AZN</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Cari qiyməti yoxla</td>
                   </tr>
                   <tr>
                     <td className="py-3 px-3 font-semibold text-slate-900">Bakı → Gəncə</td>
                     <td className="py-3 px-3 text-slate-500">Standart Minik</td>
-                    <td className="py-3 px-3 text-right font-bold text-blue-600">240 AZN</td>
+                    <td className="py-3 px-3 text-right font-bold text-blue-600">Cari qiyməti yoxla</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <p className="text-xs text-slate-500 italic">
-              * Təkər kilidlənməsi, sükan kilidi və ya xəndəkdən dartılma hallarında cüzi fərq ola bilər.
+              * Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.
             </p>
           </div>
         </section>

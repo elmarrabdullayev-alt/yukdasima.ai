@@ -2,6 +2,7 @@ import { PageSeoConfig, BreadcrumbItem, FAQItem } from './metadata';
 import { lookupEvacuatorTariff, lookupRouteTariff } from '../services/tariffService';
 import tariffDatabaseV1 from '../data/yukdasima_ai_tarif_bazasi_v1.json';
 import { resolveDestination, normalizeDestinationName } from '../services/destinationResolver';
+import { getRouteContentProfile } from './regionalContent';
 
 export interface ApprovedRouteConfig {
   slug: string; // e.g. 'baki-agdas'
@@ -425,17 +426,17 @@ export function getApprovedEvakuatorRoute(pathnameOrSlug: string): ApprovedRoute
 
 /**
  * Dynamically builds comprehensive PageSeoConfig for an approved route
- * using live tariff data from tariffService.
+ * using live tariff data and centralized regional content profiles.
  */
 export function generateRouteSeoConfig(route: ApprovedRouteConfig): PageSeoConfig {
   const evacTariff = lookupEvacuatorTariff(route.origin, route.destination);
   const routeTariff = lookupRouteTariff(route.origin, route.destination);
+  const profile = getRouteContentProfile(route.slug);
 
-  const priceText = evacTariff.price ? `${evacTariff.price} AZN` : 'Sərfəli Qiymət';
-  const distanceKm = evacTariff.distanceKm || routeTariff?.distanceKm || 281;
+  const distanceKm = evacTariff.distanceKm || routeTariff?.distanceKm || (profile ? profile.distanceKm : 281);
 
-  const title = `Bakı ${route.destination} Evakuator | Qiymət: ${priceText} | 7/24 Xidmət`;
-  const metaDescription = `Bakıdan ${route.destinationDative} və ${route.destinationAblative} Bakıya 7/24 operativ evakuator xidməti. Rəsmi tarif: ${priceText} (${distanceKm} km). Təhlükəsiz fiksasiya, dərhal sifariş: 878.`;
+  const title = profile?.metaTitleEvakuator || `Bakı ${route.destination} Evakuator | 7/24 Sürətli Xidmət | yukdasima.ai`;
+  const metaDescription = profile?.metaDescEvakuator || `Bakıdan ${route.destinationDative} və ${route.destinationAblative} Bakıya 7/24 operativ evakuator xidməti (${distanceKm} km). Təhlükəsiz fiksasiya, dərhal cari qiyməti öyrən: 878.`;
   const canonicalUrl = `https://yukdasima.ai${route.routePath}`;
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -444,28 +445,26 @@ export function generateRouteSeoConfig(route: ApprovedRouteConfig): PageSeoConfi
     { name: `${route.origin}–${route.destination} Evakuator`, item: canonicalUrl },
   ];
 
-  const faqs: FAQItem[] = [
-    {
-      question: `Bakıdan ${route.destinationDative} evakuator qiyməti nə qədərdir?`,
-      answer: `Bakı–${route.destination} marşrutu üzrə standart minik avtomobilləri (sedan, hetçbek) üçün rəsmi evakuator tarifi ${priceText}-dir. Məsafə ${distanceKm} km təşkil edir və qiymətə yükləmə, daşınma və təhlükəsiz fiksasiya daxildir.`,
-    },
-    {
-      question: `${route.destinationAblative} Bakıya da evakuator çağırmaq olar?`,
-      answer: `Bəli, xidmətimiz ikitərəflidir. Siz həm Bakıdan ${route.destinationDative}, həm də ${route.destinationLocative} və ətraf kəndlərdə qəzalı və ya nasaz avtomobilinizi Bakıdakı istənilən servisə daşıtmaq üçün 878 nömrəsi ilə 24/7 əlaqə saxlaya bilərsiniz.`,
-    },
-    {
-      question: `Evakuator sifariş edildikdən sonra nə qədər vaxta çatır?`,
-      answer: `Bakı şəhəri üzrə çağırış edildikdə evakuator 15–30 dəqiqə ərzində ünvanınıza çatır və avtomobili platformaya yükləyərək birbaşa ${route.destinationDative} yola düşür. Yol müddəti təxminən ${route.estimatedTravelTime} təşkil edir.`,
-    },
-    {
-      question: `SUV, krossover və ya təkəri kilidlənmiş maşınların daşınması necə hesablanır?`,
-      answer: `Ağır çəkili SUV, pikap və ya təkəri/ötürücü qutusu kilidlənmiş avtomobillər üçün xüsusi hidravlik sürüşən platforma və diyircəkli xüsusi arabacıqlardan istifadə olunur. Belə hallarda standart tarifə cüzi əlavə tətbiq oluna bilər.`,
-    },
-    {
-      question: `Bakı–${route.destination} evakuator xidməti üçün necə sifariş vermək olar?`,
-      answer: `Siz 878 Qaynar Xətti ilə dərhal əlaqə saxlaya, +994 50 878 08 78 nömrəsinə WhatsApp vasitəsilə geolokasiya və avtomobil modelini göndərə və ya saytımızda geri zəng sifariş edə bilərsiniz.`,
-    },
-  ];
+  const faqs: FAQItem[] = profile?.evakuatorFaqs && profile.evakuatorFaqs.length > 0
+    ? profile.evakuatorFaqs
+    : [
+        {
+          question: `Bakıdan ${route.destinationDative} evakuator sifarişi necə edilir?`,
+          answer: `878 qaynar xətti və ya WhatsApp üzərindən avtomobilinizin markasını, nasazlıq vəziyyətini və ünvanı bildirməklə dərhal uyğun evakuator yönləndirilir.`,
+        },
+        {
+          question: `${route.destinationAblative} Bakıya da evakuator çağırmaq olar?`,
+          answer: `Bəli, xidmətimiz ikitərəflidir. Siz həm Bakıdan ${route.destinationDative}, həm də ${route.destinationLocative} və ətraf kəndlərdə qəzalı və ya nasaz avtomobilinizi Bakıdakı istənilən servisə daşıtmaq üçün 878 nömrəsi ilə 24/7 əlaqə saxlaya bilərsiniz.`,
+        },
+        {
+          question: `Evakuator sifariş edildikdən sonra nə qədər vaxta çatır?`,
+          answer: `Bakı şəhəri üzrə çağırış edildikdə evakuator 15–30 dəqiqə ərzində ünvanınıza çatır və avtomobili platformaya yükləyərək birbaşa ${route.destinationDative} yola düşür. Yol müddəti təxminən ${route.estimatedTravelTime} təşkil edir.`,
+        },
+        {
+          question: `SUV, krossover və ya təkəri kilidlənmiş maşınların daşınması necə aparılır?`,
+          answer: `Ağır çəkili SUV, pikap və ya təkəri/ötürücü qutusu kilidlənmiş avtomobillər üçün xüsusi hidravlik sürüşən platforma və diyircəkli xüsusi arabacıqlardan istifadə olunur.`,
+        },
+      ];
 
   return {
     path: route.routePath,
@@ -495,13 +494,14 @@ export function generateRouteSeoConfig(route: ApprovedRouteConfig): PageSeoConfi
 
 /**
  * Dynamically builds comprehensive PageSeoConfig for an approved yukdasima route
- * using live multi-vehicle tariff data from centralized tariff database.
+ * using live multi-vehicle tariff data and centralized regional content profiles.
  */
 export function generateYukdasimaRouteSeoConfig(route: ApprovedYukdasimaRouteConfig): PageSeoConfig {
-  const distanceKm = route.distanceKm || 280;
+  const profile = getRouteContentProfile(route.slug);
+  const distanceKm = route.distanceKm || (profile ? profile.distanceKm : 280);
 
-  const title = `Bakı ${route.destination} Yükdaşıma Qiymətləri | yukdasima.ai`;
-  const metaDescription = `Bakıdan ${route.destinationDative} və ${route.destinationAblative} Bakıya təhlükəsiz yükdaşıma xidməti. 2m-dən 7m-dək yük maşınları, operativ fəhlə və mebel ustası. Süni intellektlə dərhal hesabla və sifariş et.`;
+  const title = profile?.metaTitleYukdasima || `Bakı ${route.destination} Yükdaşıma Xidməti | yukdasima.ai`;
+  const metaDescription = profile?.metaDescYukdasima || `Bakıdan ${route.destinationDative} və ${route.destinationAblative} Bakıya təhlükəsiz yükdaşıma xidməti (${distanceKm} km). 2m-dən 7m-dək yük maşınları, operativ fəhlə və mebel ustası. Dərhal cari qiyməti öyrən: 878.`;
   const canonicalUrl = `https://yukdasima.ai${route.routePath}`;
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -510,40 +510,26 @@ export function generateYukdasimaRouteSeoConfig(route: ApprovedYukdasimaRouteCon
     { name: `${route.origin}–${route.destination} Yükdaşıma`, item: canonicalUrl },
   ];
 
-  // Dynamic price summary string for FAQ
-  const priceHighlights = [
-    route.prices['2m'] ? `2m Transit: ${route.prices['2m']} AZN` : null,
-    route.prices['3m'] ? `3m: ${route.prices['3m']} AZN` : null,
-    route.prices['4m'] ? `4m: ${route.prices['4m']} AZN` : null,
-    route.prices['5m'] ? `5m: ${route.prices['5m']} AZN` : null,
-    route.prices['6m'] ? `6m: ${route.prices['6m']} AZN` : null,
-    route.prices['7m'] ? `7m: ${route.prices['7m']} AZN` : null,
-  ]
-    .filter(Boolean)
-    .join(', ');
-
-  const faqs: FAQItem[] = [
-    {
-      question: `Bakıdan ${route.destinationDative} yükdaşıma qiymətləri necə hesablanır?`,
-      answer: `Bakı–${route.destination} marşrutu üzrə (${distanceKm} km) rəsmi avtomobil daşıma tarifləri avtomobilin ölçüsünə görə müəyyən edilir (${priceHighlights}). Bu qiymətlər avtomobil üçün ilkin daşıma tarifidir; fəhlə, usta və mərtəbə xidmətləri sifarişçinin istəyinə əsasən əlavə hesablanır.`,
-    },
-    {
-      question: `Yükümün həcminə uyğun maşını necə müəyyən edə bilərəm?`,
-      answer: `Siz saytımızdakı süni intellekt kalkulyatoruna əşyalarınızın şəklini yükləyərək təxmini həcmi (m³) və ən optimal maşın növünü (2m, 3m, 4m, 5m, 6m və ya 7m) saniyələr içində avtomatik təyin edə bilərsiniz. Həmçinin birbaşa istədiyiniz maşını seçərək sifariş vermək mümkündür.`,
-    },
-    {
-      question: `Bakı–${route.destination} marşrutu üzrə fəhlə və mebel ustası xidməti təşkil olunur?`,
-      answer: `Bəli, ehtiyac olduqda peşəkar fəhlə briqadası və mebel sökülüb-yığılması üçün usta xidməti təqdim edilir. Rayonlararası fəhlə xidməti işin həcminə və məsafəyə uyğun olaraq ayrıca razılaşdırılır.`,
-    },
-    {
-      question: `${route.destinationAblative} Bakıya da yük daşımaq mümkündür?`,
-      answer: `Bəli, xidmətimiz ikitərəflidir. Siz həm Bakıdan ${route.destinationDative}, həm də ${route.destinationLocative} yerləşən ev, ofis və ya kommersiya obyektinizdən Bakıya təhlükəsiz daşınma sifariş edə bilərsiniz.`,
-    },
-    {
-      question: `Bakı–${route.destination} yükdaşıma sifarişini necə verə bilərəm?`,
-      answer: `878 Qaynar Xəttimizə zəng edə, +994 50 878 08 78 WhatsApp nömrəmizə yaza və ya saytda onlayn kalkulyator vasitəsilə müraciət edərək dərhal təsdiq ala bilərsiniz.`,
-    },
-  ];
+  const faqs: FAQItem[] = profile?.yukdasimaFaqs && profile.yukdasimaFaqs.length > 0
+    ? profile.yukdasimaFaqs
+    : [
+        {
+          question: `Bakıdan ${route.destinationDative} yükdaşıma necə təşkil olunur?`,
+          answer: `Bakı–${route.destination} marşrutu üzrə (${distanceKm} km) yükdaşıma xidməti 2m-dən 7m-dək müxtəlif tutumlu yük maşınları ilə həyata keçirilir.`,
+        },
+        {
+          question: `Yükümün həcminə uyğun maşını necə müəyyən edə bilərəm?`,
+          answer: `Siz saytımızdakı süni intellekt kalkulyatoruna əşyalarınızın şəklini yükləyərək təxmini həcmi (m³) və ən optimal maşın növünü (2m, 3m, 4m, 5m, 6m və ya 7m) təyin edə bilərsiniz.`,
+        },
+        {
+          question: `Bakı–${route.destination} marşrutu üzrə fəhlə və mebel ustası xidməti təşkil olunur?`,
+          answer: `Bəli, ehtiyac olduqda peşəkar fəhlə briqadası və mebel sökülüb-yığılması üçün usta xidməti təqdim edilir.`,
+        },
+        {
+          question: `${route.destinationAblative} Bakıya da yük daşımaq mümkündür?`,
+          answer: `Bəli, xidmətimiz ikitərəflidir. Siz həm Bakıdan ${route.destinationDative}, həm də ${route.destinationLocative} yerləşən ev, ofis və ya kommersiya obyektinizdən Bakıya təhlükəsiz daşınma sifariş edə bilərsiniz.`,
+        },
+      ];
 
   return {
     path: route.routePath,
@@ -570,4 +556,5 @@ export function generateYukdasimaRouteSeoConfig(route: ApprovedYukdasimaRouteCon
     faqs,
   };
 }
+
 

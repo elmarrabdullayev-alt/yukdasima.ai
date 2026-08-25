@@ -36,7 +36,7 @@ import {
 export interface PricingEngineOptions {
   vehicleConfig?: VehicleConfig;
   pricingRules?: BusinessPricingRules;
-  selectedVehicleCategory?: '2m' | '3m' | '4m' | '5m' | '6m' | '7m';
+  selectedVehicleCategory?: '2m' | '3m' | '4m' | '5m' | '6m' | '7m' | 'tir';
 }
 
 /**
@@ -55,13 +55,20 @@ export function calculateTransportationPricing(
   let volumeRangeDisplay: string;
   let recommendedVehicle: VehicleSpec | undefined;
   let isOverCapacity = false;
-  let vehicleCategory: '2m' | '3m' | '4m' | '5m' | '6m' | '7m' | undefined;
+  let requiresOperatorConfirmation = false;
+  let vehicleCategory: '2m' | '3m' | '4m' | '5m' | '6m' | '7m' | 'tir' | undefined;
 
   if (options.selectedVehicleCategory) {
     vehicleCategory = options.selectedVehicleCategory;
     recommendedVehicle = getVehicleByCategory(options.selectedVehicleCategory, vehicleConfig);
-    evaluatedVolumeM3 = recommendedVehicle?.practicalCapacityM3 || 0;
-    volumeRangeDisplay = recommendedVehicle ? `~${recommendedVehicle.practicalCapacityM3} m³` : '0 m³';
+    if (vehicleCategory === 'tir') {
+      evaluatedVolumeM3 = 0;
+      volumeRangeDisplay = 'TIR';
+      requiresOperatorConfirmation = true;
+    } else {
+      evaluatedVolumeM3 = recommendedVehicle?.practicalCapacityM3 || 0;
+      volumeRangeDisplay = recommendedVehicle ? `~${recommendedVehicle.practicalCapacityM3} m³` : '0 m³';
+    }
   } else {
     const minVol = analysis ? analysis.estimatedTotalVolumeMinM3 : 0;
     const maxVol = analysis ? analysis.estimatedTotalVolumeMaxM3 : 0;
@@ -71,6 +78,7 @@ export function calculateTransportationPricing(
     // 2. Deterministic Vehicle Selection based on Upper Volume
     if (evaluatedVolumeM3 > vehicleConfig.maxAutoAssignableVolumeM3) {
       isOverCapacity = true;
+      requiresOperatorConfirmation = true;
     } else if (evaluatedVolumeM3 <= 3.2) {
       vehicleCategory = '2m';
       recommendedVehicle = getVehicleByCategory('2m', vehicleConfig);
@@ -95,7 +103,6 @@ export function calculateTransportationPricing(
   // 3. Detect Special / Heavy / Large items from AI items list and user notes
   const detectedSpecialItems: SpecialItemDetected[] = [];
   let hasLargeItemFitRisk = false;
-  let requiresOperatorConfirmation = isOverCapacity;
 
   const allItemsAndDetails = [
     ...(analysis?.items.map((i) => i.name) || []),
@@ -226,7 +233,7 @@ export function calculateTransportationPricing(
     ? 'Böyük həcmli xüsusi nəqliyyat / Çoxsaylı reys'
     : 'Yük maşını təyin edilir';
 
-  const vehicleDimensionsDisplay = recommendedVehicle
+  const vehicleDimensionsDisplay = (recommendedVehicle && recommendedVehicle.category !== 'tir')
     ? `${recommendedVehicle.lengthM.toFixed(2)}m (U) × ${recommendedVehicle.widthM.toFixed(2)}m (E) × ${recommendedVehicle.heightM.toFixed(2)}m (H)`
     : undefined;
 

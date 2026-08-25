@@ -12,14 +12,21 @@ const RouterContext = createContext<RouterContextType>({
 
 export const useRouter = () => useContext(RouterContext);
 
-export const RouterProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const RouterProvider: React.FC<{ children: React.ReactNode; initialPath?: string }> = ({
+  children,
+  initialPath,
+}) => {
   const [pathname, setPathname] = useState<string>(() => {
+    if (initialPath) {
+      return initialPath.endsWith('/') && initialPath.length > 1 ? initialPath.slice(0, -1) : initialPath || '/';
+    }
     if (typeof window !== 'undefined') {
       const p = window.location.pathname;
       return p.endsWith('/') && p.length > 1 ? p.slice(0, -1) : p || '/';
     }
     return '/';
   });
+
 
   useEffect(() => {
     const handlePopState = () => {

@@ -22,12 +22,27 @@ import {
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { EVAKUASIYA_FAQS } from '../seo/metadata';
+import { getAllApprovedEvakuatorRoutes } from '../seo/routeRegistry';
+import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
+import { lookupEvacuatorTariff } from '../services/tariffService';
 
 interface EvakuasiyaPageProps {
   onOpenCallback: (phone?: string) => void;
 }
 
 export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }) => {
+  const evacRoutes = getAllApprovedEvakuatorRoutes();
+  const sortedAzEvacRoutes = [...evacRoutes].sort((a, b) =>
+    a.destination.localeCompare(b.destination, 'az')
+  );
+
+  const groupedAzEvacRoutes = sortedAzEvacRoutes.reduce((acc, route) => {
+    const letter = route.destination.charAt(0).toLocaleUpperCase('az');
+    if (!acc[letter]) acc[letter] = [];
+    acc[letter].push(route);
+    return acc;
+  }, {} as Record<string, typeof sortedAzEvacRoutes>);
+
   // State for active FAQ accordion items (first two expanded by default for smooth UX)
   const [openFaqIndexes, setOpenFaqIndexes] = useState<number[]>([0, 1]);
 
@@ -219,7 +234,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <h3 className="font-bold text-slate-900 text-base sm:text-lg">Məsafə və Marşrut (Kilometraj)</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bakı şəhərdaxili marşrutlar üzrə sabit başlanğıc tarifi (35 AZN-dən), şəhərətrafı qəsəbələrə və Azərbaycan rayonlarına isə rəsmi bazamızdakı dəqiq kilometraj əsasında sərfəli qiymətlər tətbiq olunur.
+                Bakı şəhərdaxili marşrutlar üzrə operativ və sərfəli başlanğıc tarifi, şəhərətrafı qəsəbələrə və Azərbaycan rayonlarına isə rəsmi bazamızdakı dəqiq kilometraj əsasında sərfəli qiymətlər tətbiq olunur.
               </p>
             </div>
 
@@ -596,7 +611,85 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
           </div>
         </section>
 
-        {/* Section 10: Crawlable Internal Links Navigation */}
+        {/* Section 10: Complete Regional Directory by Economic Regions */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Bölgələr üzrə evakuator kataloqu">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
+            <div className="space-y-1">
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <Navigation className="w-4 h-4" />
+                <span>İqtisadi Rayonlar və Nəqliyyat Dəhlizləri</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Bölgələr üzrə evakuator kataloqu
+              </h2>
+              <p className="text-slate-600 text-xs sm:text-sm max-w-2xl">
+                Bakıdan və Bakıya Azərbaycanın bütün iqtisadi rayonları, şəhər və magistralları üzrə 24/7 peşəkar və operativ evakuator xidməti. İstədiyiniz istiqaməti seçərək dəqiq xidmət şərtlərini öyrənin.
+              </p>
+            </div>
+            <span className="self-start sm:self-auto inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-3.5 py-2 rounded-xl shrink-0">
+              <MapPin className="w-3.5 h-3.5 text-blue-600" />
+              <span>{evacRoutes.length} Marşrut</span>
+            </span>
+          </div>
+
+          <div className="space-y-10">
+            {ECONOMIC_REGION_GROUPS.map((group) => {
+              const groupRoutes = group.destinationSlugs
+                .map((slug) => evacRoutes.find((r) => r.slug === slug))
+                .filter((r): r is typeof evacRoutes[0] => !!r);
+
+              if (groupRoutes.length === 0) return null;
+
+              return (
+                <div key={group.id} className="space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 pb-2 border-b border-slate-100">
+                    <div>
+                      <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
+                        {group.name}
+                      </h3>
+                      <p className="text-slate-500 text-xs mt-0.5">
+                        {group.description} • <span className="text-blue-600 font-medium">{group.corridor}</span>
+                      </p>
+                    </div>
+                    <span className="text-xs font-semibold text-slate-400">
+                      {groupRoutes.length} istiqamət
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
+                    {groupRoutes.map((r) => {
+                      const tariff = lookupEvacuatorTariff(r.origin, r.destination);
+                      const distance = tariff.distanceKm;
+
+                      return (
+                        <Link
+                          key={r.slug}
+                          href={r.routePath}
+                          className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/70 hover:border-blue-300 transition-all group flex flex-col justify-between gap-1.5"
+                        >
+                          <div className="flex items-center justify-between gap-1">
+                            <span className="font-bold text-slate-800 group-hover:text-blue-700 text-xs sm:text-sm transition-colors truncate">
+                              {r.destination}
+                            </span>
+                            <ArrowRight className="w-3 h-3 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all shrink-0" />
+                          </div>
+                          <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/50">
+                            <span>{distance ? `${distance} km` : 'Rayon'}</span>
+                            <span className="font-extrabold text-blue-600 group-hover:text-blue-700">
+                              Qiyməti öyrən
+                            </span>
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Section 11: Crawlable Internal Links Navigation */}
         <section className="space-y-6" aria-label="Əlaqəli Xidmətlər və Keçidlər">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -687,7 +780,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Bakı – Ağdaş Evakuator</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">281 km məsafəyə sabit 210 AZN rəsmi tarif ilə operativ daşıma.</p>
+              <p className="text-xs text-slate-600 mt-2">281 km məsafəyə operativ və təhlükəsiz evakuasiya xidməti.</p>
             </Link>
 
             <Link
@@ -698,7 +791,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Bakı – Qəbələ Evakuator</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">216 km məsafəyə sabit 210 AZN rəsmi tarif ilə operativ daşıma.</p>
+              <p className="text-xs text-slate-600 mt-2">216 km məsafəyə operativ və təhlükəsiz evakuasiya xidməti.</p>
             </Link>
 
             <Link
@@ -709,7 +802,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Bakı – Şəki Evakuator</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">297 km məsafəyə sabit 240 AZN rəsmi tarif ilə operativ daşıma.</p>
+              <p className="text-xs text-slate-600 mt-2">297 km məsafəyə operativ və təhlükəsiz evakuasiya xidməti.</p>
             </Link>
 
             <Link
@@ -720,7 +813,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Bakı – Gəncə Evakuator</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">362 km məsafəyə sabit 240 AZN rəsmi tarif ilə operativ daşıma.</p>
+              <p className="text-xs text-slate-600 mt-2">362 km məsafəyə operativ və təhlükəsiz evakuasiya xidməti.</p>
             </Link>
 
             <Link

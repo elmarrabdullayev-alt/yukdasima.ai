@@ -3,8 +3,14 @@ import {
   ApprovedYukdasimaRouteConfig,
   getApprovedYukdasimaRoute,
   getAllApprovedYukdasimaRoutes,
+  getApprovedEvakuatorRoute,
   generateYukdasimaRouteSeoConfig,
 } from '../seo/routeRegistry';
+import {
+  getGeographicNeighbors,
+  getEconomicRegionGroup,
+} from '../seo/regionalData';
+import { getRouteContentProfile } from '../seo/regionalContent';
 import { lookupRouteTariff } from '../services/tariffService';
 import { YukdasimaEstimator } from '../components/YukdasimaEstimator';
 import { Link } from '../router/RouterContext';
@@ -107,11 +113,26 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
     window.open(generateWhatsAppLink(text), '_blank');
   };
 
-  // Other regional cargo routes for internal linking
+  // Geographic neighbor routes for balanced, crawlable internal linking
   const allRoutes = getAllApprovedYukdasimaRoutes();
-  const otherPopularRoutes = allRoutes
-    .filter((r) => r.slug !== routeConfig.slug)
-    .slice(0, 8);
+  const neighborData = getGeographicNeighbors(routeConfig.slug);
+  const regionGroup = getEconomicRegionGroup(routeConfig.slug);
+
+  let neighborRoutes = neighborData
+    .map((n) => allRoutes.find((r) => r.slug === n.slug))
+    .filter((r): r is ApprovedYukdasimaRouteConfig => !!r);
+
+  if (neighborRoutes.length < 4 && regionGroup) {
+    const fallbackRoutes = regionGroup.destinationSlugs
+      .filter((slug) => slug !== routeConfig.slug && !neighborRoutes.some((nr) => nr.slug === slug))
+      .map((slug) => allRoutes.find((r) => r.slug === slug))
+      .filter((r): r is ApprovedYukdasimaRouteConfig => !!r);
+    neighborRoutes = [...neighborRoutes, ...fallbackRoutes].slice(0, 6);
+  }
+
+  // Cross-service evakuator counterpart check
+  const counterpartEvakuator = getApprovedEvakuatorRoute(routeConfig.slug);
+  const routeProfile = getRouteContentProfile(routeConfig.slug);
 
   return (
     <article className="py-6 sm:py-10 bg-slate-50 min-h-screen text-slate-900">
@@ -149,7 +170,10 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
           </h1>
 
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
-            {routeConfig.descriptionText} Rəsmi ilkin tarif: <strong>{startingPriceDisplay}</strong> ({distanceKm} km). 2m-dən 7m-dək qapalı yük maşınları, peşəkar mebel ustası və fəhlə briqadası.
+            {routeConfig.descriptionText} ({distanceKm} km). 2m-dən 7m-dək qapalı yük maşınları, peşəkar mebel ustası və fəhlə briqadası.
+          </p>
+          <p className="text-xs text-slate-500 max-w-xl mx-auto italic">
+            Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.
           </p>
 
           {/* Quick Action Buttons */}
@@ -250,16 +274,10 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
 
                   <div className="pt-3 border-t border-slate-100 space-y-3">
                     <div className="flex items-baseline justify-between">
-                      <span className="text-xs text-slate-500 font-medium">İlkin daşıma tarifi:</span>
-                      {isAvailable ? (
-                        <span className="text-2xl font-black text-slate-900 tracking-tight">
-                          {priceVal} <span className="text-base font-bold text-slate-600">AZN</span>
-                        </span>
-                      ) : (
-                        <span className="text-sm font-bold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg">
-                          Əlaqə saxlayın
-                        </span>
-                      )}
+                      <span className="text-xs text-slate-500 font-medium">Tarif:</span>
+                      <span className="text-xs font-bold text-blue-700 bg-blue-50 px-2.5 py-1 rounded-lg">
+                        Cari qiyməti yoxla
+                      </span>
                     </div>
 
                     <button
@@ -272,7 +290,7 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
                       }}
                       className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-xs transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
                     >
-                      <span>Bu maşınla hesabla</span>
+                      <span>Qiyməti öyrən</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </button>
                   </div>
@@ -365,7 +383,58 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
           </div>
         </section>
 
-        {/* Section 4: H2 - How Pricing is Calculated */}
+        {/* Section 4: H2 - Route Specific Logistics & Reverse Transport Overview */}
+        {routeProfile && (
+          <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-2xs space-y-6" aria-label="Marşrut Xüsusiyyətləri və Əks İstiqamət">
+            <div className="max-w-3xl space-y-1">
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <Navigation className="w-4 h-4" />
+                <span>Marşrut Logistikası və Əks Daşınma</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Bakı–{routeConfig.destination} və {routeConfig.destinationAblative} Bakıya Daşınma Şərtləri
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                {routeProfile.yukdasimaOverview}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm">
+                  <Truck className="w-4 h-4" />
+                  <span>Nəqliyyat Seçimi</span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {routeProfile.yukdasimaVehicleNotes}
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>Yükləmə & Bərkitmə</span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {routeProfile.yukdasimaLoadingNotes}
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm">
+                  <Layers className="w-4 h-4" />
+                  <span>{routeConfig.destination} → Bakı İstiqaməti</span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {routeProfile.yukdasimaReverseOverview}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Section 5: H2 - How Pricing is Calculated */}
+
         <section className="space-y-6" aria-label="Qiymətin Hesablanma Qaydası">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
@@ -521,18 +590,20 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
           </div>
         </section>
 
-        {/* Section 7: H2 - Other Popular Regional Cargo Routes */}
-        <section className="space-y-6" aria-label="Digər Populyar Yükdaşıma Marşrutları">
+        {/* Section 7: H2 - Geographic Neighbor Regional Cargo Routes */}
+        <section className="space-y-6" aria-label="Yaxın Rayonlar Üzrə Yükdaşıma Marşrutları">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
                 <MapPin className="w-4 h-4" />
-                <span>Azərbaycan Üzrə Şəbəkə</span>
+                <span>{regionGroup ? regionGroup.name : 'Bölgə'} və Qonşu Rayonlar</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
-                Digər Yükdaşıma Marşrutları
+                Yaxın Rayonlar Üzrə Yükdaşıma Marşrutları
               </h2>
-              <p className="text-slate-600 text-xs sm:text-sm mt-1">Bakıdan digər şəhər və rayonlara sərfəli yükdaşıma tarifləri:</p>
+              <p className="text-slate-600 text-xs sm:text-sm mt-1">
+                Bakıdan {routeConfig.destination} və qonşu rayonlara sərfəli yükdaşıma tarifləri:
+              </p>
             </div>
             <Link
               href="/yukdasima"
@@ -543,11 +614,8 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {otherPopularRoutes.map((r) => {
-              const rValidPrices = Object.values(r.prices).filter((p): p is number => typeof p === 'number' && p > 0);
-              const rMinPrice = rValidPrices.length > 0 ? Math.min(...rValidPrices) : null;
-
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {neighborRoutes.map((r) => {
               return (
                 <Link
                   key={r.slug}
@@ -562,9 +630,9 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
                     Bakı–{r.destination} Yükdaşıma
                   </h3>
                   <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
-                    <span className="text-slate-500">{r.distanceKm ? `${r.distanceKm} km` : 'Rayonlararası'}</span>
-                    <span className="font-extrabold text-slate-900">
-                      {rMinPrice ? `${rMinPrice} AZN-dən` : 'Tariflə'}
+                    <span className="text-slate-500">{r.distanceKm ? `${r.distanceKm} km` : 'Rayon'}</span>
+                    <span className="font-extrabold text-blue-600 group-hover:text-blue-700">
+                      Qiyməti öyrən
                     </span>
                   </div>
                 </Link>
@@ -664,16 +732,29 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
               <p className="text-xs text-slate-600 mt-2">Təcrübəli briqada ilə yükləmə və boşaltma.</p>
             </Link>
 
-            <Link
-              href={`/evakuator/${routeConfig.slug}`}
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-2xs transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Bakı–{routeConfig.destination} Evakuator</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-2">24/7 qəzalı və nasaz avtomobil evakuasiyası.</p>
-            </Link>
+            {counterpartEvakuator ? (
+              <Link
+                href={counterpartEvakuator.routePath}
+                className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-2xs transition-all group"
+              >
+                <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                  <span>Bakı–{routeConfig.destination} Evakuator</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                </h3>
+                <p className="text-xs text-slate-600 mt-2">24/7 operativ avtomobil evakuasiyası və texniki yardım.</p>
+              </Link>
+            ) : (
+              <Link
+                href="/evakuasiya"
+                className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-2xs transition-all group"
+              >
+                <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                  <span>24/7 Evakuasiya Xidməti</span>
+                  <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+                </h3>
+                <p className="text-xs text-slate-600 mt-2">Bütün respublika üzrə operativ evakuasiya xidməti.</p>
+              </Link>
+            )}
           </div>
         </section>
 

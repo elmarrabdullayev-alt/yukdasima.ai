@@ -1,6 +1,8 @@
 import express from "express";
 import path from "path";
+import fs from "fs";
 import { createServer as createViteServer } from "vite";
+
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
 
@@ -50,70 +52,25 @@ async function startServer() {
 
   // SEO Route: robots.txt
   app.get("/robots.txt", (_req, res) => {
-    res.type("text/plain").send(`User-agent: *
-Allow: /
-Disallow: /api/
-
-Sitemap: https://yukdasima.ai/sitemap.xml
-`);
+    const robotsPath = path.join(process.cwd(), "public", "robots.txt");
+    if (fs.existsSync(robotsPath)) {
+      res.type("text/plain").sendFile(robotsPath);
+    } else {
+      res.type("text/plain").send(`User-agent: *\nAllow: /\nDisallow: /api/\n\nSitemap: https://yukdasima.ai/sitemap.xml\n`);
+    }
   });
 
   // SEO Route: sitemap.xml
   app.get("/sitemap.xml", (_req, res) => {
-    res.type("application/xml").send(`<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://yukdasima.ai/</loc>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/yukdasima</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/evakuasiya</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/evden-eve-yukdasima</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/mebel-dasinmasi</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/ofis-dasinmasi</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/yuk-masini</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/fehle-xidmeti</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/qiymetler</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://yukdasima.ai/elaqe</loc>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-</urlset>
-`);
+    const distSitemap = path.join(process.cwd(), "dist", "sitemap.xml");
+    const publicSitemap = path.join(process.cwd(), "public", "sitemap.xml");
+    if (fs.existsSync(distSitemap)) {
+      return res.type("application/xml").sendFile(distSitemap);
+    }
+    if (fs.existsSync(publicSitemap)) {
+      return res.type("application/xml").sendFile(publicSitemap);
+    }
+    res.status(404).send("Sitemap not found");
   });
 
   // API Route: Gemini Cargo Multimodal Analysis

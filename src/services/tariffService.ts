@@ -359,7 +359,7 @@ export function lookupRouteTariff(fromAddress: string, toAddress: string): Unifi
  */
 export function lookupVehiclePrice(
   route: UnifiedRouteTariff | null,
-  vehicleCategory: '2m' | '3m' | '4m' | '5m' | '6m' | '7m'
+  vehicleCategory: '2m' | '3m' | '4m' | '5m' | '6m' | '7m' | 'tir'
 ): number | null {
   if (!route) return null;
   const price = route.prices[vehicleCategory];

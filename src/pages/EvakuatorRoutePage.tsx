@@ -3,7 +3,13 @@ import {
   ApprovedRouteConfig,
   getApprovedEvakuatorRoute,
   getAllApprovedEvakuatorRoutes,
+  getApprovedYukdasimaRoute,
 } from '../seo/routeRegistry';
+import {
+  getGeographicNeighbors,
+  getEconomicRegionGroup,
+} from '../seo/regionalData';
+import { getRouteContentProfile } from '../seo/regionalContent';
 import { lookupEvacuatorTariff, lookupRouteTariff } from '../services/tariffService';
 import { EvakuasiyaEstimator } from '../components/EvakuasiyaEstimator';
 import { Link } from '../router/RouterContext';
@@ -89,14 +95,33 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
   const evacTariff = lookupEvacuatorTariff(routeConfig.origin, routeConfig.destination);
   const routeTariff = lookupRouteTariff(routeConfig.origin, routeConfig.destination);
   const seoConfig = generateRouteSeoConfig(routeConfig);
-
-  const priceFormatted = evacTariff.price ? `${evacTariff.price} AZN` : '210 AZN';
-  const distanceKm = evacTariff.distanceKm || routeTariff?.distanceKm || 281;
+  const distanceKm = evacTariff.distanceKm || routeTariff?.distanceKm;
 
   const handleWhatsApp = () => {
     const text = `Salam, ${routeConfig.origin}dan ${routeConfig.destinationDative} evakuator sifarişi vermək istəyirəm.`;
     window.open(generateWhatsAppLink(text), '_blank');
   };
+
+  // Geographic neighbor routes for balanced, crawlable internal linking
+  const allEvacRoutes = getAllApprovedEvakuatorRoutes();
+  const neighborData = getGeographicNeighbors(routeConfig.slug);
+  const regionGroup = getEconomicRegionGroup(routeConfig.slug);
+
+  let neighborRoutes = neighborData
+    .map((n) => allEvacRoutes.find((r) => r.slug === n.slug))
+    .filter((r): r is ApprovedRouteConfig => !!r);
+
+  if (neighborRoutes.length < 4 && regionGroup) {
+    const fallbackRoutes = regionGroup.destinationSlugs
+      .filter((slug) => slug !== routeConfig.slug && !neighborRoutes.some((nr) => nr.slug === slug))
+      .map((slug) => allEvacRoutes.find((r) => r.slug === slug))
+      .filter((r): r is ApprovedRouteConfig => !!r);
+    neighborRoutes = [...neighborRoutes, ...fallbackRoutes].slice(0, 6);
+  }
+
+  // Cross-service yukdasima counterpart check
+  const counterpartYukdasima = getApprovedYukdasimaRoute(routeConfig.slug);
+  const routeProfile = getRouteContentProfile(routeConfig.slug);
 
   return (
     <article className="py-6 sm:py-10 bg-slate-50 min-h-screen text-slate-900">
@@ -134,7 +159,10 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           </h1>
 
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
-            {routeConfig.descriptionText} Rəsmi sabit tarif: <strong>{priceFormatted}</strong> ({distanceKm} km). 15–30 dəqiqə ərzində operativ çıxış və 100% sığortalı təhlükəsiz daşınma.
+            {routeConfig.descriptionText} ({distanceKm} km). 15–30 dəqiqə ərzində operativ çıxış və 100% sığortalı təhlükəsiz daşınma.
+          </p>
+          <p className="text-xs text-slate-500 max-w-xl mx-auto italic">
+            Qiymət avtomobilin mövcudluğu, marşrut, yolüstü evakuator imkanı və sifariş detallarına görə dəyişə bilər. Cari uyğun qiymət üçün bizimlə əlaqə saxlayın.
           </p>
 
           {/* Quick Action Buttons */}
@@ -178,12 +206,12 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y md:divide-y-0 md:divide-x divide-slate-100">
             <div className="pt-3 md:pt-0">
               <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 block mb-1">
-                Rəsmi Tarif
+                Tarif
               </span>
-              <div className="text-2xl sm:text-3xl font-extrabold text-blue-600">
-                {priceFormatted}
+              <div className="text-xl sm:text-2xl font-extrabold text-blue-600">
+                Cari qiyməti öyrən
               </div>
-              <span className="text-xs text-slate-500 mt-1 block">Minik / Sedan / Hetçbek</span>
+              <span className="text-xs text-slate-500 mt-1 block">Minik / SUV / Krossover</span>
             </div>
 
             <div className="pt-3 md:pt-0 md:pl-6">
@@ -252,7 +280,7 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
                   <tr className="bg-slate-100/75 border-b border-slate-200 text-slate-700 font-semibold">
                     <th className="py-3.5 px-4 sm:px-6">Nəqliyyat Növü / Kateqoriya</th>
                     <th className="py-3.5 px-4 sm:px-6">Xüsusiyyətlər</th>
-                    <th className="py-3.5 px-4 sm:px-6">Rəsmi Qiymət</th>
+                    <th className="py-3.5 px-4 sm:px-6">Tarif / Qiymət</th>
                     <th className="py-3.5 px-4 sm:px-6 text-right">Sifariş</th>
                   </tr>
                 </thead>
@@ -265,8 +293,10 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
                     <td className="py-4 px-4 sm:px-6 text-slate-600">
                       Sedan, hetçbek, kupe (çəkisi 1.6 tona qədər)
                     </td>
-                    <td className="py-4 px-4 sm:px-6 font-extrabold text-blue-600 text-base">
-                      {priceFormatted}
+                    <td className="py-4 px-4 sm:px-6">
+                      <span className="text-xs font-bold text-blue-700 bg-blue-100/70 px-2.5 py-1 rounded-lg">
+                        Cari qiyməti öyrən
+                      </span>
                     </td>
                     <td className="py-4 px-4 sm:px-6 text-right">
                       <button
@@ -286,8 +316,10 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
                     <td className="py-4 px-4 sm:px-6 text-slate-600">
                       Böyük ölçülü və ağır çəkili (1.8 – 2.8 ton) ciplər
                     </td>
-                    <td className="py-4 px-4 sm:px-6 font-bold text-slate-900">
-                      {evacTariff.price ? `${evacTariff.price + 20} – ${evacTariff.price + 40} AZN` : 'Razılaşma ilə'}
+                    <td className="py-4 px-4 sm:px-6">
+                      <span className="text-xs font-bold text-blue-700 bg-blue-100/70 px-2.5 py-1 rounded-lg">
+                        Uyğun qiymət tap
+                      </span>
                     </td>
                     <td className="py-4 px-4 sm:px-6 text-right">
                       <button
@@ -307,8 +339,8 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
                     <td className="py-4 px-4 sm:px-6 text-slate-600">
                       Qəzalı, təkəri dönməyən maşınlar üçün xüsusi diyircəklər
                     </td>
-                    <td className="py-4 px-4 sm:px-6 font-bold text-slate-900">
-                      Tarif + 20 AZN
+                    <td className="py-4 px-4 sm:px-6 font-medium text-slate-600 text-xs">
+                      Texniki vəziyyətə uyğun
                     </td>
                     <td className="py-4 px-4 sm:px-6 text-right">
                       <button
@@ -331,8 +363,10 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
                         <td className="py-4 px-4 sm:px-6 text-slate-600">
                           Mebel, məişət texnikası və tikinti yükləri
                         </td>
-                        <td className="py-4 px-4 sm:px-6 font-bold text-slate-900">
-                          {routeTariff.prices['3m'] || 240} – {routeTariff.prices['4m'] || 270} AZN
+                        <td className="py-4 px-4 sm:px-6">
+                          <span className="text-xs font-bold text-blue-700 bg-blue-100/70 px-2.5 py-1 rounded-lg">
+                            Qiyməti öyrən
+                          </span>
                         </td>
                         <td className="py-4 px-4 sm:px-6 text-right">
                           <Link
@@ -349,13 +383,54 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
               </table>
             </div>
             <div className="bg-slate-50 p-4 border-t border-slate-200 text-xs text-slate-500">
-              * Qiymətlərə avtomobilin platformaya qaldırılması, xüsusi təhlükəsizlik kəmərləri ilə fiksasiyası və birbaşa ünvana çatdırılması daxildir. Heç bir gizli xərc və ya yolda əlavə ödəniş yoxdur.
+              * Qiymət avtomobilin mövcudluğu, marşrut, yolüstü evakuator imkanı və sifariş detallarına görə dəyişə bilər. Cari uyğun qiymət üçün bizimlə əlaqə saxlayın.
             </div>
           </div>
         </section>
 
-        {/* Section 4: Route Logistics & Transportation Process */}
+        {/* Section 4: Route Specific Operational Notes & Reverse Evacuation */}
+        {routeProfile && (
+          <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-2xs space-y-6" aria-label="Evakuasiya Şərtləri və Əks İstiqamət">
+            <div className="max-w-3xl space-y-1">
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <Navigation className="w-4 h-4" />
+                <span>Marşrut Şərtləri və Əks İstiqamət</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Bakı–{routeConfig.destination} və {routeConfig.destinationAblative} Bakıya Evakuasiya Xidməti
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                {routeProfile.evakuatorOverview}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-2">
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm">
+                  <Car className="w-4 h-4" />
+                  <span>Platforma və Texniki Təchizat</span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {routeProfile.evakuatorPlatformNotes}
+                </p>
+              </div>
+
+              <div className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm">
+                  <ShieldCheck className="w-4 h-4" />
+                  <span>{routeConfig.destination} → Bakı Daşınması</span>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {routeProfile.evakuatorReverseOverview}
+                </p>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Section 5: Route Logistics & Transportation Process */}
         <section aria-labelledby="logistics-heading" className="space-y-6">
+
           <div className="text-center max-w-2xl mx-auto">
             <h2 id="logistics-heading" className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
               {routeConfig.origin}dan {routeConfig.destinationDative} Avtomobil Necə Daşınır?
@@ -445,9 +520,9 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
                 <CheckCircle2 className="w-5 h-5" />
               </div>
               <div className="space-y-1">
-                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Sabit və Şəffaf Qiymət</h3>
+                <h3 className="font-bold text-slate-900 text-sm sm:text-base">Şəffaf və Sərfəli Qiymət</h3>
                 <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Saytda təyin olunan rəsmi tarif ({priceFormatted}) son qiymətdir. Yolda heç bir gözlənilməz əlavə tələb olunmur.
+                  Qiymət avtomobilin mövcudluğu, marşrut, yolüstü evakuator imkanı və sifariş detallarına görə dəyişə bilər. Cari uyğun qiymət üçün bizimlə əlaqə saxlayın.
                 </p>
               </div>
             </div>
@@ -544,15 +619,19 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           </div>
         </section>
 
-        {/* Section 7: Other Popular Evakuasiya Routes */}
+        {/* Section 7: Geographic Neighbor Evakuasiya Routes */}
         <section aria-labelledby="other-routes-heading" className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h2 id="other-routes-heading" className="text-xl sm:text-2xl font-bold text-slate-900">
-                Digər Rayonlar Üzrə Evakuasiya Marşrutları
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <MapPin className="w-4 h-4" />
+                <span>{regionGroup ? regionGroup.name : 'Bölgə'} və Qonşu Rayonlar</span>
+              </div>
+              <h2 id="other-routes-heading" className="text-xl sm:text-2xl font-bold text-slate-900 mt-1">
+                Yaxın Rayonlar Üzrə Evakuasiya Marşrutları
               </h2>
               <p className="text-slate-600 text-xs sm:text-sm mt-1">
-                Bakıdan Azərbaycanın digər şəhər və rayonlarına 24/7 operativ evakuator xidmətləri:
+                Bakıdan {routeConfig.destination} və qonşu rayonlara 24/7 operativ evakuator xidmətləri:
               </p>
             </div>
             <Link
@@ -565,30 +644,27 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {getAllApprovedEvakuatorRoutes()
-              .filter((r) => r.slug !== routeConfig.slug)
-              .slice(0, 8)
-              .map((r) => {
-                const tariff = lookupEvacuatorTariff(r.origin, r.destination);
-                return (
-                  <Link
-                    key={r.slug}
-                    href={r.routePath}
-                    className="p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors text-sm">
-                        {r.origin} – {r.destination}
-                      </span>
-                      <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
-                    </div>
-                    <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
-                      <span>{tariff.distanceKm ? `${tariff.distanceKm} km` : 'Magistral'}</span>
-                      <span className="font-bold text-blue-600">{tariff.price ? `${tariff.price} AZN` : 'Tarif'}</span>
-                    </div>
-                  </Link>
-                );
-              })}
+            {neighborRoutes.map((r) => {
+              const tariff = lookupEvacuatorTariff(r.origin, r.destination);
+              return (
+                <Link
+                  key={r.slug}
+                  href={r.routePath}
+                  className="p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors text-sm">
+                      {r.origin} – {r.destination}
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                  </div>
+                  <div className="mt-2 flex items-center justify-between text-xs text-slate-500">
+                    <span>{tariff.distanceKm ? `${tariff.distanceKm} km` : 'Rayon'}</span>
+                    <span className="font-bold text-blue-600">Qiyməti öyrən</span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
 
@@ -611,18 +687,33 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
               <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
             </Link>
 
-            <Link
-              href="/yukdasima"
-              className="p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-xs transition-all flex items-center justify-between group"
-            >
-              <div className="space-y-0.5">
-                <span className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
-                  Yükdaşıma Xidməti
-                </span>
-                <span className="text-xs text-slate-500 block">Bakı–{routeConfig.destination} yük daşınması</span>
-              </div>
-              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
-            </Link>
+            {counterpartYukdasima ? (
+              <Link
+                href={counterpartYukdasima.routePath}
+                className="p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-xs transition-all flex items-center justify-between group"
+              >
+                <div className="space-y-0.5">
+                  <span className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
+                    Bakı–{routeConfig.destination} Yükdaşıma
+                  </span>
+                  <span className="text-xs text-slate-500 block">Təhlükəsiz yük və mebel daşınması</span>
+                </div>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
+              </Link>
+            ) : (
+              <Link
+                href="/yukdasima"
+                className="p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-xs transition-all flex items-center justify-between group"
+              >
+                <div className="space-y-0.5">
+                  <span className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
+                    Yükdaşıma Xidməti
+                  </span>
+                  <span className="text-xs text-slate-500 block">Bütün bölgələr üzrə yükdaşıma</span>
+                </div>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
+              </Link>
+            )}
 
             <Link
               href="/qiymetler"

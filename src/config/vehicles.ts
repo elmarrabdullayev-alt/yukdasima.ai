@@ -6,10 +6,10 @@
  */
 
 export interface VehicleSpec {
-  id: 'vehicle_2m' | 'vehicle_3m' | 'vehicle_4m' | 'vehicle_5m' | 'vehicle_6m' | 'vehicle_7m';
+  id: 'vehicle_2m' | 'vehicle_3m' | 'vehicle_4m' | 'vehicle_5m' | 'vehicle_6m' | 'vehicle_7m' | 'vehicle_tir';
   name: string;
   shortName: string;
-  category: '2m' | '3m' | '4m' | '5m' | '6m' | '7m';
+  category: '2m' | '3m' | '4m' | '5m' | '6m' | '7m' | 'tir';
   lengthM: number;
   widthM: number;
   heightM: number;
@@ -131,6 +131,21 @@ export const DEFAULT_VEHICLE_CONFIG: VehicleConfig = {
       badge: '27.5 – 32 m³',
       maxCarryingWeightKg: 7500,
     },
+    {
+      id: 'vehicle_tir',
+      name: 'TIR',
+      shortName: 'TIR',
+      category: 'tir',
+      lengthM: 0,
+      widthM: 0,
+      heightM: 0,
+      theoreticalVolumeM3: 0,
+      practicalCapacityM3: 0,
+      maxVolumeThresholdM3: 0,
+      description: 'Marşrut üzrə TIR qiymətini öyrənin.',
+      badge: 'TIR',
+      maxCarryingWeightKg: 0,
+    },
   ],
 };
 
@@ -138,7 +153,7 @@ export const DEFAULT_VEHICLE_CONFIG: VehicleConfig = {
  * Helper to get a vehicle by its category key ('2m' | '3m' | ...)
  */
 export function getVehicleByCategory(
-  category: '2m' | '3m' | '4m' | '5m' | '6m' | '7m',
+  category: '2m' | '3m' | '4m' | '5m' | '6m' | '7m' | 'tir',
   config: VehicleConfig = DEFAULT_VEHICLE_CONFIG
 ): VehicleSpec | undefined {
   return config.vehicles.find((v) => v.category === category);

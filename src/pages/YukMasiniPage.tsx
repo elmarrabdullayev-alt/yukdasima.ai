@@ -39,6 +39,7 @@ export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {DEFAULT_VEHICLE_CONFIG.vehicles.map((v) => {
               const isSelected = selectedVehicle.id === v.id;
+              const isTir = v.category === 'tir';
               return (
                 <div
                   key={v.id}
@@ -54,7 +55,7 @@ export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) 
                       <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-700 border border-blue-100">
                         {v.badge}
                       </span>
-                      <span className="text-xs font-semibold text-slate-400">{v.category.toUpperCase()} kateqoriyası</span>
+                      <span className="text-xs font-semibold text-slate-400">{isTir ? 'TIR' : `${v.category.toUpperCase()} kateqoriyası`}</span>
                     </div>
 
                     <div>
@@ -62,24 +63,32 @@ export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) 
                       <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{v.description}</p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
-                      <div>
-                        <div className="text-[10px] text-slate-400 font-semibold uppercase">Uzunluq</div>
-                        <div className="text-xs font-bold text-slate-800">{v.lengthM} m</div>
+                    {isTir ? (
+                      <div className="p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                        <div className="text-xs text-slate-600 font-medium">TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.</div>
                       </div>
-                      <div>
-                        <div className="text-[10px] text-slate-400 font-semibold uppercase">En / Hünd.</div>
-                        <div className="text-xs font-bold text-slate-800">{v.widthM}x{v.heightM}m</div>
+                    ) : (
+                      <div className="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-slate-50 border border-slate-100 text-center">
+                        <div>
+                          <div className="text-[10px] text-slate-400 font-semibold uppercase">Uzunluq</div>
+                          <div className="text-xs font-bold text-slate-800">{v.lengthM} m</div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-slate-400 font-semibold uppercase">En / Hünd.</div>
+                          <div className="text-xs font-bold text-slate-800">{v.widthM}x{v.heightM}m</div>
+                        </div>
+                        <div>
+                          <div className="text-[10px] text-slate-400 font-semibold uppercase">Həcm</div>
+                          <div className="text-xs font-bold text-blue-600">~{v.practicalCapacityM3} m³</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="text-[10px] text-slate-400 font-semibold uppercase">Həcm</div>
-                        <div className="text-xs font-bold text-blue-600">~{v.practicalCapacityM3} m³</div>
-                      </div>
-                    </div>
+                    )}
                   </div>
 
                   <div className="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between">
-                    <span className="text-xs text-slate-500 font-medium">Daşıma qabiliyyəti: {v.maxCarryingWeightKg} kq</span>
+                    <span className="text-xs text-slate-500 font-medium">
+                      {isTir ? 'Böyük həcmli və xüsusi daşımalar' : `Daşıma qabiliyyəti: ${v.maxCarryingWeightKg} kq`}
+                    </span>
                     <button
                       type="button"
                       onClick={(e) => {

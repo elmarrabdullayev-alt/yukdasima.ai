@@ -14,13 +14,11 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
     question: string;
     answer: string;
     service: 'yukdasima' | 'evakuasiya';
-    suggestedPrice?: string;
   } | null>({
     question: '3 otaqlı evin daşınması neçəyə başa gəlir?',
     answer:
-      'Qiymət yükün həcmi, mərtəbə, lift, məsafə və fəhlə sayından asılıdır. Daha uyğun qiymət üçün əşyalarınızın şəkillərini göndərin.',
+      'Qiymət yükün həcmi, mərtəbə, lift, məsafə və fəhlə sayından asılıdır. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
     service: 'yukdasima',
-    suggestedPrice: '90–140 AZN',
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -42,18 +40,16 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
       setActiveAnswer({
         question: query,
         answer:
-          'Evakuasiya qiyməti məsafə, avtomobil növü və avtomobilin vəziyyətindən asılıdır. Ünvanları qeyd edərək ilkin qiyməti hesablaya bilərsiniz.',
+          'Evakuasiya qiyməti məsafə, avtomobil növü və avtomobilin texniki vəziyyətindən asılıdır. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
         service: 'evakuasiya',
-        suggestedPrice: '35–50 AZN',
       });
     } else {
       // Yukdasima question
       setActiveAnswer({
         question: query,
         answer:
-          'Yükdaşıma qiyməti yükün həcmi, mərtəbə, liftin varlığı, məsafə və tələb olunan fəhlə sayından asılıdır. Əşyalarınızın şəkillərini göndərərək ilkin qiyməti saniyələr içində öyrənə bilərsiniz.',
+          'Yükdaşıma qiyməti yükün həcmi, mərtəbə, liftin varlığı, məsafə və tələb olunan fəhlə sayından asılıdır. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
         service: 'yukdasima',
-        suggestedPrice: '80–120 AZN',
       });
     }
   };
@@ -64,17 +60,15 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
       setActiveAnswer({
         question: sample.query,
         answer:
-          'Evakuasiya qiyməti məsafə, avtomobil növü və avtomobilin vəziyyətindən asılıdır. Ünvanları qeyd edərək ilkin qiyməti hesablaya bilərsiniz.',
+          'Evakuasiya qiyməti məsafə, avtomobil növü və avtomobilin texniki vəziyyətindən asılıdır. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
         service: 'evakuasiya',
-        suggestedPrice: '35–45 AZN',
       });
     } else {
       setActiveAnswer({
         question: sample.query,
         answer:
-          'Qiymət yükün həcmi, mərtəbə, lift, məsafə və fəhlə sayından asılıdır. Daha uyğun qiymət üçün əşyalarınızın şəkillərini göndərin.',
+          'Qiymət yükün həcmi, mərtəbə, lift, məsafə və fəhlə sayından asılıdır. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
         service: 'yukdasima',
-        suggestedPrice: '90–120 AZN',
       });
     }
   };
