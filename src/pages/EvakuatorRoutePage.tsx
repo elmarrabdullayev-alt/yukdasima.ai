@@ -32,11 +32,12 @@ import {
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { generateRouteSeoConfig } from '../seo/routeRegistry';
+import { CallbackInitialData } from '../types';
 
 interface EvakuatorRoutePageProps {
   routeConfig?: ApprovedRouteConfig;
   routeSlug?: string;
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({

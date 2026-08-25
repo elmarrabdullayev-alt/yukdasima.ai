@@ -12,13 +12,13 @@ import {
   ShieldCheck,
   Zap
 } from 'lucide-react';
-import { EvakuasiyaFormData, EvakuasiyaResult, CarType } from '../types';
+import { EvakuasiyaFormData, EvakuasiyaResult, CarType, CallbackInitialData } from '../types';
 import { calculateEvakuasiyaEstimate, generateWhatsAppLink } from '../utils/calculator';
 import { findDestinationSuggestions } from '../services/destinationResolver';
 import { POPULAR_LOCATIONS } from '../data/mockData';
 
 interface EvakuasiyaEstimatorProps {
-  onOpenCallback: (initialPhone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 const CAR_TYPES: { type: CarType; icon: string; desc: string }[] = [
@@ -403,7 +403,17 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({ onOpen
             <button
               id="evak-btn-callback"
               type="button"
-              onClick={() => onOpenCallback(formData.phone)}
+              onClick={() =>
+                onOpenCallback({
+                  phone: formData.phone,
+                  service: 'evakuasiya',
+                  source: 'Evakuasiya Hesablayıcı',
+                  route: `${formData.fromAddress} → ${formData.toAddress}`,
+                  vehicle: `${formData.carType} (${formData.canMove === 'Bəli' ? 'Hərəkətli' : 'Nasaz'})`,
+                  estimatedPrice: result.estimatedPrice || undefined,
+                  notes: formData.conditionNotes ? `Vəziyyət: ${formData.conditionNotes}` : undefined,
+                })
+              }
               className="py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
             >
               <Phone className="w-4 h-4" />

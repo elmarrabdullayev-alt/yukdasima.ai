@@ -19,8 +19,10 @@ import { findDestinationSuggestions } from '../services/destinationResolver';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { POPULAR_LOCATIONS } from '../data/mockData';
 
+import { CallbackInitialData } from '../types';
+
 interface DirectYukdasimaOrderProps {
-  onOpenCallback: (initialPhone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
   onSwitchToAi?: () => void;
   initialFromAddress?: string;
   initialToAddress?: string;
@@ -595,7 +597,18 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
           <button
             id="direct-btn-callback"
             type="button"
-            onClick={() => onOpenCallback(customerPhone)}
+            onClick={() =>
+              onOpenCallback({
+                phone: customerPhone,
+                name: customerName,
+                service: 'yukdasima',
+                source: 'Birbaşa Maşın Sifarişi',
+                route: pricingResult.routeSummary || `${fromAddress || 'Bakı'} → ${toAddress || 'Təyin edilməyib'}`,
+                vehicle: currentVehicle.category === 'tir' ? 'TIR' : currentVehicle.name,
+                estimatedPrice: pricingResult.vehicleTransportPriceDisplay,
+                notes: `Fəhlə: ${needsWorkers ? `${workerCount} nəfər` : 'Tələb olunmur'}, Mebel montajı: ${needsAssembly ? 'Var' : 'Yox'}`,
+              })
+            }
             className="py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-md shadow-blue-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
           >
             <Phone className="w-4 h-4" />

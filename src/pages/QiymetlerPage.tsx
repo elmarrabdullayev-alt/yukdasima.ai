@@ -3,10 +3,10 @@ import { EstimatorSection } from '../components/EstimatorSection';
 import { Link } from '../router/RouterContext';
 import { DollarSign, Truck, Car, ShieldCheck, CheckCircle2, ArrowRight, HelpCircle, Phone } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
-import { ServiceType } from '../types';
+import { ServiceType, CallbackInitialData } from '../types';
 
 interface QiymetlerPageProps {
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) => {

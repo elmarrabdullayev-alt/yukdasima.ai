@@ -1,13 +1,13 @@
 import React from 'react';
 import { Truck, Car, ArrowDown } from 'lucide-react';
-import { ServiceType } from '../types';
+import { ServiceType, CallbackInitialData } from '../types';
 import { YukdasimaEstimator } from './YukdasimaEstimator';
 import { EvakuasiyaEstimator } from './EvakuasiyaEstimator';
 
 interface EstimatorSectionProps {
   activeService: ServiceType;
   onSelectService: (service: ServiceType) => void;
-  onOpenCallback: (initialPhone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const EstimatorSection: React.FC<EstimatorSectionProps> = ({

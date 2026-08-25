@@ -4,9 +4,10 @@ import { DirectYukdasimaOrder } from '../components/DirectYukdasimaOrder';
 import { Link } from '../router/RouterContext';
 import { Truck, ShieldCheck, CheckCircle2, ArrowRight, Gauge, Box, Maximize2 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { CallbackInitialData } from '../types';
 
 interface YukMasiniPageProps {
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) => {

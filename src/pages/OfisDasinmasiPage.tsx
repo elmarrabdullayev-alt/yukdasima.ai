@@ -3,9 +3,10 @@ import { YukdasimaEstimator } from '../components/YukdasimaEstimator';
 import { Link } from '../router/RouterContext';
 import { Briefcase, ShieldCheck, CheckCircle2, ArrowRight, Server, FileText, Clock, Users } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { CallbackInitialData } from '../types';
 
 interface OfisDasinmasiPageProps {
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const OfisDasinmasiPage: React.FC<OfisDasinmasiPageProps> = ({ onOpenCallback }) => {

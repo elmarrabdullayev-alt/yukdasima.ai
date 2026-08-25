@@ -2,9 +2,10 @@ import React from 'react';
 import { YukdasimaEstimator } from '../components/YukdasimaEstimator';
 import { Link } from '../router/RouterContext';
 import { Layers, Wrench, ShieldCheck, CheckCircle2, ArrowRight, Package, Truck, Sparkles } from 'lucide-react';
+import { CallbackInitialData } from '../types';
 
 interface MebelDasinmasiPageProps {
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCallback }) => {

@@ -37,11 +37,12 @@ import {
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { DEFAULT_VEHICLE_CONFIG } from '../config/vehicles';
+import { CallbackInitialData } from '../types';
 
 interface YukdasimaRoutePageProps {
   routeConfig?: ApprovedYukdasimaRouteConfig;
   routeSlug?: string;
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({

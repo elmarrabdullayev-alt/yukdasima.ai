@@ -3,9 +3,10 @@ import { YukdasimaEstimator } from '../components/YukdasimaEstimator';
 import { Link } from '../router/RouterContext';
 import { Users, ShieldCheck, CheckCircle2, ArrowRight, Clock, Award, Building2, Package } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { CallbackInitialData } from '../types';
 
 interface FehleXidmetiPageProps {
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const FehleXidmetiPage: React.FC<FehleXidmetiPageProps> = ({ onOpenCallback }) => {

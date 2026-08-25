@@ -1,5 +1,5 @@
 import React from 'react';
-import { ServiceType } from '../types';
+import { ServiceType, CallbackInitialData } from '../types';
 import { HeroSection } from '../components/HeroSection';
 import { EstimatorSection } from '../components/EstimatorSection';
 import { HowItWorks } from '../components/HowItWorks';
@@ -13,7 +13,7 @@ import { ArrowRight, ShieldCheck, Truck, Car, Home, Layers, Briefcase, Users, Do
 interface HomePageProps {
   activeService: ServiceType;
   onSelectService: (service: ServiceType) => void;
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const HomePage: React.FC<HomePageProps> = ({

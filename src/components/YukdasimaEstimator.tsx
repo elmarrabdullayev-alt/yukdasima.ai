@@ -31,7 +31,8 @@ import {
   CargoItem,
   CargoAnalysisData,
   UploadedImage,
-  DeterministicPricingResult
+  DeterministicPricingResult,
+  CallbackInitialData
 } from '../types';
 import { POPULAR_LOCATIONS } from '../data/mockData';
 import { generateWhatsAppLink } from '../utils/calculator';
@@ -44,7 +45,7 @@ import { CONTACT_INFO } from '../constants/contact';
 import { DirectYukdasimaOrder } from './DirectYukdasimaOrder';
 
 interface YukdasimaEstimatorProps {
-  onOpenCallback: (initialPhone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
   initialFromAddress?: string;
   initialToAddress?: string;
   initialMode?: 'ai' | 'direct';
@@ -1518,7 +1519,19 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
               <button
                 id="yukdasima-btn-callback"
                 type="button"
-                onClick={() => onOpenCallback(formData.phone)}
+                onClick={() =>
+                  onOpenCallback({
+                    phone: formData.phone,
+                    service: 'yukdasima',
+                    source: 'Yükdaşıma AI Hesablayıcı',
+                    route: pricingResult?.routeSummary || `${formData.fromAddress || 'Bakı'} → ${formData.toAddress || 'Təyin edilməyib'}`,
+                    vehicle: pricingResult?.vehicleName,
+                    estimatedPrice: pricingResult?.vehicleTransportPriceDisplay,
+                    notes: analysisResult
+                      ? `Həcm: ${analysisResult.estimatedTotalVolumeMinM3}-${analysisResult.estimatedTotalVolumeMaxM3} m³, Əşyalar: ${analysisResult.items.map((i) => `${i.quantity} ${i.name}`).join(', ')}`
+                      : undefined,
+                  })
+                }
                 className="py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
               >
                 <Phone className="w-4 h-4" />

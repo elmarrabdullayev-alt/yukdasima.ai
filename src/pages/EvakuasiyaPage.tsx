@@ -26,8 +26,10 @@ import { getAllApprovedEvakuatorRoutes } from '../seo/routeRegistry';
 import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
 import { lookupEvacuatorTariff } from '../services/tariffService';
 
+import { CallbackInitialData } from '../types';
+
 interface EvakuasiyaPageProps {
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }) => {

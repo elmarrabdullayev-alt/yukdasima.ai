@@ -27,8 +27,10 @@ import { YUKDASIMA_FAQS } from '../seo/metadata';
 import { getAllApprovedYukdasimaRoutes } from '../seo/routeRegistry';
 import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
 
+import { CallbackInitialData } from '../types';
+
 interface YukdasimaPageProps {
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) => {

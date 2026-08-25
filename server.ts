@@ -47,7 +47,144 @@ async function startServer() {
     res.json({
       status: "ok",
       hasGeminiKey: Boolean(process.env.GEMINI_API_KEY),
+      hasTelegramConfig: Boolean(process.env.TELEGRAM_BOT_TOKEN && process.env.TELEGRAM_CHAT_ID),
     });
+  });
+
+  // API Route: Telegram Callback & Lead Delivery
+  app.post("/api/callback", async (req, res) => {
+    try {
+      const { name, phone, service, message, source, route, vehicle, estimatedPrice, notes } = req.body || {};
+
+      const trimmedPhone = typeof phone === "string" ? phone.trim() : "";
+      if (!trimmedPhone) {
+        return res.status(400).json({
+          success: false,
+          error: "Telefon nömrəsi daxil edilməlidir.",
+        });
+      }
+
+      const trimmedName = typeof name === "string" ? name.trim() : "";
+      const trimmedService = typeof service === "string" ? service.trim() : "";
+      const trimmedMessage = typeof message === "string" ? message.trim() : "";
+      const trimmedSource = typeof source === "string" ? source.trim() : "";
+      const trimmedRoute = typeof route === "string" ? route.trim() : "";
+      const trimmedVehicle = typeof vehicle === "string" ? vehicle.trim() : "";
+      const trimmedEstimatedPrice =
+        typeof estimatedPrice === "string"
+          ? estimatedPrice.trim()
+          : typeof estimatedPrice === "number"
+          ? String(estimatedPrice).trim()
+          : "";
+      const trimmedNotes = typeof notes === "string" ? notes.trim() : "";
+
+      const escapeHtml = (text: string): string =>
+        text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+      const lines: string[] = ["🔔 <b>Yeni müraciət — yukdasima.ai</b>", ""];
+
+      if (trimmedName) {
+        lines.push(`👤 <b>Ad:</b> ${escapeHtml(trimmedName)}`);
+      }
+      lines.push(`📞 <b>Telefon:</b> <code>${escapeHtml(trimmedPhone)}</code>`);
+
+      if (trimmedService) {
+        const isEvak = trimmedService.toLowerCase().includes("evaku");
+        lines.push(`🚚 <b>Xidmət:</b> ${isEvak ? "🚗 Evakuasiya" : "🚚 Yükdaşıma"}`);
+      }
+
+      if (trimmedRoute) {
+        lines.push(`📍 <b>Marşrut:</b> ${escapeHtml(trimmedRoute)}`);
+      }
+
+      if (trimmedVehicle) {
+        lines.push(`🚛 <b>Avtomobil:</b> ${escapeHtml(trimmedVehicle)}`);
+      }
+
+      if (trimmedEstimatedPrice) {
+        let displayPrice = trimmedEstimatedPrice;
+        // If it's purely numeric or number range without AZN, append AZN without duplication
+        if (/^\d+(\.\d+)?(\s*-\s*\d+(\.\d+)?)?$/.test(displayPrice)) {
+          displayPrice = `${displayPrice} AZN`;
+        }
+        lines.push(`💰 <b>İlkin AI qiyməti:</b> ${escapeHtml(displayPrice)} <i>(İlkin təxmin, operator təsdiqi tələb olunur)</i>`);
+      }
+
+      if (trimmedNotes) {
+        lines.push(`📝 <b>Qeyd:</b> ${escapeHtml(trimmedNotes)}`);
+      }
+
+      if (trimmedMessage) {
+        lines.push(`💬 <b>Mesaj:</b> ${escapeHtml(trimmedMessage)}`);
+      }
+
+      if (trimmedSource) {
+        lines.push(`📄 <b>Mənbə:</b> ${escapeHtml(trimmedSource)}`);
+      }
+
+      const now = new Date();
+      const formattedDate = now.toLocaleString("az-AZ", {
+        timeZone: "Asia/Baku",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+      });
+      lines.push(`⏱️ <b>Tarix:</b> ${formattedDate}`);
+
+      const telegramText = lines.join("\n");
+
+      const botToken = process.env.TELEGRAM_BOT_TOKEN;
+      const chatId = process.env.TELEGRAM_CHAT_ID;
+
+      if (!botToken || !chatId) {
+        console.warn("[Telegram Callback] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID is not configured in environment variables.");
+        return res.status(500).json({
+          success: false,
+          error: "Server konfiqurasiya xətası: Telegram bildiriş xidməti aktiv deyil. Zəhmət olmasa birbaşa 878 qaynar xətti və ya WhatsApp ilə əlaqə saxlayın.",
+        });
+      }
+
+      const telegramUrl = `https://api.telegram.org/bot${botToken}/sendMessage`;
+      const telegramResponse = await fetch(telegramUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          chat_id: chatId,
+          text: telegramText,
+          parse_mode: "HTML",
+        }),
+      });
+
+      const telegramResult: any = await telegramResponse.json().catch(() => null);
+
+      if (!telegramResponse.ok || !telegramResult?.ok) {
+        console.error("[Telegram Callback Error]: Delivery to Telegram failed", {
+          status: telegramResponse.status,
+          description: telegramResult?.description || "Unknown error",
+        });
+        return res.status(502).json({
+          success: false,
+          error: "Müraciəti çatdırmaq mümkün olmadı. Zəhmət olmasa birbaşa qaynar xətlə (878) və ya WhatsApp ilə əlaqə saxlayın.",
+        });
+      }
+
+      console.log("[Telegram Callback] Message successfully delivered to Telegram chat");
+      return res.json({
+        success: true,
+        message: "Müraciətiniz uğurla qəbul edildi! Operatorumuz tezliklə sizinlə əlaqə saxlayacaq.",
+      });
+    } catch (err: any) {
+      console.error("[Telegram Callback Exception]:", err?.message || err);
+      return res.status(500).json({
+        success: false,
+        error: "Sistem xətası baş verdi. Zəhmət olmasa bir az sonra yenidən cəhd edin və ya 878 ilə əlaqə saxlayın.",
+      });
+    }
   });
 
   // SEO Route: robots.txt

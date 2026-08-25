@@ -154,3 +154,27 @@ export interface ServiceCardData {
   features: string[];
 }
 
+export interface CallbackRequestPayload {
+  name?: string;
+  phone: string;
+  service?: string;
+  message?: string;
+  source?: string;
+  route?: string;
+  vehicle?: string;
+  estimatedPrice?: string;
+  notes?: string;
+}
+
+export interface CallbackInitialData {
+  name?: string;
+  phone?: string;
+  service?: 'yukdasima' | 'evakuasiya';
+  message?: string;
+  source?: string;
+  route?: string;
+  vehicle?: string;
+  estimatedPrice?: string;
+  notes?: string;
+}
+

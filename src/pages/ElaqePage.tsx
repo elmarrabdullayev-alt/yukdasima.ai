@@ -1,30 +1,65 @@
 import React, { useState } from 'react';
-import { Phone, MessageSquare, MapPin, Clock, ShieldCheck, Send, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Phone, MessageSquare, MapPin, Clock, ShieldCheck, Send, CheckCircle2, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { Link } from '../router/RouterContext';
+import { CallbackInitialData } from '../types';
 
 interface ElaqePageProps {
-  onOpenCallback: (phone?: string) => void;
+  onOpenCallback: (initialData?: string | CallbackInitialData) => void;
 }
 
 export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
   const [formName, setFormName] = useState('');
   const [formPhone, setFormPhone] = useState('');
   const [formMessage, setFormMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleWhatsApp = () => {
     window.open(generateWhatsAppLink('Salam, yukdasima.ai xidmətləri ilə bağlı məlumat almaq və ya sifariş vermək istəyirəm.'), '_blank');
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formPhone) return;
-    setIsSubmitted(true);
-    setTimeout(() => {
-      onOpenCallback(formPhone);
-    }, 400);
+    const cleanPhone = formPhone.trim();
+    if (!cleanPhone) {
+      setErrorMessage('Zəhmət olmasa telefon nömrənizi daxil edin.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage(null);
+
+    try {
+      const res = await fetch('/api/callback', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formName.trim(),
+          phone: cleanPhone,
+          message: formMessage.trim(),
+          service: 'Ümumi Müraciət',
+          source: 'Əlaqə Səhifəsi Forması',
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data?.success) {
+        throw new Error(data?.error || 'Müraciəti göndərmək mümkün olmadı. Zəhmət olmasa yenidən cəhd edin.');
+      }
+
+      setIsSubmitted(true);
+    } catch (err: any) {
+      console.error('[ElaqePage submit failed]:', err);
+      setErrorMessage(err.message || 'Müraciət zamanı xəta baş verdi. Zəhmət olmasa 878 qaynar xətti ilə əlaqə saxlayın.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -114,6 +149,13 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
             </div>
           ) : (
             <form onSubmit={handleSubmit} className="space-y-4">
+              {errorMessage && (
+                <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
+                  <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
+
               <div>
                 <label htmlFor="contact-name" className="block text-xs font-bold uppercase text-slate-700 mb-1.5">
                   Adınız
@@ -121,10 +163,11 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
                 <input
                   id="contact-name"
                   type="text"
+                  disabled={isSubmitting}
                   placeholder="Məs: Rəşad Əliyev"
                   value={formName}
                   onChange={(e) => setFormName(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:bg-slate-50"
                 />
               </div>
 
@@ -136,10 +179,11 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
                   id="contact-phone"
                   type="tel"
                   required
+                  disabled={isSubmitting}
                   placeholder="050 123 45 67"
                   value={formPhone}
                   onChange={(e) => setFormPhone(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 font-medium disabled:bg-slate-50"
                 />
               </div>
 
@@ -150,19 +194,30 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
                 <textarea
                   id="contact-msg"
                   rows={3}
+                  disabled={isSubmitting}
                   placeholder="Yük növü və ya çatdırılma ünvanı haqqında qısa məlumat..."
                   value={formMessage}
                   onChange={(e) => setFormMessage(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600"
+                  className="w-full px-4 py-3 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-600 disabled:bg-slate-50"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                disabled={isSubmitting}
+                className="w-full py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-sm shadow-md transition-colors flex items-center justify-center gap-2 cursor-pointer"
               >
-                <Send className="w-4 h-4" />
-                <span>Zəng Sifariş Et</span>
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Göndərilir...</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-4 h-4" />
+                    <span>Zəng Sifariş Et</span>
+                  </>
+                )}
               </button>
             </form>
           )}

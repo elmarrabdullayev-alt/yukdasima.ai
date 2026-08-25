@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { ServiceType } from './types';
+import { ServiceType, CallbackInitialData } from './types';
 import { Navbar } from './components/Navbar';
 import { MobileStickyBar } from './components/MobileStickyBar';
 import { ContactCallbackModal } from './components/ContactCallbackModal';
@@ -30,19 +30,25 @@ function AppContent() {
   const { pathname } = useRouter();
   const [activeService, setActiveService] = useState<ServiceType>('yukdasima');
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
-  const [callbackPhone, setCallbackPhone] = useState('');
+  const [callbackData, setCallbackData] = useState<CallbackInitialData | undefined>(undefined);
 
   // Dynamically update document head (meta tags, title, canonical link, JSON-LD)
   useSeo(pathname);
 
-  const handleOpenCallback = (phone?: string) => {
-    if (phone) setCallbackPhone(phone);
+  const handleOpenCallback = (data?: string | CallbackInitialData) => {
+    if (typeof data === 'string') {
+      setCallbackData({ phone: data });
+    } else if (data) {
+      setCallbackData(data);
+    } else {
+      setCallbackData(undefined);
+    }
     setIsCallbackOpen(true);
   };
 
   const handleCloseCallback = () => {
     setIsCallbackOpen(false);
-    setCallbackPhone('');
+    setCallbackData(undefined);
   };
 
   // Route router switcher
@@ -119,7 +125,7 @@ function AppContent() {
       {/* 5. Quick Contact Callback Modal */}
       <ContactCallbackModal
         isOpen={isCallbackOpen}
-        initialPhone={callbackPhone}
+        initialData={callbackData}
         onClose={handleCloseCallback}
       />
     </div>
