@@ -36,7 +36,9 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
 
             <div className="flex items-center gap-4 pt-2">
               <a
+                id="footer-hotline-brand-btn"
                 href={CONTACT_INFO.HOTLINE_TEL}
+                aria-label="878 qaynar xəttinə zəng et"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-colors font-bold text-sm"
               >
                 <Phone className="w-4 h-4" />
@@ -45,7 +47,9 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
 
               <button
                 type="button"
+                id="footer-whatsapp-brand-btn"
                 onClick={handleWhatsApp}
+                aria-label="WhatsApp vasitəsilə yaz"
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 transition-colors font-bold text-sm cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4" />

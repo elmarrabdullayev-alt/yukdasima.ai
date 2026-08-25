@@ -16,7 +16,7 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
       '@id': `${SITE_URL}/#business`,
       name: SITE_NAME,
       url: SITE_URL,
-      telephone: CONTACT_INFO.MOBILE_TEL.replace('tel:', ''),
+      telephone: CONTACT_INFO.HOTLINE_NUMBER,
       areaServed: [
         {
           '@type': 'City',

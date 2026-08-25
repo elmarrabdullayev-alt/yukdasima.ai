@@ -91,31 +91,43 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
               <p className="text-xs text-slate-500 mt-1">24/7 Operativ operator dəstəyi</p>
             </div>
             <a
+              id="elaqe-hotline-link"
               href={CONTACT_INFO.HOTLINE_TEL}
-              className="text-2xl font-black text-blue-600 hover:text-blue-700 tracking-tight"
+              aria-label="878 qaynar xəttinə zəng et"
+              className="text-3xl font-black text-blue-600 hover:text-blue-700 tracking-tight transition-colors inline-flex items-center gap-2"
             >
-              {CONTACT_INFO.HOTLINE_SHORT_DISPLAY}
+              <Phone className="w-6 h-6" />
+              <span>{CONTACT_INFO.HOTLINE_SHORT_DISPLAY}</span>
             </a>
-            <p className="text-xs text-slate-400">Bütün mobil operatorlardan və şəhər telefonlarından</p>
+            <p className="text-xs text-slate-400">Bütün mobil operatorlardan və şəhər telefonlarından ödənişsiz/standart tarif</p>
           </div>
 
-          {/* WhatsApp Card */}
+          {/* WhatsApp / Mobil Card */}
           <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4 text-center flex flex-col items-center">
             <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
               <MessageSquare className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900">WhatsApp ilə Əlaqə</h2>
-              <p className="text-xs text-slate-500 mt-1">Şəkil və məkan göndərmək üçün</p>
+              <h2 className="text-xl font-bold text-slate-900">Mobil & WhatsApp</h2>
+              <p className="text-xs text-slate-500 mt-1">Şəkil, video və məkan göndərmək üçün</p>
             </div>
+            <a
+              id="elaqe-mobile-tel-link"
+              href={CONTACT_INFO.MOBILE_TEL}
+              aria-label="Mobil nömrəyə zəng et"
+              className="text-lg font-bold text-slate-900 hover:text-blue-600 transition-colors inline-flex items-center gap-1.5"
+            >
+              <Phone className="w-4 h-4 text-blue-600" />
+              <span>{CONTACT_INFO.MOBILE_DISPLAY}</span>
+            </a>
             <button
               onClick={handleWhatsApp}
               type="button"
-              className="px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-sm shadow-sm hover:bg-emerald-700 transition-colors cursor-pointer"
+              className="w-full px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-sm shadow-xs hover:bg-emerald-700 transition-colors cursor-pointer flex items-center justify-center gap-2"
             >
-              WhatsApp-da Yazın
+              <MessageSquare className="w-4 h-4" />
+              <span>WhatsApp-da Yazın</span>
             </button>
-            <p className="text-xs text-slate-400">{CONTACT_INFO.MOBILE_DISPLAY}</p>
           </div>
 
           {/* Location / Hours */}

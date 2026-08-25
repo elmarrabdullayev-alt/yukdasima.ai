@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EstimatorSection } from '../components/EstimatorSection';
 import { Link } from '../router/RouterContext';
-import { DollarSign, Truck, Car, ShieldCheck, CheckCircle2, ArrowRight, HelpCircle, Phone } from 'lucide-react';
+import { DollarSign, Truck, Car, ShieldCheck, CheckCircle2, ArrowRight, HelpCircle, Phone, MessageSquare } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { ServiceType, CallbackInitialData } from '../types';
 
@@ -27,6 +27,28 @@ export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) 
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
             Bakı şəhəri, Abşeron və bütün Azərbaycan regionları üzrə rəsmi və şəffaf qiymət tarifləri. Gizli əlavə xərclər olmadan dəqiq hesablama.
           </p>
+
+          {/* Quick Contact Badges */}
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={CONTACT_INFO.HOTLINE_TEL}
+              aria-label="878 qaynar xəttinə zəng et"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+            </a>
+            <a
+              href={CONTACT_INFO.WHATSAPP_URL_BASE}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp vasitəsilə yaz"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>WhatsApp ilə Sifariş</span>
+            </a>
+          </div>
         </header>
 
         {/* Pricing Overview Tables */}

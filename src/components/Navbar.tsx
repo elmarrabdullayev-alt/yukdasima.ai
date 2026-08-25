@@ -124,11 +124,17 @@ export const Navbar: React.FC<NavbarProps> = ({
             <a
               id="header-phone-hotline"
               href={CONTACT_INFO.HOTLINE_TEL}
-              className="flex flex-col items-end leading-tight text-right hover:text-blue-600 transition-colors"
+              className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-slate-100 transition-colors group"
               title={CONTACT_INFO.HOTLINE_DISPLAY}
+              aria-label="878 qaynar xəttinə zəng et"
             >
-              <span className="text-xs text-slate-400 uppercase font-semibold tracking-wider">Qaynar xətt</span>
-              <span className="text-lg font-bold text-slate-900 leading-none">{CONTACT_INFO.HOTLINE_SHORT_DISPLAY}</span>
+              <div className="w-8 h-8 rounded-lg bg-blue-50 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center transition-colors shrink-0">
+                <Phone className="w-4 h-4" />
+              </div>
+              <div className="flex flex-col items-start leading-tight">
+                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Qaynar xətt</span>
+                <span className="text-base font-extrabold text-slate-900 leading-none group-hover:text-blue-600 transition-colors">{CONTACT_INFO.HOTLINE_SHORT_DISPLAY}</span>
+              </div>
             </a>
 
             <button
@@ -145,8 +151,9 @@ export const Navbar: React.FC<NavbarProps> = ({
             <a
               id="mobile-phone-btn"
               href={CONTACT_INFO.HOTLINE_TEL}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 text-blue-600 font-bold text-sm"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-sm transition-colors"
               title={CONTACT_INFO.HOTLINE_DISPLAY}
+              aria-label="878 qaynar xəttinə zəng et"
             >
               <Phone className="w-4 h-4" />
               <span>{CONTACT_INFO.HOTLINE_SHORT_DISPLAY}</span>
@@ -155,7 +162,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="mobile-menu-toggle"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-lg text-slate-700 hover:bg-slate-100 focus:outline-none"
+              className="p-2.5 rounded-lg text-slate-700 hover:bg-slate-100 focus:outline-none cursor-pointer"
               aria-label="Menyu"
             >
               {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -246,10 +253,20 @@ export const Navbar: React.FC<NavbarProps> = ({
             Əlaqə
           </Link>
 
-          <div className="pt-2">
+          <div className="pt-2 space-y-2">
+            <a
+              id="mobile-drawer-hotline"
+              href={CONTACT_INFO.HOTLINE_TEL}
+              aria-label="878 qaynar xəttinə zəng et"
+              className="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-sm shadow-xs text-center flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
+            >
+              <Phone className="w-4 h-4 text-blue-400" />
+              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+            </a>
+
             <button
               onClick={() => handleNavClick('/', 'estimator-section')}
-              className="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-md text-center flex items-center justify-center gap-2"
+              className="w-full py-3 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-md text-center flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors cursor-pointer"
             >
               <span>Qiymət hesabla</span>
               <ArrowRight className="w-4 h-4" />

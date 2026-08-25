@@ -1,7 +1,8 @@
 import React from 'react';
 import { YukdasimaEstimator } from '../components/YukdasimaEstimator';
 import { Link } from '../router/RouterContext';
-import { Layers, Wrench, ShieldCheck, CheckCircle2, ArrowRight, Package, Truck, Sparkles } from 'lucide-react';
+import { Layers, Wrench, ShieldCheck, CheckCircle2, ArrowRight, Package, Truck, Sparkles, Phone, MessageSquare } from 'lucide-react';
+import { CONTACT_INFO } from '../constants/contact';
 import { CallbackInitialData } from '../types';
 
 interface MebelDasinmasiPageProps {
@@ -24,6 +25,28 @@ export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCa
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
             Hər növ yataq dəsti, qonaq otağı mebeli, mətbəx mebeli, dolab və qarderobların peşəkar ustalar tərəfindən sökülməsi, qablaşdırılması, daşınması və yenidən quraşdırılması.
           </p>
+
+          {/* Quick Contact Badges */}
+          <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
+            <a
+              href={CONTACT_INFO.HOTLINE_TEL}
+              aria-label="878 qaynar xəttinə zəng et"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+            >
+              <Phone className="w-4 h-4" />
+              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+            </a>
+            <a
+              href={CONTACT_INFO.WHATSAPP_URL_BASE}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp vasitəsilə yaz"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+            >
+              <MessageSquare className="w-4 h-4" />
+              <span>WhatsApp ilə Sifariş</span>
+            </a>
+          </div>
         </header>
 
         {/* Feature Grid */}

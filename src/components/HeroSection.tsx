@@ -1,6 +1,7 @@
 import React from 'react';
-import { ArrowRight, Sparkles, ShieldCheck, Clock, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Sparkles, ShieldCheck, Clock, CheckCircle2, Phone } from 'lucide-react';
 import { ServiceType } from '../types';
+import { CONTACT_INFO } from '../constants/contact';
 
 interface HeroSectionProps {
   activeService: ServiceType;
@@ -23,14 +24,26 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24 bg-slate-50">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Hero Header */}
-        <div className="max-w-3xl mx-auto text-center mb-10">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
+        <div className="max-w-3xl mx-auto text-center mb-10 space-y-4">
+          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
             Daşıma qiymətinizi <span className="text-blue-600">asanlıqla</span> öyrənin
           </h1>
 
           <p className="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
             Yükdaşıma və evakuasiya xidmətləri üçün məlumatları daxil edin, ilkin qiyməti öyrənin və sifarişinizi bizə göndərin.
           </p>
+
+          <div className="flex items-center justify-center gap-3 pt-2">
+            <a
+              id="hero-quick-call-hotline"
+              href={CONTACT_INFO.HOTLINE_TEL}
+              aria-label="878 qaynar xəttinə zəng et"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-200 text-slate-800 hover:text-blue-600 text-xs sm:text-sm font-bold shadow-2xs transition-colors"
+            >
+              <Phone className="w-3.5 h-3.5 text-blue-600" />
+              <span>Təcili sifariş üçün Qaynar xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+            </a>
+          </div>
         </div>
 
         {/* TWO EQUALLY PROMINENT SERVICE CARDS */}
