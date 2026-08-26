@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   Car,
   MapPin,
@@ -7,11 +7,11 @@ import {
   MessageSquare,
   AlertCircle,
   CheckCircle2,
-  RefreshCw,
   Clock,
   ShieldCheck,
   Zap,
-  HelpCircle
+  HelpCircle,
+  Truck
 } from 'lucide-react';
 import { EvakuasiyaFormData, EvakuasiyaResult, CarType, CallbackInitialData } from '../types';
 import { calculateEvakuasiyaEstimate, generateWhatsAppLink } from '../utils/calculator';
@@ -33,6 +33,102 @@ const CAR_TYPES: { type: CarType; icon: string; desc: string }[] = [
   { type: 'Digər', icon: '🏎️', desc: 'Xüsusi texnika' },
 ];
 
+/**
+ * Modern flatbed tow-truck (platformalı evakuator) vector graphic carrying an automobile
+ */
+const TowTruckGraphic: React.FC<{ className?: string }> = ({ className = 'w-14 h-7 sm:w-16 sm:h-8' }) => (
+  <svg
+    viewBox="0 0 96 42"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+    aria-hidden="true"
+  >
+    {/* 1. WINCH CABLE & HEADACHE RACK BEHIND CAB */}
+    <path d="M57 19L50 21" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" />
+    <path d="M57 14V26" stroke="#1E293B" strokeWidth="2" strokeLinecap="round" />
+    <path d="M54 16H57" stroke="#64748B" strokeWidth="1.5" />
+
+    {/* 2. CAR LOADED ON FLATBED */}
+    <path
+      d="M12 24L15 19C16.5 16.5 19 15 22 15H36C39 15 41.5 16.5 43 19L47 21C49 22 50 23 50 25V26H10V25C10 24.5 10.8 24.2 12 24Z"
+      fill="#60A5FA"
+      stroke="#2563EB"
+      strokeWidth="1.2"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M21 16H35L39 19.5H18L21 16Z"
+      fill="#EFF6FF"
+      stroke="#1D4ED8"
+      strokeWidth="1"
+      strokeLinejoin="round"
+    />
+    <line x1="28" y1="16" x2="28" y2="19.5" stroke="#93C5FD" strokeWidth="1" />
+    {/* Car wheels on deck */}
+    <circle cx="19" cy="26" r="3" fill="#0F172A" stroke="#475569" strokeWidth="1" />
+    <circle cx="19" cy="26" r="1.2" fill="#CBD5E1" />
+    <circle cx="41" cy="26" r="3" fill="#0F172A" stroke="#475569" strokeWidth="1" />
+    <circle cx="41" cy="26" r="1.2" fill="#CBD5E1" />
+
+    {/* 3. FLATBED TOW TRUCK DECK */}
+    <path
+      d="M4 27.5L58 27.5L58 29.5L4 29.5Z"
+      fill="#2563EB"
+      stroke="#1D4ED8"
+      strokeWidth="1.2"
+      strokeLinejoin="round"
+    />
+    <line x1="6" y1="28.5" x2="56" y2="28.5" stroke="#93C5FD" strokeWidth="0.8" strokeDasharray="3 2" />
+
+    {/* Subframe & tool container under bed */}
+    <path d="M12 29.5H58V33H16L12 29.5Z" fill="#1E293B" />
+    <rect x="30" y="30" width="10" height="3.5" rx="1" fill="#475569" stroke="#334155" strokeWidth="0.8" />
+
+    {/* 4. TOW TRUCK FRONT CAB */}
+    <path
+      d="M58 16C58 14.5 59.2 13.5 60.5 13.5H74C75.5 13.5 77 14.5 78 16.5L84 25.5C84.8 26.5 85.5 27.5 87 27.5H91C92 27.5 92.5 28.5 92.5 29.5V33C92.5 34 91.5 34.5 90.5 34.5H58V16Z"
+      fill="#1D4ED8"
+      stroke="#1E40AF"
+      strokeWidth="1.2"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M62 16H73.5C74.5 16 75.5 16.8 76.2 18L80.5 24.5H62V16Z"
+      fill="#DBEAFE"
+      stroke="#1E40AF"
+      strokeWidth="1"
+      strokeLinejoin="round"
+    />
+    <path d="M62 25H72V33H62V25Z" fill="#2563EB" stroke="#1E40AF" strokeWidth="0.8" />
+    <rect x="64" y="26.5" width="2.5" height="1" rx="0.5" fill="#CBD5E1" />
+    <rect x="88" y="28.5" width="4" height="4" rx="0.8" fill="#0F172A" />
+    <path d="M89 29.5H91.5" stroke="#F59E0B" strokeWidth="1" strokeLinecap="round" />
+    <circle cx="87.5" cy="27" r="1.5" fill="#FEF08A" />
+
+    {/* 5. ROOF EMERGENCY BEACON LIGHT */}
+    <rect x="66" y="10.5" width="6" height="3" rx="1.5" fill="#F59E0B" stroke="#D97706" strokeWidth="0.8" />
+    <circle cx="69" cy="12" r="1.2" fill="#FEF08A" className="animate-ping" />
+
+    {/* 6. TOW TRUCK WHEELS */}
+    <g>
+      <circle cx="24" cy="34" r="5" fill="#0F172A" stroke="#334155" strokeWidth="1.5" />
+      <circle cx="24" cy="34" r="2.2" fill="#94A3B8" stroke="#0F172A" strokeWidth="0.8" />
+      <circle cx="24" cy="34" r="0.8" fill="#F8FAFC" />
+    </g>
+    <g>
+      <circle cx="46" cy="34" r="5" fill="#0F172A" stroke="#334155" strokeWidth="1.5" />
+      <circle cx="46" cy="34" r="2.2" fill="#94A3B8" stroke="#0F172A" strokeWidth="0.8" />
+      <circle cx="46" cy="34" r="0.8" fill="#F8FAFC" />
+    </g>
+    <g>
+      <circle cx="78" cy="34" r="5" fill="#0F172A" stroke="#334155" strokeWidth="1.5" />
+      <circle cx="78" cy="34" r="2.2" fill="#94A3B8" stroke="#0F172A" strokeWidth="0.8" />
+      <circle cx="78" cy="34" r="0.8" fill="#F8FAFC" />
+    </g>
+  </svg>
+);
+
 export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
   onOpenCallback,
   initialFrom = 'Nərimanov, Bakı',
@@ -48,33 +144,92 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
   });
 
   const [isCalculating, setIsCalculating] = useState(false);
+  const [calcProgress, setCalcProgress] = useState(0);
+  const [calcStage, setCalcStage] = useState<1 | 2 | 3>(1);
+  const [calcStatusText, setCalcStatusText] = useState('Marşrut hesablanır...');
   const [result, setResult] = useState<EvakuasiyaResult | null>(null);
+
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
 
   const updateFormAndRecalculate = (updates: Partial<EvakuasiyaFormData>) => {
     const updated = { ...formData, ...updates };
     setFormData(updated);
-    if (result) {
+    if (result && !isCalculating) {
       setResult(calculateEvakuasiyaEstimate(updated));
     }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isCalculating) return; // Prevent multiple concurrent calculations
+
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
     setIsCalculating(true);
     setResult(null);
+    setCalcProgress(0);
+    setCalcStage(1);
+    setCalcStatusText('Marşrut hesablanır...');
 
+    // Smoothly scroll down towards calculation area if needed
     setTimeout(() => {
-      setIsCalculating(false);
-      const est = calculateEvakuasiyaEstimate(formData);
-      setResult(est);
+      const loaderEl = document.getElementById('evakuasiya-route-loader');
+      if (loaderEl) {
+        loaderEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 50);
 
-      setTimeout(() => {
-        const resEl = document.getElementById('evakuasiya-result-card');
-        if (resEl) {
-          resEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    const prefersReducedMotion = typeof window !== 'undefined' &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const totalDuration = prefersReducedMotion ? 350 : 2200;
+    const startTime = performance.now();
+
+    timerRef.current = setInterval(() => {
+      const elapsed = performance.now() - startTime;
+      const progressRatio = Math.min(elapsed / totalDuration, 1);
+      const currentProgress = progressRatio * 100;
+      setCalcProgress(currentProgress);
+
+      if (currentProgress < 35) {
+        setCalcStage(1);
+        setCalcStatusText('Marşrut hesablanır...');
+      } else if (currentProgress < 70) {
+        setCalcStage(2);
+        setCalcStatusText('Avtomobil məlumatları yoxlanılır...');
+      } else {
+        setCalcStage(3);
+        setCalcStatusText('Qiymət hesablanır...');
+      }
+
+      if (progressRatio >= 1) {
+        if (timerRef.current) {
+          clearInterval(timerRef.current);
         }
-      }, 100);
-    }, 400);
+        setTimeout(() => {
+          const est = calculateEvakuasiyaEstimate(formData);
+          setResult(est);
+          setIsCalculating(false);
+
+          setTimeout(() => {
+            const resEl = document.getElementById('evakuasiya-result-card');
+            if (resEl) {
+              resEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }, 100);
+        }, 150);
+      }
+    }, 25);
   };
 
   const isOperatorType = formData.carType === 'Mikroavtobus' || formData.carType === 'Digər';
@@ -163,10 +318,11 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               id="evak-from-address"
               type="text"
               required
+              disabled={isCalculating}
               value={formData.fromAddress}
               onChange={(e) => updateFormAndRecalculate({ fromAddress: e.target.value })}
               placeholder="Məsələn: Nərimanov, Bakı"
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm bg-slate-50/50 outline-none"
+              className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm bg-slate-50/50 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
             />
             {/* Quick Location Chips */}
             <div className="flex flex-wrap gap-1.5 pt-1">
@@ -174,8 +330,9 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                 <button
                   key={loc}
                   type="button"
+                  disabled={isCalculating}
                   onClick={() => updateFormAndRecalculate({ fromAddress: loc })}
-                  className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-blue-100 text-[11px] text-slate-600 hover:text-blue-700 font-medium transition-colors cursor-pointer"
+                  className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-blue-100 text-[11px] text-slate-600 hover:text-blue-700 font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loc}
                 </button>
@@ -193,13 +350,14 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               id="evak-to-address"
               type="text"
               required
+              disabled={isCalculating}
               value={formData.toAddress}
               onChange={(e) => updateFormAndRecalculate({ toAddress: e.target.value })}
               placeholder="Məsələn: Xırdalan"
-              className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm bg-slate-50/50 outline-none"
+              className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm bg-slate-50/50 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
             />
             {/* Dynamic Search Suggestions */}
-            {formData.toAddress.trim().length >= 2 && (() => {
+            {formData.toAddress.trim().length >= 2 && !isCalculating && (() => {
               const dynamicSuggestions = findDestinationSuggestions(formData.toAddress, 5);
               if (dynamicSuggestions.length === 0) return null;
               return (
@@ -224,8 +382,9 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                 <button
                   key={loc}
                   type="button"
+                  disabled={isCalculating}
                   onClick={() => updateFormAndRecalculate({ toAddress: loc })}
-                  className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-blue-100 text-[11px] text-slate-600 hover:text-blue-700 font-medium transition-colors cursor-pointer"
+                  className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-blue-100 text-[11px] text-slate-600 hover:text-blue-700 font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loc}
                 </button>
@@ -245,8 +404,9 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                 key={item.type}
                 type="button"
                 id={`evak-type-${item.type.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
+                disabled={isCalculating}
                 onClick={() => updateFormAndRecalculate({ carType: item.type })}
-                className={`p-3 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 ${
+                className={`p-3 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center justify-center gap-1.5 disabled:opacity-75 ${
                   formData.carType === item.type
                     ? 'border-blue-600 bg-blue-50/80 text-blue-900 shadow-xs ring-2 ring-blue-500/20 font-bold'
                     : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
@@ -277,8 +437,9 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
             <button
               id="evak-condition-working"
               type="button"
+              disabled={isCalculating}
               onClick={() => updateFormAndRecalculate({ canMove: 'Bəli' })}
-              className={`py-3 px-4 rounded-xl border font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              className={`py-3 px-4 rounded-xl border font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-75 ${
                 formData.canMove === 'Bəli'
                   ? 'border-emerald-600 bg-emerald-50 text-emerald-800 ring-2 ring-emerald-500/20'
                   : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
@@ -291,8 +452,9 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
             <button
               id="evak-condition-broken"
               type="button"
+              disabled={isCalculating}
               onClick={() => updateFormAndRecalculate({ canMove: 'Xeyr' })}
-              className={`py-3 px-4 rounded-xl border font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer ${
+              className={`py-3 px-4 rounded-xl border font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer disabled:opacity-75 ${
                 formData.canMove === 'Xeyr'
                   ? 'border-amber-600 bg-amber-50 text-amber-900 ring-2 ring-amber-500/20'
                   : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100'
@@ -312,10 +474,11 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
           <textarea
             id="evak-condition"
             rows={2}
+            disabled={isCalculating}
             value={formData.conditionNotes}
             onChange={(e) => updateFormAndRecalculate({ conditionNotes: e.target.value })}
             placeholder="Məsələn: avtomobil qəza edib, sükan və ya təkər kilidlənib..."
-            className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm text-slate-800 placeholder-slate-400 bg-slate-50/50 outline-none"
+            className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm text-slate-800 placeholder-slate-400 bg-slate-50/50 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
           />
         </div>
 
@@ -331,10 +494,11 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
             <input
               id="evak-phone"
               type="tel"
+              disabled={isCalculating}
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               placeholder="+994 50 123 45 67"
-              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 text-sm bg-slate-50/50 outline-none"
+              className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 text-sm bg-slate-50/50 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
             />
           </div>
         </div>
@@ -345,12 +509,12 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
             id="btn-calculate-evakuasiya"
             type="submit"
             disabled={isCalculating}
-            className="w-full sm:w-auto min-w-[280px] py-4 px-8 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base shadow-lg shadow-blue-600/30 active:scale-[0.99] transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-75"
+            className="w-full sm:w-auto min-w-[280px] py-4 px-8 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base shadow-lg shadow-blue-600/30 active:scale-[0.99] transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed"
           >
             {isCalculating ? (
               <>
-                <RefreshCw className="w-5 h-5 animate-spin" />
-                <span>Marşrut və məlumatlar hesablanır...</span>
+                <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
+                <span>Hesablanır... ({Math.round(calcProgress)}%)</span>
               </>
             ) : (
               <>
@@ -361,6 +525,156 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
           </button>
         </div>
       </form>
+
+      {/* PROFESSIONAL ROUTE & PROGRESS LOADING COMPONENT */}
+      {isCalculating && (
+        <div
+          id="evakuasiya-route-loader"
+          aria-live="polite"
+          className="mt-10 rounded-2xl border-2 border-blue-500/40 bg-linear-to-b from-blue-50/70 via-white to-slate-50/80 p-6 sm:p-8 shadow-xl shadow-blue-500/5 transition-all duration-300 animate-in fade-in zoom-in-95"
+        >
+          {/* Header Status & Progress Pill */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-6 border-b border-slate-200/80">
+            <div>
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-extrabold uppercase tracking-wide mb-1.5">
+                <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />
+                <span>Aktiv marşrut təhlili</span>
+              </div>
+              <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight transition-all">
+                {calcStatusText}
+              </h3>
+            </div>
+            <div className="flex items-baseline gap-2">
+              <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Tərəqqi</span>
+              <span className="text-2xl sm:text-3xl font-black text-blue-600 font-mono">
+                {Math.round(calcProgress)}%
+              </span>
+            </div>
+          </div>
+
+          {/* Route Corridor Visual with Moving Tow-Truck */}
+          <div className="pt-8 pb-6 px-1 sm:px-4">
+            <div className="relative flex items-center justify-between py-6">
+              {/* Route line track background */}
+              <div className="absolute left-6 right-6 sm:left-10 sm:right-10 top-1/2 -translate-y-1/2 h-2.5 bg-slate-200/80 rounded-full overflow-hidden">
+                {/* Active animated progress bar fill */}
+                <div
+                  className="h-full bg-linear-to-r from-blue-600 via-blue-500 to-indigo-600 rounded-full transition-all duration-75 ease-out shadow-xs"
+                  style={{ width: `${Math.min(Math.max(calcProgress, 0), 100)}%` }}
+                />
+              </div>
+
+              {/* Moving Tow-Truck Graphic along horizontal route line */}
+              <div
+                className="absolute top-1/2 -translate-y-1/2 pointer-events-none z-10 transition-all duration-75 ease-out"
+                style={{
+                  left: `calc(24px + (100% - 48px) * ${Math.min(Math.max(calcProgress, 0), 100) / 100})`,
+                  transform: 'translate(-50%, -50%)',
+                }}
+              >
+                <div className="px-2.5 py-1.5 sm:px-3 sm:py-2 bg-white rounded-xl shadow-md border border-slate-200/90 flex items-center justify-center">
+                  <TowTruckGraphic className="w-14 h-7 sm:w-16 sm:h-8" />
+                </div>
+              </div>
+
+              {/* Point A (Başlanğıc nöqtəsi) */}
+              <div className="relative z-0 flex flex-col items-center text-center">
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-blue-600 text-white font-black text-base shadow-lg shadow-blue-600/30 flex items-center justify-center ring-4 ring-white border border-blue-700">
+                  A
+                </div>
+                <span className="text-[11px] font-extrabold text-blue-700 uppercase tracking-wider mt-2.5">
+                  Götürülmə
+                </span>
+                <span className="text-xs sm:text-sm font-bold text-slate-800 max-w-[100px] sm:max-w-[160px] truncate mt-0.5">
+                  {formData.fromAddress || 'Nərimanov'}
+                </span>
+              </div>
+
+              {/* Point B (Təyinat nöqtəsi) */}
+              <div className="relative z-0 flex flex-col items-center text-center">
+                <div
+                  className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl font-black text-base shadow-lg flex items-center justify-center ring-4 ring-white border transition-all duration-300 ${
+                    calcProgress >= 95
+                      ? 'bg-emerald-600 text-white border-emerald-700 shadow-emerald-600/30 ring-emerald-200'
+                      : 'bg-slate-100 text-slate-700 border-slate-300 shadow-slate-300/40'
+                  }`}
+                >
+                  B
+                </div>
+                <span className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider mt-2.5">
+                  Çatdırılma
+                </span>
+                <span className="text-xs sm:text-sm font-bold text-slate-800 max-w-[100px] sm:max-w-[160px] truncate mt-0.5">
+                  {formData.toAddress || 'Xırdalan'}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Sequential Step Progress Pills */}
+          <div className="mt-4 pt-4 border-t border-slate-200/80 grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div
+              className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all ${
+                calcStage >= 1
+                  ? 'bg-blue-50 border-blue-200 text-blue-900 shadow-2xs'
+                  : 'bg-slate-50 border-slate-200 text-slate-400'
+              }`}
+            >
+              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
+                calcStage > 1 ? 'bg-blue-600 text-white' : 'bg-blue-200 text-blue-800'
+              }`}>
+                {calcStage > 1 ? '✓' : '1'}
+              </span>
+              <span>Marşrut təyini</span>
+            </div>
+
+            <div
+              className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all ${
+                calcStage >= 2
+                  ? 'bg-blue-50 border-blue-200 text-blue-900 shadow-2xs'
+                  : 'bg-slate-50 border-slate-200 text-slate-400'
+              }`}
+            >
+              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
+                calcStage > 2 ? 'bg-blue-600 text-white' : calcStage === 2 ? 'bg-blue-200 text-blue-800' : 'bg-slate-200 text-slate-500'
+              }`}>
+                {calcStage > 2 ? '✓' : '2'}
+              </span>
+              <span>Avtomobil və vəziyyət</span>
+            </div>
+
+            <div
+              className={`p-2.5 rounded-xl border text-xs font-bold flex items-center gap-2 transition-all ${
+                calcStage >= 3
+                  ? 'bg-blue-50 border-blue-200 text-blue-900 shadow-2xs'
+                  : 'bg-slate-50 border-slate-200 text-slate-400'
+              }`}
+            >
+              <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
+                calcProgress >= 100 ? 'bg-emerald-600 text-white' : calcStage === 3 ? 'bg-blue-200 text-blue-800' : 'bg-slate-200 text-slate-500'
+              }`}>
+                {calcProgress >= 100 ? '✓' : '3'}
+              </span>
+              <span>Qiymət hesablanması</span>
+            </div>
+          </div>
+
+          {/* Quick specs pill summary */}
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 pt-2">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 font-semibold">
+                🚗 {formData.carType}
+              </span>
+              <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 font-semibold">
+                ⚙️ {formData.canMove === 'Bəli' ? 'İşlək' : 'Nasaz / Kilidli (+5 AZN)'}
+              </span>
+            </div>
+            <span className="text-[11px] text-slate-500 italic">
+              Avtomatik marşrut xətti hesablanır
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* RESULT CARD */}
       {result && !isCalculating && (
@@ -503,3 +817,4 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
     </div>
   );
 };
+

@@ -115,8 +115,8 @@ export interface EvakuasiyaFormData {
   toAddress: string;
   carType: CarType;
   canMove: 'Bəli' | 'Xeyr';
-  conditionNotes: string;
-  phone: string;
+  conditionNotes?: string;
+  phone?: string;
 }
 
 export interface EvakuasiyaResult {
