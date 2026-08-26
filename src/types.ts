@@ -127,9 +127,13 @@ export interface EvakuasiyaResult {
   canMove: 'Bəli' | 'Xeyr';
   estimatedPrice: string;
   hasMissingTariff?: boolean;
+  requiresOperatorConfirmation?: boolean;
   tariffDisclaimer?: string;
   isIntercity?: boolean;
   rawPrice?: number | null;
+  basePrice?: number | null;
+  vehicleTypeSurcharge?: number;
+  conditionSurcharge?: number;
 }
 
 export interface FaqItem {
