@@ -73,7 +73,7 @@ const SAMPLE_DEMO_IMAGES = [
 ];
 
 // Helper function to resize and compress uploaded images before sending to AI
-function compressImageFile(file: File, maxDim = 1400, quality = 0.82): Promise<{ base64: string; mimeType: string }> {
+function compressImageFile(file: File, maxDim = 900, quality = 0.72): Promise<{ base64: string; mimeType: string }> {
   return new Promise((resolve) => {
     try {
       const reader = new FileReader();
@@ -480,7 +480,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
       details: formData.details,
     };
 
-    // Inner fetch routine with 45s hard timeout
+    // Inner fetch routine with 30s hard timeout (server hard timeout is 22s)
     const executeFetchAttempt = async (attemptNumber: number): Promise<any> => {
       const abortController = new AbortController();
       const timeoutId = setTimeout(() => {
@@ -489,7 +489,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
         } catch (_abortErr) {
           // Ignore
         }
-      }, 45000); // 45s hard frontend timeout
+      }, 30000); // 30s frontend timeout
 
       try {
         const response = await fetch('/api/analyze-cargo', {
@@ -507,10 +507,10 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
 
         if (!response.ok) {
           const status = response.status;
-          const isTransient = status >= 500 || status === 429 || status === 504;
-          if (isTransient && attemptNumber < 1) {
-            console.warn(`[Gemini Cargo Analysis] Transient status ${status}, retrying attempt 2...`);
-            // Brief 1s delay before retry
+          // Only retry on transient proxy/gateway drops (502/503), NEVER on 504 timeout or 429 rate limit
+          const isTransientGatewayDrop = (status === 502 || status === 503) && attemptNumber < 1;
+          if (isTransientGatewayDrop) {
+            console.warn(`[Gemini Cargo Analysis] Transient gateway status ${status}, retrying attempt 2...`);
             await new Promise((resolve) => setTimeout(resolve, 1000));
             return await executeFetchAttempt(attemptNumber + 1);
           }
@@ -520,12 +520,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
         return data;
       } catch (err: any) {
         clearTimeout(timeoutId);
-        const isAbort = err?.name === 'AbortError' || String(err).includes('aborted');
-        if (isAbort && attemptNumber < 1) {
-          console.warn('[Gemini Cargo Analysis] Request timed out (45s), attempting 1 automatic retry...');
-          await new Promise((resolve) => setTimeout(resolve, 800));
-          return await executeFetchAttempt(attemptNumber + 1);
-        }
+        // Do NOT auto-retry on timeouts (AbortError) to avoid doubling heavy server workload
         throw err;
       }
     };

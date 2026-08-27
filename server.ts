@@ -377,116 +377,143 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
 7. ETİBARLILIQ (CONFIDENCE): Əgər şəkillər aydındırsa 'high' və ya 'medium', şəkillər qaranlıqdırsa və ya əşyalar kəsilmiş/qeyri-müəyyəndirsə 'low' qoy və 'notes' massivində Azərbaycan dilində aydın qeyd yaz.
 8. Bütün əşya adları və qeydlər yalnız Azərbaycan dilində olmalıdır.`;
 
-      // Approved multimodal model hierarchy from gemini-api SKILL
-      const candidateModels = ["gemini-3.7-flash", "gemini-2.5-flash", "gemini-3.1-flash-lite"];
+      // Production Optimized Multimodal Architecture:
+      // Primary: gemini-3.6-flash (Official Google recommended fast multimodal model)
+      // Fallback: gemini-3.1-flash-lite (Ultra-fast backup, activated ONLY if primary returns an immediate non-timeout API error and budget < 10s)
+      const primaryModel = "gemini-3.6-flash";
+      const fallbackModel = "gemini-3.1-flash-lite";
+      const serverHardTimeoutMs = 22000;
+      const perModelTimeoutMs = 16000;
+
       let response: any = null;
+      let usedModel = primaryModel;
       let lastError: any = null;
 
-      // Iterate through models with 35s per-model timeout and total 45s hard budget
-      for (const modelName of candidateModels) {
-        const elapsedSoFar = Date.now() - startTime;
-        const remainingBudgetMs = Math.max(10000, 42000 - elapsedSoFar);
-        if (remainingBudgetMs < 5000) {
-          isTimeoutOccurred = true;
-          throw new Error("Ümumi analiz vaxtı (45 saniyə) bitdi.");
-        }
-
-        try {
-          const perModelTimeoutMs = Math.min(30000, remainingBudgetMs);
-          const modelCallPromise = ai.models.generateContent({
-            model: modelName,
-            contents: [
-              ...validInlineParts,
-              {
-                text: userPrompt,
-              },
-            ],
-            config: {
-              systemInstruction,
-              responseMimeType: "application/json",
-              responseSchema: {
+      const modelGenerationConfig = {
+        systemInstruction,
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            items: {
+              type: Type.ARRAY,
+              items: {
                 type: Type.OBJECT,
                 properties: {
-                  items: {
-                    type: Type.ARRAY,
-                    items: {
-                      type: Type.OBJECT,
-                      properties: {
-                        name: {
-                          type: Type.STRING,
-                          description: "Əşyanın Azərbaycan dilində adı (məsələn: Divan, Soyuducu, Kitab rəfi, Qutu)",
-                        },
-                        quantity: {
-                          type: Type.INTEGER,
-                          description: "Müəyyən edilən əşyanın sayı",
-                        },
-                        estimatedVolumeM3: {
-                          type: Type.NUMBER,
-                          description: "1 ədəd üçün təxmini həcm (m³)",
-                        },
-                        confidence: {
-                          type: Type.STRING,
-                          description: "'high', 'medium', və ya 'low'",
-                        },
-                        isSpecialOrHeavy: {
-                          type: Type.BOOLEAN,
-                          description: "Pianino, seyf, böyük soyuducu, xüsusi ağır və ya həddən artıq iri əşya olduqda true",
-                        },
-                      },
-                      required: ["name", "quantity", "estimatedVolumeM3", "confidence"],
-                    },
+                  name: {
+                    type: Type.STRING,
+                    description: "Əşyanın Azərbaycan dilində adı (məsələn: Divan, Soyuducu, Kitab rəfi, Qutu)",
                   },
-                  estimatedTotalVolumeMinM3: {
+                  quantity: {
+                    type: Type.INTEGER,
+                    description: "Müəyyən edilən əşyanın sayı",
+                  },
+                  estimatedVolumeM3: {
                     type: Type.NUMBER,
-                    description: "Minimum təxmini ümumi həcm (m³)",
+                    description: "1 ədəd üçün təxmini həcm (m³)",
                   },
-                  estimatedTotalVolumeMaxM3: {
-                    type: Type.NUMBER,
-                    description: "Maksimum təxmini ümumi həcm (m³)",
-                  },
-                  analysisConfidence: {
+                  confidence: {
                     type: Type.STRING,
                     description: "'high', 'medium', və ya 'low'",
                   },
-                  notes: {
-                    type: Type.ARRAY,
-                    items: { type: Type.STRING },
-                    description: "Təhlil üzrə qeydlər və ya əlavə tövsiyələr",
+                  isSpecialOrHeavy: {
+                    type: Type.BOOLEAN,
+                    description: "Pianino, seyf, böyük soyuducu, xüsusi ağır və ya həddən artıq iri əşya olduqda true",
                   },
                 },
-                required: [
-                  "items",
-                  "estimatedTotalVolumeMinM3",
-                  "estimatedTotalVolumeMaxM3",
-                  "analysisConfidence",
-                ],
+                required: ["name", "quantity", "estimatedVolumeM3", "confidence"],
               },
             },
-          });
+            estimatedTotalVolumeMinM3: {
+              type: Type.NUMBER,
+              description: "Minimum təxmini ümumi həcm (m³)",
+            },
+            estimatedTotalVolumeMaxM3: {
+              type: Type.NUMBER,
+              description: "Maksimum təxmini ümumi həcm (m³)",
+            },
+            analysisConfidence: {
+              type: Type.STRING,
+              description: "'high', 'medium', və ya 'low'",
+            },
+            notes: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+              description: "Təhlil üzrə qeydlər və ya əlavə tövsiyələr",
+            },
+          },
+          required: [
+            "items",
+            "estimatedTotalVolumeMinM3",
+            "estimatedTotalVolumeMaxM3",
+            "analysisConfidence",
+          ],
+        },
+      };
 
-          response = await promiseWithTimeout(
-            modelCallPromise,
-            perModelTimeoutMs,
-            `Model ${modelName} timeout (${perModelTimeoutMs}ms)`
-          );
+      // Step 1: Execute primary model call with strict per-model timeout
+      try {
+        const modelCallPromise = ai.models.generateContent({
+          model: primaryModel,
+          contents: [
+            ...validInlineParts,
+            {
+              text: userPrompt,
+            },
+          ],
+          config: modelGenerationConfig,
+        });
 
-          if (response && response.text) {
-            break;
-          }
-        } catch (err: any) {
-          lastError = err;
-          const errMsg = String(err?.message || err);
-          if (errMsg.includes("429") || errMsg.toLowerCase().includes("quota") || errMsg.toLowerCase().includes("rate limit")) {
-            isRateLimitOccurred = true;
-          }
-          if (errMsg.toLowerCase().includes("timeout")) {
-            isTimeoutOccurred = true;
+        response = await promiseWithTimeout(
+          modelCallPromise,
+          perModelTimeoutMs,
+          `Model ${primaryModel} timeout (${perModelTimeoutMs}ms)`
+        );
+        usedModel = primaryModel;
+      } catch (primaryErr: any) {
+        lastError = primaryErr;
+        const errMsg = String(primaryErr?.message || primaryErr);
+        const elapsed = Date.now() - startTime;
+
+        if (errMsg.toLowerCase().includes("timeout") || elapsed >= perModelTimeoutMs) {
+          isTimeoutOccurred = true;
+          console.warn(`[Gemini API] Primary model ${primaryModel} timed out after ${elapsed}ms. Skipping fallback to avoid cascade.`);
+        } else {
+          // If it was a fast explicit API error (e.g. 500 or 503) and we have plenty of budget left (< 10s elapsed)
+          if (elapsed < 10000 && !errMsg.includes("429")) {
+            console.warn(`[Gemini API] Primary model ${primaryModel} failed quickly (${elapsed}ms: ${errMsg}). Attempting single fallback ${fallbackModel}...`);
+            try {
+              const fallbackRemainingMs = Math.min(12000, serverHardTimeoutMs - elapsed);
+              const fallbackCallPromise = ai.models.generateContent({
+                model: fallbackModel,
+                contents: [
+                  ...validInlineParts,
+                  {
+                    text: userPrompt,
+                  },
+                ],
+                config: modelGenerationConfig,
+              });
+
+              response = await promiseWithTimeout(
+                fallbackCallPromise,
+                fallbackRemainingMs,
+                `Model ${fallbackModel} fallback timeout (${fallbackRemainingMs}ms)`
+              );
+              usedModel = fallbackModel;
+            } catch (fbErr: any) {
+              lastError = fbErr;
+              const fbMsg = String(fbErr?.message || fbErr);
+              if (fbMsg.toLowerCase().includes("timeout")) {
+                isTimeoutOccurred = true;
+              }
+            }
           }
         }
       }
 
       if (!response || !response.text) {
-        throw lastError || new Error("Gemini modelləri cavab qaytarmadı.");
+        throw lastError || new Error("Gemini modeli cavab qaytarmadı.");
       }
 
       let parsedData: any = null;
@@ -508,6 +535,7 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
         };
       }
 
+      const totalPayloadBytes = validInlineParts.reduce((acc, part) => acc + (part.inlineData?.data?.length || 0), 0);
       const totalDuration = Date.now() - startTime;
       console.log(
         JSON.stringify({
@@ -515,8 +543,10 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
           tag: "CARGO_ANALYSIS_SUCCESS",
           requestId,
           timestamp: new Date().toISOString(),
+          usedModel,
           imageCount: validInlineParts.length,
           imageMimeTypes: detectedMimeList,
+          payloadSizeBytes: totalPayloadBytes,
           aiResponseStatus: "ok",
           timeout: false,
           rateLimit: false,
@@ -524,11 +554,18 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
         })
       );
 
-      return res.json(parsedData);
+      return res.json({
+        ...parsedData,
+        _diagnostics: {
+          usedModel,
+          payloadSizeBytes: totalPayloadBytes,
+          processingDurationMs: totalDuration,
+        },
+      });
     } catch (error: any) {
       const totalDuration = Date.now() - startTime;
       const errorMessageStr = String(error?.message || error);
-      if (errorMessageStr.toLowerCase().includes("timeout") || totalDuration >= 44000) {
+      if (errorMessageStr.toLowerCase().includes("timeout") || totalDuration >= 20000) {
         isTimeoutOccurred = true;
       }
       if (errorMessageStr.includes("429") || errorMessageStr.toLowerCase().includes("rate") || errorMessageStr.toLowerCase().includes("quota")) {
@@ -555,7 +592,7 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
         })
       );
 
-      const isClientFacingTimeout = isTimeoutOccurred || totalDuration >= 40000;
+      const isClientFacingTimeout = isTimeoutOccurred || totalDuration >= 20000;
       return res.status(isClientFacingTimeout ? 504 : isRateLimitOccurred ? 429 : 500).json({
         success: false,
         error: "Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.",
