@@ -480,7 +480,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
       details: formData.details,
     };
 
-    // Inner fetch routine with 30s hard timeout (server hard timeout is 22s)
+    // Inner fetch routine with 55s hard timeout (server hard timeout is 45s)
     const executeFetchAttempt = async (attemptNumber: number): Promise<any> => {
       const abortController = new AbortController();
       const timeoutId = setTimeout(() => {
@@ -489,7 +489,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
         } catch (_abortErr) {
           // Ignore
         }
-      }, 30000); // 30s frontend timeout
+      }, 55000); // 55s frontend timeout
 
       try {
         const response = await fetch('/api/analyze-cargo', {

@@ -379,11 +379,11 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
 
       // Production Optimized Multimodal Architecture:
       // Primary: gemini-3.6-flash (Official Google recommended fast multimodal model)
-      // Fallback: gemini-3.1-flash-lite (Ultra-fast backup, activated ONLY if primary returns an immediate non-timeout API error and budget < 10s)
+      // Fallback: gemini-3.1-flash-lite (Ultra-fast backup, activated ONLY if primary returns an immediate non-timeout API error and budget remains)
       const primaryModel = "gemini-3.6-flash";
       const fallbackModel = "gemini-3.1-flash-lite";
-      const serverHardTimeoutMs = 22000;
-      const perModelTimeoutMs = 16000;
+      const serverHardTimeoutMs = 45000;
+      const perModelTimeoutMs = 35000;
 
       let response: any = null;
       let usedModel = primaryModel;
@@ -565,7 +565,7 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
     } catch (error: any) {
       const totalDuration = Date.now() - startTime;
       const errorMessageStr = String(error?.message || error);
-      if (errorMessageStr.toLowerCase().includes("timeout") || totalDuration >= 20000) {
+      if (errorMessageStr.toLowerCase().includes("timeout") || totalDuration >= 44000) {
         isTimeoutOccurred = true;
       }
       if (errorMessageStr.includes("429") || errorMessageStr.toLowerCase().includes("rate") || errorMessageStr.toLowerCase().includes("quota")) {
@@ -574,7 +574,7 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
 
       failureReason = errorMessageStr;
 
-      // Requirement 7: Structured Server Diagnostic Logging for all failed analyses
+      // Structured Server Diagnostic Logging for all failed analyses
       console.error(
         JSON.stringify({
           level: "error",
@@ -592,7 +592,7 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
         })
       );
 
-      const isClientFacingTimeout = isTimeoutOccurred || totalDuration >= 20000;
+      const isClientFacingTimeout = isTimeoutOccurred || totalDuration >= 44000;
       return res.status(isClientFacingTimeout ? 504 : isRateLimitOccurred ? 429 : 500).json({
         success: false,
         error: "Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.",
