@@ -71,7 +71,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
             </li>
             <li aria-hidden="true" className="text-slate-400">/</li>
             <li className="font-semibold text-slate-800" aria-current="page">
-              Evakuasiya
+              Evakuator
             </li>
           </ol>
         </nav>

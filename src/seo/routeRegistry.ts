@@ -441,7 +441,7 @@ export function generateRouteSeoConfig(route: ApprovedRouteConfig): PageSeoConfi
 
   const breadcrumbs: BreadcrumbItem[] = [
     { name: 'Ana səhifə', item: 'https://yukdasima.ai/' },
-    { name: 'Evakuasiya', item: 'https://yukdasima.ai/evakuasiya' },
+    { name: 'Evakuator', item: 'https://yukdasima.ai/evakuator' },
     { name: `${route.origin}–${route.destination} Evakuator`, item: canonicalUrl },
   ];
 

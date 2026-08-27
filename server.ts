@@ -210,6 +210,16 @@ async function startServer() {
     res.status(404).send("Sitemap not found");
   });
 
+  // 301 Permanent SEO Redirects: Evakuasiya -> Evakuator Migration
+  app.use((req, res, next) => {
+    const url = req.originalUrl;
+    if (url === '/evakuasiya' || url.startsWith('/evakuasiya/') || url.startsWith('/evakuasiya?')) {
+      const redirectedUrl = url.replace(/^\/evakuasiya(\/|\?|$)/, '/evakuator$1');
+      return res.redirect(301, redirectedUrl);
+    }
+    next();
+  });
+
   // API Route: Gemini Cargo Multimodal Analysis
   app.post("/api/analyze-cargo", async (req, res) => {
     try {

@@ -73,7 +73,7 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           </p>
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <Link
-              href="/evakuasiya"
+              href="/evakuator"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-xs transition-colors"
             >
               <Car className="w-4 h-4" />
@@ -137,8 +137,8 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
             </li>
             <li aria-hidden="true" className="text-slate-400">/</li>
             <li>
-              <Link href="/evakuasiya" className="hover:text-blue-600 transition-colors">
-                Evakuasiya
+              <Link href="/evakuator" className="hover:text-blue-600 transition-colors">
+                Evakuator
               </Link>
             </li>
             <li aria-hidden="true" className="text-slate-400">/</li>
@@ -636,7 +636,7 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
               </p>
             </div>
             <Link
-              href="/evakuasiya"
+              href="/evakuator"
               className="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1 shrink-0"
             >
               <span>Bütün rayonlar</span>
@@ -676,12 +676,12 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <Link
-              href="/evakuasiya"
+              href="/evakuator"
               className="p-4 rounded-xl bg-white border border-slate-200 hover:border-blue-300 hover:shadow-xs transition-all flex items-center justify-between group"
             >
               <div className="space-y-0.5">
                 <span className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
-                  Bütün Evakuasiya Xidmətləri
+                  Bütün Evakuator Xidmətləri
                 </span>
                 <span className="text-xs text-slate-500 block">Bakı və bütün rayonlar</span>
               </div>

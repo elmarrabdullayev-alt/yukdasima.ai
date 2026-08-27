@@ -251,7 +251,7 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
             </Link>
 
             <Link
-              href="/evakuasiya"
+              href="/evakuator"
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">

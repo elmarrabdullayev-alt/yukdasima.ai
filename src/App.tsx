@@ -68,7 +68,7 @@ function AppContent() {
     switch (pathname) {
       case '/yukdasima':
         return <YukdasimaPage onOpenCallback={handleOpenCallback} />;
-      case '/evakuasiya':
+      case '/evakuator':
         return <EvakuasiyaPage onOpenCallback={handleOpenCallback} />;
       case '/evden-eve-yukdasima':
         return <EvdenEveYukdasimaPage onOpenCallback={handleOpenCallback} />;

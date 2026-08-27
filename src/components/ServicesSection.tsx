@@ -50,7 +50,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
       case 'srv-5':
         return '/yuk-masini';
       case 'srv-6':
-        return '/evakuasiya';
+        return '/evakuator';
       default:
         return '/yukdasima';
     }

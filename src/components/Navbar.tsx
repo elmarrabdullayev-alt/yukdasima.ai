@@ -79,13 +79,13 @@ export const Navbar: React.FC<NavbarProps> = ({
             </Link>
             <Link
               id="nav-evakuasiya"
-              href="/evakuasiya"
+              href="/evakuator"
               onClick={() => onSelectService('evakuasiya')}
               className={`hover:text-blue-600 transition-colors flex items-center gap-1.5 ${
-                pathname === '/evakuasiya' ? 'text-blue-600 font-semibold' : 'text-slate-600'
+                pathname === '/evakuator' ? 'text-blue-600 font-semibold' : 'text-slate-600'
               }`}
             >
-              Evakuasiya
+              Evakuator
             </Link>
             <Link
               id="nav-qiymetler"
@@ -189,17 +189,17 @@ export const Navbar: React.FC<NavbarProps> = ({
               Yükdaşıma
             </Link>
             <Link
-              href="/evakuasiya"
+              href="/evakuator"
               onClick={() => {
                 setMobileMenuOpen(false);
                 onSelectService('evakuasiya');
               }}
               className={`p-3 rounded-xl border flex flex-col items-center gap-1 text-xs font-bold ${
-                pathname === '/evakuasiya' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700'
+                pathname === '/evakuator' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700'
               }`}
             >
               <Car className="w-5 h-5 text-blue-600" />
-              Evakuasiya
+              Evakuator
             </Link>
           </div>
 

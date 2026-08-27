@@ -154,12 +154,12 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
     ],
     faqs: YUKDASIMA_FAQS,
   },
-  '/evakuasiya': {
-    path: '/evakuasiya',
+  '/evakuator': {
+    path: '/evakuator',
     title: 'Evakuator Bakı | Evakuator Xidməti və Qiymətləri',
     metaDescription: 'Bakıda və rayonlara 24/7 operativ evakuator xidməti. Avtomobil daşıma və evakuasiya qiymətlərini dərhal onlayn hesablayın, sərfəli və təhlükəsiz sifariş edin.',
     h1: 'Bakı Evakuator Xidməti və Qiymətləri',
-    canonicalUrl: 'https://yukdasima.ai/evakuasiya',
+    canonicalUrl: 'https://yukdasima.ai/evakuator',
     keywords: [
       'evakuator',
       'evakuator xidməti',
@@ -182,7 +182,7 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
     serviceTypeDetail: 'Towing and Vehicle Evacuation Service',
     breadcrumbs: [
       { name: 'Ana səhifə', item: 'https://yukdasima.ai/' },
-      { name: 'Evakuasiya', item: 'https://yukdasima.ai/evakuasiya' },
+      { name: 'Evakuator', item: 'https://yukdasima.ai/evakuator' },
     ],
   },
   '/evden-eve-yukdasima': {

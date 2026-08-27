@@ -28,7 +28,7 @@ export function auditPrerenderedRoutes() {
   const sampleRoutes = [
     '/',
     '/yukdasima',
-    '/evakuasiya',
+    '/evakuator',
     '/yukdasima/baki-gence',
     '/evakuator/baki-qebele',
   ];

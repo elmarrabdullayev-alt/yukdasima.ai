@@ -115,11 +115,11 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
               </li>
               <li>
                 <Link
-                  href="/evakuasiya"
+                  href="/evakuator"
                   onClick={() => onSelectService('evakuasiya')}
                   className="hover:text-blue-600 transition-colors font-semibold text-slate-800"
                 >
-                  24/7 Evakuasiya
+                  24/7 Evakuator
                 </Link>
               </li>
             </ul>

@@ -71,7 +71,7 @@ export const HomePage: React.FC<HomePageProps> = ({
             </Link>
 
             <Link
-              href="/evakuasiya"
+              href="/evakuator"
               className="p-5 rounded-2xl border border-slate-200 hover:border-blue-500 hover:shadow-md transition-all bg-slate-50/60 group flex flex-col justify-between"
             >
               <div>
@@ -79,7 +79,7 @@ export const HomePage: React.FC<HomePageProps> = ({
                   <Car className="w-5 h-5" />
                 </div>
                 <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  24/7 Evakuasiya
+                  24/7 Evakuator
                 </h3>
                 <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
                   24/7 operativ və etibarlı evakuator xidməti. Bakı və bütün rayonlara təcili çıxış.

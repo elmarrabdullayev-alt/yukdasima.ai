@@ -470,10 +470,10 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
             </Link>
 
             <Link
-              href="/evakuasiya"
+              href="/evakuator"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition-colors"
             >
-              <span>24/7 Evakuasiya Xidməti</span>
+              <span>24/7 Evakuator Xidməti</span>
               <ArrowRight className="w-4 h-4 text-slate-500" />
             </Link>
           </div>
@@ -814,11 +814,11 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
             </Link>
 
             <Link
-              href="/evakuasiya"
+              href="/evakuator"
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>24/7 Evakuasiya Xidməti</span>
+                <span>24/7 Evakuator Xidməti</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
               <p className="text-xs text-slate-600 mt-2">Operativ evakuator və 24/7 texniki yardım xidməti.</p>
