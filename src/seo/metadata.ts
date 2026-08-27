@@ -39,77 +39,75 @@ export const YUKDASIMA_FAQS: PageFaqItem[] = [
   {
     question: 'Yükdaşıma qiyməti necə hesablanır?',
     answer:
-      'Yükdaşıma qiyməti daşınacaq məsafəyə (Bakıdaxili və ya rayonlararası), seçilən yük maşınının həcminə (2 metrlik Ford Transit-dən 7 metrlik böyük furqonlaradək), tələb olunan fəhlə sayına və mərtəbə şərtlərinə (liftin olub-olmaması) əsasən şəffaf kalkulyatorumuz vasitəsilə hesablanır.',
+      'Yükdaşıma qiyməti daşınma məsafəsinə (Bakı şəhərdaxili və ya rayonlararası kilometraj), seçilən yük maşınının həcminə (2 metrlik Ford Transit-dən 7 metrlik böyük furqonlaradək), tələb olunan fəhlə sayına, mərtəbə/lift vəziyyətinə və əlavə xidmətlərə (mebel ustası, qablaşdırma) əsasən şəffaf şəkildə formalaşır.',
   },
   {
-    question: 'Bakı daxilində yükdaşıma neçə manatdır?',
+    question: 'Bakıda yükdaşıma sifarişi necə verilir?',
     answer:
-      'Bakı şəhəri daxilində və rayonlararası yükdaşıma qiymətləri yükün həcminə, seçilən maşın növünə və məsafəyə əsasən hesablanır. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
+      'Saytımızdakı onlayn kalkulyatordan marşrutu və yükün detallarını daxil edərək, 878 qaynar xəttimizə zəng edərək və ya WhatsApp vasitəsilə məkan və əşya şəkillərini göndərərək dərhal sifariş verə bilərsiniz. Dispetçerimiz sizə ən yaxın növbətçi avtomobili operativ yönləndirir.',
   },
   {
-    question: 'Rayonlara yükdaşıma xidməti göstərirsiniz?',
+    question: 'Hansı ölçüdə yük maşını seçməliyəm?',
     answer:
-      'Bəli, Bakıdan bütün Azərbaycan rayonlarına (Gəncə, Sumqayıt, Xırdalan, Quba, Şəki, Lənkəran və s.) və əks istiqamətdə təhlükəsiz yükdaşıma xidməti göstəririk. Rayonlararası marşrutlar üzrə kilometraj və maşın növünə uyğun sabit rəsmi tariflər tətbiq olunur.',
+      'Yük maşını əşyaların ümumi həcminə görə seçilir: tək-tək mebel və qutular üçün 2 metrlik, 1 otaqlı mənzil üçün 3 metrlik, 2–3 otaqlı mənzillər üçün 4–5 metrlik, böyük həcmli ev və ofislər üçün isə 6–7 metrlik furqonlar uyğundur. Onlayn AI kalkulyatorumuz şəkillər əsasında ən uyğun maşını dərhal təyin edir.',
   },
   {
-    question: 'Yükdaşıma üçün neçə fəhlə sifariş etmək lazımdır?',
+    question: 'Fəhlə xidməti sifariş etmək mümkündür?',
     answer:
-      'Fəhlə sayı daşınacaq əşyaların həcminə və çəkisinə görə müəyyən edilir. Adətən 1 otaqlı mənzil və ya tək-tək mebellər üçün 2 fəhlə, 2–3 otaqlı mənzillər və ofislər üçün isə 3–4 nəfərlik peşəkar briqada tövsiyə olunur.',
+      'Bəli, sifariş zamanı tələbata uyğun olaraq 2, 3 və ya 4 nəfərlik peşəkar fəhlə briqadası cəlb edə bilərsiniz. Fəhlələrimiz əşyaların yüklənməsi, boşaldılması və mərtəbələrə təhlükəsiz qaldırılmasını həyata keçirir.',
   },
   {
-    question: 'Mebel daşınması və sökülüb-yığılması necə həyata keçirilir?',
+    question: 'Bakıdan rayonlara yükdaşıma mümkündür?',
     answer:
-      'Təcrübəli mebel ustalarımız qarderob, yataq dəsti və modul mebelləri xüsusi alətlərlə zədələmədən sökür, qoruyucu plyonka (stretch/bubble film) ilə qablaşdırır və yeni mənzildə dəqiqliklə quraşdıraraq təhvil verir.',
+      'Bəli, Bakıdan Azərbaycanın bütün şəhər və rayonlarına (Gəncə, Sumqayıt, Quba, Qəbələ, Şəki, Lənkəran və digər 80-dən çox istiqamətə) və əks istiqamətdə təhlükəsiz şəhərlərarası yükdaşıma xidməti göstəririk.',
   },
   {
-    question: 'Qiyməti əvvəlcədən onlayn hesablamaq mümkündürmü?',
+    question: 'Mebel daşınması həyata keçirilirmi?',
     answer:
-      'Bəli! Səhifəmizdəki interaktiv kalkulyator və AI foto analiz funksiyası ilə əşyalarınızın şəklini yükləyərək və ya birbaşa ünvanları seçərək ilkin qiyməti heç bir gizli xərc olmadan saniyələr ərzində öyrənə bilərsiniz.',
+      'Bəli, mebel daşınması üçün xüsusi ustalarımız mövcuddur. Qarderob, yataq dəstləri və modul mebellər zədələnmədən sökülür, qoruyucu plyonkalarla qablaşdırılır, yeni ünvanda isə dəqiqliklə yenidən quraşdırılaraq təhvil verilir.',
   },
   {
-    question: 'Təcili yük maşını nə qədər vaxta ünvana çatır?',
+    question: 'Ev köçürülməsi üçün hansı xidmətlər mövcuddur?',
     answer:
-      'Bakı şəhərinin müxtəlif ərazilərində növbətçi avtomobillərimiz olduğundan, təcili sifarişlərdə yük maşını təxminən 20–30 dəqiqə ərzində ünvanınıza yaxınlaşır.',
+      'Evdən evə köçürülmə zamanı tam xidmət paketi təklif olunur: uyğun ölçülü qapalı yük maşını, mebellərin sökülüb-yığılması, məişət texnikasının və kövrək əşyaların qablaşdırılması, fəhlə xidməti və yeni ünvanda mərtəbəyə qaldırılma.',
+  },
+  {
+    question: 'Yük maşınını ayrıca sifariş etmək mümkündür?',
+    answer:
+      'Bəli, fəhlə və ya usta xidməti tələb olunmadıqda yalnız ehtiyacınıza uyğun 2m-dən 7m-dək təmiz və qapalı yük maşınını sürücü ilə birlikdə birbaşa sifariş edə bilərsiniz.',
   },
 ];
 
-export const EVAKUASIYA_FAQS: PageFaqItem[] = [
+export const EVAKUATOR_FAQS: PageFaqItem[] = [
   {
     question: 'Evakuator qiyməti necə hesablanır?',
     answer:
-      'Evakuator qiyməti daşınacaq məsafəyə (Bakı şəhərdaxili və ya rayonlararası marşrut), avtomobilin növünə (Sedan, SUV / Jeep, Hetçbek, Minivan və ya Mikroavtobus) və təkərlərin hərəkət qabiliyyətinə (çarxların bloklanıb-bloklanmaması) əsasən şəffaf kalkulyatorumuz vasitəsilə hesablanır.',
+      'Evakuator qiyməti marşrut məsafəsi (Bakı şəhərdaxili və ya regionlararası kilometraj), nəqliyyat vasitəsinin növü (Sedan, Hetçbek, SUV / Cip, Minivan) və texniki vəziyyətinə (təkərlərin hərəkət qabiliyyəti) əsasən şəffaf kalkulyatorumuz vasitəsilə hesablanır.',
   },
   {
-    question: 'Bakı daxilində evakuator qiyməti neçədir?',
+    question: 'Nasaz və ya təkəri kilidlənmiş avtomobilin daşınması fərqli qiymətləndirilirmi?',
     answer:
-      'Bakı şəhəri daxilində və rayonlara evakuasiya xidməti 24/7 operativ şəkildə həyata keçirilir. Qiymət marşrut, avtomobilin mövcudluğu, yolüstü daşınma imkanı və sifariş detallarına görə dəyişə bilər. Cari ən uyğun qiymət üçün bizimlə əlaqə saxlayın.',
+      'Bəli. Sükanı və təkərləri sərbəst hərəkət edən avtomobillər standart bucurqadla asanlıqla platformaya qaldırılır. Təkəri kilidlənmiş, qəzalı və ya asqı sistemi zədələnmiş maşınların təhlükəsiz yüklənməsi üçün əlavə xüsusi avadanlıq və köməkçi təkər arabacıqları tələb olunduğundan ilkin tarifə əlavə texniki xidmət haqqı (+5 AZN) tətbiq olunur.',
   },
   {
-    question: 'Bakıdan rayonlara evakuator qiyməti necə müəyyən olunur?',
+    question: 'Bakıdan regionlara evakuator sifariş etmək olar?',
     answer:
-      'Bakıdan Azərbaycanın rayonlarına (Gəncə, Sumqayıt, Xırdalan, Quba, Şəki, Lənkəran və s.) rəsmi tarif bazası əsasında sabit və şəffaf qiymətlər tətbiq olunur. Qiyməti kalkulyatorda təyinat rayonunu seçərək dərhal öyrənə bilərsiniz.',
+      'Bəli. Bakıdan Azərbaycanın bütün şəhər və rayonlarına (Gəncə, Quba, Qəbələ, Şəki, Lənkəran, Xaçmaz və digər 80-dən çox istiqamətə), eləcə də regionlardan Bakıya 24/7 operativ şəhərlərarası evakuator xidməti təşkil olunur.',
   },
   {
-    question: 'Evakuator sifarişini necə verə bilərəm?',
+    question: 'Minivan və ya iri həcmli avtomobillər üçün evakuator qiyməti fərqlənirmi?',
     answer:
-      '878 Qaynar xəttimizə zəng edərək, WhatsApp nömrəmizə yazaraq və ya saytımızdakı interaktiv kalkulyator vasitəsilə dərhal sifariş verə bilərsiniz. Dispetçerimiz sizə ən yaxın növbətçi evakuatoru operativ yönləndirir.',
+      'Bəli. Nəqliyyat vasitəsinin çəkisi və ölçüləri daşıyıcı platforma tələblərinə təsir edir. Sedan və hetçbeklərə nisbətən Minivan kateqoriyalı avtomobillər üçün tarif fərqi (+10 AZN) nəzərdə tutulur. Mikroavtobus və xüsusi texnika kimi digər böyük nəqliyyat vasitələrinin daşınma şərtləri isə operatorumuz tərəfindən fərdi dəqiqləşdirilir.',
   },
   {
-    question: 'Təcili evakuator nə qədər vaxta ünvana çatır?',
+    question: 'Evakuator sifarişi necə verilir?',
     answer:
-      'Bakı şəhəri və Abşeronun müxtəlif nöqtələrində növbətçi evakuatorlarımız olduğu üçün təcili çağırışlarda avtomobil təxminən 15–20 dəqiqə ərzində ünvanınıza yaxınlaşır.',
-  },
-  {
-    question: 'Qəzalı və ya təkəri kilidlənmiş maşınları daşıyırsınız?',
-    answer:
-      'Bəli, xüsusi hidravlik sürüşən platforma və qaldırıcı kran/dolayı təkər arabacıqları ilə təchiz olunmuş evakuatorlarımızla texniki nasaz, təkərləri kilidlənmiş və ya qəzalı avtomobillər tam təhlükəsiz şəkildə daşınır.',
-  },
-  {
-    question: 'Qiyməti əvvəlcədən hesablamaq mümkündürmü?',
-    answer:
-      'Bəli! Səhifəmizdəki onlayn evakuasiya kalkulyatoru ilə marşrutu və avtomobil tipini daxil edərək heç bir gizli ödəniş olmadan son və rəsmi qiyməti əvvəlcədən öyrənə bilərsiniz.',
+      '878 Qaynar xəttimizə zəng edərək, WhatsApp vasitəsilə canlı məkan (lokasiya) göndərərək və ya saytımızdakı interaktiv kalkulyatordan geri zəng sifariş edərək dərhal evakuator çağıra bilərsiniz. Operatorumuz sizə ən yaxın növbətçi maşını dərhal yönləndirir.',
   },
 ];
+
+// Backwards compatibility alias
+export const EVAKUASIYA_FAQS = EVAKUATOR_FAQS;
 
 export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
   '/': {
@@ -124,30 +122,28 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
   },
   '/yukdasima': {
     path: '/yukdasima',
-    title: 'Yükdaşıma Bakı | Yükdaşıma Xidməti və Qiymətləri',
-    metaDescription: 'Bakıda sərfəli yükdaşıma xidməti və qiymətləri. Mənzil köçürülməsi, mebel daşınması və yük maşını sifarişi. Qiyməti dərhal onlayn hesablayın və sifariş edin.',
-    h1: 'Bakı Yükdaşıma Xidməti və Qiymətləri',
+    title: 'Yükdaşıma Xidməti – Bakı və Regionlar | yukdasima.ai',
+    metaDescription: 'Bakı və regionlar üzrə peşəkar yükdaşıma xidməti. Ev, ofis, mebel və müxtəlif yüklərin daşınması üçün uyğun yük maşını seçin və onlayn sifariş edin.',
+    h1: 'Yükdaşıma Xidməti – Bakı və Regionlar',
     canonicalUrl: 'https://yukdasima.ai/yukdasima',
     keywords: [
       'yükdaşıma',
       'yük daşıma',
       'yükdaşıma xidməti',
-      'yükdaşıma xidmətləri',
-      'Bakı yükdaşıma',
-      'yükdaşıma Bakı',
+      'yük daşıma xidməti',
+      'Bakıda yükdaşıma',
       'yükdaşıma qiymətləri',
-      'yük daşıma qiymətləri',
       'ucuz yükdaşıma',
+      'yük maşını sifarişi',
       'mebel daşınması',
       'evdən evə yükdaşıma',
       'ofis daşınması',
-      'yük maşını',
-      'yük taksisi',
+      'fəhlə xidməti',
     ],
     ogType: 'website',
     schemaType: 'Service',
-    serviceName: 'Bakı Yükdaşıma Xidməti',
-    serviceTypeDetail: 'Moving and Freight Transportation Service',
+    serviceName: 'Yükdaşıma Xidməti – Bakı və Regionlar',
+    serviceTypeDetail: 'Freight and Moving Services in Baku and Azerbaijan Regions',
     breadcrumbs: [
       { name: 'Ana səhifə', item: 'https://yukdasima.ai/' },
       { name: 'Yükdaşıma', item: 'https://yukdasima.ai/yukdasima' },
@@ -156,34 +152,34 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
   },
   '/evakuator': {
     path: '/evakuator',
-    title: 'Evakuator Bakı | Evakuator Xidməti və Qiymətləri',
-    metaDescription: 'Bakıda və rayonlara 24/7 operativ evakuator xidməti. Avtomobil daşıma və evakuasiya qiymətlərini dərhal onlayn hesablayın, sərfəli və təhlükəsiz sifariş edin.',
-    h1: 'Bakı Evakuator Xidməti və Qiymətləri',
+    title: 'Evakuator Xidməti – Bakı və Regionlar | yukdasima.ai',
+    metaDescription: 'Bakı və regionlar üzrə operativ evakuator xidməti. İlkin evakuator qiymətini onlayn hesablayın və ya 24/7 operatorla əlaqə saxlayaraq sifariş edin.',
+    h1: 'Evakuator Xidməti – Bakı və Regionlar',
     canonicalUrl: 'https://yukdasima.ai/evakuator',
     keywords: [
-      'evakuator',
       'evakuator xidməti',
-      'evakuator qiymətləri',
-      'evakuator qiyməti',
-      'Bakı evakuator',
-      'Bakıda evakuator',
+      'evakuator',
       'ucuz evakuator',
-      '7/24 evakuator',
+      'evakuator qiyməti',
+      'Bakı evakuator xidməti',
+      'Bakı və regionlara evakuator',
+      'avtomobil evakuasiyası',
+      'Bakı evakuator',
+      '24/7 evakuator',
       'avtomobil evakuatoru',
       'maşın daşıma',
       'avtomobil daşıma',
       'rayonlara evakuator',
-      'Bakı rayon evakuator',
-      'evakuasiya xidməti',
     ],
     ogType: 'website',
     schemaType: 'Service',
-    serviceName: 'Bakı Evakuator Xidməti',
+    serviceName: 'Evakuator Xidməti – Bakı və Regionlar',
     serviceTypeDetail: 'Towing and Vehicle Evacuation Service',
     breadcrumbs: [
       { name: 'Ana səhifə', item: 'https://yukdasima.ai/' },
       { name: 'Evakuator', item: 'https://yukdasima.ai/evakuator' },
     ],
+    faqs: EVAKUATOR_FAQS,
   },
   '/evden-eve-yukdasima': {
     path: '/evden-eve-yukdasima',

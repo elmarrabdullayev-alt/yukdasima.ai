@@ -18,14 +18,14 @@ import {
   Layers,
   Navigation,
   Wrench,
+  AlertTriangle,
 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
-import { EVAKUASIYA_FAQS } from '../seo/metadata';
+import { EVAKUATOR_FAQS } from '../seo/metadata';
 import { getAllApprovedEvakuatorRoutes } from '../seo/routeRegistry';
 import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
 import { lookupEvacuatorTariff } from '../services/tariffService';
-
 import { CallbackInitialData } from '../types';
 
 interface EvakuasiyaPageProps {
@@ -37,13 +37,6 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
   const sortedAzEvacRoutes = [...evacRoutes].sort((a, b) =>
     a.destination.localeCompare(b.destination, 'az')
   );
-
-  const groupedAzEvacRoutes = sortedAzEvacRoutes.reduce((acc, route) => {
-    const letter = route.destination.charAt(0).toLocaleUpperCase('az');
-    if (!acc[letter]) acc[letter] = [];
-    acc[letter].push(route);
-    return acc;
-  }, {} as Record<string, typeof sortedAzEvacRoutes>);
 
   // State for active FAQ accordion items (first two expanded by default for smooth UX)
   const [openFaqIndexes, setOpenFaqIndexes] = useState<number[]>([0, 1]);
@@ -84,11 +77,11 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Bakı Evakuator Xidməti və Qiymətləri
+            Evakuator Xidməti – Bakı və Regionlar
           </h1>
 
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
-            Bakı şəhəri, Abşeron yarımadası və bütün Azərbaycan rayonları üzrə 24/7 operativ <strong>evakuator xidməti</strong>. Sərfəli rəsmi tariflər, təhlükəsiz avtomobil daşıma və 15–20 dəqiqə ərzində ünvana operativ çatma.
+            Bakı şəhəri, Abşeron və bütün regionlar üzrə 24/7 peşəkar <strong>evakuator xidməti</strong>. Nasaz, qəzalı və ya hərəkətsiz qalmış avtomobillərin təhlükəsiz daşınması, onlayn ilkin qiymət hesablanması və operativ operator əlaqəsi.
           </p>
 
           {/* Quick Hotline and WhatsApp Action Buttons */}
@@ -111,6 +104,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp ilə Sifariş</span>
             </button>
+
+            <a
+              href="#evakuasiya-calculator-section"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-bold transition-colors"
+            >
+              <Calculator className="w-4 h-4 text-blue-600" />
+              <span>Qiyməti Hesabla</span>
+            </a>
           </div>
         </header>
 
@@ -128,10 +129,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                   <span>Onlayn Qiymət Hesablama</span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white">
-                  Evakuator Qiymətini Dərhal Hesablayın
+                  Evakuator qiymətini dərhal hesablayın
                 </h2>
                 <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">
-                  Çıxış və çatdırılma ünvanını daxil edərək, avtomobilin tipini seçin və rəsmi tarif bazamız əsasında <strong>evakuator qiymətlərini</strong> dərhal onlayn öyrənin.
+                  Çıxış və təyinat ünvanını daxil edərək, avtomobilin tipini və texniki vəziyyətini seçin; rəsmi tarif bazamız əsasında ilkin <strong>evakuator qiymətini</strong> dərhal onlayn öyrənin.
                 </p>
               </div>
 
@@ -165,7 +166,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               Evakuator xidməti necə işləyir?
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Yolda nasazlıq və ya qəza baş verdikdə peşəkar <strong>evakuasiya xidməti</strong> almaq bir neçə sadə addımdan ibarətdir:
+              Yolda nasazlıq və ya qəza baş verdikdə peşəkar <strong>evakuator xidməti</strong> almaq bir neçə sadə və aydın mərhələdən ibarətdir:
             </p>
           </div>
 
@@ -176,7 +177,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               </div>
               <h3 className="font-bold text-slate-900 text-lg">Məlumatın Qəbulu</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Kalkulyatorda ünvanları seçin və ya qaynar xəttimizə zəng edərək avtomobilin markasını, yerləşdiyi ünvanı və texniki vəziyyətini bildirin.
+                Kalkulyatorda marşrutu seçin və ya 878 qaynar xəttimizə zəng edərək avtomobilin markasını, yerləşdiyi ünvanı və nasazlıq detallarını bildirin.
               </p>
             </div>
 
@@ -186,7 +187,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               </div>
               <h3 className="font-bold text-slate-900 text-lg">Növbətçi Təyini</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Dispetçerimiz dərhal ən yaxın ərazidəki növbətçi evakuatoru təyin edir və sürücü 15–20 dəqiqə ərzində ünvanınıza istiqamətlənir.
+                Dispetçerimiz dərhal ən yaxın ərazidəki növbətçi evakuatoru təyin edir və sürücü operativ şəkildə ünvanınıza istiqamətlənir.
               </p>
             </div>
 
@@ -206,13 +207,13 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               </div>
               <h3 className="font-bold text-slate-900 text-lg">Təyinat Yerinə Çatdırılma</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Avtomobiliniz göstərdiyiniz ünvana, rəsmi servis mərkəzinə və ya fərdi qaraja təhlükəsiz çatdırılaraq səliqəli şəkildə boşaldılır.
+                Avtomobiliniz tələb olunan ünvana, rəsmi servis mərkəzinə və ya fərdi qaraja təhlükəsiz çatdırılaraq səliqəli şəkildə boşaldılır.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Section 3: H2 - Evakuator qiymətləri necə hesablanır? */}
+        {/* Section 3: H2 - Evakuator qiyməti necə hesablanır? */}
         <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Qiymət Hesablama Qaydaları">
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
@@ -220,10 +221,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <span>Şəffaf və Rəsmi Tariflər</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Evakuator qiymətləri necə hesablanır?
+              Evakuator qiyməti necə hesablanır?
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Müştərilərimiz üçün <strong>ucuz evakuator</strong> və tam şəffaf qiymətləndirmə təmin edirik. Daşınma haqqı heç bir gözlənilməz artım olmadan aşağıdakı real meyarlar əsasında hesablanır:
+              Platformamızda <strong>evakuator qiyməti</strong> qabaqcadan tam şəffaf şəkildə formalaşır. Daşınma haqqı heç bir gizli xərc olmadan aşağıdakı real meyarlar əsasında hesablanır:
             </p>
           </div>
 
@@ -233,10 +234,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <MapPin className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Məsafə və Marşrut (Kilometraj)</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Məsafə və Marşrut</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bakı şəhərdaxili marşrutlar üzrə operativ və sərfəli başlanğıc tarifi, şəhərətrafı qəsəbələrə və Azərbaycan rayonlarına isə rəsmi bazamızdakı dəqiq kilometraj əsasında sərfəli qiymətlər tətbiq olunur.
+                Bakı şəhərdaxili marşrutlar üzrə sabit başlanğıc tarifi, şəhərətrafı qəsəbələrə və Azərbaycan rayonlarına isə rəsmi bazamızdakı dəqiq kilometraj əsasında tarif hesablanır.
               </p>
             </div>
 
@@ -245,10 +246,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <Car className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Avtomobilin Növü və Çəkisi</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Nəqliyyat Növü və Çəkisi</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Standart sedan və hetçbeklər, daha böyük krossoverlər (SUV / Cip), geniş minivanlar və ya mikroavtobuslar üçün müvafiq yükgötürmə qabiliyyətinə malik evakuatorlar ayrılır və çəkiyə uyğun dərəcələndirilir.
+                Standart sedan və hetçbeklər üçün standart platforma, iri krossoverlər (SUV / Cip) və minivanlar üçün isə müvafiq yükgötürmə qabiliyyətinə malik evakuator təyin edilir (+10 AZN minivan tarif fərqi).
               </p>
             </div>
 
@@ -260,7 +261,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <h3 className="font-bold text-slate-900 text-base sm:text-lg">Təkərlərin Hərəkət Qabiliyyəti</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Təkərləri sərbəst fırlanan maşınlar adi bucurqadla asanlıqla çəkilir. Qəza və ya nasazlıq səbəbindən çarxları bloklanmış maşınlar üçün isə əlavə qaldırıcı kran və ya köməkçi təkər arabacıqları tələb olunur.
+                Təkərləri sərbəst fırlanan maşınlar standart bucurqadla asanlıqla yüklənir. Təkəri kilidlənmiş, sükanı dönməyən və ya qəzalı nəqliyyat üçün əlavə xüsusi avadanlıq və köməkçi təkər arabacıqları tələb olunur (+5 AZN texniki xidmət haqqı).
               </p>
             </div>
 
@@ -272,7 +273,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <h3 className="font-bold text-slate-900 text-base sm:text-lg">Günün Saatı və Təcililik</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Xidmətimiz günün 24 saatı və həftənin 7 günü fasiləsiz fəaliyyət göstərir. Gecə və ya gündüz sifarişlərində qiymətlər rəsmi tarif cədvəlinə tam uyğun olaraq qabaqcadan bildirilir.
+                Xidmətimiz 24/7 fasiləsiz işləyir. Gecə və ya gündüz sifarişlərində qiymətlər rəsmi tarif cədvəlinə uyğun olaraq öncədən bildirilir və sifarişdən sonra dəyişmir.
               </p>
             </div>
           </div>
@@ -291,88 +292,94 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
           </div>
         </section>
 
-        {/* Section 4: H2 - Bakı daxilində evakuator xidməti */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Bakı Daxili Evakuasiya">
+        {/* Section 4: H2 - Ucuz evakuator seçərkən nələrə diqqət etmək lazımdır? */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Sərfəli və Etibarlı Evakuator">
+          <div className="max-w-3xl space-y-2">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-amber-600 uppercase tracking-wider">
+              <AlertTriangle className="w-4 h-4" />
+              <span>Sərfəli və Təhlükəsiz Seçim</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Ucuz evakuator seçərkən nələrə diqqət etmək lazımdır?
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              İstifadəçilər tez-tez <strong>ucuz evakuator</strong> axtararkən yalnız qiymət rəqəminə baxırlar. Lakin avtomobilin zədələnmədən daşınması və sonradan gözlənilməz əlavə xərclərin çıxmaması üçün bir neçə mühüm məqamı nəzərə almaq vacibdir:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                <BadgePercent className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Gizli Xərclərin Olmaması</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Bəzi fərdi sürücülər telefonda çox aşağı qiymət deyib, çatdıqda yükləmə və ya məsafə bəhanəsi ilə əlavə ödəniş tələb edirlər. yukdasima.ai-də qiymət əvvəlcədən dəqiq hesablanır.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Texniki Təhlükəsizlik</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Köhnə tros və nasaz bucurqadla aparılan daşıma avtomobilin bamperinə və asqı sisteminə ciddi ziyan vura bilər. Müasir hidravlik platforma təhlükəsizliyin qarantıdır.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                <Calculator className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Real Qiymət Şəffaflığı</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Ən uyğun qiymət real marşrut məsafəsi, avtomobilin tipi və texniki vəziyyəti nəzərə alınaraq təyin olunur. Onlayn kalkulyatorumuz bu balansı dərhal təmin edir.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 5: H2 - Bakı və regionlara evakuator xidməti */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Xidmət Coğrafiyası">
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
               <MapPin className="w-4 h-4" />
-              <span>Paytaxt və Abşeron Ərazisi</span>
+              <span>Geniş Coğrafi Əhatə</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Bakı daxilində evakuator xidməti
+              Bakı və regionlara evakuator xidməti
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Bakının bütün inzibati rayonlarında və sıx hərəkətli prospektlərində növbətçi <strong>Bakı evakuator</strong> briqadalarımız gecə-gündüz fəaliyyət göstərir:
+              Paytaxt Bakının bütün rayon və qəsəbələrində, eləcə də respublikanın bütün magistral yollarında növbətçi <strong>Bakı evakuator</strong> və şəhərlərarası daşıma heyətlərimiz fəaliyyət göstərir:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-              <h3 className="font-bold text-slate-900 text-base">Mərkəzi Rayonlar</h3>
+              <h3 className="font-bold text-slate-900 text-base">Bakı və Abşeron Ərazisi</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Yasamal, Nəsimi, Səbail, Nərimanov və Xətai rayonları üzrə sıx tıxaclarda belə 15–20 dəqiqəyə operativ yaxınlaşma.
+                Yasamal, Nəsimi, Səbail, Nərimanov, Xətai, Binəqədi, Xırdalan, Masazır, Nizami, Sabunçu, Suraxanı, Xəzər və Qaradağ üzrə 15–20 dəqiqəyə operativ yaxınlaşma.
               </p>
             </div>
 
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-              <h3 className="font-bold text-slate-900 text-base">Şimal və Qərb Əraziləri</h3>
+              <h3 className="font-bold text-slate-900 text-base">Qərb və Mərkəzi Magistrallar</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Binəqədi, Biləcəri, Xırdalan, Masazır, Sulutəpə və Saray qəsəbələrində növbətçi evakuasiya avtomobilləri.
+                Bakı – Gəncə, Mingəçevir, Yevlax, Şəmkir, Tovuz, Qazax, Bərdə, Ağdam, Ağdaş, Göyçay, Ucar və Kürdəmir istiqamətlərində fasiləsiz avtomobil daşıma.
               </p>
             </div>
 
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-              <h3 className="font-bold text-slate-900 text-base">Şərq və Cənub Əraziləri</h3>
+              <h3 className="font-bold text-slate-900 text-base">Şimal və Cənub Dəhlizləri</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Nizami, Sabunçu, Suraxanı, Xəzər (Mərdəkan, Şüvəlan, Hava Limanı) və Qaradağ (Lökbatan, Səngəçal) istiqamətləri.
+                Sumqayıt, Quba, Qusar, Xaçmaz, Şamaxı, İsmayıllı, Qəbələ, Şəki, Zaqatala, Salyan, Biləsuvar, Cəlilabad, Masallı, Lənkəran və Astara marşrutları.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Section 5: H2 - Bakıdan rayonlara evakuator */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Rayonlara Evakuator">
-          <div className="max-w-3xl space-y-2">
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
-              <Navigation className="w-4 h-4" />
-              <span>Şəhərlərarası və Rayonlararası</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Bakıdan rayonlara evakuator
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Bakıdan Azərbaycanın bütün bölgələrinə və əksinə — rayonlardan paytaxta avtomobillərin təhlükəsiz və rəsmi tariflərlə daşınması təmin edilir:
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-                  <Navigation className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-slate-900 text-lg">Qərb və Mərkəzi Magistrallar</h3>
-              </div>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bakı – Gəncə, Mingəçevir, Yevlax, Şəmkir, Tovuz, Qazax, Bərdə, Ağdam, Ağdaş, Göyçay, Ucar, Kürdəmir və Hacıqabul marşrutları üzrə rəsmi kilometraj tarifi ilə <strong>avtomobil evakuatoru</strong> təminatı.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-                  <Navigation className="w-5 h-5" />
-                </div>
-                <h3 className="font-bold text-slate-900 text-lg">Şimal və Cənub Marşrutları</h3>
-              </div>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bakı – Sumqayıt, Quba, Qusar, Xaçmaz, Şabran, Siyəzən, eləcə də Şamaxı, İsmayıllı, Qəbələ, Şəki, Zaqatala, Salyan, Biləsuvar, Cəlilabad, Masallı, Lənkəran və Astara istiqamətləri.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 6: H2 - Hansı avtomobillər daşına bilər? */}
+        {/* Section 6: H2 - Hansı avtomobillər evakuasiya olunur? */}
         <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Daşına Bilən Nəqliyyat Vasitələri">
           <div className="max-w-3xl space-y-2">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -388,7 +395,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="text-3xl">🚗</div>
               <h3 className="font-bold text-slate-900 text-lg">Sedan və Hetçbek</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bütün növ minik avtomobillərinin şəhərdaxili və şəhərlərarası operativ və təhlükəsiz daşınması.
+                Bütün minik avtomobillərinin şəhərdaxili və şəhərlərarası operativ və təhlükəsiz daşınması.
               </p>
             </div>
 
@@ -404,7 +411,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="text-3xl">🚐</div>
               <h3 className="font-bold text-slate-900 text-lg">Minivan və Mikroavtobus</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Sprinter, Vito, Ford Transit kimi uzun bazalı və hündür kommersiya nəqliyyatının daşınması.
+                Sprinter, Vito, Ford Transit kimi uzun bazalı və hündür nəqliyyat vasitələrinin daşınması.
               </p>
             </div>
 
@@ -493,7 +500,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <span>Etibarlı Xidmət Standartları</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Niyə yukdasima.ai?
+              Niyə yukdasima.ai evakuator xidməti?
             </h2>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
               Yolda qaldığınız zaman operativlik və etibarlılıq ən mühüm amildir. Platformamız sizə aşağıdakı real üstünlükləri təqdim edir:
@@ -505,7 +512,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
                 <Clock className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">15–20 Dəqiqəyə Ünvanda</h3>
+              <h3 className="font-bold text-white text-base sm:text-lg">Operativ Yaxınlaşma</h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
                 Bakı və Abşeron ərazisindəki növbətçi məntəqələrimiz sayəsində çağırış daxil olan kimi ən yaxın avtomobil operativ yönləndirilir.
               </p>
@@ -574,12 +581,12 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               Tez-tez verilən suallar
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Evakuasiya xidməti, qiymətlər, təcili sifariş və texniki imkanlar haqqında ən çox verilən sualların cavabları:
+              Evakuator xidməti, qiymətlər, təcili sifariş və texniki imkanlar haqqında ən çox verilən sualların cavabları:
             </p>
           </div>
 
           <div className="space-y-3 max-w-4xl">
-            {EVAKUASIYA_FAQS.map((faq, index) => {
+            {EVAKUATOR_FAQS.map((faq, index) => {
               const isOpen = openFaqIndexes.includes(index);
               return (
                 <div
@@ -782,7 +789,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Bakı – Ağdaş Evakuator</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">281 km məsafəyə operativ və təhlükəsiz evakuasiya xidməti.</p>
+              <p className="text-xs text-slate-600 mt-2">281 km məsafəyə operativ və təhlükəsiz evakuator xidməti.</p>
             </Link>
 
             <Link
@@ -793,7 +800,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Bakı – Qəbələ Evakuator</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">216 km məsafəyə operativ və təhlükəsiz evakuasiya xidməti.</p>
+              <p className="text-xs text-slate-600 mt-2">216 km məsafəyə operativ və təhlükəsiz evakuator xidməti.</p>
             </Link>
 
             <Link
@@ -804,7 +811,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Bakı – Şəki Evakuator</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">297 km məsafəyə operativ və təhlükəsiz evakuasiya xidməti.</p>
+              <p className="text-xs text-slate-600 mt-2">297 km məsafəyə operativ və təhlükəsiz evakuator xidməti.</p>
             </Link>
 
             <Link
@@ -815,7 +822,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Bakı – Gəncə Evakuator</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">362 km məsafəyə operativ və təhlükəsiz evakuasiya xidməti.</p>
+              <p className="text-xs text-slate-600 mt-2">362 km məsafəyə operativ və təhlükəsiz evakuator xidməti.</p>
             </Link>
 
             <Link
@@ -826,7 +833,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Şəffaf Qiymətlər & Tariflər</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">Evakuasiya və yükdaşıma üzrə rəsmi qiymətlər cədvəli.</p>
+              <p className="text-xs text-slate-600 mt-2">Evakuator və yükdaşıma üzrə rəsmi qiymətlər cədvəli.</p>
             </Link>
 
             <Link
@@ -842,14 +849,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
           </div>
         </section>
 
-        {/* Section 11: Bottom Call to Action Banner */}
+        {/* Section 12: Bottom Call to Action Banner */}
         <section className="bg-gradient-to-r from-blue-600 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-md text-center space-y-6" aria-label="Sürətli Evakuator Çağırışı">
           <div className="max-w-2xl mx-auto space-y-2">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
               Təcili Evakuatora Ehtiyacınız Var?
             </h2>
             <p className="text-blue-100 text-xs sm:text-base leading-relaxed">
-              Günün istənilən saatında bizə zəng edin və ya WhatsApp ilə yerləşmə göndərin. Növbətçi evakuatorumuz 15–20 dəqiqə ərzində yanınızda olacaq!
+              Günün istənilən saatında bizə zəng edin və ya WhatsApp ilə yerləşmə göndərin. Növbətçi evakuatorumuz operativ şəkildə yanınızda olacaq!
             </p>
           </div>
 

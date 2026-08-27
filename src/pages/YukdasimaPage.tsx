@@ -8,9 +8,10 @@ import {
   ArrowRight,
   Clock,
   MapPin,
-  Package,
   Users,
   PhoneCall,
+  Phone,
+  MessageSquare,
   ChevronDown,
   Sparkles,
   Calculator,
@@ -21,12 +22,15 @@ import {
   Building2,
   Wrench,
   Navigation,
+  AlertTriangle,
+  Box,
 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { generateWhatsAppLink } from '../utils/calculator';
 import { YUKDASIMA_FAQS } from '../seo/metadata';
 import { getAllApprovedYukdasimaRoutes } from '../seo/routeRegistry';
 import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
-
+import { DEFAULT_VEHICLE_CONFIG } from '../config/vehicles';
 import { CallbackInitialData } from '../types';
 
 interface YukdasimaPageProps {
@@ -35,18 +39,8 @@ interface YukdasimaPageProps {
 
 export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) => {
   const regionalRoutes = getAllApprovedYukdasimaRoutes();
-  const sortedAzRoutes = [...regionalRoutes].sort((a, b) =>
-    a.destination.localeCompare(b.destination, 'az')
-  );
 
-  const groupedAzRoutes = sortedAzRoutes.reduce((acc, route) => {
-    const letter = route.destination.charAt(0).toLocaleUpperCase('az');
-    if (!acc[letter]) acc[letter] = [];
-    acc[letter].push(route);
-    return acc;
-  }, {} as Record<string, typeof sortedAzRoutes>);
-
-  // State for active FAQ accordion items (first two expanded by default for best user engagement)
+  // State for active FAQ accordion items (first two expanded by default for smooth UX)
   const [openFaqIndexes, setOpenFaqIndexes] = useState<number[]>([0, 1]);
 
   const toggleFaq = (index: number) => {
@@ -54,6 +48,25 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
       prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
     );
   };
+
+  const handleWhatsApp = () => {
+    window.open(generateWhatsAppLink('Salam, yükdaşıma xidməti ilə bağlı məlumat almaq və sifariş vermək istəyirəm.'), '_blank');
+  };
+
+  // Featured key popular canonical routes for quick access
+  const popularRouteSlugs = [
+    'baki-gence',
+    'baki-sumqayit',
+    'baki-quba',
+    'baki-seki',
+    'baki-qebele',
+    'baki-lenkeran',
+    'baki-xacmaz',
+    'baki-mingecevir',
+  ];
+  const popularRoutes = popularRouteSlugs
+    .map((slug) => regionalRoutes.find((r) => r.slug === slug))
+    .filter((r): r is typeof regionalRoutes[0] => !!r);
 
   return (
     <article className="py-6 sm:py-10 bg-slate-50 min-h-screen text-slate-900">
@@ -81,32 +94,40 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
           </div>
 
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Bakı Yükdaşıma Xidməti və Qiymətləri
+            Yükdaşıma Xidməti – Bakı və Regionlar
           </h1>
 
           <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
-            Bakı, Abşeron və Azərbaycan rayonları üzrə təhlükəsiz və operativ <strong>yükdaşıma xidməti</strong>. Mənzil köçürülməsi, mebel daşınması, ofis daşınması və yük maşını sifarişi üçün ən sərfəli və şəffaf qiymətlər.
+            Bakı şəhəri, Abşeron və bütün Azərbaycan regionları üzrə təhlükəsiz və operativ <strong>yükdaşıma xidməti</strong>. Mənzil köçürülməsi, ofis daşınması, mebel montajı və yük maşını sifarişi üçün şəffaf onlayn qiymət hesablanması və sürətli əlaqə.
           </p>
 
-          {/* Quick Hotline and WhatsApp Action Badges */}
+          {/* Quick Hotline and WhatsApp Action Buttons */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
               href={CONTACT_INFO.HOTLINE_TEL}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
               title="Qaynar xəttə zəng et"
             >
-              <PhoneCall className="w-4 h-4" />
+              <Phone className="w-4 h-4" />
               <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
             </a>
 
-            <a
-              href={CONTACT_INFO.WHATSAPP_URL_BASE}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition-colors"
+            <button
+              onClick={handleWhatsApp}
+              type="button"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition-colors cursor-pointer"
               title="WhatsApp vasitəsilə yaz"
             >
+              <MessageSquare className="w-4 h-4" />
               <span>WhatsApp ilə Sifariş</span>
+            </button>
+
+            <a
+              href="#yukdasima-calculator-section"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-bold transition-colors"
+            >
+              <Calculator className="w-4 h-4 text-blue-600" />
+              <span>Qiyməti Hesabla</span>
             </a>
           </div>
         </header>
@@ -125,7 +146,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
                   <span>Onlayn Qiymətləndirmə</span>
                 </div>
                 <h2 className="text-xl sm:text-2xl font-bold text-white">
-                  Yükdaşıma Qiymətini Dərhal Hesablayın
+                  Yükdaşıma qiymətini dərhal hesablayın
                 </h2>
                 <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">
                   Ünvanları daxil edərək və ya əşyaların şəkillərini yükləyərək süni intellekt analizi ilə yükün həcmini və <strong>yükdaşıma qiymətlərini</strong> saniyələr ərzində dəqiq hesablayın.
@@ -136,10 +157,10 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
                 <button
                   type="button"
                   onClick={() => onOpenCallback()}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-bold text-sm shadow-sm transition-all"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-bold text-sm shadow-sm transition-all cursor-pointer"
                 >
                   <PhoneCall className="w-4 h-4 text-blue-600" />
-                  <span>Geri Zəng Sifarişi</span>
+                  <span>Operator Zəngi Sifariş Et</span>
                 </button>
               </div>
             </div>
@@ -151,89 +172,169 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
           </div>
         </section>
 
-        {/* Section 2: H2 - Yükdaşıma xidməti necə işləyir? */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Xidmət Prosesi">
+        {/* Section 2: H2 - Yükdaşıma xidmətləri */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Yükdaşıma Xidmətləri">
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
               <Layers className="w-4 h-4" />
-              <span>Sadə və Rahat 4 Addım</span>
+              <span>İxtisaslaşmış Həllər</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Yükdaşıma xidməti necə işləyir?
+              Yükdaşıma xidmətləri
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              yukdasima.ai platforması ilə <strong>yük daşıma</strong> sifarişi vermək və daşınmanı həyata keçirmək son dərəcə operativ və şəffafdır:
+              Fərdi və korporativ müştərilərimiz üçün müxtəlif tələblərə uyğunlaşdırılmış kompleks <strong>yükdaşıma</strong> həlləri təqdim edirik:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
-                1
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {/* Ev və Mənzil Daşınması */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between space-y-4 hover:border-blue-200 transition-colors">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                  <Home className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Ev və Mənzil Daşınması</h3>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  Mənzil və bağ evlərinin tam köçürülməsi. Məişət texnikası, kövrək əşyalar və fərdi əşyalar xüsusi qablaşdırılır və səliqəli daşınır.
+                </p>
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Qiymət və Həcm Hesablama</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Kalkulyatorda çıxış və çatdırılma ünvanını seçin və ya əşyaların şəkillərini yükləyərək AI vasitəsilə ən uyğun yük maşını ölçüsünü və ilkin qiyməti müəyyən edin.
-              </p>
+              <Link
+                href="/evden-eve-yukdasima"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <span>Evdən evə daşıma</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
-                2
+            {/* Ofis Daşınması */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between space-y-4 hover:border-blue-200 transition-colors">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Ofis Daşınması</h3>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  Şirkətlər üçün fasiləsiz iş qrafiki ilə korporativ köçürülmə. Kompüter avadanlıqları, arxiv sənədləri və ofis masalarının təhlükəsiz daşınması.
+                </p>
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Sifarişin Təsdiqi</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Dispetçerimiz sizinlə dərhal əlaqə saxlayır, daşınma vaxtını, tələb olunan fəhlə və usta sayını dəqiqləşdirərək ən yaxın yük maşınını istiqamətləndirir.
-              </p>
+              <Link
+                href="/ofis-dasinmasi"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <span>Ofis köçürülməsi</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
-                3
+            {/* Mebel Daşınması */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between space-y-4 hover:border-blue-200 transition-colors">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                  <Wrench className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Mebel Daşınması & Montaj</h3>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  Qonaq, yataq və mətbəx mebellərinin təcrübəli usta tərəfindən sökülməsi, qoruyucu plyonka ilə bükülməsi və yeni mənzildə quraşdırılması.
+                </p>
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Qablaşdırma və Yükləmə</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Peşəkar ustalarımız mebelləri səliqəli sökür, qoruyucu plyonkalarla qablaşdırır və fəhlə briqadası əşyaları təhlükəsiz şəkildə yük avtomobilinə bərkidir.
-              </p>
+              <Link
+                href="/mebel-dasinmasi"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <span>Mebel ustası və daşıma</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative">
-              <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
-                4
+            {/* Müxtəlif Həcmli Yüklərin Daşınması */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between space-y-4 hover:border-blue-200 transition-colors">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                  <Box className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Müxtəlif Həcmli Yüklər</h3>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  Tək mebel, tikinti materialları, anbar və ticarət yükləri üçün təmiz və qapalı yük avtomobillərinin təminatı.
+                </p>
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Çatdırılma və Quraşdırma</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Yüklər yeni ünvana çatdırılır, mərtəbəyə qaldırılır, mebellər yenidən yığılaraq mənzildə və ya ofisdə arzuladığınız qaydada təhvil verilir.
-              </p>
+              <Link
+                href="/yuk-masini"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <span>Yük maşını seçimi</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {/* Bakı Daxili Daşınma */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between space-y-4 hover:border-blue-200 transition-colors">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Bakı Daxili Daşınma</h3>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  Paytaxtın bütün rayon və qəsəbələrində operativ xidmət. 20–30 dəqiqə ərzində növbətçi maşın və fəhlə heyətinin ünvana çatdırılması.
+                </p>
+              </div>
+              <Link
+                href="/fehle-xidmeti"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <span>Fəhlə briqadası</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            {/* Bakıdan Regionlara Daşınma */}
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 flex flex-col justify-between space-y-4 hover:border-blue-200 transition-colors">
+              <div className="space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center font-bold">
+                  <Navigation className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-lg">Bakıdan Regionlara Daşınma</h3>
+                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                  Azərbaycanın bütün şəhər və rayonlarına kilometraj əsasında rəsmi sabit tariflərlə təhlükəsiz şəhərlərarası daşıma.
+                </p>
+              </div>
+              <Link
+                href="/qiymetler"
+                className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors"
+              >
+                <span>Tarif cədvəli</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
           </div>
         </section>
 
-        {/* Section 3: H2 - Yükdaşıma qiymətləri necə hesablanır? */}
+        {/* Section 3: H2 - Yükdaşıma qiyməti necə hesablanır? */}
         <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Qiymət Hesablama Qaydaları">
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
               <BadgePercent className="w-4 h-4" />
-              <span>Şəffaf Tariflər</span>
+              <span>Şəffaf və Rəsmi Tariflər</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Yükdaşıma qiymətləri necə hesablanır?
+              Yükdaşıma qiyməti necə hesablanır?
             </h2>
             <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Müştərilərimiz üçün <strong>ucuz yükdaşıma</strong> və şəffaf qiymət siyasəti əsas prinsipimizdir. Qiymətləndirmə zamanı heç bir gizli xərc əlavə olunmur və məbləğ aşağıdakı əsas amillər əsasında formalaşır:
+              Platformamızda <strong>yükdaşıma qiymətləri</strong> tam şəffaf şəkildə formalaşır. Daşınma haqqı heç bir gizli xərc olmadan aşağıdakı real meyarlar əsasında hesablanır:
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
               <div className="flex items-center gap-3">
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <MapPin className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Məsafə və Marşrut (Kilometraj)</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Marşrut və Məsafə</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bakı şəhərdaxili marşrutlarda (məsələn, Yasamal, Nəsimi, Nərimanov, Xətai) sabit başlanğıc tarifləri, şəhərətrafı qəsəbələrə (Xırdalan, Sumqayıt, Mərdəkan, Şüvəlan) və rayonlara isə kilometraj üzrə hesablanmış sərfəli tariflər tətbiq olunur.
+                Bakı şəhərdaxili marşrutlar üzrə sabit başlanğıc tarifi, şəhərətrafı qəsəbələrə və Azərbaycan rayonlarına isə rəsmi bazamızdakı dəqiq kilometraj əsasında hesablanır.
               </p>
             </div>
 
@@ -242,10 +343,10 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <Truck className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Yük Maşınının Tutumu və Növü</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Yükün Həcmi və Avtomobil</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Yükün həcminə uyğun olaraq 2 metrlik yığcam Ford Transit (tək mebel və az sayda əşyalar), 3–4 metrlik standart furqonlar və ya 5–7 metrlik böyük həcmli yük maşınları seçilir. Doğru maşın seçimi xərclərinizi 30%-dək azaldır.
+                2 metrlik Ford Transit-dən 7 metrlik böyük tutumlu furqonlaradək yükün real həcminə uyğun avtomobil seçilir. Doğru seçim artıq xərclərin qarşısını alır.
               </p>
             </div>
 
@@ -254,10 +355,34 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <Users className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Fəhlə Sayı və Mərtəbə Şərtləri</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Fəhlə Ehtiyacı və Briqada</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Daşınacaq əşyaların sayına görə 2, 3 və ya 4 nəfərlik peşəkar fəhlə briqadası cəlb edilir. Binalarda yük liftinin olması və ya pilləkənlə qaldırılma mərtəbələri nəzərə alınaraq dəqiq məbləğ bildirilir.
+                Əşyaların miqdarına görə 2, 3 və ya 4 nəfərlik fəhlə briqadası cəlb edilir. Fəhlələrimiz yükləmə, boşaltma və mərtəbələrə təhlükəsiz daşımanı təmin edir.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Mərtəbə və Lift Vəziyyəti</h3>
+              </div>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Binalarda işlək yük liftinin olub-olmaması və pilləkənlə qaldırılacaq mərtəbə sayı hesablamada şəffaf nəzərə alınır.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                  <AlertTriangle className="w-5 h-5" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Xüsusi Ağır Əşyalar</h3>
+              </div>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Piano, iri seyf, tibbi və ya xüsusi qabaritli ağır avadanlıqlar üçün xüsusi kəmərlər və əlavə işçi qüvvəsi təşkil olunur.
               </p>
             </div>
 
@@ -269,7 +394,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
                 <h3 className="font-bold text-slate-900 text-base sm:text-lg">Mebel Ustası və Qablaşdırma</h3>
               </div>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Qarderob, yataq mebeli və mətbəx şkaflarının peşəkar usta tərəfindən sökülüb yenidən quraşdırılması, həmçinin xüsusi qablaşdırma materialları (streç, hava qabarcıqlı plyonka, kardon qutular) qiymətləndirməyə daxil edilə bilər.
+                Mebellərin peşəkar sökülüb-yığılması və keyfiyyətli qoruyucu plyonkalarla (streç, hava qabarcıqlı material) bükülməsi daxildir.
               </p>
             </div>
           </div>
@@ -288,240 +413,397 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
           </div>
         </section>
 
-        {/* Section 4: Deep Specific Moving Services (H2s for Evdən Evə, Mebel, Ofis) */}
-        <section className="space-y-8" aria-label="Xüsusi Yükdaşıma İstiqamətləri">
-          <div className="max-w-3xl space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Peşəkar Daşıma İstiqamətlərimiz
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Müxtəlif tələblərə uyğun ixtisaslaşmış komandalarımızla hər növ daşınma xidmətini yüksək keyfiyyət zəmanəti ilə həyata keçiririk:
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Evdən Evə Yükdaşıma Block */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
-                  <Home className="w-6 h-6" />
-                </div>
-                <h2 className="text-xl font-extrabold text-slate-900">
-                  Evdən evə yükdaşıma
-                </h2>
-                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                  Mənzil və bağ evlərinin köçürülməsi böyük diqqət və məsuliyyət tələb edir. <strong>Evdən evə yükdaşıma</strong> xidmətimiz çərçivəsində bütün mebellər, məişət texnikası (soyuducu, paltaryuyan, televizor) və kövrək qab-qacaqlar xüsusi qablaşdırılır və yeni ünvana zədələnmədən çatdırılır.
-                </p>
-                <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Mənzil əşyalarının tam çeşidlənməsi</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Mərtəbələrə qaldırma və endirmə</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Təhlükəsiz və səliqəli daşıma</span>
-                  </li>
-                </ul>
+        {/* Section 4: H2 - Hansı yük maşını sizə uyğundur? */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Yük Maşını Modelləri">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="max-w-3xl space-y-2">
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <Truck className="w-4 h-4" />
+                <span>Geniş Avtopark</span>
               </div>
-
-              <Link
-                href="/evden-eve-yukdasima"
-                className="inline-flex items-center justify-between w-full p-3 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-blue-700 font-bold text-xs sm:text-sm transition-all group"
-              >
-                <span>Evdən evə daşıma haqqında ətraflı</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            {/* Mebel Daşınması Block */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
-                  <Wrench className="w-6 h-6" />
-                </div>
-                <h2 className="text-xl font-extrabold text-slate-900">
-                  Mebel daşınması
-                </h2>
-                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                  Böyük qabaritli qonaq, yataq və mətbəx mebellərinin daşınması üçün peşəkar usta dəstəyi vacibdir. <strong>Mebel daşınması</strong> prosesində mebelləriniz cızılmadan və zədələnmədən sökülür, xüsusi materiallarla qablaşdırılır və yeni mənzildə dəqiqliklə yığılır.
-                </p>
-                <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Təcrübəli mebel ustası xidməti</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Qoruyucu plyonka ilə qablaşdırma</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Yeni mənzildə montaj və təhvil</span>
-                  </li>
-                </ul>
-              </div>
-
-              <Link
-                href="/mebel-dasinmasi"
-                className="inline-flex items-center justify-between w-full p-3 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-blue-700 font-bold text-xs sm:text-sm transition-all group"
-              >
-                <span>Mebel ustası və daşıma xidməti</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            {/* Ofis Daşınması Block */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xs flex flex-col justify-between space-y-6">
-              <div className="space-y-4">
-                <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
-                  <Building2 className="w-6 h-6" />
-                </div>
-                <h2 className="text-xl font-extrabold text-slate-900">
-                  Ofis daşınması
-                </h2>
-                <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                  Şirkətlər və təşkilatlar üçün iş prosesini dayandırmadan operativ <strong>ofis daşınması</strong> təşkil edirik. Kompüter avadanlıqları, serverlər, sənəd qutuları və ofis masaları xüsusi etiketlənərək təhlükəsiz köçürülür.
-                </p>
-                <ul className="space-y-2 text-xs sm:text-sm text-slate-700">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Ofis texnikasının təhlükəsiz daşınması</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Arxiv və sənədlərin qutulanması</span>
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>Qeyri-iş saatlarında operativ köçürmə</span>
-                  </li>
-                </ul>
-              </div>
-
-              <Link
-                href="/ofis-dasinmasi"
-                className="inline-flex items-center justify-between w-full p-3 rounded-xl bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-blue-700 font-bold text-xs sm:text-sm transition-all group"
-              >
-                <span>Ofis köçürülməsi haqqında ətraflı</span>
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 5: H2 - Bakı və rayonlara yükdaşıma */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Xidmət Ərazisi">
-          <div className="max-w-3xl space-y-2">
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
-              <Navigation className="w-4 h-4" />
-              <span>Geniş Coğrafi Əhatə</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Bakı və rayonlara yükdaşıma
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Xidmətimiz təkcə Bakı şəhərini deyil, bütün Abşeron yarımadasını və Azərbaycanın bütün regionlarını əhatə edir. Hər bir istiqamət üzrə operativ logistika təmin olunur:
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-                  <MapPin className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-lg">Bakı və Abşeron Qəsəbələri</h3>
-                  <p className="text-xs text-slate-500">20-30 dəqiqə ərzində sürətli maşın təminatı</p>
-                </div>
-              </div>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Yasamal, Nərimanov, Nəsimi, Xətai, Binəqədi, Səbail, Nizami, Sabunçu, Suraxanı, Xəzər, Qaradağ, Pirallahı, həmçinin Xırdalan, Sumqayıt, Masazır, Saray, Mərdəkan, Şüvəlan, Bilgəh, Novxanı və digər qəsəbələrə növbətçi <strong>yük maşını</strong> və <strong>yük taksisi</strong> briqadalarımız 24/7 xidmət göstərir.
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Hansı yük maşını sizə uyğundur?
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                Yükün həcminə və növünə uyğun avtomobil seçmək həm daşımanın təhlükəsizliyini təmin edir, həm də xərcləri minimuma endirir:
               </p>
             </div>
 
-            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
-                  <Truck className="w-5 h-5" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-900 text-lg">Bütün Azərbaycan Rayonları</h3>
-                  <p className="text-xs text-slate-500">Şəhərlərarası təhlükəsiz və rəsmi daşıma</p>
-                </div>
-              </div>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bakıdan Gəncə, Sumqayıt, Şəki, Quba, Qusar, Xaçmaz, Lənkəran, Astara, Şamaxı, İsmayıllı, Qəbələ, Mingəçevir, Bərdə, Şəmkir və digər rayonlara, eləcə də əks istiqamətdə kommersiya və fərdi yüklərin etibarlı daşınması həyata keçirilir.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-4 pt-2">
             <Link
               href="/yuk-masini"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm transition-colors"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition-colors self-start sm:self-auto shrink-0"
             >
-              <Truck className="w-4 h-4" />
-              <span>Yük Maşını Avtoparkımız</span>
+              <span>Bütün Avtopark</span>
+              <ArrowRight className="w-4 h-4" />
             </Link>
+          </div>
 
-            <Link
-              href="/evakuator"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm transition-colors"
-            >
-              <span>24/7 Evakuator Xidməti</span>
-              <ArrowRight className="w-4 h-4 text-slate-500" />
-            </Link>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {DEFAULT_VEHICLE_CONFIG.vehicles.map((v) => {
+              const isTir = v.category === 'tir';
+              return (
+                <div
+                  key={v.id}
+                  className="p-5 rounded-2xl bg-slate-50 border border-slate-200/80 flex flex-col justify-between space-y-3 hover:border-blue-300 transition-colors"
+                >
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-blue-100 text-blue-700">
+                        {v.badge}
+                      </span>
+                      <span className="text-xs font-semibold text-slate-400">
+                        {isTir ? 'TIR' : `${v.category.toUpperCase()} kateqoriyası`}
+                      </span>
+                    </div>
+
+                    <h3 className="font-bold text-slate-900 text-base">{v.name}</h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">{v.description}</p>
+                  </div>
+
+                  {isTir ? (
+                    <div className="p-2.5 rounded-xl bg-white border border-slate-100 text-center">
+                      <p className="text-[11px] text-slate-500">
+                        TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-3 gap-1.5 p-2 rounded-xl bg-white border border-slate-100 text-center text-xs">
+                      <div>
+                        <div className="text-[10px] text-slate-400 uppercase font-medium">Uzunluq</div>
+                        <div className="font-bold text-slate-800">{v.lengthM} m</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-slate-400 uppercase font-medium">Tutum</div>
+                        <div className="font-bold text-slate-800">{v.practicalCapacityM3} m³</div>
+                      </div>
+                      <div>
+                        <div className="text-[10px] text-slate-400 uppercase font-medium">Yük</div>
+                        <div className="font-bold text-slate-800">{v.maxCarryingWeightKg} kq</div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </section>
 
-        {/* Section 6: H2 - Niyə yukdasima.ai? */}
+        {/* Section 5: H2 - Bakıda yükdaşıma xidməti */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Bakıda Yükdaşıma">
+          <div className="max-w-3xl space-y-2">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <MapPin className="w-4 h-4" />
+              <span>Şəhərdaxili Operativlik</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Bakıda yükdaşıma xidməti
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Paytaxt Bakının sıx küçələrində və geniş ətraf qəsəbələrində operativ <strong>Bakıda yükdaşıma</strong> tələblərinə uyğun növbətçi maşınlarımız 24/7 fəaliyyət göstərir:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Evdən Evə Mənzil Köçürülməsi</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Yasamal, Nərimanov, Xətai, Nəsimi, Binəqədi və digər mərkəzi rayonlarda mənzillərin qapalı furqonlarla təhlükəsiz köçürülməsi.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Ofis və Şirkət Köçürmələri</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Biznes mərkəzləri və ofislər üçün kompüter avadanlıqları, arxiv sənədləri və ofis mebellərinin planlı köçürülməsi.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Mebel və Məişət Texnikası</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Tək-tək mebel dəstləri, soyuducu, paltaryuyan və kövrək əşyaların qoruyucu materiallarla etibarlı çatdırılması.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Mağaza və Anbar Daşımaları</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Ticarət obyektləri, anbarlar və mağazalar üçün malların, qutuların və avadanlıqların operativ daşınması.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Kiçik və Böyük Həcmli Yüklər</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                2 metrlik yığcam maşınlardan tutmuş 7 metrlik böyük tutumlu furqonlaradək istənilən həcmdə yüklərin daşınması.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Abşeron və Qəsəbələr</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Xırdalan, Masazır, Sumqayıt, Mərdəkan, Şüvəlan, Bilgəh, Novxanı və digər qəsəbələrə 20–30 dəqiqə ərzində sürətli çıxış.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 6: H2 - Bakıdan regionlara yükdaşıma */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Regionlara Yükdaşıma">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="max-w-3xl space-y-2">
+              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+                <Navigation className="w-4 h-4" />
+                <span>Şəhərlərarası Magistrallar</span>
+              </div>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Bakıdan regionlara yükdaşıma
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+                Bakıdan Azərbaycanın bütün şəhər və rayonlarına, eləcə də əks istiqamətdə rəsmi sabit tariflərlə <strong>yükdaşıma xidməti</strong> göstərilir. Əsas populyar marşrutlarımız:
+              </p>
+            </div>
+
+            <span className="self-start sm:self-auto inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-3.5 py-2 rounded-xl shrink-0">
+              <MapPin className="w-3.5 h-3.5 text-blue-600" />
+              <span>{regionalRoutes.length} Təsdiqlənmiş Marşrut</span>
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+            {popularRoutes.map((r) => (
+              <Link
+                key={r.slug}
+                href={r.routePath}
+                className="p-4 rounded-2xl bg-slate-50 hover:bg-blue-50/80 border border-slate-200/80 hover:border-blue-300 transition-all group block space-y-1.5"
+              >
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-blue-600">Bakı → {r.destination}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+                </div>
+                <h3 className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
+                  Bakı–{r.destination} Yükdaşıma
+                </h3>
+                <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-200/50">
+                  <span className="text-slate-500">{r.distanceKm ? `${r.distanceKm} km` : 'Rayon'}</span>
+                  <span className="font-extrabold text-blue-600 group-hover:text-blue-700">
+                    Qiyməti öyrən
+                  </span>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        {/* Section 7: H2 - Yükdaşıma sifarişi necə verilir? */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Sifariş Prosesi">
+          <div className="max-w-3xl space-y-2">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <Layers className="w-4 h-4" />
+              <span>Sadə və Aydın Proses</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Yükdaşıma sifarişi necə verilir?
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              yukdasima.ai platformasında <strong>yük maşını sifarişi</strong> və köçürülmə xidməti 5 rahat mərhələdən ibarətdir:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                1
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Marşrutu Seçin</h3>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                Çıxış və çatdırılma ünvanlarını kalkulyatorda qeyd edin.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                2
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Yükü Bildirin</h3>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                Əşyaların təsvirini qeyd edin və ya foto yükləyərək AI analizi aparın.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                3
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Avtomobil və Xidmət</h3>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                Yükün həcminə uyğun maşın ölçüsü, fəhlə və usta ehtiyacını təyin edin.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                4
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Sifarişi Göndərin</h3>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                İlkin qiymətlə tanış olub əlaqə nömrənizi daxil edin.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2.5">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
+                5
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Operativ Əlaqə</h3>
+              <p className="text-slate-600 text-xs leading-relaxed">
+                Operatorumuz dərhal əlaqə saxlayır və ən yaxın növbətçi maşını yönləndirir.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 8: H2 - Ucuz yükdaşıma seçərkən nələrə diqqət etmək lazımdır? */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Sərfəli və Təhlükəsiz Yükdaşıma">
+          <div className="max-w-3xl space-y-2">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-amber-600 uppercase tracking-wider">
+              <AlertTriangle className="w-4 h-4" />
+              <span>Sərfəli və Etibarlı Seçim</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Ucuz yükdaşıma seçərkən nələrə diqqət etmək lazımdır?
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              İstifadəçilər tez-tez <strong>ucuz yükdaşıma</strong> axtararkən yalnız qiymət rəqəminə diqqət yetirirlər. Lakin əşyaların zədələnmədən daşınması və sonradan gözlənilməz əlavə xərclərin çıxmaması üçün aşağıdakı məqamları nəzərə almaq vacibdir:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
+                <Truck className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Uyğun Maşın Seçimi</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Yükün həcminə uyğun olmayan çox kiçik maşın seçildikdə əlavə reyslər tələb oluna və ümumi xərc arta bilər. Düzgün ölçü optimal xərci təmin edir.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Yükün Təhlükəsizliyi</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Keyfiyyətsiz daşıma zamanı mebellərin cızılması və ya elektronikanın zədələnməsi daha böyük ziyan vura bilər. Təmiz furqon və etibarlı bərkitmə əsas şərtdir.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+                <BadgePercent className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Əvvəlcədən Düzgün Məlumat</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Əşyaların sayı, liftin olub-olmaması və mərtəbə vəziyyəti əvvəlcədən dəqiq bildirildikdə sifariş zamanı təyin olunmuş qiymət sabit qalır.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold">
+                <Calculator className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Əlavə Xərclərin Aydın Olması</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Bəzi fərdi sürücülər telefonda çox aşağı qiymət deyib sonradan əlavə məbləğ tələb edə bilərlər. Platformamızda bütün şərtlər öncədən aydın razılaşdırılır.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-violet-100 text-violet-700 flex items-center justify-center font-bold">
+                <Navigation className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Düzgün Marşrut Planlaması</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Optimal marşrut və tıxacların nəzərə alınması vaxta qənaət edir və daşınmanın vaxtında tamamlanmasını təmin edir.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center font-bold">
+                <Users className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Peşəkar İşçi Heyəti</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                Təlim keçmiş fəhlə və mebel ustaları işi daha tez və səliqəli tamamlayaraq həm vaxtınızı, həm də əsəblərinizi qoruyur.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 9: H2 - Niyə yukdasima.ai? */}
         <section className="bg-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl space-y-8" aria-label="Üstünlüklərimiz">
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-400 uppercase tracking-wider">
               <Sparkles className="w-4 h-4" />
-              <span>Texnoloji Üstünlük</span>
+              <span>Etibarlı Xidmət Standartları</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
               Niyə yukdasima.ai?
             </h2>
             <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Müasir texnologiyaları peşəkar logistika təcrübəsi ilə birləşdirərək <strong>Bakı yükdaşıma</strong> sahəsində ən yüksək xidmət səviyyəsini təqdim edirik:
+              Müasir texnoloji imkanları peşəkar daşıma təcrübəsi ilə birləşdirərək aşağıdakı real üstünlükləri təqdim edirik:
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
-                <Sparkles className="w-5 h-5" />
+                <Calculator className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Süni İntellektlə Həcm Təyini</h3>
+              <h3 className="font-bold text-white text-base sm:text-lg">Onlayn İlkin Hesablamalar</h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Mənzildəki əşyaların şəklini yükləyərək AI vasitəsilə ən optimal maşın növünü və lazımi fəhlə sayını heç bir təxmin olmadan dərhal müəyyən edin.
+                Ünvanları daxil edərək və ya əşyaların şəkillərini yükləyərək AI analizi ilə qiyməti və lazımi avtomobili dərhal onlayn öyrənin.
               </p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
-                <BadgePercent className="w-5 h-5" />
+                <Truck className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Şəffaf və Rəsmi Tariflər</h3>
+              <h3 className="font-bold text-white text-base sm:text-lg">Müxtəlif Ölçülü Yük Avtomobilləri</h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Sifarişdən əvvəl hesablanan qiymət son qiymətdir. Daşınma zamanı heç bir gözlənilməz əlavə ödəniş və ya gizli xərc tələb olunmur.
+                2 metrlik Ford Transit-dən 7 metrlik böyük furqonlaradək təmiz və baxımlı nəqliyyat vasitələri.
               </p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
-                <Clock className="w-5 h-5" />
+                <Navigation className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">20 Dəqiqə Ərzində Ünvanda</h3>
+              <h3 className="font-bold text-white text-base sm:text-lg">Bakı və Region Marşrutları</h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Bakının hər nöqtəsində fəaliyyət göstərən geniş avtoparkımız sayəsində təcili sifarişlərdə avtomobillər ən qısa müddətdə ünvana çatır.
+                Bakı və Abşeronun bütün əraziləri, eləcə də respublikanın 80-dən çox şəhər və rayonuna fasiləsiz daşıma.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+                <CheckCircle2 className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-white text-base sm:text-lg">Məlumat Əsasında Uyğun Seçim</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                Yükün növü və həcmi nəzərə alınaraq ən uyğun avtomobil ölçüsü və lazımi fəhlə sayı təyin olunur.
+              </p>
+            </div>
+
+            <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+                <Phone className="w-5 h-5" />
+              </div>
+              <h3 className="font-bold text-white text-base sm:text-lg">Sürətli Sifariş Kanalları</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                878 Qaynar Xətt, WhatsApp və saytdan bir kliklə geri zəng sifarişi ilə operativ dispetçer dəstəyi.
               </p>
             </div>
 
@@ -529,35 +811,15 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Əşyalara 100% Zəmanət</h3>
+              <h3 className="font-bold text-white text-base sm:text-lg">Təhlükəsiz Daşıma Zəmanəti</h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Hər bir əşyanız peşəkar qablaşdırma ilə qorunur və yük bölməsində xüsusi kəmərlərlə möhkəm bərkidilərək təhlükəsiz çatdırılır.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
-                <Users className="w-5 h-5" />
-              </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Məsuliyyətli Heyət</h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Təcrübəli mebel ustaları və daimi təlim keçmiş, fiziki cəhətdən hazırlıqlı fəhlə briqadalarımızla yüksək keyfiyyətli xidmət göstəririk.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
-                <PhoneCall className="w-5 h-5" />
-              </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">878 Qaynar Xətt və Dəstək</h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Günün istənilən saatında suallarınızı cavablandırmağa və operativ sifarişlərinizi qəbul etməyə hazır 24/7 çağrı mərkəzimiz mövcuddur.
+                Əşyaların qoruyucu plyonkalarla qablaşdırılması və qapalı yük bölməsində xüsusi kəmərlərlə möhkəm bərkidilməsi.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Section 7: H2 - Tez-tez verilən suallar (FAQ) */}
+        {/* Section 10: H2 - Tez-tez verilən suallar (Visible FAQ Accordion) */}
         <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Tez-tez verilən suallar">
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
@@ -584,7 +846,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
                     type="button"
                     onClick={() => toggleFaq(index)}
                     aria-expanded={isOpen}
-                    className="w-full flex items-center justify-between p-5 text-left bg-slate-50 hover:bg-slate-100 transition-colors gap-4"
+                    className="w-full flex items-center justify-between p-5 text-left bg-slate-50 hover:bg-slate-100 transition-colors gap-4 cursor-pointer"
                   >
                     <span className="font-bold text-slate-900 text-sm sm:text-base">
                       {faq.question}
@@ -607,57 +869,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
           </div>
         </section>
 
-        {/* Section 8: Regional Intercity Cargo Routes */}
-        <section className="space-y-6" aria-label="Bakıdan Rayonlara Populyar Yükdaşıma Marşrutları">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-            <div>
-              <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
-                <MapPin className="w-4 h-4" />
-                <span>Rayonlararası Xətlər</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
-                Bakıdan Rayonlara Yükdaşıma Marşrutları
-              </h2>
-              <p className="text-slate-600 text-xs sm:text-sm mt-1">
-                Azərbaycanın bütün bölgələrinə rəsmi sabit tariflərlə yükdaşıma xidməti:
-              </p>
-            </div>
-            <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl">
-              {regionalRoutes.length} Təsdiqlənmiş Marşrut
-            </span>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {regionalRoutes.slice(0, 16).map((r) => {
-              const rValidPrices = Object.values(r.prices).filter((p): p is number => typeof p === 'number' && p > 0);
-              const rMinPrice = rValidPrices.length > 0 ? Math.min(...rValidPrices) : null;
-
-              return (
-                <Link
-                  key={r.slug}
-                  href={r.routePath}
-                  className="p-4 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group block space-y-1.5"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-blue-600">Bakı → {r.destination}</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
-                  </div>
-                  <h3 className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
-                    Bakı–{r.destination} Yükdaşıma
-                  </h3>
-                  <div className="flex items-center justify-between text-xs pt-1 border-t border-slate-100">
-                    <span className="text-slate-500">{r.distanceKm ? `${r.distanceKm} km` : 'Rayon'}</span>
-                    <span className="font-extrabold text-blue-600 group-hover:text-blue-700">
-                      Qiyməti öyrən
-                    </span>
-                  </div>
-                </Link>
-              );
-            })}
-          </div>
-        </section>
-
-        {/* Section 9: Complete Regional Directory by Economic Regions */}
+        {/* Section 11: Complete Regional Directory by Economic Regions */}
         <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Bölgələr üzrə yükdaşıma marşrutları">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
             <div className="space-y-1">
@@ -730,7 +942,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
           </div>
         </section>
 
-        {/* Section 10: Related Internal Links Navigation */}
+        {/* Section 12: Related Internal Links Navigation */}
         <section className="space-y-6" aria-label="Əlaqəli Xidmətlər və Keçidlər">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
@@ -837,7 +1049,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
           </div>
         </section>
 
-        {/* Section 9: Bottom Call to Action Banner */}
+        {/* Section 13: Bottom Call to Action Banner */}
         <section className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 sm:p-10 text-white shadow-md text-center space-y-6" aria-label="Sürətli Sifariş Çağırışı">
           <div className="max-w-2xl mx-auto space-y-2">
             <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
@@ -860,7 +1072,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
             <button
               type="button"
               onClick={() => onOpenCallback()}
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-800 hover:bg-blue-900 text-white font-bold text-sm border border-blue-400/30 shadow-sm transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-800 hover:bg-blue-900 text-white font-bold text-sm border border-blue-400/30 shadow-sm transition-all cursor-pointer"
             >
               <span>Operator Sizi Yığsın</span>
             </button>
