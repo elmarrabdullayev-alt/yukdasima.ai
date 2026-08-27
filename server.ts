@@ -220,12 +220,68 @@ async function startServer() {
     next();
   });
 
-  // API Route: Gemini Cargo Multimodal Analysis
-  app.post("/api/analyze-cargo", async (req, res) => {
-    try {
-      const { images, details } = req.body;
+  // Helper: Execute promise with timeout
+  function promiseWithTimeout<T>(promise: Promise<T>, timeoutMs: number, timeoutMsg: string): Promise<T> {
+    return Promise.race([
+      promise,
+      new Promise<T>((_, reject) => {
+        const timer = setTimeout(() => {
+          reject(new Error(timeoutMsg));
+        }, timeoutMs);
+        if (typeof timer.unref === "function") {
+          timer.unref();
+        }
+      }),
+    ]);
+  }
 
+  // Helper: Clean and safely parse JSON from Gemini multimodal response
+  function extractAndParseCargoJson(rawText: string): any {
+    if (!rawText || typeof rawText !== "string") {
+      throw new Error("Boş AI cavabı.");
+    }
+
+    let cleaned = rawText.trim();
+    if (cleaned.startsWith("```json")) {
+      cleaned = cleaned.replace(/^```json\s*/, "").replace(/\s*```$/, "");
+    } else if (cleaned.startsWith("```")) {
+      cleaned = cleaned.replace(/^```\s*/, "").replace(/\s*```$/, "");
+    }
+    cleaned = cleaned.trim();
+
+    try {
+      return JSON.parse(cleaned);
+    } catch (_firstParseErr) {
+      // Attempt to locate outermost JSON object if model included commentary
+      const firstBrace = cleaned.indexOf("{");
+      const lastBrace = cleaned.lastIndexOf("}");
+      if (firstBrace !== -1 && lastBrace !== -1 && lastBrace > firstBrace) {
+        const substringJson = cleaned.substring(firstBrace, lastBrace + 1);
+        try {
+          return JSON.parse(substringJson);
+        } catch (_subParseErr) {
+          // Continue to fallback
+        }
+      }
+      throw new Error("AI cavabının JSON strukturu oxunmadı.");
+    }
+  }
+
+  // API Route: Gemini Cargo Multimodal Analysis with Resilience, Validation & Diagnostic Logging
+  app.post("/api/analyze-cargo", async (req, res) => {
+    const startTime = Date.now();
+    const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    const { images, details } = req.body || {};
+
+    let detectedMimeList: string[] = [];
+    let isTimeoutOccurred = false;
+    let isRateLimitOccurred = false;
+    let failureReason: string | null = null;
+    let parsingErrorDetail: string | null = null;
+
+    try {
       if (!images || !Array.isArray(images) || images.length === 0) {
+        failureReason = "No images provided";
         return res.status(400).json({
           error: "Zəhmət olmasa ən azı bir şəkil təqdim edin.",
         });
@@ -233,52 +289,79 @@ async function startServer() {
 
       const apiKey = process.env.GEMINI_API_KEY;
       if (!apiKey) {
-        console.error("[Gemini API] GEMINI_API_KEY environment variable is not configured.");
+        failureReason = "Missing GEMINI_API_KEY";
+        console.error(`[Gemini API] [${requestId}] GEMINI_API_KEY environment variable is not configured.`);
         return res.status(500).json({
-          error: "GEMINI_API_KEY konfiqurasiya edilməyib. Zəhmət olmasa Settings > Secrets panelindən API açarınızı daxil edin.",
+          error: "Sistem konfiqurasiya xətası. Zəhmət olmasa bir az sonra yenidən cəhd edin və ya 878 ilə əlaqə saxlayın.",
           developerDetails: "Missing GEMINI_API_KEY in environment variables",
+        });
+      }
+
+      // Filter and validate images (strip broken/empty items, normalize MIME types)
+      const validInlineParts: Array<{ inlineData: { mimeType: string; data: string } }> = [];
+
+      for (const img of images) {
+        let rawData = typeof img?.base64 === "string" ? img.base64 : typeof img?.url === "string" ? img.url : "";
+        let detectedMime = typeof img?.mimeType === "string" ? img.mimeType.toLowerCase().trim() : "image/jpeg";
+
+        if (!rawData || rawData.length < 50) {
+          continue;
+        }
+
+        if (rawData.includes(";base64,")) {
+          const parts = rawData.split(";base64,");
+          rawData = parts[1] || "";
+          const match = parts[0].match(/:(.*?);/);
+          if (match && match[1]) {
+            detectedMime = match[1].toLowerCase().trim();
+          }
+        }
+
+        // Clean any whitespace from base64 string
+        rawData = rawData.replace(/\s+/g, "");
+        if (rawData.length < 50) {
+          continue;
+        }
+
+        // Normalize supported MIME types for multimodal vision
+        let finalMime = "image/jpeg";
+        if (detectedMime === "image/png") {
+          finalMime = "image/png";
+        } else if (detectedMime === "image/webp") {
+          finalMime = "image/webp";
+        } else if (detectedMime === "image/heic" || detectedMime === "image/heif") {
+          // Standardize HEIC/HEIF payload MIME to jpeg for maximum multimodal model compatibility
+          finalMime = "image/jpeg";
+        } else {
+          finalMime = "image/jpeg";
+        }
+
+        detectedMimeList.push(finalMime);
+        validInlineParts.push({
+          inlineData: {
+            mimeType: finalMime,
+            data: rawData,
+          },
+        });
+      }
+
+      if (validInlineParts.length === 0) {
+        failureReason = "No valid image data after decompression and sanitization";
+        return res.status(400).json({
+          error: "Təqdim edilən şəkillər oxunmadı. Zəhmət olmasa JPG, PNG və ya WEBP formatlı aydın şəkillər seçin.",
         });
       }
 
       const ai = getGeminiAI();
 
-      // Format images into inlineData parts for multimodal input
-      const inlineParts = images.map((img: { base64: string; mimeType?: string; url?: string }, index: number) => {
-        let rawData = img.base64 || img.url || "";
-        let detectedMime = img.mimeType || "image/jpeg";
-
-        if (rawData.includes(";base64,")) {
-          const parts = rawData.split(";base64,");
-          rawData = parts[1];
-          const match = parts[0].match(/:(.*?);/);
-          if (match && match[1]) {
-            detectedMime = match[1];
-          }
-        }
-
-        // Normalize common MIME types
-        let finalMime = detectedMime.toLowerCase().trim();
-        if (finalMime === "image/jpg") finalMime = "image/jpeg";
-        if (!["image/jpeg", "image/png", "image/webp", "image/heic", "image/heif"].includes(finalMime)) {
-          finalMime = "image/jpeg";
-        }
-
-        return {
-          inlineData: {
-            mimeType: finalMime,
-            data: rawData.trim(),
-          },
-        };
-      });
-
-      const userPrompt = `Aşağıdakı ${images.length} ədəd fotoşəkili analiz et. Müştərinin köçürülməsi/yükdaşınması üçün daşınacaq bütün əşyaları siyahıya al və onların təxmini həcmini hesabla.${
+      const userPrompt = `Aşağıdakı ${validInlineParts.length} ədəd fotoşəkili analiz et. Müştərinin köçürülməsi/yükdaşınması üçün daşınacaq bütün əşyaları siyahıya al və onların təxmini həcmini hesabla.${
         details && typeof details === "string" && details.trim().length > 0
           ? `\nMüştərinin əlavə qeydləri: "${details.trim()}"`
           : ""
       }`;
 
       const systemInstruction = `Sən Azərbaycan üzrə peşəkar yükdaşıma, logistika və köçürülmə ekspert süni intellektsən (yukdasima.ai).
-Sənə müştərinin yükdaşıma sifarişi üçün yüklədiyi ${images.length} ədəd fotoşəkil verilir.
+Sənə müştərinin yükdaşıma sifarişi üçün yüklədiyi ${validInlineParts.length} ədəd fotoşəkil verilir.
 
 ƏSAS VƏZİFƏ:
 Müştərinin otaq və ya ofis şəkillərində görünən və daşınması lazım olan mebelləri, məişət avadanlıqlarını, qutuları və digər daşınan əşyaları müəyyən et və onların təxmini həcmini (m³) hesabla.
@@ -294,18 +377,26 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
 7. ETİBARLILIQ (CONFIDENCE): Əgər şəkillər aydındırsa 'high' və ya 'medium', şəkillər qaranlıqdırsa və ya əşyalar kəsilmiş/qeyri-müəyyəndirsə 'low' qoy və 'notes' massivində Azərbaycan dilində aydın qeyd yaz.
 8. Bütün əşya adları və qeydlər yalnız Azərbaycan dilində olmalıdır.`;
 
-      // Candidate multimodal models in order of priority
-      const candidateModels = ["gemini-3.6-flash", "gemini-3.7-flash", "gemini-2.5-flash-lite"];
+      // Approved multimodal model hierarchy from gemini-api SKILL
+      const candidateModels = ["gemini-3.7-flash", "gemini-2.5-flash", "gemini-3.1-flash-lite"];
       let response: any = null;
       let lastError: any = null;
 
+      // Iterate through models with 35s per-model timeout and total 45s hard budget
       for (const modelName of candidateModels) {
+        const elapsedSoFar = Date.now() - startTime;
+        const remainingBudgetMs = Math.max(10000, 42000 - elapsedSoFar);
+        if (remainingBudgetMs < 5000) {
+          isTimeoutOccurred = true;
+          throw new Error("Ümumi analiz vaxtı (45 saniyə) bitdi.");
+        }
+
         try {
-          console.log(`[Gemini API] Sending multimodal request (${images.length} images) with model: ${modelName}`);
-          response = await ai.models.generateContent({
+          const perModelTimeoutMs = Math.min(30000, remainingBudgetMs);
+          const modelCallPromise = ai.models.generateContent({
             model: modelName,
             contents: [
-              ...inlineParts,
+              ...validInlineParts,
               {
                 text: userPrompt,
               },
@@ -373,38 +464,103 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
             },
           });
 
+          response = await promiseWithTimeout(
+            modelCallPromise,
+            perModelTimeoutMs,
+            `Model ${modelName} timeout (${perModelTimeoutMs}ms)`
+          );
+
           if (response && response.text) {
-            console.log(`[Gemini API] Successfully analyzed with ${modelName}`);
             break;
           }
         } catch (err: any) {
           lastError = err;
-          console.warn(`[Gemini API] Model ${modelName} failed:`, err?.message || err);
+          const errMsg = String(err?.message || err);
+          if (errMsg.includes("429") || errMsg.toLowerCase().includes("quota") || errMsg.toLowerCase().includes("rate limit")) {
+            isRateLimitOccurred = true;
+          }
+          if (errMsg.toLowerCase().includes("timeout")) {
+            isTimeoutOccurred = true;
+          }
         }
       }
 
       if (!response || !response.text) {
-        throw lastError || new Error("Gemini modeli cavab qaytarmadı.");
+        throw lastError || new Error("Gemini modelləri cavab qaytarmadı.");
       }
 
-      let responseText = response.text.trim();
-      if (responseText.startsWith("```json")) {
-        responseText = responseText.replace(/^```json\s*/, "").replace(/\s*```$/, "");
-      } else if (responseText.startsWith("```")) {
-        responseText = responseText.replace(/^```\s*/, "").replace(/\s*```$/, "");
+      let parsedData: any = null;
+      try {
+        parsedData = extractAndParseCargoJson(response.text);
+      } catch (jsonErr: any) {
+        parsingErrorDetail = jsonErr?.message || String(jsonErr);
+        throw jsonErr;
       }
 
-      const parsedData = JSON.parse(responseText);
+      // Validate parsed shape structure
+      if (!parsedData || !Array.isArray(parsedData.items)) {
+        parsedData = {
+          items: parsedData?.items || [],
+          estimatedTotalVolumeMinM3: Number(parsedData?.estimatedTotalVolumeMinM3) || 3,
+          estimatedTotalVolumeMaxM3: Number(parsedData?.estimatedTotalVolumeMaxM3) || 6,
+          analysisConfidence: parsedData?.analysisConfidence || "medium",
+          notes: Array.isArray(parsedData?.notes) ? parsedData.notes : [],
+        };
+      }
+
+      const totalDuration = Date.now() - startTime;
+      console.log(
+        JSON.stringify({
+          level: "info",
+          tag: "CARGO_ANALYSIS_SUCCESS",
+          requestId,
+          timestamp: new Date().toISOString(),
+          imageCount: validInlineParts.length,
+          imageMimeTypes: detectedMimeList,
+          aiResponseStatus: "ok",
+          timeout: false,
+          rateLimit: false,
+          processingDurationMs: totalDuration,
+        })
+      );
+
       return res.json(parsedData);
     } catch (error: any) {
-      console.error("[Gemini API Error Detail]:", {
-        message: error?.message,
-        status: error?.status,
-        stack: error?.stack,
-      });
-      return res.status(500).json({
-        error: "Şəkilləri analiz etmək mümkün olmadı. Zəhmət olmasa yenidən cəhd edin.",
-        developerDetails: error?.message || String(error),
+      const totalDuration = Date.now() - startTime;
+      const errorMessageStr = String(error?.message || error);
+      if (errorMessageStr.toLowerCase().includes("timeout") || totalDuration >= 44000) {
+        isTimeoutOccurred = true;
+      }
+      if (errorMessageStr.includes("429") || errorMessageStr.toLowerCase().includes("rate") || errorMessageStr.toLowerCase().includes("quota")) {
+        isRateLimitOccurred = true;
+      }
+
+      failureReason = errorMessageStr;
+
+      // Requirement 7: Structured Server Diagnostic Logging for all failed analyses
+      console.error(
+        JSON.stringify({
+          level: "error",
+          tag: "CARGO_ANALYSIS_FAILURE",
+          timestamp: new Date().toISOString(),
+          requestId,
+          imageCount: detectedMimeList.length || (Array.isArray(images) ? images.length : 0),
+          imageMimeTypes: detectedMimeList,
+          aiResponseStatus: isTimeoutOccurred ? "timeout" : isRateLimitOccurred ? "rate_limit" : parsingErrorDetail ? "parsing_error" : "api_error",
+          timeout: isTimeoutOccurred,
+          rateLimit: isRateLimitOccurred,
+          apiError: failureReason ? failureReason.substring(0, 300) : "Unknown API Error",
+          parsingError: parsingErrorDetail,
+          processingDurationMs: totalDuration,
+        })
+      );
+
+      const isClientFacingTimeout = isTimeoutOccurred || totalDuration >= 40000;
+      return res.status(isClientFacingTimeout ? 504 : isRateLimitOccurred ? 429 : 500).json({
+        success: false,
+        error: "Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.",
+        timeout: isClientFacingTimeout,
+        requestId,
       });
     }
   });

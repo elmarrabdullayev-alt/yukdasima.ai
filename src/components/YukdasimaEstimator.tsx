@@ -73,7 +73,7 @@ const SAMPLE_DEMO_IMAGES = [
 ];
 
 // Helper function to resize and compress uploaded images before sending to AI
-function compressImageFile(file: File, maxDim = 1600, quality = 0.85): Promise<{ base64: string; mimeType: string }> {
+function compressImageFile(file: File, maxDim = 1400, quality = 0.82): Promise<{ base64: string; mimeType: string }> {
   return new Promise((resolve) => {
     try {
       const reader = new FileReader();
@@ -100,8 +100,9 @@ function compressImageFile(file: File, maxDim = 1600, quality = 0.85): Promise<{
               canvas.height = Math.max(1, height);
               const ctx = canvas.getContext('2d');
               if (!ctx) {
+                const fallbackResult = (readerEvent.target?.result as string) || '';
                 resolve({
-                  base64: (readerEvent.target?.result as string) || '',
+                  base64: fallbackResult.length > 50 ? fallbackResult : '',
                   mimeType: file.type || 'image/jpeg',
                 });
                 return;
@@ -111,28 +112,31 @@ function compressImageFile(file: File, maxDim = 1600, quality = 0.85): Promise<{
               const mimeType = file.type === 'image/png' ? 'image/png' : 'image/jpeg';
               const compressedBase64 = canvas.toDataURL(mimeType, quality);
               resolve({
-                base64: compressedBase64,
+                base64: compressedBase64.length > 50 ? compressedBase64 : '',
                 mimeType,
               });
             } catch (canvasErr) {
               console.warn('[compressImageFile] Canvas processing fallback:', canvasErr);
+              const fallbackResult = (readerEvent.target?.result as string) || '';
               resolve({
-                base64: (readerEvent.target?.result as string) || '',
+                base64: fallbackResult.length > 50 ? fallbackResult : '',
                 mimeType: file.type || 'image/jpeg',
               });
             }
           };
           img.onerror = () => {
+            const fallbackResult = (readerEvent.target?.result as string) || '';
             resolve({
-              base64: (readerEvent.target?.result as string) || '',
+              base64: fallbackResult.length > 50 ? fallbackResult : '',
               mimeType: file.type || 'image/jpeg',
             });
           };
           img.src = (readerEvent.target?.result as string) || '';
         } catch (imgErr) {
           console.warn('[compressImageFile] Image instantiation fallback:', imgErr);
+          const fallbackResult = (readerEvent.target?.result as string) || '';
           resolve({
-            base64: (readerEvent.target?.result as string) || '',
+            base64: fallbackResult.length > 50 ? fallbackResult : '',
             mimeType: file.type || 'image/jpeg',
           });
         }
@@ -438,68 +442,118 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
     setShowAddForm(false);
   };
 
-  // Submit to Gemini Multimodal Analysis API
-  const handleStartAnalysis = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErrorMessage(null);
-    setUploadError(null);
+  const isAnalyzingRef = useRef(false);
 
-    if (formData.images.length === 0) {
-      setUploadError('Zəhmət olmasa analiz üçün ən azı bir şəkil əlavə edin.');
+  // Submit to Gemini Multimodal Analysis API with 45s hard timeout, 1x auto-retry & race safety
+  const handleStartAnalysis = async (e?: React.FormEvent) => {
+    if (e && typeof e.preventDefault === 'function') {
+      e.preventDefault();
+    }
+
+    // Prevent concurrent executions
+    if (isAnalyzingRef.current || isAnalyzing) {
       return;
     }
 
+    setErrorMessage(null);
+    setUploadError(null);
+
+    // Validate images existence and filter out blank/corrupted items
+    const validImages = formData.images.filter(
+      (img) => (img.base64 && img.base64.length > 50) || (img.url && img.url.length > 10)
+    );
+
+    if (validImages.length === 0) {
+      setUploadError('Zəhmət olmasa analiz üçün ən azı bir aydın şəkil əlavə edin.');
+      return;
+    }
+
+    isAnalyzingRef.current = true;
     setIsAnalyzing(true);
     setAnalysisResult(null);
 
-    try {
-      const payload = {
-        images: formData.images.map((img) => ({
-          base64: img.base64 || img.url,
-          mimeType: img.mimeType || 'image/jpeg',
-        })),
-        details: formData.details,
-      };
+    const payload = {
+      images: validImages.map((img) => ({
+        base64: img.base64 || img.url,
+        mimeType: img.mimeType || 'image/jpeg',
+      })),
+      details: formData.details,
+    };
 
-      const response = await fetch('/api/analyze-cargo', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-      });
+    // Inner fetch routine with 45s hard timeout
+    const executeFetchAttempt = async (attemptNumber: number): Promise<any> => {
+      const abortController = new AbortController();
+      const timeoutId = setTimeout(() => {
+        try {
+          abortController.abort();
+        } catch (_abortErr) {
+          // Ignore
+        }
+      }, 45000); // 45s hard frontend timeout
 
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        console.error('[Gemini Cargo Analysis Failed Response]:', {
-          status: response.status,
-          statusText: response.statusText,
-          error: data?.error,
+      try {
+        const response = await fetch('/api/analyze-cargo', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+          signal: abortController.signal,
         });
-        throw new Error(data?.error || `Server status: ${response.status}`);
+
+        clearTimeout(timeoutId);
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          const status = response.status;
+          const isTransient = status >= 500 || status === 429 || status === 504;
+          if (isTransient && attemptNumber < 1) {
+            console.warn(`[Gemini Cargo Analysis] Transient status ${status}, retrying attempt 2...`);
+            // Brief 1s delay before retry
+            await new Promise((resolve) => setTimeout(resolve, 1000));
+            return await executeFetchAttempt(attemptNumber + 1);
+          }
+          throw new Error(data?.error || `Server xətası: ${status}`);
+        }
+
+        return data;
+      } catch (err: any) {
+        clearTimeout(timeoutId);
+        const isAbort = err?.name === 'AbortError' || String(err).includes('aborted');
+        if (isAbort && attemptNumber < 1) {
+          console.warn('[Gemini Cargo Analysis] Request timed out (45s), attempting 1 automatic retry...');
+          await new Promise((resolve) => setTimeout(resolve, 800));
+          return await executeFetchAttempt(attemptNumber + 1);
+        }
+        throw err;
       }
+    };
+
+    try {
+      const data = await executeFetchAttempt(0);
 
       // Ensure valid structure with item IDs
-      const formattedItems: CargoItem[] = (data.items || []).map((item: any) => ({
+      const rawItems = Array.isArray(data?.items) ? data.items : [];
+      const formattedItems: CargoItem[] = rawItems.map((item: any) => ({
         id: Math.random().toString(36).substring(2, 9),
         name: item.name || 'Əşya',
         quantity: Math.max(1, parseInt(item.quantity, 10) || 1),
         estimatedVolumeM3: parseFloat(item.estimatedVolumeM3) || 0.5,
         confidence: item.confidence === 'low' ? 'low' : item.confidence === 'high' ? 'high' : 'medium',
-        isSpecialOrHeavy: !!item.isSpecialOrHeavy,
+        isSpecialOrHeavy: Boolean(item.isSpecialOrHeavy),
       }));
 
       const finalResult: CargoAnalysisData = {
         items: formattedItems,
-        estimatedTotalVolumeMinM3: Math.max(1, Math.round(data.estimatedTotalVolumeMinM3 || 3)),
+        estimatedTotalVolumeMinM3: Math.max(1, Math.round(data?.estimatedTotalVolumeMinM3 || 3)),
         estimatedTotalVolumeMaxM3: Math.max(
-          Math.max(1, Math.round(data.estimatedTotalVolumeMinM3 || 3)) + 1,
-          Math.round(data.estimatedTotalVolumeMaxM3 || 5)
+          Math.max(1, Math.round(data?.estimatedTotalVolumeMinM3 || 3)) + 1,
+          Math.round(data?.estimatedTotalVolumeMaxM3 || 5)
         ),
         analysisConfidence:
-          data.analysisConfidence === 'low' ? 'low' : data.analysisConfidence === 'high' ? 'high' : 'medium',
-        notes: data.notes || [],
+          data?.analysisConfidence === 'low' ? 'low' : data?.analysisConfidence === 'high' ? 'high' : 'medium',
+        notes: Array.isArray(data?.notes) ? data.notes : [],
       };
 
       setAnalysisResult(finalResult);
@@ -513,8 +567,10 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
       }, 150);
     } catch (err: any) {
       console.error('[Gemini Cargo Analysis Failed]:', err);
-      setErrorMessage('Əməliyyatı tamamlamaq mümkün olmadı. Zəhmət olmasa yenidən cəhd edin.');
+      // Requirement 6: Exact user-friendly Azerbaijani error message
+      setErrorMessage('Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.');
     } finally {
+      isAnalyzingRef.current = false;
       setIsAnalyzing(false);
     }
   };
@@ -1075,20 +1131,18 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
             <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 mt-0.5">
               <AlertCircle className="w-5 h-5" />
             </div>
-            <div className="space-y-2 flex-1">
+            <div className="space-y-3 flex-1">
               <h4 className="font-bold text-rose-900 text-base">
-                Şəkilləri analiz etmək mümkün olmadı.
+                Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.
               </h4>
-              <p className="text-sm text-rose-700">
-                Zəhmət olmasa yenidən cəhd edin və ya internet bağlantınızı yoxlayın.
-              </p>
               <button
                 type="button"
-                onClick={handleStartAnalysis}
-                className="mt-2 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm cursor-pointer transition-colors"
+                id="btn-retry-analysis"
+                onClick={() => handleStartAnalysis()}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm cursor-pointer transition-colors shadow-sm"
               >
-                <RefreshCw className="w-3.5 h-3.5" />
-                <span>Yenidən analiz et</span>
+                <RefreshCw className="w-4 h-4" />
+                <span>Yenidən cəhd et</span>
               </button>
             </div>
           </div>
