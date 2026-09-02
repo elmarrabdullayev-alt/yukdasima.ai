@@ -147,7 +147,7 @@ export const REGIONAL_DESTINATIONS: Record<string, RegionalDestination> = {
     mainCorridor: 'M4 (Bakı–Şamaxı–İsmayıllı–Qəbələ) magistralı',
     terrainType: 'dağətəyi',
     approximateDistanceKm: 216,
-    neighborSlugs: ['baki-oguz', 'baki-ismayilli', 'baki-seki', 'baki-agdas'],
+    neighborSlugs: ['baki-oguz', 'baki-ismayilli', 'baki-seki', 'baki-agdas', 'baki-goycay'],
   },
   'baki-oguz': {
     slug: 'baki-oguz',
@@ -165,7 +165,7 @@ export const REGIONAL_DESTINATIONS: Record<string, RegionalDestination> = {
     mainCorridor: 'M4 (Bakı–İsmayıllı–Qəbələ–Şəki) və ya M2/Yevlax yolu',
     terrainType: 'dağətəyi',
     approximateDistanceKm: 298,
-    neighborSlugs: ['baki-oguz', 'baki-qax', 'baki-yevlax', 'baki-mingecevir', 'baki-qebele'],
+    neighborSlugs: ['baki-oguz', 'baki-qax', 'baki-yevlax', 'baki-mingecevir', 'baki-qebele', 'baki-zaqatala'],
   },
   'baki-qax': {
     slug: 'baki-qax',
@@ -286,7 +286,7 @@ export const REGIONAL_DESTINATIONS: Record<string, RegionalDestination> = {
     mainCorridor: 'M2 (Bakı–Gəncə–Qazax) magistralı',
     terrainType: 'düzənlik',
     approximateDistanceKm: 362,
-    neighborSlugs: ['baki-samux', 'baki-goranboy', 'baki-semkir', 'baki-daskesen', 'baki-naftalan'],
+    neighborSlugs: ['baki-samux', 'baki-goranboy', 'baki-semkir', 'baki-goygol', 'baki-mingecevir', 'baki-daskesen', 'baki-naftalan', 'baki-tovuz'],
   },
   'baki-samux': {
     slug: 'baki-samux',
@@ -580,7 +580,7 @@ export const REGIONAL_DESTINATIONS: Record<string, RegionalDestination> = {
     mainCorridor: 'M3 (Bakı–Ələt–Astara) magistralı',
     terrainType: 'sahilyanı',
     approximateDistanceKm: 268,
-    neighborSlugs: ['baki-astara', 'baki-masalli', 'baki-lerik'],
+    neighborSlugs: ['baki-astara', 'baki-masalli', 'baki-lerik', 'baki-celilabad', 'baki-yardimli'],
   },
   'baki-lerik': {
     slug: 'baki-lerik',

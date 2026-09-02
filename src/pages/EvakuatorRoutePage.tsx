@@ -218,6 +218,80 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           </div>
         </header>
 
+        {/* GEO / AI Search Direct Answer Block */}
+        {routeProfile?.directAnswerEvakuator && (
+          <section
+            aria-label="Birbaşa Cavab və Xülasə"
+            className="bg-white rounded-3xl p-6 sm:p-8 border border-blue-200/80 shadow-xs space-y-3 bg-linear-to-br from-blue-50/50 via-white to-indigo-50/30"
+          >
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Birbaşa Cavab / Xülasə</span>
+              </span>
+              <span className="text-xs font-semibold text-slate-500">
+                Bakı–{routeConfig.destination} Evakuasiya Bələdçisi
+              </span>
+            </div>
+            <p className="text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
+              {routeProfile.directAnswerEvakuator}
+            </p>
+          </section>
+        )}
+
+        {/* Section: Target Audience & Vehicle Types */}
+        {routeProfile && (routeProfile.targetAudienceEvakuator || routeProfile.vehicleTypesEvakuator) && (
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-6" aria-label="Xidmət İntenti və Daşınan Nəqliyyat Kateqoriyaları">
+            {routeProfile.targetAudienceEvakuator && routeProfile.targetAudienceEvakuator.length > 0 && (
+              <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-2xs space-y-4">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm uppercase tracking-wider">
+                  <Car className="w-4 h-4" />
+                  <span>Bu Xidmət Kimlər Üçündür?</span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Bakı–{routeConfig.destination} evakuasiyasından kimlər faydalana bilər?
+                </h3>
+                <ul className="space-y-3">
+                  {routeProfile.targetAudienceEvakuator.map((item, idx) => (
+                    <li key={idx} className="space-y-0.5">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>{item.title}</span>
+                      </div>
+                      <p className="text-xs text-slate-600 pl-6 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {routeProfile.vehicleTypesEvakuator && routeProfile.vehicleTypesEvakuator.length > 0 && (
+              <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-2xs space-y-4">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm uppercase tracking-wider">
+                  <Wrench className="w-4 h-4" />
+                  <span>Evakuator Texnikası və Platformalar</span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Daşınan texnika və platforma növləri
+                </h3>
+                <ul className="space-y-3">
+                  {routeProfile.vehicleTypesEvakuator.map((v, idx) => (
+                    <li key={idx} className="p-3 bg-slate-50 rounded-xl border border-slate-200/80 space-y-1">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-900 text-xs sm:text-sm">{v.name}</span>
+                        <span className="text-[11px] font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">{v.specs}</span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed">{v.bestFor}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+        )}
+
         {/* Section 1: Route Metrics & Key Parameters Bar */}
         <section aria-labelledby="route-metrics-heading" className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-8 shadow-xs">
           <h2 id="route-metrics-heading" className="sr-only">
@@ -450,10 +524,9 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
 
         {/* Section 5: Route Logistics & Transportation Process */}
         <section aria-labelledby="logistics-heading" className="space-y-6">
-
           <div className="text-center max-w-2xl mx-auto">
             <h2 id="logistics-heading" className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-              {routeConfig.origin}dan {routeConfig.destinationDative} Avtomobil Necə Daşınır?
+              {routeConfig.origin}dan {routeConfig.destinationDative} Evakuator Necə Sifariş Edilir?
             </h2>
             <p className="text-slate-600 text-sm sm:text-base mt-2">
               4 sadə mərhələdə rahat və tam təhlükəsiz evakuasiya xidməti
@@ -461,54 +534,63 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs relative space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-base">
-                1
+            {(routeProfile?.orderStepsEvakuator || [
+              {
+                step: 1,
+                title: 'Sifariş və Ünvan Təyini',
+                desc: `${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng edərək və ya WhatsApp ilə avtomobilin markasını və lokasiyasını göndərin.`,
+              },
+              {
+                step: 2,
+                title: 'Operativ Çıxış (15–30 dəq)',
+                desc: 'Növbətçi evakuator dərhal ünvanınıza yönləndirilir və ən qısa vaxtda çatır.',
+              },
+              {
+                step: 3,
+                title: 'Təhlükəsiz Yükləmə',
+                desc: 'Avtomobil hidravlik platformaya ehtiyatla qaldırılır və 4 nöqtədən xüsusi qayışlarla bərkidilir.',
+              },
+              {
+                step: 4,
+                title: `${routeConfig.destinationDative} Çatdırılma`,
+                desc: `${routeConfig.primaryHighway} vasitəsilə maşınınız təxminən ${routeConfig.estimatedTravelTime} ərzində ünvana çatdırılır.`,
+              },
+            ]).map((s) => (
+              <div key={s.step} className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs relative space-y-3">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-base">
+                  {s.step}
+                </div>
+                <h3 className="text-base font-bold text-slate-900">
+                  {s.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {s.desc}
+                </p>
               </div>
-              <h3 className="text-base font-bold text-slate-900">
-                Sifariş və Ünvan Təyini
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng edirsiniz və ya WhatsApp vasitəsilə avtomobilin dəqiq yerləşdiyi ünvanı (lokasiyanı) və maşının modelini göndərirsiniz.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs relative space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-base">
-                2
-              </div>
-              <h3 className="text-base font-bold text-slate-900">
-                Operativ Çıxış (15–30 dəq)
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Növbətçi evakuatorumuz dərhal ünvanınıza göndərilir və 15–30 dəqiqə ərzində olduğunuz yerə çatır.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs relative space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-base">
-                3
-              </div>
-              <h3 className="text-base font-bold text-slate-900">
-                Təhlükəsiz Yükləmə
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                Avtomobil hidravlik sürüşən platformaya ehtiyatla qaldırılır və 4 nöqtədən xüsusi möhkəm təkər bağlayıcıları ilə bərkidilir.
-              </p>
-            </div>
-
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs relative space-y-3">
-              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 font-extrabold flex items-center justify-center text-base">
-                4
-              </div>
-              <h3 className="text-base font-bold text-slate-900">
-                {routeConfig.destinationDative} Çatdırılma
-              </h3>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {routeConfig.primaryHighway} vasitəsilə maşınınız təxminən {routeConfig.estimatedTravelTime} ərzində {routeConfig.destinationLocative} istənilən ünvana və ya servisə təhvil verilir.
-              </p>
-            </div>
+            ))}
           </div>
+
+          {/* Regional Specific Pricing Factors if available */}
+          {routeProfile?.pricingFactorsEvakuator && routeProfile.pricingFactorsEvakuator.length > 0 && (
+            <div className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-3 mt-6">
+              <h3 className="font-bold text-slate-900 text-base">
+                Bakı–{routeConfig.destination} evakuasiya qiymətinə nə təsir edir?
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {routeProfile.pricingFactorsEvakuator.map((item, idx) => (
+                  <div key={idx} className="flex flex-col gap-1 text-xs sm:text-sm text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200/70">
+                    <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                      <span>{item.factor}</span>
+                    </div>
+                    <p className="text-xs text-slate-600 pl-5.5 leading-relaxed">
+                      {item.detail}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Section 5: Why choose yukdasima.ai for this route */}

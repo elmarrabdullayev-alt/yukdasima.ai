@@ -243,6 +243,77 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
           </div>
         </header>
 
+        {/* GEO / AI Search Direct Answer Block */}
+        {routeProfile?.directAnswerYukdasima && (
+          <section
+            aria-label="Birbaşa Cavab və Xülasə"
+            className="bg-white rounded-3xl p-6 sm:p-8 border border-blue-200/80 shadow-xs space-y-3 bg-linear-to-br from-blue-50/50 via-white to-indigo-50/30"
+          >
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600 text-white text-xs font-bold uppercase tracking-wider shadow-2xs">
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Birbaşa Cavab / Xülasə</span>
+              </span>
+              <span className="text-xs font-semibold text-slate-500">
+                Bakı–{routeConfig.destination} Marşrut Bələdçisi
+              </span>
+            </div>
+            <p className="text-slate-800 text-sm sm:text-base leading-relaxed font-medium">
+              {routeProfile.directAnswerYukdasima}
+            </p>
+          </section>
+        )}
+
+        {/* Section: Target Audience & Cargo Types */}
+        {routeProfile && (routeProfile.targetAudienceYukdasima || routeProfile.cargoTypesYukdasima) && (
+          <section className="grid grid-cols-1 md:grid-cols-2 gap-6" aria-label="Xidmət İntenti və Yük Kateqoriyaları">
+            {routeProfile.targetAudienceYukdasima && routeProfile.targetAudienceYukdasima.length > 0 && (
+              <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-2xs space-y-4">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm uppercase tracking-wider">
+                  <Users className="w-4 h-4" />
+                  <span>Bu Xidmət Kimlər Üçündür?</span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Bakı–{routeConfig.destination} daşınmasından kimlər faydalana bilər?
+                </h3>
+                <ul className="space-y-3">
+                  {routeProfile.targetAudienceYukdasima.map((item, idx) => (
+                    <li key={idx} className="space-y-0.5">
+                      <div className="flex items-center gap-2 text-xs sm:text-sm font-bold text-slate-800">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>{item.title}</span>
+                      </div>
+                      <p className="text-xs text-slate-600 pl-6 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {routeProfile.cargoTypesYukdasima && routeProfile.cargoTypesYukdasima.length > 0 && (
+              <div className="p-6 rounded-3xl bg-white border border-slate-200 shadow-2xs space-y-4">
+                <div className="flex items-center gap-2 text-blue-700 font-bold text-sm uppercase tracking-wider">
+                  <Boxes className="w-4 h-4" />
+                  <span>Hansı Növ Yüklər Daşınır?</span>
+                </div>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Daşınan əşya və yük kateqoriyaları
+                </h3>
+                <ul className="space-y-2.5">
+                  {routeProfile.cargoTypesYukdasima.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700">
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </section>
+        )}
+
         {/* Section 1: H2 - Official Vehicle Tariffs Matrix */}
         <section className="space-y-6" aria-label="Yükdaşıma Qiymət Cədvəli">
           <div className="max-w-3xl">
@@ -454,7 +525,6 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
         )}
 
         {/* Section 5: H2 - How Pricing is Calculated */}
-
         <section className="space-y-6" aria-label="Qiymətin Hesablanma Qaydası">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
@@ -462,10 +532,10 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
               <span>Şəffaflıq</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
-              Yükdaşıma Qiyməti Necə Hesablanır?
+              Bakı–{routeConfig.destination} Yükdaşıma Qiymətinə Nə Təsir Edir?
             </h2>
             <p className="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
-              Bizim sistemdə heç bir gizli xərc və ya sonradan artırılan ödəniş yoxdur. Qiymət 4 aydın meyar əsasında formalaşır:
+              Bizim sistemdə heç bir gizli xərc və ya sonradan artırılan ödəniş yoxdur. Qiymət şəffaf meyarlar əsasında formalaşır:
             </p>
           </div>
 
@@ -501,6 +571,65 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
                 Böyük qarderob, dəhliz mebeli, yataq dəstləri, həmçinin pianino və ya ağır seyflər üçün xüsusi peşəkar xidmət təşkil edilir.
               </p>
             </div>
+          </div>
+
+          {/* Regional Specific Pricing Factors if available */}
+          {routeProfile?.pricingFactorsYukdasima && routeProfile.pricingFactorsYukdasima.length > 0 && (
+            <div className="p-5 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-3">
+              <h3 className="font-bold text-slate-900 text-sm sm:text-base">
+                {routeConfig.destination} marşrutu üzrə qiymət amilləri:
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                {routeProfile.pricingFactorsYukdasima.map((item, idx) => (
+                  <div key={idx} className="flex flex-col gap-1 text-xs sm:text-sm text-slate-700 bg-slate-50 p-3 rounded-xl border border-slate-200/70">
+                    <div className="flex items-center gap-1.5 font-bold text-slate-900">
+                      <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+                      <span>{item.factor}</span>
+                    </div>
+                    <p className="text-xs text-slate-600 pl-5.5 leading-relaxed">
+                      {item.detail}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* Section: Step-by-Step Order Process */}
+        <section className="space-y-6" aria-label="Addım-addım Sifariş Prosesi">
+          <div className="max-w-3xl">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <Clock className="w-4 h-4" />
+              <span>Sadə və Rahat</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight mt-1">
+              Bakı–{routeConfig.destination} Yükdaşıma Necə Sifariş Edilir?
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base mt-2 leading-relaxed">
+              4 aydın mərhələdə rahat, sığortalı və operativ daşınma prosesi:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {(routeProfile?.orderStepsYukdasima || [
+              { step: 1, title: 'Əlaqə & Qiymətləndirmə', desc: 'Telefon və ya WhatsApp ilə yükün növünü və ünvanları bildirin.' },
+              { step: 2, title: 'Nəqliyyatın Təyini', desc: 'Yük həcminə tam uyğun ölçüdə (2m-7m) avtomobil və briqada seçilir.' },
+              { step: 3, title: 'Yükləmə & Bərkitmə', desc: 'Əşyalar peşəkar fəhlələr tərəfindən kəmərlərlə möhkəm bərkidilir.' },
+              { step: 4, title: 'Təhlükəsiz Çatdırılma', desc: 'Yük təyin olunmuş vaxtda ünvana çatdırılaraq təhvil verilir.' },
+            ]).map((s) => (
+              <div key={s.step} className="p-6 rounded-2xl bg-white border border-slate-200 shadow-2xs space-y-3 relative">
+                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white font-extrabold flex items-center justify-center text-sm shadow-xs">
+                  {s.step}
+                </div>
+                <h3 className="font-bold text-slate-900 text-base">
+                  {s.title}
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  {s.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

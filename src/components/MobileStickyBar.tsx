@@ -9,12 +9,18 @@ import { ServiceType } from '../types';
 interface MobileStickyBarProps {
   activeService?: ServiceType;
   onSelectService?: (service: ServiceType) => void;
+  isMobileMenuOpen?: boolean;
 }
 
-export const MobileStickyBar: React.FC<MobileStickyBarProps> = () => {
+export const MobileStickyBar: React.FC<MobileStickyBarProps> = ({ isMobileMenuOpen }) => {
   const { pathname } = useRouter();
   const whatsappUrl = getContextualWhatsAppUrl(pathname);
   const { service, route } = getServiceAndRouteFromPath(pathname);
+
+  // When mobile menu is open, hide sticky bar to prevent screen overlap
+  if (isMobileMenuOpen) {
+    return null;
+  }
 
   const handleCallClick = () => {
     trackConversionEvent('mobile_call_click', {

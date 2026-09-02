@@ -9,15 +9,28 @@ interface NavbarProps {
   activeService: ServiceType;
   onSelectService: (service: ServiceType) => void;
   onOpenCallback: () => void;
+  isMobileMenuOpen?: boolean;
+  onMobileMenuChange?: (isOpen: boolean) => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
   activeService,
   onSelectService,
   onOpenCallback,
+  isMobileMenuOpen,
+  onMobileMenuChange,
 }) => {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [internalMenuOpen, setInternalMenuOpen] = useState(false);
   const { pathname, navigate } = useRouter();
+
+  const mobileMenuOpen = isMobileMenuOpen !== undefined ? isMobileMenuOpen : internalMenuOpen;
+
+  const setMobileMenuOpen = (isOpen: boolean) => {
+    if (onMobileMenuChange) {
+      onMobileMenuChange(isOpen);
+    }
+    setInternalMenuOpen(isOpen);
+  };
 
   const handleNavClick = (targetPath: string, sectionId?: string) => {
     setMobileMenuOpen(false);
@@ -180,7 +193,7 @@ export const Navbar: React.FC<NavbarProps> = ({
 
       {/* Mobile menu dropdown */}
       {mobileMenuOpen && (
-        <div className="sm:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2">
+        <div className="sm:hidden border-b border-slate-200 bg-white px-4 pt-2 pb-6 space-y-2 shadow-xl animate-in slide-in-from-top-2 max-h-[calc(100vh-4.5rem)] overflow-y-auto">
           <div className="grid grid-cols-2 gap-2 pt-2 pb-2">
             <Link
               href="/yukdasima"
@@ -262,19 +275,19 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           <div className="pt-2 space-y-2">
             <a
-              id="mobile-drawer-hotline"
-              href={CONTACT_INFO.HOTLINE_TEL}
+              id="mobile-drawer-call-btn"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
               onClick={() => {
                 trackConversionEvent('mobile_call_click', {
                   page_path: pathname,
                   cta_location: 'navbar_mobile_drawer',
                 });
               }}
-              aria-label="878 qaynar xəttinə zəng et"
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
               className="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-sm shadow-xs text-center flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
             >
               <Phone className="w-4 h-4 text-blue-400" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             <button

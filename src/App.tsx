@@ -31,6 +31,12 @@ function AppContent() {
   const [activeService, setActiveService] = useState<ServiceType>('yukdasima');
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
   const [callbackData, setCallbackData] = useState<CallbackInitialData | undefined>(undefined);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Close mobile menu automatically on route change
+  React.useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
 
   // Dynamically update document head (meta tags, title, canonical link, JSON-LD)
   useSeo(pathname);
