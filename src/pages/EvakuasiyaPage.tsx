@@ -29,6 +29,7 @@ import { getAllApprovedEvakuatorRoutes } from '../seo/routeRegistry';
 import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
 import { lookupEvacuatorTariff } from '../services/tariffService';
 import { CallbackInitialData } from '../types';
+import { BakuDistrictsGeoSection } from '../components/BakuDistrictsGeoSection';
 
 interface EvakuasiyaPageProps {
   onOpenCallback: (initialData?: string | CallbackInitialData) => void;
@@ -638,7 +639,13 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
           </div>
         </section>
 
-        {/* Section 10: Complete Regional Directory by Economic Regions */}
+        {/* Section 10: Baku Districts GEO / AI Search Optimization (Batch 2) */}
+        <BakuDistrictsGeoSection
+          defaultMode="evakuator"
+          onOpenCallback={onOpenCallback}
+        />
+
+        {/* Section 11: Complete Regional Directory by Economic Regions */}
         <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Bölgələr üzrə evakuator kataloqu">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
             <div className="space-y-1">

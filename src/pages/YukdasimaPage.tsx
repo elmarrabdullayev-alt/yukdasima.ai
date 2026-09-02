@@ -34,6 +34,7 @@ import { getAllApprovedYukdasimaRoutes } from '../seo/routeRegistry';
 import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
 import { DEFAULT_VEHICLE_CONFIG } from '../config/vehicles';
 import { CallbackInitialData } from '../types';
+import { BakuDistrictsGeoSection } from '../components/BakuDistrictsGeoSection';
 
 interface YukdasimaPageProps {
   onOpenCallback: (initialData?: string | CallbackInitialData) => void;
@@ -885,6 +886,12 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
             })}
           </div>
         </section>
+
+        {/* Section 10: Baku Districts GEO / AI Search Optimization (Batch 2) */}
+        <BakuDistrictsGeoSection
+          defaultMode="yukdasima"
+          onOpenCallback={onOpenCallback}
+        />
 
         {/* Section 11: Complete Regional Directory by Economic Regions */}
         <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Bölgələr üzrə yükdaşıma marşrutları">

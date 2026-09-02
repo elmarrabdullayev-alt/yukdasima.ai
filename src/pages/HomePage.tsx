@@ -7,6 +7,7 @@ import { AiQuestionBox } from '../components/AiQuestionBox';
 import { ServicesSection } from '../components/ServicesSection';
 import { TrustSection } from '../components/TrustSection';
 import { FaqSection } from '../components/FaqSection';
+import { BakuDistrictsGeoSection } from '../components/BakuDistrictsGeoSection';
 import { Link } from '../router/RouterContext';
 import { ArrowRight, ShieldCheck, Truck, Car, Home, Layers, Briefcase, Users, DollarSign } from 'lucide-react';
 
@@ -228,6 +229,14 @@ export const HomePage: React.FC<HomePageProps> = ({
 
       {/* Services Section */}
       <ServicesSection onSelectService={onSelectService} />
+
+      {/* Baku Districts GEO / AI Search Optimization (Batch 2) */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <BakuDistrictsGeoSection
+          defaultMode={activeService === 'evakuator' ? 'evakuator' : 'yukdasima'}
+          onOpenCallback={onOpenCallback}
+        />
+      </div>
 
       {/* Trust Section */}
       <TrustSection />
