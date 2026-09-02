@@ -109,6 +109,8 @@ function AppContent() {
         activeService={activeService}
         onSelectService={setActiveService}
         onOpenCallback={() => handleOpenCallback()}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onMobileMenuChange={setIsMobileMenuOpen}
       />
 
       {/* 2. Main Page Content View */}
@@ -126,6 +128,7 @@ function AppContent() {
       <MobileStickyBar
         activeService={activeService}
         onSelectService={setActiveService}
+        isMobileMenuOpen={isMobileMenuOpen}
       />
 
       {/* 5. Quick Contact Callback Modal */}
