@@ -3,6 +3,8 @@ import { YukdasimaEstimator } from '../components/YukdasimaEstimator';
 import { Link } from '../router/RouterContext';
 import { Layers, Wrench, ShieldCheck, CheckCircle2, ArrowRight, Package, Truck, Sparkles, Phone, MessageSquare } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { CallbackInitialData } from '../types';
 
 interface MebelDasinmasiPageProps {
@@ -10,6 +12,24 @@ interface MebelDasinmasiPageProps {
 }
 
 export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCallback }) => {
+  const whatsappUrl = getContextualWhatsAppUrl('/mebel-dasinmasi');
+
+  const handleCallClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: '/mebel-dasinmasi',
+      service_type: 'mebel-dasinmasi',
+      cta_location: 'hero',
+    });
+  };
+
+  const handleWhatsAppClick = () => {
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: '/mebel-dasinmasi',
+      service_type: 'mebel-dasinmasi',
+      cta_location: 'hero',
+    });
+  };
+
   return (
     <article className="py-8 sm:py-12 bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -29,19 +49,21 @@ export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCa
           {/* Quick Contact Badges */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
-              aria-label="878 qaynar xəttinə zəng et"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleCallClick}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
             <a
-              href={CONTACT_INFO.WHATSAPP_URL_BASE}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleWhatsAppClick}
               aria-label="WhatsApp vasitəsilə yaz"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp ilə Sifariş</span>
@@ -65,9 +87,9 @@ export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCa
             <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
               <Package className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-slate-900 text-lg">Xüsusi Qablaşdırma Materialları</h3>
+            <h3 className="font-bold text-slate-900 text-lg">Xüsusi Qoruyucu Qablaşdırma</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Cızılma və sürtünmənin qarşısını almaq üçün mebel fasadları, şüşə hissələr və künclər qabarcıqlı klyonka və kardonla qorunur.
+              Mebellərin hər bir hissəsi qalın qabarcıqlı klyonka və streç filmlərlə sarınır, künclər zədələrdən müdafiə olunur.
             </p>
           </div>
 
@@ -75,9 +97,9 @@ export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCa
             <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
               <Sparkles className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-slate-900 text-lg">Xüsusi Əşyalar: Piano və Seyf</h3>
+            <h3 className="font-bold text-slate-900 text-lg">Xırda Təmir və Düzəliş</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Pianino, royal və ağır seyflər xüsusi qaldırıcı kəmərlər və təcrübəli mütəxəssislər tərəfindən həssaslıqla daşınır.
+              Montaj zamanı petlələrin nizamlanması, qulpların bərkidilməsi və səliqəli yerləşdirilməsi təmin edilir.
             </p>
           </div>
         </section>
@@ -85,48 +107,37 @@ export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCa
         {/* Embedded Interactive Estimator */}
         <section id="mebel-calculator-section" aria-label="Mebel Daşınması Kalkulyatoru">
           <div className="mb-4">
-            <h2 className="text-2xl font-bold text-slate-900">Mebellərin Daşınması Üçün Qiymət Hesabla</h2>
-            <p className="text-sm text-slate-600 mt-1">Mebel şəkillərini yükləyərək tələb olunan maşın və işçi sayını dərhal öyrənin</p>
+            <h2 className="text-2xl font-bold text-slate-900">Mebel Daşınması Qiymətini Hesabla</h2>
+            <p className="text-sm text-slate-600 mt-1">Mebel şəkillərini yükləyərək tələb olunan maşın və işçi sayını öyrənin</p>
           </div>
           <YukdasimaEstimator onOpenCallback={onOpenCallback} />
         </section>
 
-        {/* Internal Linking */}
-        <section className="space-y-6" aria-label="Əlaqəli Xidmətlər">
-          <h2 className="text-2xl font-bold text-slate-900">Əlaqəli Daşıma Xidmətləri</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Link
-              href="/evden-eve-yukdasima"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Evdən Evə Yükdaşıma</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Mənzil və evlərin bütöv köçürülməsi.</p>
-            </Link>
+        {/* Detailed Moving Guide */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-6" aria-label="Mebel Daşınması Haqqında Məlumat">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Niyə Mebel Daşınmasını Peşəkar Ustaya Həvalə Etməlisiniz?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>MDF və Laminatların Qorunması</span>
+              </div>
+              <p>
+                Qeyri-peşəkar sökülmə zamanı şrupların yeri genişlənir və təkrar yığılanda mebel boşalır. Ustalarımız xüsusi alətlərlə hər bir detala zərər yetirmədən işləyir.
+              </p>
+            </div>
 
-            <Link
-              href="/fehle-xidmeti"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Fəhlə Xidməti</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Ağır əşyaların qaldırılması və fəhlələr.</p>
-            </Link>
-
-            <Link
-              href="/yuk-masini"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Yük Maşını Sifarişi</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Geniş həcmli və örtülü yük avtomobilləri.</p>
-            </Link>
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>Vaxt və Əmək Qənaəti</span>
+              </div>
+              <p>
+                Böyük qarderob və ya mətbəx mebelinin sökülüb-yığılması günlərlə vaxt apara bilər. Təcrübəli briqadamız bütün prosesi bir neçə saat ərzində tamamlayır.
+              </p>
+            </div>
           </div>
         </section>
       </div>

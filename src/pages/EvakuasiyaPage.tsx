@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { EVAKUATOR_FAQS } from '../seo/metadata';
 import { getAllApprovedEvakuatorRoutes } from '../seo/routeRegistry';
 import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
@@ -48,7 +50,20 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
   };
 
   const handleWhatsApp = () => {
-    window.open(generateWhatsAppLink('Salam, təcili evakuator xidmətinə ehtiyacım var.'), '_blank');
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: '/evakuator',
+      service_type: 'evakuator',
+      cta_location: 'hero',
+    });
+    window.open(getContextualWhatsAppUrl('/evakuator'), '_blank');
+  };
+
+  const handleHotlineClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: '/evakuator',
+      service_type: 'evakuator',
+      cta_location: 'hero',
+    });
   };
 
   return (
@@ -87,12 +102,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
           {/* Quick Hotline and WhatsApp Action Buttons */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleHotlineClick}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
-              title="Qaynar xəttə zəng et"
+              title={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             <button
@@ -177,7 +194,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               </div>
               <h3 className="font-bold text-slate-900 text-lg">Məlumatın Qəbulu</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Kalkulyatorda marşrutu seçin və ya 878 qaynar xəttimizə zəng edərək avtomobilin markasını, yerləşdiyi ünvanı və nasazlıq detallarını bildirin.
+                Kalkulyatorda marşrutu seçin və ya {CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəmizə zəng edərək avtomobilin markasını, yerləşdiyi ünvanı və nasazlıq detallarını bildirin.
               </p>
             </div>
 
@@ -441,15 +458,16 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
                 <Phone className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">878 Qaynar Xətt</h3>
+              <h3 className="font-bold text-slate-900 text-lg">Telefonla Sifariş</h3>
               <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
                 Günün 24 saatı zəng edərək operatorumuza ünvanı və nasazlığı bildirin. Növbətçi maşın dərhal yola düşsün.
               </p>
               <a
-                href={CONTACT_INFO.HOTLINE_TEL}
+                href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+                aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900"
               >
-                <span>Zəng et: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+                <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -844,7 +862,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <span>Əlaqə & Zəng Sifarişi</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">878 Qaynar xətt, WhatsApp və operativ geri zəng mərkəzi.</p>
+              <p className="text-xs text-slate-600 mt-2">{CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsi, WhatsApp və operativ geri zəng mərkəzi.</p>
             </Link>
           </div>
         </section>
@@ -862,11 +880,12 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-extrabold text-sm shadow-sm transition-all"
             >
               <Phone className="w-4 h-4 text-blue-600" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             <button

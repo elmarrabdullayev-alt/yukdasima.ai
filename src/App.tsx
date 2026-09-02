@@ -106,7 +106,7 @@ function AppContent() {
       />
 
       {/* 2. Main Page Content View */}
-      <main className="grow">
+      <main className="grow pb-20 lg:pb-0">
         {renderCurrentPage()}
       </main>
 

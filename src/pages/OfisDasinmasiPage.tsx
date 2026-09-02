@@ -3,6 +3,8 @@ import { YukdasimaEstimator } from '../components/YukdasimaEstimator';
 import { Link } from '../router/RouterContext';
 import { Briefcase, ShieldCheck, CheckCircle2, ArrowRight, Server, FileText, Clock, Users, Phone, MessageSquare } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { CallbackInitialData } from '../types';
 
 interface OfisDasinmasiPageProps {
@@ -10,6 +12,24 @@ interface OfisDasinmasiPageProps {
 }
 
 export const OfisDasinmasiPage: React.FC<OfisDasinmasiPageProps> = ({ onOpenCallback }) => {
+  const whatsappUrl = getContextualWhatsAppUrl('/ofis-dasinmasi');
+
+  const handleCallClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: '/ofis-dasinmasi',
+      service_type: 'ofis-dasinmasi',
+      cta_location: 'hero',
+    });
+  };
+
+  const handleWhatsAppClick = () => {
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: '/ofis-dasinmasi',
+      service_type: 'ofis-dasinmasi',
+      cta_location: 'hero',
+    });
+  };
+
   return (
     <article className="py-8 sm:py-12 bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -29,19 +49,21 @@ export const OfisDasinmasiPage: React.FC<OfisDasinmasiPageProps> = ({ onOpenCall
           {/* Quick Contact Badges */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
-              aria-label="878 qaynar xəttinə zəng et"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleCallClick}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
             <a
-              href={CONTACT_INFO.WHATSAPP_URL_BASE}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleWhatsAppClick}
               aria-label="WhatsApp vasitəsilə yaz"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp ilə Sifariş</span>
@@ -65,9 +87,9 @@ export const OfisDasinmasiPage: React.FC<OfisDasinmasiPageProps> = ({ onOpenCall
             <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
               <Server className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-slate-900 text-lg">Server və IT Avadanlıqları</h3>
+            <h3 className="font-bold text-slate-900 text-lg">Texnika və Serverlərin Qorunması</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Server rəfləri, monitorlar və həssas texnika antistatik və zərbəyədavamlı materiallarla bükülərək daşınır.
+              Monitorlar, prosessorlar və server avadanlıqları antistatik və zərbəyədavamlı xüsusi materiallarla qablaşdırılır.
             </p>
           </div>
 
@@ -75,58 +97,47 @@ export const OfisDasinmasiPage: React.FC<OfisDasinmasiPageProps> = ({ onOpenCall
             <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
               <FileText className="w-5 h-5" />
             </div>
-            <h3 className="font-bold text-slate-900 text-lg">Arxiv və Sənəd Qutuları</h3>
+            <h3 className="font-bold text-slate-900 text-lg">Sənəd və Arxivlərin Nizamlanması</h3>
             <p className="text-slate-600 text-sm leading-relaxed">
-              Sənədlər və qovluqlar şöbələr üzrə nömrələnmiş qutulara yığılır və yeni ünvanda yerbəyer təhvil verilir.
+              Qovluqlar və hüquqi sənədlər nömrələnmiş qutulara yığılır və yeni ofisdə dəqiq şöbələr üzrə təhvil verilir.
             </p>
           </div>
         </section>
 
         {/* Embedded Interactive Estimator */}
-        <section id="ofis-calculator-section" aria-label="Ofis Daşıma Qiymətləndirilməsi">
+        <section id="ofis-calculator-section" aria-label="Ofis Daşınması Kalkulyatoru">
           <div className="mb-4">
-            <h2 className="text-2xl font-bold text-slate-900">Ofis Köçürülməsi Üçün İlkin Qiymət Hesabla</h2>
-            <p className="text-sm text-slate-600 mt-1">Avadanlıq və otaq şəkillərini yükləyərək tələb olunan nəqliyyat həcmini dərhal öyrənin</p>
+            <h2 className="text-2xl font-bold text-slate-900">Ofis Köçürülməsi Üçün Qiymət Hesabla</h2>
+            <p className="text-sm text-slate-600 mt-1">İşçi sayı və ya otaq şəkillərini yükləyərək ilkin büdcəni müəyyən edin</p>
           </div>
           <YukdasimaEstimator onOpenCallback={onOpenCallback} />
         </section>
 
-        {/* Internal Linking */}
-        <section className="space-y-6" aria-label="Əlaqəli Keçidlər">
-          <h2 className="text-2xl font-bold text-slate-900">Əlaqəli Xidmətlər</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Link
-              href="/mebel-dasinmasi"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Mebel Daşınması & Usta</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Ofis masaları və dolabların sökülməsi.</p>
-            </Link>
+        {/* Detailed Office Moving FAQ */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-6" aria-label="Ofis Daşınması Qaydaları">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Ofis Daşınması Prosesi Necə Təşkil Olunur?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>İlkin Baxış və Planlaşdırma</span>
+              </div>
+              <p>
+                Menecerimiz ofisinizə baxış keçirərək və ya video-zənglə inventarlaşdırma apararaq optimal maşın və işçi sayını müəyyən edir, dəqiq smeta tərtib olunur.
+              </p>
+            </div>
 
-            <Link
-              href="/yuk-masini"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Böyük Tutumlu Yük Maşınları</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">4m, 5m və 7m yük avtomobilləri.</p>
-            </Link>
-
-            <Link
-              href="/fehle-xidmeti"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Fəhlə Briqadası</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Geniş tərkibli peşəkar işçi qüvvəsi.</p>
-            </Link>
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>Müqavilə və Rəsmi Zəmanət</span>
+              </div>
+              <p>
+                Hüquqi şəxslərlə rəsmi müqavilə bağlanır, köçürmə zamanı bütün əmlaka görə maddi məsuliyyət daşıyırıq və köçürmə sonrası rəsmi elektron qaimə-faktura təqdim edilir.
+              </p>
+            </div>
           </div>
         </section>
       </div>

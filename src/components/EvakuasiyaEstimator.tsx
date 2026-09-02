@@ -790,15 +790,15 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               </button>
             )}
 
-            {/* Quick Hotline Dial Button */}
+            {/* Quick Dial Button */}
             <a
-              id="evak-btn-hotline"
-              href={CONTACT_INFO.HOTLINE_TEL}
-              aria-label="878 qaynar xəttinə zəng et"
+              id="evak-btn-call"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
               className="py-3.5 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
             >
               <Phone className="w-4 h-4 text-emerald-400" />
-              <span>878-ə zəng et</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             {/* WhatsApp Button */}

@@ -3,6 +3,7 @@ import { Phone, ArrowRight, Menu, X, Truck, Car, Shield } from 'lucide-react';
 import { ServiceType } from '../types';
 import { CONTACT_INFO } from '../constants/contact';
 import { Link, useRouter } from '../router/RouterContext';
+import { trackConversionEvent } from '../utils/analytics';
 
 interface NavbarProps {
   activeService: ServiceType;
@@ -124,6 +125,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <a
               id="header-phone-hotline"
               href={CONTACT_INFO.HOTLINE_TEL}
+              onClick={() => {
+                trackConversionEvent('mobile_call_click', {
+                  page_path: pathname,
+                  cta_location: 'navbar_header',
+                });
+              }}
               className="flex items-center gap-2.5 px-3 py-1.5 rounded-xl hover:bg-slate-100 transition-colors group"
               title={CONTACT_INFO.HOTLINE_DISPLAY}
               aria-label="878 qaynar xəttinə zəng et"
@@ -257,6 +264,12 @@ export const Navbar: React.FC<NavbarProps> = ({
             <a
               id="mobile-drawer-hotline"
               href={CONTACT_INFO.HOTLINE_TEL}
+              onClick={() => {
+                trackConversionEvent('mobile_call_click', {
+                  page_path: pathname,
+                  cta_location: 'navbar_mobile_drawer',
+                });
+              }}
               aria-label="878 qaynar xəttinə zəng et"
               className="w-full py-3 rounded-xl bg-slate-900 text-white font-bold text-sm shadow-xs text-center flex items-center justify-center gap-2 hover:bg-slate-800 transition-colors"
             >

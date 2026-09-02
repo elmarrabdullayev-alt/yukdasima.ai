@@ -4,6 +4,8 @@ import { DirectYukdasimaOrder } from '../components/DirectYukdasimaOrder';
 import { Link } from '../router/RouterContext';
 import { Truck, ShieldCheck, CheckCircle2, ArrowRight, Gauge, Box, Maximize2, Phone, MessageSquare } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { CallbackInitialData } from '../types';
 
 interface YukMasiniPageProps {
@@ -12,6 +14,23 @@ interface YukMasiniPageProps {
 
 export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) => {
   const [selectedVehicle, setSelectedVehicle] = useState<VehicleSpec>(DEFAULT_VEHICLE_CONFIG.vehicles[0]);
+  const whatsappUrl = getContextualWhatsAppUrl('/yuk-masini');
+
+  const handleCallClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: '/yuk-masini',
+      service_type: 'yuk-masini',
+      cta_location: 'hero',
+    });
+  };
+
+  const handleWhatsAppClick = () => {
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: '/yuk-masini',
+      service_type: 'yuk-masini',
+      cta_location: 'hero',
+    });
+  };
 
   return (
     <article className="py-8 sm:py-12 bg-slate-50 min-h-screen">
@@ -32,19 +51,21 @@ export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) 
           {/* Quick Contact Badges */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
-              aria-label="878 qaynar xəttinə zəng et"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleCallClick}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
             <a
-              href={CONTACT_INFO.WHATSAPP_URL_BASE}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleWhatsAppClick}
               aria-label="WhatsApp vasitəsilə yaz"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp ilə Sifariş</span>
@@ -132,54 +153,43 @@ export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) 
           </div>
         </section>
 
-        {/* Embedded Direct Order Flow */}
-        <section id="direct-order-form" aria-label="Birbaşa Yük Maşını Sifarişi">
+        {/* Direct Order Form Embedded */}
+        <section id="direct-order-form" aria-label="Birbaşa Sifariş Formu">
           <div className="mb-4">
-            <h2 className="text-2xl font-bold text-slate-900">Birbaşa Yük Maşını Sifarişi</h2>
-            <p className="text-sm text-slate-600 mt-1">Ünvanları daxil edin və seçilmiş {selectedVehicle.name} üçün ilkin hesablamanı görün</p>
+            <h2 className="text-2xl font-bold text-slate-900">Seçilmiş Maşın Üçün Sifariş</h2>
+            <p className="text-sm text-slate-600 mt-1">Məlumatları daxil edin və ya {CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng edin</p>
           </div>
           <DirectYukdasimaOrder
-            defaultVehicle={selectedVehicle}
+            selectedVehicle={selectedVehicle}
             onOpenCallback={onOpenCallback}
           />
         </section>
 
-        {/* Internal Linking */}
-        <section className="space-y-6" aria-label="Əlaqəli Xidmətlər">
-          <h2 className="text-2xl font-bold text-slate-900">Əlaqəli Xidmətlər</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Link
-              href="/fehle-xidmeti"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Fəhlə Xidməti</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Maşınla bərabər işçi qüvvəsi sifarişi.</p>
-            </Link>
+        {/* Informational Section */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-6" aria-label="Yük Maşını Seçimi Haqqında">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Hansı Yük Maşınını Seçməlisiniz?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>2 və 3 Metrlik Furqonlar (Kiçik daşımalar)</span>
+              </div>
+              <p>
+                Tək-tək mebellər (divan, soyuducu, paltaryuyan), kiçik ofis əşyaları və ya 1 otaqlı az əşyalı mənzillər üçün ən operativ və qənaətcil seçimdir. Şəhərdaxili dar küçələrdə manevr qabiliyyəti yüksəkdir.
+              </p>
+            </div>
 
-            <Link
-              href="/qiymetler"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Tariflər Cədvəli</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Bütün avtomobil növləri üzrə qiymətlər.</p>
-            </Link>
-
-            <Link
-              href="/evden-eve-yukdasima"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Mənzil Köçürülməsi</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Kompleks evdən evə daşıma.</p>
-            </Link>
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>4 və 5 Metrlik Böyük Furqonlar (Standart ev köçürməsi)</span>
+              </div>
+              <p>
+                2–4 otaqlı tam mənzil əşyaları, çoxlu sayda qutu, qonaq və yataq otağı dəstləri üçün idealdır. Qapalı və təmiz ban əşyalarınızın tozdan və hava şəraitindən tam qorunmasını təmin edir.
+              </p>
+            </div>
           </div>
         </section>
       </div>

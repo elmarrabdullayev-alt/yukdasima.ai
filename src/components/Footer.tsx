@@ -36,13 +36,13 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
 
             <div className="flex items-center gap-4 pt-2">
               <a
-                id="footer-hotline-brand-btn"
-                href={CONTACT_INFO.HOTLINE_TEL}
-                aria-label="878 qaynar xəttinə zəng et"
+                id="footer-call-brand-btn"
+                href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+                aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200 transition-colors font-bold text-sm"
               >
                 <Phone className="w-4 h-4" />
-                <span>{CONTACT_INFO.HOTLINE_DISPLAY}</span>
+                <span>{CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
               </a>
 
               <button
@@ -184,12 +184,10 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
               <li className="flex items-start gap-2.5">
                 <Phone className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                 <div className="flex flex-col gap-0.5">
-                  <a href={CONTACT_INFO.HOTLINE_TEL} className="hover:text-blue-600 font-bold text-slate-900">
-                    {CONTACT_INFO.HOTLINE_DISPLAY}
+                  <a href={CONTACT_INFO.PRIMARY_PHONE_TEL} className="hover:text-blue-600 font-bold text-slate-900">
+                    {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}
                   </a>
-                  <a href={CONTACT_INFO.MOBILE_TEL} className="hover:text-blue-600 font-semibold text-slate-600 text-xs">
-                    {CONTACT_INFO.MOBILE_DISPLAY}
-                  </a>
+                  <span className="text-slate-500 text-xs">24/7 Zəng və WhatsApp</span>
                 </div>
               </li>
             </ul>

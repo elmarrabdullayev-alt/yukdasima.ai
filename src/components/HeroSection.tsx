@@ -1,7 +1,10 @@
 import React from 'react';
-import { ArrowRight, Sparkles, ShieldCheck, Clock, CheckCircle2, Phone } from 'lucide-react';
+import { ArrowRight, Phone, MessageSquare, ShieldCheck, Clock } from 'lucide-react';
 import { ServiceType } from '../types';
 import { CONTACT_INFO } from '../constants/contact';
+import { useRouter } from '../router/RouterContext';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 
 interface HeroSectionProps {
   activeService: ServiceType;
@@ -12,6 +15,9 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
   activeService,
   onSelectService,
 }) => {
+  const { pathname } = useRouter();
+  const whatsappUrl = getContextualWhatsAppUrl(pathname);
+
   const handleSelect = (service: ServiceType) => {
     onSelectService(service);
     const element = document.getElementById('estimator-section');
@@ -20,57 +26,93 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
     }
   };
 
+  const handleHeroCallClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: pathname,
+      service_type: activeService,
+      cta_location: 'hero',
+    });
+  };
+
+  const handleHeroWhatsAppClick = () => {
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: pathname,
+      service_type: activeService,
+      cta_location: 'hero',
+    });
+  };
+
   return (
-    <section className="relative overflow-hidden pt-10 pb-16 md:pt-16 md:pb-24 bg-slate-50">
+    <section className="relative overflow-hidden pt-8 pb-14 md:pt-16 md:pb-24 bg-slate-50">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Main Hero Header */}
-        <div className="max-w-3xl mx-auto text-center mb-10 space-y-4">
-          <h1 className="text-4xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
+        <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-10 space-y-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold">
+            <Clock className="w-3.5 h-3.5" />
+            <span>24/7 Operativ Xidmət və Dərhal Əlaqə</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
             Daşıma qiymətinizi <span className="text-blue-600">asanlıqla</span> öyrənin
           </h1>
 
-          <p className="text-base sm:text-lg text-slate-500 max-w-2xl mx-auto leading-relaxed">
-            Yükdaşıma və evakuasiya xidmətləri üçün məlumatları daxil edin, ilkin qiyməti öyrənin və sifarişinizi bizə göndərin.
+          <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+            Yükdaşıma və evakuasiya xidmətləri üçün məlumatları daxil edin, ilkin qiyməti öyrənin və sifarişinizi dərhal bizə göndərin.
           </p>
 
-          <div className="flex items-center justify-center gap-3 pt-2">
+          {/* Primary Quick Conversion CTAs for Mobile & Desktop */}
+          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 max-w-md sm:max-w-none mx-auto">
             <a
-              id="hero-quick-call-hotline"
-              href={CONTACT_INFO.HOTLINE_TEL}
-              aria-label="878 qaynar xəttinə zəng et"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-200 text-slate-800 hover:text-blue-600 text-xs sm:text-sm font-bold shadow-2xs transition-colors"
+              id="hero-call-cta-btn"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleHeroCallClick}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-sm font-extrabold shadow-sm transition-all active:scale-[0.98] cursor-pointer"
             >
-              <Phone className="w-3.5 h-3.5 text-blue-600" />
-              <span>Təcili sifariş üçün Qaynar xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <Phone className="w-4 h-4 fill-current" />
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+            </a>
+
+            <a
+              id="hero-whatsapp-cta-btn"
+              href={whatsappUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleHeroWhatsAppClick}
+              aria-label="WhatsApp vasitəsilə dərhal yaz"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-sm font-extrabold shadow-sm transition-all active:scale-[0.98] cursor-pointer"
+            >
+              <MessageSquare className="w-4 h-4 fill-current" />
+              <span>WhatsApp ilə Yaz</span>
             </a>
           </div>
         </div>
 
         {/* TWO EQUALLY PROMINENT SERVICE CARDS */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 max-w-4xl mx-auto mb-8 sm:mb-12">
           {/* CARD 1: YÜKDAŞIMA */}
           <div
             id="hero-card-yukdasima"
             onClick={() => handleSelect('yukdasima')}
-            className={`bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all group flex flex-col h-full cursor-pointer ${
+            className={`bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all group flex flex-col h-full cursor-pointer ${
               activeService === 'yukdasima' ? 'border-blue-600 ring-2 ring-blue-500/20' : ''
             }`}
           >
-            <div className="w-16 h-16 bg-blue-50 text-3xl flex items-center justify-center rounded-xl mb-6 group-hover:scale-110 transition-transform">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-50 text-3xl flex items-center justify-center rounded-2xl mb-5 group-hover:scale-110 transition-transform">
               🚚
             </div>
 
-            <h3 className="text-2xl font-bold text-slate-900 mb-3 text-left">
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 sm:mb-3 text-left">
               Yükdaşıma
             </h3>
-            <p className="text-slate-500 mb-8 flex-1 text-left">
+            <p className="text-slate-500 text-sm sm:text-base mb-6 flex-1 text-left">
               Əşyalarınızın şəkillərini göndərin. AI yükünüzü analiz etsin və ilkin qiyməti öyrənin.
             </p>
 
             <button
               type="button"
               id="hero-btn-yukdasima"
-              className={`w-full py-4 font-bold rounded-xl transition-colors cursor-pointer ${
+              className={`w-full py-3.5 sm:py-4 font-bold rounded-xl transition-colors cursor-pointer text-sm sm:text-base ${
                 activeService === 'yukdasima'
                   ? 'bg-blue-600 text-white'
                   : 'bg-slate-900 text-white group-hover:bg-blue-600'
@@ -84,25 +126,25 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           <div
             id="hero-card-evakuasiya"
             onClick={() => handleSelect('evakuasiya')}
-            className={`bg-white p-8 rounded-2xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all group flex flex-col h-full cursor-pointer ${
+            className={`bg-white p-6 sm:p-8 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm hover:border-blue-300 transition-all group flex flex-col h-full cursor-pointer ${
               activeService === 'evakuasiya' ? 'border-blue-600 ring-2 ring-blue-500/20' : ''
             }`}
           >
-            <div className="w-16 h-16 bg-blue-50 text-3xl flex items-center justify-center rounded-xl mb-6 group-hover:scale-110 transition-transform">
+            <div className="w-14 h-14 sm:w-16 sm:h-16 bg-blue-50 text-3xl flex items-center justify-center rounded-2xl mb-5 group-hover:scale-110 transition-transform">
               🚗
             </div>
 
-            <h3 className="text-2xl font-bold text-slate-900 mb-3 text-left">
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 sm:mb-3 text-left">
               Evakuasiya
             </h3>
-            <p className="text-slate-500 mb-8 flex-1 text-left">
+            <p className="text-slate-500 text-sm sm:text-base mb-6 flex-1 text-left">
               Avtomobilin götürüləcəyi və aparılacağı ünvanı qeyd edin, ilkin evakuasiya qiymətini öyrənin.
             </p>
 
             <button
               type="button"
               id="hero-btn-evakuasiya"
-              className={`w-full py-4 font-bold rounded-xl transition-colors cursor-pointer ${
+              className={`w-full py-3.5 sm:py-4 font-bold rounded-xl transition-colors cursor-pointer text-sm sm:text-base ${
                 activeService === 'evakuasiya'
                   ? 'bg-blue-600 text-white'
                   : 'bg-slate-900 text-white group-hover:bg-blue-600'

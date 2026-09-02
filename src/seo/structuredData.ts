@@ -16,7 +16,7 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
       '@id': `${SITE_URL}/#business`,
       name: SITE_NAME,
       url: SITE_URL,
-      telephone: CONTACT_INFO.HOTLINE_NUMBER,
+      telephone: CONTACT_INFO.PRIMARY_PHONE_RAW,
       areaServed: [
         {
           '@type': 'City',
@@ -55,7 +55,7 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
       ],
       contactPoint: {
         '@type': 'ContactPoint',
-        telephone: CONTACT_INFO.HOTLINE_NUMBER,
+        telephone: CONTACT_INFO.PRIMARY_PHONE_RAW,
         contactType: 'customer service',
         availableLanguage: 'Azerbaijani',
       },

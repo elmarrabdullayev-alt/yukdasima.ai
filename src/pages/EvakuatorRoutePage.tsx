@@ -31,6 +31,8 @@ import {
 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { generateRouteSeoConfig } from '../seo/routeRegistry';
 import { CallbackInitialData } from '../types';
 
@@ -80,11 +82,11 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
               <span>Bütün Evakuator Qiymətləri</span>
             </Link>
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-sm transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: 878</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
           </div>
         </div>
@@ -99,8 +101,23 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
   const distanceKm = evacTariff.distanceKm || routeTariff?.distanceKm;
 
   const handleWhatsApp = () => {
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: `/evakuator/${routeConfig.slug}`,
+      service_type: 'evakuator',
+      route: `${routeConfig.origin}–${routeConfig.destination}`,
+      cta_location: 'hero',
+    });
     const text = `Salam, ${routeConfig.origin}dan ${routeConfig.destinationDative} evakuator sifarişi vermək istəyirəm.`;
     window.open(generateWhatsAppLink(text), '_blank');
+  };
+
+  const handleHotlineClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: `/evakuator/${routeConfig.slug}`,
+      service_type: 'evakuator',
+      route: `${routeConfig.origin}–${routeConfig.destination}`,
+      cta_location: 'hero',
+    });
   };
 
   // Geographic neighbor routes for balanced, crawlable internal linking
@@ -169,12 +186,14 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
           {/* Quick Action Buttons */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleHotlineClick}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
-              title="Qaynar xəttə zəng et"
+              title={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             <button
@@ -450,7 +469,7 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
                 Sifariş və Ünvan Təyini
               </h3>
               <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                878 nömrəsinə zəng edirsiniz və ya WhatsApp vasitəsilə avtomobilin dəqiq yerləşdiyi ünvanı (lokasiyanı) və maşının modelini göndərirsiniz.
+                {CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng edirsiniz və ya WhatsApp vasitəsilə avtomobilin dəqiq yerləşdiyi ünvanı (lokasiyanı) və maşının modelini göndərirsiniz.
               </p>
             </div>
 
@@ -735,9 +754,9 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
             >
               <div className="space-y-0.5">
                 <span className="font-bold text-slate-900 text-sm group-hover:text-blue-600 transition-colors">
-                  Əlaqə və Qaynar Xətt
+                  Əlaqə və Zəng Sifarişi
                 </span>
-                <span className="text-xs text-slate-500 block">878 və 24/7 Dəstək</span>
+                <span className="text-xs text-slate-500 block">{CONTACT_INFO.PRIMARY_PHONE_DISPLAY} və 24/7 Dəstək</span>
               </div>
               <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 transition-colors" />
             </Link>

@@ -44,7 +44,7 @@ export const YUKDASIMA_FAQS: PageFaqItem[] = [
   {
     question: 'Bakıda yükdaşıma sifarişi necə verilir?',
     answer:
-      'Saytımızdakı onlayn kalkulyatordan marşrutu və yükün detallarını daxil edərək, 878 qaynar xəttimizə zəng edərək və ya WhatsApp vasitəsilə məkan və əşya şəkillərini göndərərək dərhal sifariş verə bilərsiniz. Dispetçerimiz sizə ən yaxın növbətçi avtomobili operativ yönləndirir.',
+      'Saytımızdakı onlayn kalkulyatordan marşrutu və yükün detallarını daxil edərək, 050 231 17 28 əlaqə nömrəmizə zəng edərək və ya WhatsApp vasitəsilə məkan və əşya şəkillərini göndərərək dərhal sifariş verə bilərsiniz. Dispetçerimiz sizə ən yaxın növbətçi avtomobili operativ yönləndirir.',
   },
   {
     question: 'Hansı ölçüdə yük maşını seçməliyəm?',
@@ -102,7 +102,7 @@ export const EVAKUATOR_FAQS: PageFaqItem[] = [
   {
     question: 'Evakuator sifarişi necə verilir?',
     answer:
-      '878 Qaynar xəttimizə zəng edərək, WhatsApp vasitəsilə canlı məkan (lokasiya) göndərərək və ya saytımızdakı interaktiv kalkulyatordan geri zəng sifariş edərək dərhal evakuator çağıra bilərsiniz. Operatorumuz sizə ən yaxın növbətçi maşını dərhal yönləndirir.',
+      '050 231 17 28 əlaqə nömrəmizə zəng edərək, WhatsApp vasitəsilə canlı məkan (lokasiya) göndərərək və ya saytımızdakı interaktiv kalkulyatordan geri zəng sifariş edərək dərhal evakuator çağıra bilərsiniz. Operatorumuz sizə ən yaxın növbətçi maşını dərhal yönləndirir.',
   },
 ];
 
@@ -250,10 +250,10 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
   '/elaqe': {
     path: '/elaqe',
     title: 'Əlaqə | yukdasima.ai — 24/7 Daşıma və Evakuator',
-    metaDescription: 'yukdasima.ai ilə əlaqə: 878 Qaynar xətt, WhatsApp və operativ zəng sifarişi. Bakı və bütün Azərbaycan üzrə 24/7 xidmətinizdəyik.',
+    metaDescription: 'yukdasima.ai ilə əlaqə: 050 231 17 28 əsas nömrə, WhatsApp və operativ zəng sifarişi. Bakı və bütün Azərbaycan üzrə 24/7 xidmətinizdəyik.',
     h1: 'Bizimlə Əlaqə və Operativ Sifariş',
     canonicalUrl: 'https://yukdasima.ai/elaqe',
-    keywords: ['yükdaşıma əlaqə', 'evakuator nömrəsi', 'yükdaşıma qaynar xətt', '878 qaynar xətt'],
+    keywords: ['yükdaşıma əlaqə', 'evakuator nömrəsi', 'yükdaşıma telefon', '050 231 17 28'],
     ogType: 'website',
     schemaType: 'ContactPage',
     serviceName: 'Əlaqə və Dəstək',

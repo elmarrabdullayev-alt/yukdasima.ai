@@ -36,6 +36,8 @@ import {
 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { DEFAULT_VEHICLE_CONFIG } from '../config/vehicles';
 import { CallbackInitialData } from '../types';
 
@@ -85,11 +87,11 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
               <span>Bütün Yükdaşıma Qiymətləri</span>
             </Link>
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-sm transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: 878</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
           </div>
         </div>
@@ -110,8 +112,23 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
 
   // WhatsApp quick text
   const handleWhatsApp = () => {
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: `/yukdasima/${routeConfig.slug}`,
+      service_type: 'yukdasima',
+      route: `${routeConfig.origin}–${routeConfig.destination}`,
+      cta_location: 'hero',
+    });
     const text = `Salam, ${routeConfig.origin}dan ${routeConfig.destinationDative} yükdaşıma sifarişi vermək istəyirəm.`;
     window.open(generateWhatsAppLink(text), '_blank');
+  };
+
+  const handleHotlineClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: `/yukdasima/${routeConfig.slug}`,
+      service_type: 'yukdasima',
+      route: `${routeConfig.origin}–${routeConfig.destination}`,
+      cta_location: 'hero',
+    });
   };
 
   // Geographic neighbor routes for balanced, crawlable internal linking
@@ -180,12 +197,14 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
           {/* Quick Action Buttons */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleHotlineClick}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
-              title="Qaynar xəttə zəng et"
+              title={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             <button
@@ -583,9 +602,9 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center">
                 <Phone className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base">878 Qaynar Xətt</h3>
+              <h3 className="font-bold text-white text-base">24/7 Dəstək Xətti</h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Günün istənilən vaxtında suallarınızı cavablandıran və operativ sifariş qəbul edən 24/7 dəstək xətti.
+                Günün istənilən vaxtında suallarınızı cavablandıran və {CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsi ilə operativ sifariş qəbul edən dispetçer mərkəzi.
               </p>
             </div>
           </div>
@@ -772,11 +791,12 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-extrabold text-sm shadow-sm transition-all"
             >
               <Phone className="w-4 h-4 text-blue-600" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             <button

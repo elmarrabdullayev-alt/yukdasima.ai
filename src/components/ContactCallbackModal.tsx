@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, Phone, User, CheckCircle2, MessageSquare, AlertCircle, Loader2 } from 'lucide-react';
+import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { CallbackInitialData } from '../types';
 
@@ -84,7 +85,7 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
       setSubmitted(true);
     } catch (err: any) {
       console.error('[Callback submit failed]:', err);
-      setErrorMessage(err.message || 'Müraciəti göndərmək mümkün olmadı. Zəhmət olmasa birbaşa 878 ilə əlaqə saxlayın.');
+      setErrorMessage(err.message || `Müraciəti göndərmək mümkün olmadı. Zəhmət olmasa birbaşa ${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} ilə əlaqə saxlayın.`);
     } finally {
       setIsSubmitting(false);
     }

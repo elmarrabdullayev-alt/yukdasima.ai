@@ -1,93 +1,75 @@
 import React from 'react';
-import { Phone } from 'lucide-react';
-import { ServiceType } from '../types';
-import { generateWhatsAppLink } from '../utils/calculator';
+import { Phone, MessageSquare } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { useRouter } from '../router/RouterContext';
+import { getContextualWhatsAppUrl, getServiceAndRouteFromPath } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
+import { ServiceType } from '../types';
 
 interface MobileStickyBarProps {
-  activeService: ServiceType;
-  onSelectService: (service: ServiceType) => void;
+  activeService?: ServiceType;
+  onSelectService?: (service: ServiceType) => void;
 }
 
-export const MobileStickyBar: React.FC<MobileStickyBarProps> = ({
-  activeService,
-  onSelectService,
-}) => {
-  const handleServiceClick = (service: ServiceType) => {
-    onSelectService(service);
-    const element = document.getElementById('estimator-section');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
+export const MobileStickyBar: React.FC<MobileStickyBarProps> = () => {
+  const { pathname } = useRouter();
+  const whatsappUrl = getContextualWhatsAppUrl(pathname);
+  const { service, route } = getServiceAndRouteFromPath(pathname);
+
+  const handleCallClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: pathname,
+      service_type: service,
+      route,
+      cta_location: 'sticky_mobile_bar',
+    });
   };
 
   const handleWhatsAppClick = () => {
-    const text = 'Salam, yukdasima.ai üzərindən əlaqə saxlamaq istəyirəm.';
-    window.open(generateWhatsAppLink(text), '_blank');
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: pathname,
+      service_type: service,
+      route,
+      cta_location: 'sticky_mobile_bar',
+    });
   };
 
   return (
-    <div
+    <aside
       id="mobile-sticky-bottom-bar"
-      className="fixed bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-1 sm:gap-1.5 bg-white/95 backdrop-blur-md p-1 sm:p-1.5 rounded-full border border-slate-200 shadow-2xl z-50 max-w-[96vw]"
+      aria-label="Mobil əlaqə paneli"
+      className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_24px_rgba(15,23,42,0.12)] transition-all"
     >
-      {/* 1. YÜKDAŞIMA */}
-      <button
-        type="button"
-        id="sticky-btn-yukdasima"
-        onClick={() => handleServiceClick('yukdasima')}
-        className={`flex items-center gap-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full font-bold text-xs transition-colors cursor-pointer whitespace-nowrap ${
-          activeService === 'yukdasima'
-            ? 'bg-slate-900 text-white shadow-xs'
-            : 'hover:bg-slate-100 text-slate-700'
-        }`}
-      >
-        <span className="text-sm">🚚</span>
-        <span>Yükdaşıma</span>
-      </button>
+      <div className="max-w-md mx-auto px-3.5 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom,0px))] flex items-center gap-2.5">
+        {/* 1. CLICK-TO-CALL PRIMARY PHONE BUTTON */}
+        <a
+          id="mobile-sticky-call-btn"
+          href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+          onClick={handleCallClick}
+          aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə birbaşa zəng et`}
+          className="flex-1 h-12 flex items-center justify-center gap-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm tracking-wide shadow-xs transition-all active:scale-[0.98] select-none cursor-pointer"
+        >
+          <Phone className="w-4 h-4 shrink-0 fill-current" />
+          <span className="truncate">Zəng et</span>
+          <span className="text-[11px] font-bold bg-blue-700/80 px-1.5 py-0.5 rounded-md text-blue-100 hidden sm:inline">
+            {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}
+          </span>
+        </a>
 
-      {/* 2. EVAKUASİYA */}
-      <button
-        type="button"
-        id="sticky-btn-evakuasiya"
-        onClick={() => handleServiceClick('evakuasiya')}
-        className={`flex items-center gap-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full font-bold text-xs transition-colors cursor-pointer whitespace-nowrap ${
-          activeService === 'evakuasiya'
-            ? 'bg-slate-900 text-white shadow-xs'
-            : 'hover:bg-slate-100 text-slate-700'
-        }`}
-      >
-        <span className="text-sm">🚗</span>
-        <span>Evakuasiya</span>
-      </button>
-
-      {/* Divider */}
-      <div className="w-px h-5 bg-slate-200 mx-0.5 shrink-0"></div>
-
-      {/* 3. CLICK-TO-CALL HOTLINE */}
-      <a
-        id="sticky-btn-call"
-        href={CONTACT_INFO.HOTLINE_TEL}
-        aria-label="878 qaynar xəttinə zəng et"
-        title={CONTACT_INFO.HOTLINE_DISPLAY}
-        className="flex items-center gap-1 px-3 sm:px-3.5 py-2 sm:py-2.5 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition-colors cursor-pointer whitespace-nowrap shadow-xs"
-      >
-        <Phone className="w-3.5 h-3.5" />
-        <span>878</span>
-      </a>
-
-      {/* 4. WHATSAPP */}
-      <button
-        type="button"
-        id="sticky-btn-whatsapp"
-        onClick={handleWhatsAppClick}
-        aria-label="WhatsApp vasitəsilə yaz"
-        className="flex items-center gap-1 px-2.5 sm:px-3.5 py-2 sm:py-2.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold text-xs transition-colors cursor-pointer whitespace-nowrap border border-emerald-200/60"
-      >
-        <span className="text-sm">💬</span>
-        <span className="hidden xs:inline">WP</span>
-      </button>
-    </div>
+        {/* 2. CONTEXT-AWARE WHATSAPP BUTTON */}
+        <a
+          id="mobile-sticky-whatsapp-btn"
+          href={whatsappUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={handleWhatsAppClick}
+          aria-label="WhatsApp vasitəsilə bizə dərhal yaz"
+          className="flex-1 h-12 flex items-center justify-center gap-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-sm tracking-wide shadow-xs transition-all active:scale-[0.98] select-none cursor-pointer"
+        >
+          <MessageSquare className="w-4 h-4 shrink-0 fill-current" />
+          <span className="truncate">WhatsApp</span>
+        </a>
+      </div>
+    </aside>
   );
 };
-

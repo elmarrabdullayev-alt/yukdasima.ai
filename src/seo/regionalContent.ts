@@ -166,7 +166,7 @@ export function generateRouteContentProfile(dest: RegionalDestination): RouteCon
   const evacFaqs: RouteFaqItem[] = [
     {
       question: `Bakıdan ${dName} istiqamətinə evakuator necə sifariş edilir?`,
-      answer: `878 qaynar xətti və ya WhatsApp üzərindən avtomobilinizin markasını, nasazlıq vəziyyətini (sükan və ya təkər kilidi) və dəqiq koordinatları bildirməklə dərhal uyğun evakuator təyin edilir.`,
+      answer: `050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp üzərindən avtomobilinizin markasını, nasazlıq vəziyyətini (sükan və ya təkər kilidi) və dəqiq koordinatları bildirməklə dərhal uyğun evakuator təyin edilir.`,
     },
     {
       question: `${dName} ərazisindən Bakıya avtomobil daşımaq mümkündürmü?`,
@@ -202,24 +202,24 @@ export function generateRouteContentProfile(dest: RegionalDestination): RouteCon
 
   if (category === 'major_city') {
     metaTitleYuk = `Bakı ${dName} Yükdaşıma Xidməti | Mebel və Yük Köçürülməsi`;
-    metaDescYuk = `Bakıdan ${dName} şəhərinə və əks istiqamətdə (${distanceKm} km) təhlükəsiz yükdaşıma. 3m-dən 7m-dək qapalı maşınlar, mebel ustası və fəhlə. Dərhal cari qiyməti öyrən: 878.`;
-    metaTitleEvac = `Bakı ${dName} Evakuator | 24/7 Avtomobil Daşıma | 878`;
-    metaDescEvac = `Bakı–${dName} marşrutu üzrə (${distanceKm} km) 24/7 operativ evakuator xidməti. Minik və yolsuzluq maşınlarının təhlükəsiz daşınması. Qiyməti öyrən: 878.`;
+    metaDescYuk = `Bakıdan ${dName} şəhərinə və əks istiqamətdə (${distanceKm} km) təhlükəsiz yükdaşıma. 3m-dən 7m-dək qapalı maşınlar, mebel ustası və fəhlə. Dərhal cari qiyməti öyrən: 050 231 17 28.`;
+    metaTitleEvac = `Bakı ${dName} Evakuator | 24/7 Avtomobil Daşıma | yukdasima.ai`;
+    metaDescEvac = `Bakı–${dName} marşrutu üzrə (${distanceKm} km) 24/7 operativ evakuator xidməti. Minik və yolsuzluq maşınlarının təhlükəsiz daşınması. Qiyməti öyrən: 050 231 17 28.`;
   } else if (category === 'tourism_hub') {
     metaTitleYuk = `Bakı ${dName} Yükdaşıma | Bağ Evi və Mənzil Köçürülməsi`;
-    metaDescYuk = `Bakıdan ${dName} bölgəsinə (${distanceKm} km) sürətli və etibarlı yükdaşıma. Əşyaların xüsusi qablaşdırılması və peşəkar fəhlə xidməti. Təklif al: 878.`;
+    metaDescYuk = `Bakıdan ${dName} bölgəsinə (${distanceKm} km) sürətli və etibarlı yükdaşıma. Əşyaların xüsusi qablaşdırılması və peşəkar fəhlə xidməti. Təklif al: 050 231 17 28.`;
     metaTitleEvac = `Bakı ${dName} Evakuator Xidməti | 7/24 Yol Yardımı`;
-    metaDescEvac = `Bakıdan ${dName} istiqamətinə (${distanceKm} km) operativ evakuator və texniki yardım. Dağətəyi və magistral yollarda 24/7 xidmət. Əlaqə: 878.`;
+    metaDescEvac = `Bakıdan ${dName} istiqamətinə (${distanceKm} km) operativ evakuator və texniki yardım. Dağətəyi və magistral yollarda 24/7 xidmət. Əlaqə: 050 231 17 28.`;
   } else if (category === 'mountain_hub') {
     metaTitleYuk = `Bakı ${dName} Yükdaşıma | Dağ Bölgələrinə Təhlükəsiz Çatdırılma`;
-    metaDescYuk = `Bakı–${dName} istiqamətində (${distanceKm} km) dağ marşrutu üzrə etibarlı yükdaşıma. Qapalı furqonlar və təcrübəli sürücülər. Cari qiyməti dəqiqləşdir: 878.`;
+    metaDescYuk = `Bakı–${dName} istiqamətində (${distanceKm} km) dağ marşrutu üzrə etibarlı yükdaşıma. Qapalı furqonlar və təcrübəli sürücülər. Cari qiyməti dəqiqləşdir: 050 231 17 28.`;
     metaTitleEvac = `Bakı ${dName} Evakuator | 24/7 Dağ Yolları Evakuasiyası`;
-    metaDescEvac = `Bakıdan ${dName} rayonuna (${distanceKm} km) gücləndirilmiş platformalı evakuator xidməti. Nasaz və qəzalı maşınların etibarlı daşınması: 878.`;
+    metaDescEvac = `Bakıdan ${dName} rayonuna (${distanceKm} km) gücləndirilmiş platformalı evakuator xidməti. Nasaz və qəzalı maşınların etibarlı daşınması: 050 231 17 28.`;
   } else {
     metaTitleYuk = `Bakı ${dName} Yükdaşıma Xidməti | Sərfəli Tariflər | yukdasima.ai`;
-    metaDescYuk = `Bakıdan ${dName} rayonuna və geriyə (${distanceKm} km) operativ yükdaşıma xidməti. Mebel, fərdi əşyalar və kommersiya yükləri. Zəng et: 878.`;
+    metaDescYuk = `Bakıdan ${dName} rayonuna və geriyə (${distanceKm} km) operativ yükdaşıma xidməti. Mebel, fərdi əşyalar və kommersiya yükləri. Zəng et: 050 231 17 28.`;
     metaTitleEvac = `Bakı ${dName} Evakuator | 7/24 Sürətli Xidmət | yukdasima.ai`;
-    metaDescEvac = `Bakıdan ${dName} istiqamətinə və geriyə (${distanceKm} km) 24/7 operativ evakuator xidməti. Təhlükəsiz fiksasiya, dərhal cari qiyməti öyrən: 878.`;
+    metaDescEvac = `Bakıdan ${dName} istiqamətinə və geriyə (${distanceKm} km) 24/7 operativ evakuator xidməti. Təhlükəsiz fiksasiya, dərhal cari qiyməti öyrən: 050 231 17 28.`;
   }
 
   return {

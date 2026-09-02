@@ -12,6 +12,7 @@ export interface HotlineConfig extends PhoneEntry {
 
 export interface ContactConfig {
   hotline: HotlineConfig;
+  primaryPhone: PhoneEntry;
   mobileNumbers: PhoneEntry[];
   whatsapp: {
     label: string;
@@ -26,14 +27,20 @@ export const PHONE_CONFIG: ContactConfig = {
     label: 'Qaynar xətt',
     displayNumber: '878',
     shortDisplay: '878',
-    fullDisplay: 'Qaynar xətt: 878',
+    fullDisplay: '878',
     telNumber: '878',
     telHref: 'tel:878',
+  },
+  primaryPhone: {
+    label: 'Əlaqə nömrəsi',
+    displayNumber: '050 231 17 28',
+    telNumber: '+994502311728',
+    telHref: 'tel:+994502311728',
   },
   mobileNumbers: [
     {
       label: 'Mobil / WhatsApp',
-      displayNumber: '+994 50 231 17 28',
+      displayNumber: '050 231 17 28',
       telNumber: '+994502311728',
       telHref: 'tel:+994502311728',
     },
@@ -47,24 +54,34 @@ export const PHONE_CONFIG: ContactConfig = {
 };
 
 export const CONTACT_INFO = {
-  // Hotline
+  // 1. Header-only Hotline (878)
   HOTLINE_NUMBER: PHONE_CONFIG.hotline.telNumber,
   HOTLINE_DISPLAY: PHONE_CONFIG.hotline.fullDisplay,
   HOTLINE_SHORT_DISPLAY: PHONE_CONFIG.hotline.shortDisplay,
   HOTLINE_TEL: PHONE_CONFIG.hotline.telHref,
+  HOTLINE_SHORT: '878',
 
-  // Mobile
-  MOBILE_DISPLAY: PHONE_CONFIG.mobileNumbers[0].displayNumber,
+  // 2. Primary Contact / Call number everywhere outside Header (050 231 17 28)
+  PRIMARY_PHONE_DISPLAY: PHONE_CONFIG.primaryPhone.displayNumber,
+  PRIMARY_PHONE_TEL: PHONE_CONFIG.primaryPhone.telHref,
+  PRIMARY_PHONE_RAW: PHONE_CONFIG.primaryPhone.telNumber,
+
+  // Mobile / Backwards-compatibility aliases
+  MOBILE_DISPLAY: PHONE_CONFIG.primaryPhone.displayNumber,
   MOBILE_NORMALIZED: PHONE_CONFIG.whatsapp.normalizedNumber,
-  MOBILE_TEL: PHONE_CONFIG.mobileNumbers[0].telHref,
+  MOBILE_TEL: PHONE_CONFIG.primaryPhone.telHref,
+  MOBILE_RAW: PHONE_CONFIG.primaryPhone.telNumber,
 
-  // WhatsApp
+  // 3. WhatsApp (+994 50 231 17 28 / 994502311728)
   WHATSAPP_NUMBER: PHONE_CONFIG.whatsapp.normalizedNumber,
+  WHATSAPP_DISPLAY: PHONE_CONFIG.whatsapp.displayNumber,
   WHATSAPP_URL_BASE: PHONE_CONFIG.whatsapp.baseUrl,
 
   // Structured Config References
   hotline: PHONE_CONFIG.hotline,
+  primaryPhone: PHONE_CONFIG.primaryPhone,
   mobileNumbers: PHONE_CONFIG.mobileNumbers,
   whatsapp: PHONE_CONFIG.whatsapp,
 };
+
 

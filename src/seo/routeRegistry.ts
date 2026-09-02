@@ -436,7 +436,7 @@ export function generateRouteSeoConfig(route: ApprovedRouteConfig): PageSeoConfi
   const distanceKm = evacTariff.distanceKm || routeTariff?.distanceKm || (profile ? profile.distanceKm : 281);
 
   const title = profile?.metaTitleEvakuator || `Bakı ${route.destination} Evakuator | 7/24 Sürətli Xidmət | yukdasima.ai`;
-  const metaDescription = profile?.metaDescEvakuator || `Bakıdan ${route.destinationDative} və ${route.destinationAblative} Bakıya 7/24 operativ evakuator xidməti (${distanceKm} km). Təhlükəsiz fiksasiya, dərhal cari qiyməti öyrən: 878.`;
+  const metaDescription = profile?.metaDescEvakuator || `Bakıdan ${route.destinationDative} və ${route.destinationAblative} Bakıya 7/24 operativ evakuator xidməti (${distanceKm} km). Təhlükəsiz fiksasiya, dərhal cari qiyməti öyrən: 050 231 17 28.`;
   const canonicalUrl = `https://yukdasima.ai${route.routePath}`;
 
   const breadcrumbs: BreadcrumbItem[] = [
@@ -450,11 +450,11 @@ export function generateRouteSeoConfig(route: ApprovedRouteConfig): PageSeoConfi
     : [
         {
           question: `Bakıdan ${route.destinationDative} evakuator sifarişi necə edilir?`,
-          answer: `878 qaynar xətti və ya WhatsApp üzərindən avtomobilinizin markasını, nasazlıq vəziyyətini və ünvanı bildirməklə dərhal uyğun evakuator yönləndirilir.`,
+          answer: `050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp üzərindən avtomobilinizin markasını, nasazlıq vəziyyətini və ünvanı bildirməklə dərhal uyğun evakuator yönləndirilir.`,
         },
         {
           question: `${route.destinationAblative} Bakıya da evakuator çağırmaq olar?`,
-          answer: `Bəli, xidmətimiz ikitərəflidir. Siz həm Bakıdan ${route.destinationDative}, həm də ${route.destinationLocative} və ətraf kəndlərdə qəzalı və ya nasaz avtomobilinizi Bakıdakı istənilən servisə daşıtmaq üçün 878 nömrəsi ilə 24/7 əlaqə saxlaya bilərsiniz.`,
+          answer: `Bəli, xidmətimiz ikitərəflidir. Siz həm Bakıdan ${route.destinationDative}, həm də ${route.destinationLocative} və ətraf kəndlərdə qəzalı və ya nasaz avtomobilinizi Bakıdakı istənilən servisə daşıtmaq üçün 050 231 17 28 nömrəsi ilə 24/7 əlaqə saxlaya bilərsiniz.`,
         },
         {
           question: `Evakuator sifariş edildikdən sonra nə qədər vaxta çatır?`,
@@ -501,7 +501,7 @@ export function generateYukdasimaRouteSeoConfig(route: ApprovedYukdasimaRouteCon
   const distanceKm = route.distanceKm || (profile ? profile.distanceKm : 280);
 
   const title = profile?.metaTitleYukdasima || `Bakı ${route.destination} Yükdaşıma Xidməti | yukdasima.ai`;
-  const metaDescription = profile?.metaDescYukdasima || `Bakıdan ${route.destinationDative} və ${route.destinationAblative} Bakıya təhlükəsiz yükdaşıma xidməti (${distanceKm} km). 2m-dən 7m-dək yük maşınları, operativ fəhlə və mebel ustası. Dərhal cari qiyməti öyrən: 878.`;
+  const metaDescription = profile?.metaDescYukdasima || `Bakıdan ${route.destinationDative} və ${route.destinationAblative} Bakıya təhlükəsiz yükdaşıma xidməti (${distanceKm} km). 2m-dən 7m-dək yük maşınları, operativ fəhlə və mebel ustası. Dərhal cari qiyməti öyrən: 050 231 17 28.`;
   const canonicalUrl = `https://yukdasima.ai${route.routePath}`;
 
   const breadcrumbs: BreadcrumbItem[] = [

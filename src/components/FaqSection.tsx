@@ -96,11 +96,12 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenCallback }) => {
               <span>WhatsApp ilə yaz</span>
             </button>
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
               className="px-4 py-2.5 rounded-xl bg-blue-700 hover:bg-blue-800 text-white font-bold text-sm flex items-center gap-2 transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>{CONTACT_INFO.HOTLINE_DISPLAY}</span>
+              <span>{CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
           </div>
         </div>

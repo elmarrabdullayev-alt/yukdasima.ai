@@ -27,6 +27,8 @@ import {
 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { YUKDASIMA_FAQS } from '../seo/metadata';
 import { getAllApprovedYukdasimaRoutes } from '../seo/routeRegistry';
 import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
@@ -50,7 +52,20 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
   };
 
   const handleWhatsApp = () => {
-    window.open(generateWhatsAppLink('Salam, yükdaşıma xidməti ilə bağlı məlumat almaq və sifariş vermək istəyirəm.'), '_blank');
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: '/yukdasima',
+      service_type: 'yukdasima',
+      cta_location: 'hero',
+    });
+    window.open(getContextualWhatsAppUrl('/yukdasima'), '_blank');
+  };
+
+  const handleHotlineClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: '/yukdasima',
+      service_type: 'yukdasima',
+      cta_location: 'hero',
+    });
   };
 
   // Featured key popular canonical routes for quick access
@@ -104,12 +119,14 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
           {/* Quick Hotline and WhatsApp Action Buttons */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleHotlineClick}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
-              title="Qaynar xəttə zəng et"
+              title={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             <button
@@ -803,7 +820,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
               </div>
               <h3 className="font-bold text-white text-base sm:text-lg">Sürətli Sifariş Kanalları</h3>
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                878 Qaynar Xətt, WhatsApp və saytdan bir kliklə geri zəng sifarişi ilə operativ dispetçer dəstəyi.
+                {CONTACT_INFO.PRIMARY_PHONE_DISPLAY} əlaqə nömrəsi, WhatsApp və saytdan bir kliklə geri zəng sifarişi ilə operativ dispetçer dəstəyi.
               </p>
             </div>
 
@@ -1044,7 +1061,7 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
                 <span>Əlaqə & Zəng Sifarişi</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">878 Qaynar xətt, WhatsApp və operativ geri zəng sifarişi.</p>
+              <p className="text-xs text-slate-600 mt-2">{CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsi, WhatsApp və operativ geri zəng sifarişi.</p>
             </Link>
           </div>
         </section>
@@ -1062,11 +1079,12 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-extrabold text-sm shadow-sm transition-all"
             >
               <PhoneCall className="w-4 h-4 text-blue-600" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
 
             <button

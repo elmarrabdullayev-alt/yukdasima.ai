@@ -3,6 +3,8 @@ import { EstimatorSection } from '../components/EstimatorSection';
 import { Link } from '../router/RouterContext';
 import { DollarSign, Truck, Car, ShieldCheck, CheckCircle2, ArrowRight, HelpCircle, Phone, MessageSquare } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { ServiceType, CallbackInitialData } from '../types';
 
 interface QiymetlerPageProps {
@@ -11,6 +13,21 @@ interface QiymetlerPageProps {
 
 export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) => {
   const [activeTab, setActiveTab] = useState<ServiceType>('yukdasima');
+  const whatsappUrl = getContextualWhatsAppUrl('/qiymetler');
+
+  const handleCallClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: '/qiymetler',
+      cta_location: 'hero',
+    });
+  };
+
+  const handleWhatsAppClick = () => {
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: '/qiymetler',
+      cta_location: 'hero',
+    });
+  };
 
   return (
     <article className="py-8 sm:py-12 bg-slate-50 min-h-screen">
@@ -31,19 +48,21 @@ export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) 
           {/* Quick Contact Badges */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
-              aria-label="878 qaynar xəttinə zəng et"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleCallClick}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
             <a
-              href={CONTACT_INFO.WHATSAPP_URL_BASE}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleWhatsAppClick}
               aria-label="WhatsApp vasitəsilə yaz"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp ilə Sifariş</span>
@@ -213,7 +232,7 @@ export const QiymetlerPage: React.FC<QiymetlerPageProps> = ({ onOpenCallback }) 
                 <span>Bizimlə Əlaqə</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-1">878 Qaynar xətt və zəng sifarişi.</p>
+              <p className="text-xs text-slate-600 mt-1">{CONTACT_INFO.PRIMARY_PHONE_DISPLAY} və zəng sifarişi.</p>
             </Link>
           </div>
         </section>

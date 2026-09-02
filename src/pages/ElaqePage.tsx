@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Phone, MessageSquare, MapPin, Clock, ShieldCheck, Send, CheckCircle2, ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { Link } from '../router/RouterContext';
 import { CallbackInitialData } from '../types';
 
@@ -18,7 +20,18 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleWhatsApp = () => {
-    window.open(generateWhatsAppLink('Salam, yukdasima.ai xidmətləri ilə bağlı məlumat almaq və ya sifariş vermək istəyirəm.'), '_blank');
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: '/elaqe',
+      cta_location: 'contact_page',
+    });
+    window.open(getContextualWhatsAppUrl('/elaqe'), '_blank');
+  };
+
+  const handleCallClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: '/elaqe',
+      cta_location: 'contact_page_phone',
+    });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -56,7 +69,7 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
       setIsSubmitted(true);
     } catch (err: any) {
       console.error('[ElaqePage submit failed]:', err);
-      setErrorMessage(err.message || 'Müraciət zamanı xəta baş verdi. Zəhmət olmasa 878 qaynar xətti ilə əlaqə saxlayın.');
+      setErrorMessage(err.message || `Müraciət zamanı xəta baş verdi. Zəhmət olmasa ${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsi ilə əlaqə saxlayın.`);
     } finally {
       setIsSubmitting(false);
     }
@@ -81,44 +94,48 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
 
         {/* Contact Cards Grid */}
         <section className="grid grid-cols-1 md:grid-cols-3 gap-6" aria-label="Əlaqə Vasitələri">
-          {/* Hotline Card */}
+          {/* Primary Call Card */}
           <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4 text-center flex flex-col items-center">
             <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
               <Phone className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Qaynar Xətt</h2>
-              <p className="text-xs text-slate-500 mt-1">24/7 Operativ operator dəstəyi</p>
+              <h2 className="text-xl font-bold text-slate-900">Zəng Edin</h2>
+              <p className="text-xs text-slate-500 mt-1">24/7 Birbaşa dispetçer əlaqəsi</p>
             </div>
             <a
-              id="elaqe-hotline-link"
-              href={CONTACT_INFO.HOTLINE_TEL}
-              aria-label="878 qaynar xəttinə zəng et"
-              className="text-3xl font-black text-blue-600 hover:text-blue-700 tracking-tight transition-colors inline-flex items-center gap-2"
+              id="elaqe-call-link"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleCallClick}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              className="text-2xl sm:text-3xl font-black text-blue-600 hover:text-blue-700 tracking-tight transition-colors inline-flex items-center gap-2"
             >
               <Phone className="w-6 h-6" />
-              <span>{CONTACT_INFO.HOTLINE_SHORT_DISPLAY}</span>
+              <span>{CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
-            <p className="text-xs text-slate-400">Bütün mobil operatorlardan və şəhər telefonlarından ödənişsiz/standart tarif</p>
+            <p className="text-xs text-slate-400">Bütün operatorlardan birbaşa zəng</p>
           </div>
 
-          {/* WhatsApp / Mobil Card */}
+          {/* WhatsApp Card */}
           <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-xs space-y-4 text-center flex flex-col items-center">
             <div className="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
               <MessageSquare className="w-7 h-7" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-slate-900">Mobil & WhatsApp</h2>
+              <h2 className="text-xl font-bold text-slate-900">WhatsApp ilə Yazın</h2>
               <p className="text-xs text-slate-500 mt-1">Şəkil, video və məkan göndərmək üçün</p>
             </div>
             <a
-              id="elaqe-mobile-tel-link"
-              href={CONTACT_INFO.MOBILE_TEL}
-              aria-label="Mobil nömrəyə zəng et"
-              className="text-lg font-bold text-slate-900 hover:text-blue-600 transition-colors inline-flex items-center gap-1.5"
+              id="elaqe-whatsapp-link"
+              href={CONTACT_INFO.WHATSAPP_URL_BASE}
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={handleWhatsApp}
+              aria-label="WhatsApp vasitəsilə yaz"
+              className="text-2xl font-bold text-slate-900 hover:text-emerald-600 transition-colors inline-flex items-center gap-1.5"
             >
-              <Phone className="w-4 h-4 text-blue-600" />
-              <span>{CONTACT_INFO.MOBILE_DISPLAY}</span>
+              <MessageSquare className="w-6 h-6 text-emerald-600" />
+              <span>{CONTACT_INFO.WHATSAPP_DISPLAY}</span>
             </a>
             <button
               onClick={handleWhatsApp}
@@ -126,7 +143,7 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
               className="w-full px-5 py-2.5 rounded-xl bg-emerald-600 text-white font-bold text-sm shadow-xs hover:bg-emerald-700 transition-colors cursor-pointer flex items-center justify-center gap-2"
             >
               <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp-da Yazın</span>
+              <span>WhatsApp-da Aç</span>
             </button>
           </div>
 

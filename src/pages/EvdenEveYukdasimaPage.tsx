@@ -3,6 +3,8 @@ import { YukdasimaEstimator } from '../components/YukdasimaEstimator';
 import { Link } from '../router/RouterContext';
 import { Home, ShieldCheck, CheckCircle2, ArrowRight, Package, Truck, Users, Clock, Phone, MessageSquare } from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
+import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
+import { trackConversionEvent } from '../utils/analytics';
 import { CallbackInitialData } from '../types';
 
 interface EvdenEveYukdasimaPageProps {
@@ -10,6 +12,24 @@ interface EvdenEveYukdasimaPageProps {
 }
 
 export const EvdenEveYukdasimaPage: React.FC<EvdenEveYukdasimaPageProps> = ({ onOpenCallback }) => {
+  const whatsappUrl = getContextualWhatsAppUrl('/evden-eve-yukdasima');
+
+  const handleCallClick = () => {
+    trackConversionEvent('mobile_call_click', {
+      page_path: '/evden-eve-yukdasima',
+      service_type: 'evden-eve',
+      cta_location: 'hero',
+    });
+  };
+
+  const handleWhatsAppClick = () => {
+    trackConversionEvent('mobile_whatsapp_click', {
+      page_path: '/evden-eve-yukdasima',
+      service_type: 'evden-eve',
+      cta_location: 'hero',
+    });
+  };
+
   return (
     <article className="py-8 sm:py-12 bg-slate-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
@@ -29,19 +49,21 @@ export const EvdenEveYukdasimaPage: React.FC<EvdenEveYukdasimaPageProps> = ({ on
           {/* Quick Contact Badges */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
             <a
-              href={CONTACT_INFO.HOTLINE_TEL}
-              aria-label="878 qaynar xəttinə zəng et"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              href={CONTACT_INFO.PRIMARY_PHONE_TEL}
+              onClick={handleCallClick}
+              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <Phone className="w-4 h-4" />
-              <span>Qaynar Xətt: {CONTACT_INFO.HOTLINE_NUMBER}</span>
+              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
             </a>
             <a
-              href={CONTACT_INFO.WHATSAPP_URL_BASE}
+              href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
+              onClick={handleWhatsAppClick}
               aria-label="WhatsApp vasitəsilə yaz"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold shadow-xs transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition-colors"
             >
               <MessageSquare className="w-4 h-4" />
               <span>WhatsApp ilə Sifariş</span>
@@ -108,63 +130,24 @@ export const EvdenEveYukdasimaPage: React.FC<EvdenEveYukdasimaPageProps> = ({ on
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-              <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                <span>Məişət Texnikasının Təhlükəsizliyi</span>
-              </h3>
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>Qablaşdırma və Qorunma</span>
+              </div>
               <p>
-                Soyuducu, paltaryuyan, televizor və digər həssas elektronika xüsusi amortizasiyalı qablaşdırma materialları ilə örtülür və şaquli vəziyyətdə daşınır.
+                Xüsusi qoruyucu filmlər, künclük materiallar və qalın qutular vasitəsilə kövrək əşyalarınız və cilalı mebel səthləri cızılmalardan 100% qorunur.
               </p>
             </div>
 
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-              <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                <span>Qab-Qacaq və Kövrək Əşyalar</span>
-              </h3>
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>Təcrübəli Mebel Ustası</span>
+              </div>
               <p>
-                Şüşə, çini və dekorativ əşyalar üçün xüsusi möhkəm qutulardan və qoruyucu kağız/köpük qatlardan istifadə olunur.
+                Bütün növ mürəkkəb dolablar, mətbəx mebelləri və yataq dəstləri peşəkar şəkildə sökülür, yeni mənzildə səliqə ilə yenidən qurulur.
               </p>
             </div>
-          </div>
-        </section>
-
-        {/* Internal Linking */}
-        <section className="space-y-6" aria-label="Əlaqəli Keçidlər">
-          <h2 className="text-2xl font-bold text-slate-900">Digər Faydalı Xidmətlər</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Link
-              href="/mebel-dasinmasi"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Mebel Daşınması</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Usta heyəti və montaj xidmətləri.</p>
-            </Link>
-
-            <Link
-              href="/fehle-xidmeti"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Fəhlə Xidməti</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Mərtəbəyə qaldırma və fəhlə briqadası.</p>
-            </Link>
-
-            <Link
-              href="/qiymetler"
-              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
-            >
-              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Daşıma Qiymətləri</span>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
-              </h3>
-              <p className="text-xs text-slate-600 mt-1">Bütün marşrutlar üzrə şəffaf qiymətlər.</p>
-            </Link>
           </div>
         </section>
       </div>
