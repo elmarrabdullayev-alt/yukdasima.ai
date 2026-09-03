@@ -43,7 +43,11 @@ export function trackConversionEvent(
     window.dispatchEvent(customEvent);
 
     // 3. Development diagnostic log
-    if (process.env.NODE_ENV !== 'production') {
+    const isDev = Boolean(
+      (typeof import.meta !== 'undefined' && (import.meta as Record<string, any>).env?.DEV) ||
+      (typeof process !== 'undefined' && process.env?.NODE_ENV !== 'production')
+    );
+    if (isDev) {
       console.log(`[Conversion Event] ${eventName}:`, params);
     }
   } catch (err) {

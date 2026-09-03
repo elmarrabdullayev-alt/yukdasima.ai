@@ -710,11 +710,13 @@ export const EvakuatorRoutePage: React.FC<EvakuatorRoutePageProps> = ({
                       }`}
                     />
                   </button>
-                  {isOpen && (
-                    <div className="px-5 sm:px-6 pb-4 pt-1 text-slate-600 text-xs sm:text-sm leading-relaxed border-t border-slate-100 bg-slate-50/50">
-                      {faq.answer}
-                    </div>
-                  )}
+                  <div
+                    className={`px-5 sm:px-6 pb-4 pt-1 text-slate-600 text-xs sm:text-sm leading-relaxed border-t border-slate-100 bg-slate-50/50 ${
+                      isOpen ? 'block' : 'hidden'
+                    }`}
+                  >
+                    {faq.answer}
+                  </div>
                 </div>
               );
             })}

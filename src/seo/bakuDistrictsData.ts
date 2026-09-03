@@ -982,7 +982,7 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       {
         vehicle: '7 Metrlik İri Qapalı Yük Maşını (Atego)',
         specs: 'Həcm: 36–40 m³ | Yük: 5–8 ton',
-        reason: 'Sədərək və Binə topdansatış anbarlarının iri partiyalı kommersiya yükləri üçün idealdır. (Qeyd: Böyük həcmli TIR daşımaları dispetçerlə xüsusi razılaşdırılır).',
+        reason: 'Sədərək və Binə topdansatış anbarlarının iri partiyalı kommersiya yükləri üçün idealdır.',
       },
     ],
     faqsYukdasima: [
@@ -1063,9 +1063,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
     ],
     faqsYukdasima: [
       {
-        question: 'Bakı mərkəzindən Pirallahıya daşıma nə qədər vaxt aparır?',
+        question: 'Bakı mərkəzindən Pirallahıya daşıma prosesi necə təşkil olunur?',
         answer:
-          'Hava Limanı və Qala sürət magistralı ilə təxminən 45–50 dəqiqə ərzində ünvana çatdırılır.',
+          'Hava Limanı və Qala sürət magistralı ilə birbaşa qapalı furqonlarla təhlükəsiz çatdırılma icra edilir.',
       },
       {
         question: 'Əşyalar dəniz rütubətindən necə qorunur?',

@@ -1,4 +1,7 @@
 import { REGIONAL_DESTINATIONS, RegionalDestination } from './regionalData';
+import { BATCH3_REGIONAL_CONTENT } from './batch3RegionalContent';
+import { BATCH4_REGIONAL_CONTENT } from './batch4RegionalContent';
+import { BATCH5_REGIONAL_CONTENT } from './batch5RegionalContent';
 
 export type DestinationCategory =
   | 'major_city'
@@ -79,8 +82,8 @@ export interface RouteContentProfile {
   metaDescEvakuator: string;
 }
 
-// Dedicated GEO / AI Search optimized profiles for 5 Pilot Regions
-interface PilotContent {
+// Dedicated GEO / AI Search optimized profiles for Pilot and Batch Regions
+export interface PilotContent {
   directAnswerYukdasima: string;
   directAnswerEvakuator: string;
   targetAudienceYukdasima: RouteTargetAudience[];
@@ -1112,8 +1115,12 @@ export function generateRouteContentProfile(dest: RegionalDestination): RouteCon
   const hours = getTransitDuration(distanceKm, dest.terrainType === 'dağlıq');
   const dName = dest.destinationName;
 
-  // Check if this destination is one of our 5 pilot regions
-  const pilot = PILOT_REGIONAL_CONTENT[dest.slug];
+  // Check if this destination is one of our curated pilot or batch regions
+  const pilot =
+    PILOT_REGIONAL_CONTENT[dest.slug] ||
+    BATCH3_REGIONAL_CONTENT[dest.slug] ||
+    BATCH4_REGIONAL_CONTENT[dest.slug] ||
+    BATCH5_REGIONAL_CONTENT[dest.slug];
 
   // --- 1. Yükdaşıma Descriptions & Text ---
   let yukOverview = '';
