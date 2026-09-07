@@ -3,9 +3,9 @@ import { PilotContent } from './regionalContent';
 export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
   'baki-samaxi': {
     directAnswerYukdasima:
-      'Bakıdan Şamaxıya yükdaşıma xidməti mümkündürmü? Bəli, M4 magistralı üzrə (122 km) Bakı–Şamaxı və Şamaxı–Bakı istiqamətində gündəlik yük və mebel daşınması həyata keçirilir. Şamaxı şəhər mərkəzi və ətraf ərazilərə mənzil köçü, mebel, tikinti materialları və kommersiya yükləri üçün 3 metrdən 7 metrədək qapalı furqonlar, mebel ustaları və fəhlə briqadası ayrılır. Sifariş: 050 231 17 28.',
+      'Bakıdan Şamaxıya yükdaşıma xidməti mümkündürmü? Bəli, M4 magistralı üzrə (122 km) Bakı–Şamaxı və Şamaxı–Bakı istiqamətində gündəlik yük və mebel daşınması həyata keçirilir. Şamaxı şəhər mərkəzi və ətraf ərazilərə mənzil köçü, mebel, tikinti materialları və kommersiya yükləri üçün 3 metrdən 7 metrədək qapalı furqonlar, mebel ustaları və fəhlə briqadası ayrılır. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Şamaxıya evakuator necə sifariş edilir? M4 Bakı–Şamaxı magistralı üzrə (122 km) 24/7 operativ evakuator və yol yardımı fəaliyyət göstərir. Minik, SUV, pikap və təkəri/karobkası kilidlənmiş avtomobillər hidravlik sürüşən platforma ilə daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp-la məkan göndərə bilərsiniz.',
+      'Bakıdan Şamaxıya evakuator necə sifariş edilir? M4 Bakı–Şamaxı magistralı üzrə (122 km) 24/7 operativ evakuator və yol yardımı fəaliyyət göstərir. Minik, SUV, pikap və təkəri/karobkası kilidlənmiş avtomobillər hidravlik sürüşən platforma ilə daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp-la məkan göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Bağ Evi və Villa Sahibləri',
@@ -108,7 +108,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–Şamaxı yükdaşıma qiyməti necə müəyyənləşir?',
-        answer: 'Məsafə (122 km), maşının ölçüsü və fəhlə xidmətinə əsasən hesablanır. 050 231 17 28 nömrəsi ilə əlaqə saxlayaraq dəqiq məlumat ala bilərsiniz.',
+        answer: 'Məsafə (122 km), maşının ölçüsü və fəhlə xidmətinə əsasən hesablanır. 050 250 31 70 nömrəsi ilə əlaqə saxlayaraq dəqiq məlumat ala bilərsiniz.',
       },
     ],
     evakuatorFaqs: [
@@ -130,16 +130,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuasiya qiyməti nəyə əsasən formalaşır?',
-        answer: 'Məsafə, avtomobilin çəkisi (sedan/SUV) və nasazlığın xarakterinə görə şəffaf təyin edilir. Dərhal öyrənmək üçün: 050 231 17 28.',
+        answer: 'Məsafə, avtomobilin çəkisi (sedan/SUV) və nasazlığın xarakterinə görə şəffaf təyin edilir. Dərhal öyrənmək üçün: 050 250 31 70.',
       },
     ],
   },
 
   'baki-masalli': {
     directAnswerYukdasima:
-      'Bakıdan Masallıya yükdaşıma mümkündürmü? Bəli, M3 müasir magistralı üzrə (215 km) Bakı–Masallı və Masallı–Bakı reysləri hər gün təşkil olunur. Masallı şəhər mərkəzi və ətraf ərazilərə ev köçürülməsi, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası təmin edilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Masallıya yükdaşıma mümkündürmü? Bəli, M3 müasir magistralı üzrə (215 km) Bakı–Masallı və Masallı–Bakı reysləri hər gün təşkil olunur. Masallı şəhər mərkəzi və ətraf ərazilərə ev köçürülməsi, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası təmin edilir. Əlaqə: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Masallıya və Masallıdan Bakıya evakuator necə sifariş edilir? M3 magistralında (215 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə təhlükəsiz daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə GPS məkanınızı göndərə bilərsiniz.',
+      'Bakıdan Masallıya və Masallıdan Bakıya evakuator necə sifariş edilir? M3 magistralında (215 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə təhlükəsiz daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə GPS məkanınızı göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -241,7 +241,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Masallı yükdaşıma qiymətini necə öyrənmək olar?',
-        answer: 'Baza məsafəsi (215 km) və yükün həcminə uyğun olaraq fərdi hesablanır. Əlaqə: 050 231 17 28.',
+        answer: 'Baza məsafəsi (215 km) və yükün həcminə uyğun olaraq fərdi hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -263,16 +263,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuator qiyməti nə qədərdir?',
-        answer: '215 km məsafəyə və maşının tipinə əsasən şəffaf təyin edilir. 050 231 17 28 nömrəsindən öyrənə bilərsiniz.',
+        answer: '215 km məsafəyə və maşının tipinə əsasən şəffaf təyin edilir. 050 250 31 70 nömrəsindən öyrənə bilərsiniz.',
       },
     ],
   },
 
   'baki-astara': {
     directAnswerYukdasima:
-      'Bakıdan Astaraya yükdaşıma mümkündürmü? Bəli, M3 magistralının cənub dəhlizi ilə (283 km) Bakı–Astara və Astara–Bakı marşrutunda gündəlik yükdaşıma xidməti göstərilir. Astara şəhər mərkəzi və ətraf ərazilərə mənzil köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası ayrılır. Əlaqə: 050 231 17 28.',
+      'Bakıdan Astaraya yükdaşıma mümkündürmü? Bəli, M3 magistralının cənub dəhlizi ilə (283 km) Bakı–Astara və Astara–Bakı marşrutunda gündəlik yükdaşıma xidməti göstərilir. Astara şəhər mərkəzi və ətraf ərazilərə mənzil köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası ayrılır. Əlaqə: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Astaraya evakuator necə sifariş edilir? M3 magistralı üzrə (283 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, pikap və tranzit nəqliyyat vasitələri hidravlik platformalı xüsusi texnika ilə təhlükəsiz daşınır. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp-dan məkan göndərə bilərsiniz.',
+      'Bakıdan Astaraya evakuator necə sifariş edilir? M3 magistralı üzrə (283 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, pikap və tranzit nəqliyyat vasitələri hidravlik platformalı xüsusi texnika ilə təhlükəsiz daşınır. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp-dan məkan göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -374,7 +374,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–Astara daşıma qiyməti nə qədərdir?',
-        answer: 'Qiymət məsafə (283 km) və seçilən maşın tipinə görə hesablanır. Dəqiq qiymət üçün: 050 231 17 28.',
+        answer: 'Qiymət məsafə (283 km) və seçilən maşın tipinə görə hesablanır. Dəqiq qiymət üçün: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -396,16 +396,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuasiya qiyməti necə təyin edilir?',
-        answer: '283 km məsafəyə və avtomobilin çəkisinə uyğun hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '283 km məsafəyə və avtomobilin çəkisinə uyğun hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
   },
 
   'baki-tovuz': {
     directAnswerYukdasima:
-      'Bakıdan Tovuza yükdaşıma xidməti mümkündürmü? Bəli, M2 magistralı boyunca (451 km) Bakı–Tovuz və Tovuz–Bakı istiqamətində müntəzəm yükdaşıma həyata keçirilir. Tovuz şəhər mərkəzi və ətraf ərazilərə ev köçürülməsi, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar, mebel ustaları və fəhlələr ayrılır. Sifariş: 050 231 17 28.',
+      'Bakıdan Tovuza yükdaşıma xidməti mümkündürmü? Bəli, M2 magistralı boyunca (451 km) Bakı–Tovuz və Tovuz–Bakı istiqamətində müntəzəm yükdaşıma həyata keçirilir. Tovuz şəhər mərkəzi və ətraf ərazilərə ev köçürülməsi, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar, mebel ustaları və fəhlələr ayrılır. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Tovuza evakuator necə sifariş edilir? M2 magistralında (451 km) 24/7 fasiləsiz operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, pikap, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platformalı texnika ilə daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp üzərindən GPS koordinatlarınızı göndərə bilərsiniz.',
+      'Bakıdan Tovuza evakuator necə sifariş edilir? M2 magistralında (451 km) 24/7 fasiləsiz operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, pikap, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platformalı texnika ilə daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp üzərindən GPS koordinatlarınızı göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -507,7 +507,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–Tovuz yükdaşıma qiymətini necə öyrənmək olar?',
-        answer: 'Məsafə (451 km) və seçilən furqon ölçüsünə görə rəsmi bazadan hesablanır. Əlaqə: 050 231 17 28.',
+        answer: 'Məsafə (451 km) və seçilən furqon ölçüsünə görə rəsmi bazadan hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -529,16 +529,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Tovuz evakuasiya qiyməti necə müəyyən edilir?',
-        answer: '451 km məsafəyə və avtomobilin kateqoriyasına uyğun şəffaf hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '451 km məsafəyə və avtomobilin kateqoriyasına uyğun şəffaf hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
   },
 
   'baki-agdas': {
     directAnswerYukdasima:
-      'Bakıdan Ağdaşa yükdaşıma mümkündürmü? Bəli, M2 və M4 magistral dəhlizləri ilə (281 km) Bakı–Ağdaş və Ağdaş–Bakı reysləri gündəlik təşkil olunur. Ağdaş şəhər mərkəzi və ətraf ərazilərə mənzil köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası ayrılır. Sifariş: 050 231 17 28.',
+      'Bakıdan Ağdaşa yükdaşıma mümkündürmü? Bəli, M2 və M4 magistral dəhlizləri ilə (281 km) Bakı–Ağdaş və Ağdaş–Bakı reysləri gündəlik təşkil olunur. Ağdaş şəhər mərkəzi və ətraf ərazilərə mənzil köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası ayrılır. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Ağdaşa evakuator necə sifariş edilir? M2/M4 magistralında (281 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı avtomobillər hidravlik platforma ilə təhlükəsiz daşınır. Növbətçi evakuator çağırmaq üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə lokasiya göndərə bilərsiniz.',
+      'Bakıdan Ağdaşa evakuator necə sifariş edilir? M2/M4 magistralında (281 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı avtomobillər hidravlik platforma ilə təhlükəsiz daşınır. Növbətçi evakuator çağırmaq üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə lokasiya göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -640,7 +640,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–Ağdaş yükdaşıma qiyməti necə təyin olunur?',
-        answer: '281 km məsafə və maşının ölçüsünə əsasən hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '281 km məsafə və maşının ölçüsünə əsasən hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -662,16 +662,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuasiya qiyməti nə qədərdir?',
-        answer: '281 km məsafə və maşının çəkisinə görə şəffaf təyin edilir. Əlaqə: 050 231 17 28.',
+        answer: '281 km məsafə və maşının çəkisinə görə şəffaf təyin edilir. Əlaqə: 050 250 31 70.',
       },
     ],
   },
 
   'baki-goycay': {
     directAnswerYukdasima:
-      'Bakıdan Göyçaya yükdaşıma xidməti mümkündürmü? Bəli, M4 magistral dəhlizi ilə (260 km) Bakı–Göyçay və Göyçay–Bakı xəttində gündəlik təhlükəsiz yük və mebel daşınması təşkil edilir. Göyçay şəhər mərkəzi və ətraf ərazilərə mənzil köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası ayrılır. Sifariş: 050 231 17 28.',
+      'Bakıdan Göyçaya yükdaşıma xidməti mümkündürmü? Bəli, M4 magistral dəhlizi ilə (260 km) Bakı–Göyçay və Göyçay–Bakı xəttində gündəlik təhlükəsiz yük və mebel daşınması təşkil edilir. Göyçay şəhər mərkəzi və ətraf ərazilərə mənzil köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası ayrılır. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Göyçaya evakuator necə sifariş edilir? M4 magistralı üzrə (260 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp üzərindən GPS məkanınızı göndərə bilərsiniz.',
+      'Bakıdan Göyçaya evakuator necə sifariş edilir? M4 magistralı üzrə (260 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp üzərindən GPS məkanınızı göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -773,7 +773,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Göyçay yükdaşıma qiymətini necə öyrənə bilərəm?',
-        answer: '260 km məsafə və seçilən maşın tipinə uyğun olaraq rəsmi tariflə hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '260 km məsafə və seçilən maşın tipinə uyğun olaraq rəsmi tariflə hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -795,16 +795,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuasiya qiyməti necə müəyyənləşir?',
-        answer: '260 km məsafəyə və avtomobilin kateqoriyasına uyğun şəffaf hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '260 km məsafəyə və avtomobilin kateqoriyasına uyğun şəffaf hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
   },
 
   'baki-imisli': {
     directAnswerYukdasima:
-      'Bakıdan İmişliyə yükdaşıma mümkündürmü? Bəli, Hacıqabul–Bəhramtəpə magistralı üzrə (210 km) Bakı–İmişli və İmişli–Bakı reysləri hər gün təşkil olunur. İmişli şəhər mərkəzi və ətraf ərazilərə ev köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlələr ayrılır. Sifariş: 050 231 17 28.',
+      'Bakıdan İmişliyə yükdaşıma mümkündürmü? Bəli, Hacıqabul–Bəhramtəpə magistralı üzrə (210 km) Bakı–İmişli və İmişli–Bakı reysləri hər gün təşkil olunur. İmişli şəhər mərkəzi və ətraf ərazilərə ev köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlələr ayrılır. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan İmişliyə evakuator necə sifariş edilir? Hacıqabul–Bəhramtəpə magistralında (210 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə məkan göndərə bilərsiniz.',
+      'Bakıdan İmişliyə evakuator necə sifariş edilir? Hacıqabul–Bəhramtəpə magistralında (210 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə məkan göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -906,7 +906,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–İmişli daşıma qiyməti nə qədərdir?',
-        answer: '210 km məsafə və seçilən maşın tutumuna görə hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '210 km məsafə və seçilən maşın tutumuna görə hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -928,16 +928,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuasiya qiyməti necə müəyyən edilir?',
-        answer: '210 km məsafəyə və avtomobilin çəkisinə uyğun şəffaf hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '210 km məsafəyə və avtomobilin çəkisinə uyğun şəffaf hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
   },
 
   'baki-sabirabad': {
     directAnswerYukdasima:
-      'Bakıdan Sabirabada yükdaşıma xidməti mümkündürmü? Bəli, Hacıqabul–Sabirabad–İmişli yolu boyunca (171 km) Bakı–Sabirabad və Sabirabad–Bakı reysləri hər gün təşkil olunur. Sabirabad şəhər mərkəzi və ətraf ərazilərə ev köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası ayrılır. Sifariş: 050 231 17 28.',
+      'Bakıdan Sabirabada yükdaşıma xidməti mümkündürmü? Bəli, Hacıqabul–Sabirabad–İmişli yolu boyunca (171 km) Bakı–Sabirabad və Sabirabad–Bakı reysləri hər gün təşkil olunur. Sabirabad şəhər mərkəzi və ətraf ərazilərə ev köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlə briqadası ayrılır. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Sabirabada evakuator necə sifariş edilir? Sabirabad marşrutu üzrə (171 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə məkan göndərə bilərsiniz.',
+      'Bakıdan Sabirabada evakuator necə sifariş edilir? Sabirabad marşrutu üzrə (171 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə məkan göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -1039,7 +1039,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–Sabirabad yükdaşıma qiyməti necə təyin edilir?',
-        answer: '171 km məsafə və seçilən furqon ölçüsünə görə hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '171 km məsafə və seçilən furqon ölçüsünə görə hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -1061,16 +1061,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuasiya qiyməti nə qədərdir?',
-        answer: '171 km məsafəyə və maşının çəkisinə uyğun şəffaf hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '171 km məsafəyə və maşının çəkisinə uyğun şəffaf hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
   },
 
   'baki-qusar': {
     directAnswerYukdasima:
-      'Bakıdan Qusara yükdaşıma xidməti mümkündürmü? Bəli, M1 magistralı üzrə (183 km) Bakı–Qusar və Qusar–Bakı marşrutunda gündəlik yük və mebel daşınması həyata keçirilir. Qusar şəhər mərkəzi və ətraf ərazilərə mənzil köçü, bağ əşyaları və kommersiya yükləri üçün 3m–7m qapalı furqonlar və fəhlələr ayrılır. Sifariş: 050 231 17 28.',
+      'Bakıdan Qusara yükdaşıma xidməti mümkündürmü? Bəli, M1 magistralı üzrə (183 km) Bakı–Qusar və Qusar–Bakı marşrutunda gündəlik yük və mebel daşınması həyata keçirilir. Qusar şəhər mərkəzi və ətraf ərazilərə mənzil köçü, bağ əşyaları və kommersiya yükləri üçün 3m–7m qapalı furqonlar və fəhlələr ayrılır. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Qusara evakuator necə sifariş edilir? M1 magistralı və dağlıq marşrut üzrə (183 km) 24/7 operativ evakuasiya və yol yardımı fəaliyyət göstərir. Minik, SUV, pikap və yolda qalan avtomobillər gücləndirilmiş platforma ilə təhlükəsiz daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp üzərindən GPS məkanınızı göndərə bilərsiniz.',
+      'Bakıdan Qusara evakuator necə sifariş edilir? M1 magistralı və dağlıq marşrut üzrə (183 km) 24/7 operativ evakuasiya və yol yardımı fəaliyyət göstərir. Minik, SUV, pikap və yolda qalan avtomobillər gücləndirilmiş platforma ilə təhlükəsiz daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp üzərindən GPS məkanınızı göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Bağ Evi və Kottec Sahibləri',
@@ -1173,7 +1173,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–Qusar daşıma qiyməti necə hesablanır?',
-        answer: '183 km məsafə və seçilən furqon ölçüsünə görə rəsmi tariflərlə hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '183 km məsafə və seçilən furqon ölçüsünə görə rəsmi tariflərlə hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -1195,16 +1195,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Qusar evakuasiya qiyməti nə qədərdir?',
-        answer: '183 km məsafəyə və avtomobilin kateqoriyasına uyğun şəffaf hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '183 km məsafəyə və avtomobilin kateqoriyasına uyğun şəffaf hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
   },
 
   'baki-sabran': {
     directAnswerYukdasima:
-      'Bakıdan Şabrana yükdaşıma mümkündürmü? Bəli, M1 şimal magistralı üzrə (127 km) Bakı–Şabran və Şabran–Bakı reysləri hər gün təşkil olunur. Şabran şəhər mərkəzi və ətraf ərazilərə mənzil köçü, bağ əşyaları və kommersiya malları üçün 3m–7m qapalı furqonlar və fəhlələr təmin edilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Şabrana yükdaşıma mümkündürmü? Bəli, M1 şimal magistralı üzrə (127 km) Bakı–Şabran və Şabran–Bakı reysləri hər gün təşkil olunur. Şabran şəhər mərkəzi və ətraf ərazilərə mənzil köçü, bağ əşyaları və kommersiya malları üçün 3m–7m qapalı furqonlar və fəhlələr təmin edilir. Əlaqə: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Şabrana evakuator necə sifariş edilir? M1 magistralında (127 km) 24/7 operativ evakuasiya və yol yardımı xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə təhlükəsiz daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə məkan göndərə bilərsiniz.',
+      'Bakıdan Şabrana evakuator necə sifariş edilir? M1 magistralında (127 km) 24/7 operativ evakuasiya və yol yardımı xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə təhlükəsiz daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə məkan göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -1306,7 +1306,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–Şabran daşıma qiyməti necə hesablanır?',
-        answer: '127 km məsafə və seçilən furqon ölçüsünə görə rəsmi tariflərlə hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '127 km məsafə və seçilən furqon ölçüsünə görə rəsmi tariflərlə hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -1328,16 +1328,16 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuasiya qiyməti necə müəyyən edilir?',
-        answer: '127 km məsafəyə və maşının çəkisinə uyğun şəffaf hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '127 km məsafəyə və maşının çəkisinə uyğun şəffaf hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
   },
 
   'baki-agcabedi': {
     directAnswerYukdasima:
-      'Bakıdan Ağcabədiyə yükdaşıma xidməti mümkündürmü? Bəli, Hacıqabul–Bəhramtəpə–Ağcabədi magistralı boyunca (293 km) Bakı–Ağcabədi və Ağcabədi–Bakı reysləri hər gün təşkil olunur. Ağcabədi şəhər mərkəzi və ətraf ərazilərə mənzil köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlələr ayrılır. Sifariş: 050 231 17 28.',
+      'Bakıdan Ağcabədiyə yükdaşıma xidməti mümkündürmü? Bəli, Hacıqabul–Bəhramtəpə–Ağcabədi magistralı boyunca (293 km) Bakı–Ağcabədi və Ağcabədi–Bakı reysləri hər gün təşkil olunur. Ağcabədi şəhər mərkəzi və ətraf ərazilərə mənzil köçü, kommersiya malları və mebel daşınması üçün 3m–7m qapalı furqonlar və fəhlələr ayrılır. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Ağcabədiyə evakuator necə sifariş edilir? Qarabağ və Mərkəzi Aran marşrutunda (293 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə təhlükəsiz daşınır. Növbətçi evakuator üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə GPS məkanınızı göndərə bilərsiniz.',
+      'Bakıdan Ağcabədiyə evakuator necə sifariş edilir? Qarabağ və Mərkəzi Aran marşrutunda (293 km) 24/7 operativ evakuasiya xidməti fəaliyyət göstərir. Minik, SUV, mikroavtobus və qəzalı nəqliyyat vasitələri hidravlik platforma ilə təhlükəsiz daşınır. Növbətçi evakuator üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə GPS məkanınızı göndərə bilərsiniz.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -1439,7 +1439,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Bakı–Ağcabədi yükdaşıma qiyməti necə hesablanır?',
-        answer: '293 km məsafə və seçilən furqon ölçüsünə görə rəsmi bazadan hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '293 km məsafə və seçilən furqon ölçüsünə görə rəsmi bazadan hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
     evakuatorFaqs: [
@@ -1461,7 +1461,7 @@ export const BATCH3_REGIONAL_CONTENT: Record<string, PilotContent> = {
       },
       {
         question: 'Evakuasiya qiyməti necə müəyyən edilir?',
-        answer: '293 km məsafəyə və avtomobilin çəkisinə uyğun şəffaf hesablanır. Əlaqə: 050 231 17 28.',
+        answer: '293 km məsafəyə və avtomobilin çəkisinə uyğun şəffaf hesablanır. Əlaqə: 050 250 31 70.',
       },
     ],
   },

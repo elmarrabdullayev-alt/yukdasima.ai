@@ -3,9 +3,9 @@ import { PilotContent } from './regionalContent';
 export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
   'baki-salyan': {
     directAnswerYukdasima:
-      'Bakıdan Salyana yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Salyandan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Salyana yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Salyandan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Salyana evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Salyandan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Salyana evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Salyandan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -93,7 +93,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Salyana yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Salyandan Bakıya yükdaşıma mümkündür?',
@@ -115,7 +115,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Salyana evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Salyandan Bakıya evakuator çağırmaq mümkündür?',
@@ -138,9 +138,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-neftcala': {
     directAnswerYukdasima:
-      'Bakıdan Neftçalaya yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun yüklər üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Neftçaladan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Neftçalaya yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun yüklər üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Neftçaladan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Neftçalaya evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Neftçaladan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Neftçalaya evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Neftçaladan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -228,7 +228,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Neftçalaya yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Neftçaladan Bakıya yükdaşıma mümkündür?',
@@ -250,7 +250,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Neftçalaya evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Neftçaladan Bakıya evakuator çağırmaq mümkündür?',
@@ -273,9 +273,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-haciqabul': {
     directAnswerYukdasima:
-      'Bakıdan Hacıqabula yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Hacıqabuldan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Hacıqabula yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Hacıqabuldan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Hacıqabula evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Hacıqabuldan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Hacıqabula evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Hacıqabuldan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -363,7 +363,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Hacıqabula yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Hacıqabuldan Bakıya yükdaşıma mümkündür?',
@@ -385,7 +385,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Hacıqabula evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Hacıqabuldan Bakıya evakuator çağırmaq mümkündür?',
@@ -408,9 +408,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-kurdemir': {
     directAnswerYukdasima:
-      'Bakıdan Kürdəmirə yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Kürdəmirdən Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Kürdəmirə yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Kürdəmirdən Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Kürdəmirə evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Kürdəmirdən Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Kürdəmirə evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Kürdəmirdən Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -498,7 +498,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Kürdəmirə yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Kürdəmirdən Bakıya yükdaşıma mümkündür?',
@@ -520,7 +520,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Kürdəmirə evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Kürdəmirdən Bakıya evakuator çağırmaq mümkündür?',
@@ -543,9 +543,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-ucar': {
     directAnswerYukdasima:
-      'Bakıdan Ucara yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Ucardan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Ucara yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Ucardan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Ucara evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Ucardan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Ucara evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Ucardan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -633,7 +633,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Ucara yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Ucardan Bakıya yükdaşıma mümkündür?',
@@ -655,7 +655,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Ucara evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Ucardan Bakıya evakuator çağırmaq mümkündür?',
@@ -678,9 +678,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-zerdab': {
     directAnswerYukdasima:
-      'Bakıdan Zərdaba yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Zərdabdan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Zərdaba yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Zərdabdan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Zərdaba evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Zərdabdan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Zərdaba evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Zərdabdan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -768,7 +768,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Zərdaba yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Zərdabdan Bakıya yükdaşıma mümkündür?',
@@ -790,7 +790,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Zərdaba evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Zərdabdan Bakıya evakuator çağırmaq mümkündür?',
@@ -813,9 +813,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-berde': {
     directAnswerYukdasima:
-      'Bakıdan Bərdəyə yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Bərdədən Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Bərdəyə yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Bərdədən Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Bərdəyə evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Bərdədən Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Bərdəyə evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Bərdədən Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -903,7 +903,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Bərdəyə yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Bərdədən Bakıya yükdaşıma mümkündür?',
@@ -925,7 +925,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Bərdəyə evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Bərdədən Bakıya evakuator çağırmaq mümkündür?',
@@ -948,9 +948,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-terter': {
     directAnswerYukdasima:
-      'Bakıdan Tərtərə yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Tərtərdən Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Tərtərə yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Tərtərdən Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Tərtərə evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Tərtərdən Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Tərtərə evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Tərtərdən Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -1038,7 +1038,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Tərtərə yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Tərtərdən Bakıya yükdaşıma mümkündür?',
@@ -1060,7 +1060,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Tərtərə evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Tərtərdən Bakıya evakuator çağırmaq mümkündür?',
@@ -1083,9 +1083,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-agdam-quzanli': {
     directAnswerYukdasima:
-      'Bakıdan Ağdam Quzanlıya yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Ağdam Quzanlıdan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Ağdam Quzanlıya yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Ağdam Quzanlıdan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Ağdam Quzanlıya evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Ağdam Quzanlıdan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Ağdam Quzanlıya evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Ağdam Quzanlıdan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -1173,7 +1173,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Ağdam Quzanlıya yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Ağdam Quzanlıdan Bakıya yükdaşıma mümkündür?',
@@ -1195,7 +1195,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Ağdam Quzanlıya evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Ağdam Quzanlıdan Bakıya evakuator çağırmaq mümkündür?',
@@ -1218,9 +1218,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-beyleqan': {
     directAnswerYukdasima:
-      'Bakıdan Beyləqana yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Beyləqandan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Beyləqana yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Beyləqandan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Beyləqana evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Beyləqandan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Beyləqana evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Beyləqandan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -1308,7 +1308,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Beyləqana yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Beyləqandan Bakıya yükdaşıma mümkündür?',
@@ -1330,7 +1330,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Beyləqana evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Beyləqandan Bakıya evakuator çağırmaq mümkündür?',
@@ -1353,9 +1353,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-bilasuvar': {
     directAnswerYukdasima:
-      'Bakıdan Biləsuvara yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Biləsuvardan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Biləsuvara yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Biləsuvardan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Biləsuvara evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Biləsuvardan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Biləsuvara evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Biləsuvardan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -1443,7 +1443,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Biləsuvara yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Biləsuvardan Bakıya yükdaşıma mümkündür?',
@@ -1465,7 +1465,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Biləsuvara evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Biləsuvardan Bakıya evakuator çağırmaq mümkündür?',
@@ -1488,9 +1488,9 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
 
   'baki-celilabad': {
     directAnswerYukdasima:
-      'Bakıdan Cəlilabada yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Cəlilabaddan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 231 17 28.',
+      'Bakıdan Cəlilabada yükdaşıma xidməti sifariş etmək mümkündür. Ev əşyaları, mebel və digər uyğun kommersiya yükləri üçün yükün həcminə uyğun nəqliyyat vasitəsi seçilə bilər. Cəlilabaddan Bakıya daşınma sifarişi üçün də operatorla əlaqə saxlamaq mümkündür. Sifariş: 050 250 31 70.',
     directAnswerEvakuator:
-      'Bakıdan Cəlilabada evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Cəlilabaddan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 231 17 28.',
+      'Bakıdan Cəlilabada evakuator xidməti sifariş etmək mümkündür. Nasaz və qəzalı avtomobillərin hidravlik platforma ilə daşınması üçün 24/7 sifariş qəbul edilir. Cəlilabaddan Bakıya evakuator sifarişi üzrə qiymət və xidmət detalları operator tərəfindən dəqiqləşdirilir. Əlaqə: 050 250 31 70.',
     targetAudienceYukdasima: [
       {
         title: 'Mənzil və Ev Köçürənlər',
@@ -1578,7 +1578,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     yukdasimaFaqs: [
       {
         question: 'Bakıdan Cəlilabada yükdaşıma necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə yükün növünü, həcmini və ünvanları bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Cəlilabaddan Bakıya yükdaşıma mümkündür?',
@@ -1600,7 +1600,7 @@ export const BATCH4_REGIONAL_CONTENT: Record<string, PilotContent> = {
     evakuatorFaqs: [
       {
         question: 'Bakıdan Cəlilabada evakuator necə sifariş edilir?',
-        answer: '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
+        answer: '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp vasitəsilə avtomobilin modelini və yerləşdiyi ünvanı bildirməklə sifariş verə bilərsiniz.',
       },
       {
         question: 'Cəlilabaddan Bakıya evakuator çağırmaq mümkündür?',

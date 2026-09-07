@@ -33,23 +33,23 @@ export const PHONE_CONFIG: ContactConfig = {
   },
   primaryPhone: {
     label: 'Əlaqə nömrəsi',
-    displayNumber: '050 231 17 28',
-    telNumber: '+994502311728',
-    telHref: 'tel:+994502311728',
+    displayNumber: '050 250 31 70',
+    telNumber: '+994502503170',
+    telHref: 'tel:+994502503170',
   },
   mobileNumbers: [
     {
       label: 'Mobil / WhatsApp',
-      displayNumber: '050 231 17 28',
-      telNumber: '+994502311728',
-      telHref: 'tel:+994502311728',
+      displayNumber: '050 250 31 70',
+      telNumber: '+994502503170',
+      telHref: 'tel:+994502503170',
     },
   ],
   whatsapp: {
     label: 'WhatsApp',
-    displayNumber: '+994 50 231 17 28',
-    normalizedNumber: '994502311728',
-    baseUrl: 'https://wa.me/994502311728',
+    displayNumber: '+994 50 250 31 70',
+    normalizedNumber: '994502503170',
+    baseUrl: 'https://wa.me/994502503170',
   },
 };
 
@@ -61,7 +61,7 @@ export const CONTACT_INFO = {
   HOTLINE_TEL: PHONE_CONFIG.hotline.telHref,
   HOTLINE_SHORT: '878',
 
-  // 2. Primary Contact / Call number everywhere outside Header (050 231 17 28)
+  // 2. Primary Contact / Call number everywhere outside Header (050 250 31 70)
   PRIMARY_PHONE_DISPLAY: PHONE_CONFIG.primaryPhone.displayNumber,
   PRIMARY_PHONE_TEL: PHONE_CONFIG.primaryPhone.telHref,
   PRIMARY_PHONE_RAW: PHONE_CONFIG.primaryPhone.telNumber,
@@ -72,7 +72,7 @@ export const CONTACT_INFO = {
   MOBILE_TEL: PHONE_CONFIG.primaryPhone.telHref,
   MOBILE_RAW: PHONE_CONFIG.primaryPhone.telNumber,
 
-  // 3. WhatsApp (+994 50 231 17 28 / 994502311728)
+  // 3. WhatsApp (+994 50 250 31 70 / 994502503170)
   WHATSAPP_NUMBER: PHONE_CONFIG.whatsapp.normalizedNumber,
   WHATSAPP_DISPLAY: PHONE_CONFIG.whatsapp.displayNumber,
   WHATSAPP_URL_BASE: PHONE_CONFIG.whatsapp.baseUrl,

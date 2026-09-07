@@ -73,9 +73,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Pik saatlarda Şərifzadə və Tbilisi prospektində sıxlıq müşahidə olunur. Yeni Yasamalın bəzi həyətlərində avtomobil parklanması sıx olduğundan 3–4.2 metrlik manevrli furqonların seçilməsi tövsiyə olunur.',
     responseTimeMinutes: '15–20 dəqiqə',
     directAnswerYukdasima:
-      'Bakının Yasamal rayonunda (Yeni Yasamal, Elmlər Akademiyası, İnşaatçılar, Tbilisi pr.) yükdaşıma xidməti necə sifariş edilir? Yasamal rayonunun bütün məhəllələri üzrə hər gün fasiləsiz mənzil köçürülməsi, mebel ustası və fəhlə xidməti göstərilir. Hündürmərtəbəli binalar və dar həyətlərə uyğun 3–4.2 metrlik qapalı yük maşınları təyin edilir. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə mənzilin yerləşdiyi ünvanı və əşyaların şəkillərini göndərərək dərhal qiymət təklifi ala bilərsiniz.',
+      'Bakının Yasamal rayonunda (Yeni Yasamal, Elmlər Akademiyası, İnşaatçılar, Tbilisi pr.) yükdaşıma xidməti necə sifariş edilir? Yasamal rayonunun bütün məhəllələri üzrə hər gün fasiləsiz mənzil köçürülməsi, mebel ustası və fəhlə xidməti göstərilir. Hündürmərtəbəli binalar və dar həyətlərə uyğun 3–4.2 metrlik qapalı yük maşınları təyin edilir. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə mənzilin yerləşdiyi ünvanı və əşyaların şəkillərini göndərərək dərhal qiymət təklifi ala bilərsiniz.',
     directAnswerEvakuator:
-      'Yasamal rayonunda təcili evakuator necə çağırılır? Tbilisi prospekti, Şərifzadə küçəsi, 20 Yanvar dairəsi və Yeni Yasamal ərazisində 24/7 növbətçi hidravlik evakuatorlarımız fəaliyyət göstərir. Çağırışdan sonra 15–20 dəqiqə ərzində ünvana çataraq minik, SUV və ya qəzalı nəqliyyat vasitələrini təhlükəsiz platformaya qaldırırıq. Əlaqə: 050 231 17 28.',
+      'Yasamal rayonunda təcili evakuator necə çağırılır? Tbilisi prospekti, Şərifzadə küçəsi, 20 Yanvar dairəsi və Yeni Yasamal ərazisində 24/7 növbətçi hidravlik evakuatorlarımız fəaliyyət göstərir. Çağırışdan sonra 15–20 dəqiqə ərzində ünvana çataraq minik, SUV və ya qəzalı nəqliyyat vasitələrini təhlükəsiz platformaya qaldırırıq. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Yasamal rayonunda yükdaşıma prosesində əsas diqqət binaların mərtəbə hündürlüyünə və həyətə giriş imkanlarına yetirilir. Yeni tikililərdə yük liftindən istifadə edilərək mebellər sürətlə daşınır, köhnə 5 mərtəbəli binalarda isə təcrübəli fəhlə briqadası pilləkənlərlə təhlükəsiz endirmə və qaldırmanı icra edir. Mebellər xüsusi qoruyucu materiallarla qablaşdırılır.',
     evakuatorOverview:
@@ -124,7 +124,7 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       {
         question: 'Yasamal daxili yükdaşıma xidmətinin qiyməti nə qədərdir?',
         answer:
-          'Qiymət yükün həcminə, seçilən avtomobilə (3m/4m), fəhlə sayına və mərtəbə şərtlərinə görə formalaşır. Dəqiq hesablama üçün 050 231 17 28 ilə əlaqə saxlaya bilərsiniz.',
+          'Qiymət yükün həcminə, seçilən avtomobilə (3m/4m), fəhlə sayına və mərtəbə şərtlərinə görə formalaşır. Dəqiq hesablama üçün 050 250 31 70 ilə əlaqə saxlaya bilərsiniz.',
       },
     ],
     faqsEvakuator: [
@@ -168,9 +168,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Geniş prospektlər yük maşınlarının rahat hərəkətinə imkan verir. Əhməd Rəcəbli və Təbriz küçələrində gündüz saatlarında parklanma sıxlığı nəzərə alınaraq operativ yükləmə zonası seçilir.',
     responseTimeMinutes: '15–20 dəqiqə',
     directAnswerYukdasima:
-      'Nərimanov rayonunda (Təbriz küç., N.Nərimanov metrosu, Əhməd Rəcəbli, Montin, Heydər Əliyev pr.) yükdaşıma və ofis köçürülməsi necə sifariş edilir? Nərimanov rayonunun bütün ofis və yaşayış binaları üçün korporativ köç, mebel daşınması və fəhlə xidməti təklif olunur. 2 metrdən 6 metrədək qapalı furqonlar və təcrübəli ustalarla xidmət göstərilir. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp-dan istifadə edə bilərsiniz.',
+      'Nərimanov rayonunda (Təbriz küç., N.Nərimanov metrosu, Əhməd Rəcəbli, Montin, Heydər Əliyev pr.) yükdaşıma və ofis köçürülməsi necə sifariş edilir? Nərimanov rayonunun bütün ofis və yaşayış binaları üçün korporativ köç, mebel daşınması və fəhlə xidməti təklif olunur. 2 metrdən 6 metrədək qapalı furqonlar və təcrübəli ustalarla xidmət göstərilir. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp-dan istifadə edə bilərsiniz.',
     directAnswerEvakuator:
-      'Nərimanov rayonunda 24/7 evakuator necə çağırılır? Heydər Əliyev prospekti, Ziya Bünyadov, Koroğlu körpüsü yaxınlığı və Əhməd Rəcəbli küçəsində növbətçi evakuatorlarımız 15 dəqiqəyə çatır. Minik, SUV, biznes-klass və qəzalı maşınlar üçün alçaq bucaqlı hidravlik platforma təmin edilir. Əlaqə: 050 231 17 28.',
+      'Nərimanov rayonunda 24/7 evakuator necə çağırılır? Heydər Əliyev prospekti, Ziya Bünyadov, Koroğlu körpüsü yaxınlığı və Əhməd Rəcəbli küçəsində növbətçi evakuatorlarımız 15 dəqiqəyə çatır. Minik, SUV, biznes-klass və qəzalı maşınlar üçün alçaq bucaqlı hidravlik platforma təmin edilir. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Nərimanov rayonunda həm fərdi mənzil köçləri, həm də irimiqyaslı ofis və ticarət obyektlərinin daşınması yüksək tələbatdadır. Əhməd Rəcəbli və Təbriz küçələrindəki biznes mərkəzlərində iş prosesini dayandırmadan axşam və ya həftəsonu qrafiki ilə sənədlərin, serverlərin və ofis mebellərinin təhlükəsiz köçürülməsi təmin edilir.',
     evakuatorOverview:
@@ -219,7 +219,7 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       {
         question: 'Nərimanovdan digər rayonlara yükdaşıma neçəyədir?',
         answer:
-          'Rayondaxili və digər Bakı rayonlarına tariflər şəffafdır. İlkin qiymət üçün 050 231 17 28 ilə dərhal əlaqə saxlayın.',
+          'Rayondaxili və digər Bakı rayonlarına tariflər şəffafdır. İlkin qiymət üçün 050 250 31 70 ilə dərhal əlaqə saxlayın.',
       },
     ],
     faqsEvakuator: [
@@ -265,9 +265,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Mərkəzi küçələrdə gün ərzində sıx nəqliyyat və parklanma qıtlığı var. Yükləmə-boşaltma üçün sürücülərimiz ən optimal park yerini əvvəlcədən koordinasiya edir.',
     responseTimeMinutes: '15–20 dəqiqə',
     directAnswerYukdasima:
-      'Nəsimi rayonunda (28 May, Tibb Universiteti, Bakıxanov küç., Memar Əcəmi, Səməd Vurğun) yükdaşıma xidməti necə təşkil edilir? Nəsimi rayonunun tarixi və yeni binaları üçün xüsusi qablaşdırma, mebel ustası və peşəkar fəhlə xidməti göstərilir. Mərkəzi küçələrin dar həyətlərinə uyğun 3–4 metrlik yük maşınları ayrılır. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
+      'Nəsimi rayonunda (28 May, Tibb Universiteti, Bakıxanov küç., Memar Əcəmi, Səməd Vurğun) yükdaşıma xidməti necə təşkil edilir? Nəsimi rayonunun tarixi və yeni binaları üçün xüsusi qablaşdırma, mebel ustası və peşəkar fəhlə xidməti göstərilir. Mərkəzi küçələrin dar həyətlərinə uyğun 3–4 metrlik yük maşınları ayrılır. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
     directAnswerEvakuator:
-      'Nəsimi rayonunda operativ evakuator xidməti varmı? Bəli, 28 May, Bakıxanov küçəsi, Sirk ətrafı və Memar Əcəmi zonasında 24/7 növbətçi evakuatorlarımız 15–20 dəqiqəyə ünvana çatır. Təkəri və ya transmissiyası kilidlənmiş qəzalı avtomobillər hidravlik platforma ilə daşınır. Əlaqə: 050 231 17 28.',
+      'Nəsimi rayonunda operativ evakuator xidməti varmı? Bəli, 28 May, Bakıxanov küçəsi, Sirk ətrafı və Memar Əcəmi zonasında 24/7 növbətçi evakuatorlarımız 15–20 dəqiqəyə ünvana çatır. Təkəri və ya transmissiyası kilidlənmiş qəzalı avtomobillər hidravlik platforma ilə daşınır. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Nəsimi rayonunun arxitektur binalarında tavanların hündür və pilləkənlərin geniş olması mebel daşınmasında xüsusi ehtiyat tələb edir. Köhnə və yeni binalarda antikvar əşyalar, musiqi alətləri (pianino, royal) və həssas mebellər çoxqatlı köpüklü materiallarla qorunaraq daşınır.',
     evakuatorOverview:
@@ -352,9 +352,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Babək və 8 Noyabr prospektləri genişdir, böyük yük maşınları və evakuatorlar üçün əla logistika imkanı yaradır. Əhmədli məhəllə daxili yollarında axşam saatlarında parklanma sıxlığı olur.',
     responseTimeMinutes: '15–20 dəqiqə',
     directAnswerYukdasima:
-      'Xətai rayonunda (Ağ Şəhər, Əhmədli, Həzi Aslanov, 8 Noyabr pr., Babək pr.) yükdaşıma necə sifariş edilir? Xətai rayonunun bütün yeni kompleksləri və yaşayış məhəllələri üzrə gündəlik evdən-evə köçürülmə, mebel ustası və fəhlə xidmətləri mövcuddur. 2 metrdən 7 metrədək geniş yük maşınları ilə xidmət göstərilir. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə yazaraq dərhal qiymət öyrənə bilərsiniz.',
+      'Xətai rayonunda (Ağ Şəhər, Əhmədli, Həzi Aslanov, 8 Noyabr pr., Babək pr.) yükdaşıma necə sifariş edilir? Xətai rayonunun bütün yeni kompleksləri və yaşayış məhəllələri üzrə gündəlik evdən-evə köçürülmə, mebel ustası və fəhlə xidmətləri mövcuddur. 2 metrdən 7 metrədək geniş yük maşınları ilə xidmət göstərilir. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə yazaraq dərhal qiymət öyrənə bilərsiniz.',
     directAnswerEvakuator:
-      'Xətai rayonunda 24/7 evakuator necə çağırılır? Babək prospekti, 8 Noyabr pr., Nobel körpüsü və Əhmədli dairəsində növbətçi hidravlik evakuatorlarımız 15 dəqiqəyə çatır. Minik, SUV və qəzalı nəqliyyat vasitələri zərərsiz platformaya qaldırılır. Əlaqə: 050 231 17 28.',
+      'Xətai rayonunda 24/7 evakuator necə çağırılır? Babək prospekti, 8 Noyabr pr., Nobel körpüsü və Əhmədli dairəsində növbətçi hidravlik evakuatorlarımız 15 dəqiqəyə çatır. Minik, SUV və qəzalı nəqliyyat vasitələri zərərsiz platformaya qaldırılır. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Xətai rayonu Bakının ən sıx məskunlaşmış və ən çox yeni mənzil köçü həyata keçirilən rayonlarındandır. Ağ Şəhərdəki müasir komplekslərdən tutmuş Həzi Aslanov və Əhmədlidəki çoxsaylı yeni binalara qədər bütün mənzillər üçün iritutumlu qapalı furqonlar və təcrübəli mebel montajçıları təmin edilir.',
     evakuatorOverview:
@@ -438,9 +438,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'İçərişəhər və Fəvvarələr meydanı ətrafında avtomobil girişi məhdudiyyətlidir. Badamdar və Bayıl yoxuşlarında güclü mühərrikli və etibarlı əyləc sistemli nəqliyyat vasitələri tələb olunur.',
     responseTimeMinutes: '15–20 dəqiqə',
     directAnswerYukdasima:
-      'Səbail rayonunda (Badamdar, Bayıl, İçərişəhər, Sahil, Neftçilər pr.) yükdaşıma və villa köçürülməsi necə sifariş edilir? Səbail rayonunun həm tarixi mərkəz binaları, həm də Badamdar və Bayıldakı fərdi villaları üçün xüsusi daşıma briqadası və təmiz qapalı furqonlar təmin olunur. Mebellərin qoruyucu qablaşdırılması və montajı daxildir. Sifariş üçün 050 231 17 28 nömrəsi ilə əlaqə saxlayın və ya WhatsApp-dan yazın.',
+      'Səbail rayonunda (Badamdar, Bayıl, İçərişəhər, Sahil, Neftçilər pr.) yükdaşıma və villa köçürülməsi necə sifariş edilir? Səbail rayonunun həm tarixi mərkəz binaları, həm də Badamdar və Bayıldakı fərdi villaları üçün xüsusi daşıma briqadası və təmiz qapalı furqonlar təmin olunur. Mebellərin qoruyucu qablaşdırılması və montajı daxildir. Sifariş üçün 050 250 31 70 nömrəsi ilə əlaqə saxlayın və ya WhatsApp-dan yazın.',
     directAnswerEvakuator:
-      'Səbail rayonunda evakuator necə çağırılır? Neftçilər prospekti, Badamdar yoxuşu, Bayıl və Salyan şossesində 24/7 növbətçi evakuatorlarımız 15 dəqiqə ərzində ünvana çatır. Dağətəyi yoxuşlarda və dar küçələrdə güclü hidravlik platforma ilə təhlükəsiz daşıma təmin olunur. Əlaqə: 050 231 17 28.',
+      'Səbail rayonunda evakuator necə çağırılır? Neftçilər prospekti, Badamdar yoxuşu, Bayıl və Salyan şossesində 24/7 növbətçi evakuatorlarımız 15 dəqiqə ərzində ünvana çatır. Dağətəyi yoxuşlarda və dar küçələrdə güclü hidravlik platforma ilə təhlükəsiz daşıma təmin olunur. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Səbail rayonunda daşıma xidməti iki fərqli xarakter daşıyır: Mərkəzi Sahil və İçərişəhər zonasında dar keçidlərə uyğun manevrli kiçik yük maşınları ilə antikvar və mənzil əşyaları daşınır; Badamdar və Bayılda isə böyük həcmli villaların, bağ mebellərinin və bəzək əşyalarının iritutumlu furqonlarla təhlükəsiz köçürülməsi həyata keçirilir.',
     evakuatorOverview:
@@ -524,9 +524,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Dərnəgül şossesi və Azadlıq prospektində hərəkət rahatdır. Mikrorayon daxili həyətlərdə parklanma sıxlığı olur, lakin təcrübəli sürücülərimiz ən yaxın giriş nöqtəsini seçir.',
     responseTimeMinutes: '15–20 dəqiqə',
     directAnswerYukdasima:
-      'Binəqədi rayonunda (Azadlıq pr., 6, 7, 8, 9-cu mikrorayonlar, Biləcəri, Dərnəgül) yükdaşıma xidməti necə sifariş edilir? Binəqədi rayonunun həm çoxmərtəbəli mikrorayon binaları, həm də Biləcəri və Binəqədi kəndindəki həyət evləri üçün mənzil köçürülməsi, mebel ustası və fəhlə briqadası təqdim edilir. 2 metrdən 6 metrədək yük maşınları ilə xidmət göstərilir. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp-dan yaza bilərsiniz.',
+      'Binəqədi rayonunda (Azadlıq pr., 6, 7, 8, 9-cu mikrorayonlar, Biləcəri, Dərnəgül) yükdaşıma xidməti necə sifariş edilir? Binəqədi rayonunun həm çoxmərtəbəli mikrorayon binaları, həm də Biləcəri və Binəqədi kəndindəki həyət evləri üçün mənzil köçürülməsi, mebel ustası və fəhlə briqadası təqdim edilir. 2 metrdən 6 metrədək yük maşınları ilə xidmət göstərilir. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp-dan yaza bilərsiniz.',
     directAnswerEvakuator:
-      'Binəqədi rayonunda 24/7 evakuator necə çağırılır? Azadlıq prospekti, Dərnəgül yolu, Biləcəri enişi və Bakı-Sumqayıt şossesi çıxışında növbətçi evakuatorlarımız 15 dəqiqəyə çatır. Minik, SUV, mikroavtobus və qəzalı nəqliyyat üçün hidravlik platforma ayrılır. Əlaqə: 050 231 17 28.',
+      'Binəqədi rayonunda 24/7 evakuator necə çağırılır? Azadlıq prospekti, Dərnəgül yolu, Biləcəri enişi və Bakı-Sumqayıt şossesi çıxışında növbətçi evakuatorlarımız 15 dəqiqəyə çatır. Minik, SUV, mikroavtobus və qəzalı nəqliyyat üçün hidravlik platforma ayrılır. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Binəqədi rayonunda daşıma xidmətləri geniş spektri əhatə edir: 6, 7, 8 və 9-cu mikrorayonlarda çoxmərtəbəli binalardan ev köçləri, Dərnəgül sənaye zonasından tikinti materialları və istehsalat avadanlıqlarının daşınması, Biləcəridə isə fərdi həyət evlərinin tam köçürülməsi təşkil edilir.',
     evakuatorOverview:
@@ -610,9 +610,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Qara Qarayev pr. və 8-ci km bazarı ətrafında xüsusilə həftəsonları nəqliyyat və piyada hərəkəti sıxdır. Təcrübəli sürücülərimiz alternativ məhəllə yollarından istifadə edir.',
     responseTimeMinutes: '15–20 dəqiqə',
     directAnswerYukdasima:
-      'Nizami rayonunda (Qara Qarayev, Neftçilər, Xalqlar Dostluğu, Keşlə, 8-ci km) yükdaşıma xidməti necə sifariş edilir? Nizami rayonunun bütün məhəllələri üzrə mənzil köçürülməsi, mebel ustası və fəhlə xidməti fəaliyyət göstərir. 2 metrdən 6 metrədək qapalı furqonlar və təcrübəli ustalar təyin olunur. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
+      'Nizami rayonunda (Qara Qarayev, Neftçilər, Xalqlar Dostluğu, Keşlə, 8-ci km) yükdaşıma xidməti necə sifariş edilir? Nizami rayonunun bütün məhəllələri üzrə mənzil köçürülməsi, mebel ustası və fəhlə xidməti fəaliyyət göstərir. 2 metrdən 6 metrədək qapalı furqonlar və təcrübəli ustalar təyin olunur. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
     directAnswerEvakuator:
-      'Nizami rayonunda evakuator necə çağırılır? Qara Qarayev prospekti, Koroğlu qovşağı, Babək pr. və Neftçilər ərazisində 24/7 növbətçi evakuatorlarımız 15 dəqiqəyə çatır. Minik maşınları, SUV və qəzalı nəqliyyat vasitələri hidravlik platforma ilə daşınır. Əlaqə: 050 231 17 28.',
+      'Nizami rayonunda evakuator necə çağırılır? Qara Qarayev prospekti, Koroğlu qovşağı, Babək pr. və Neftçilər ərazisində 24/7 növbətçi evakuatorlarımız 15 dəqiqəyə çatır. Minik maşınları, SUV və qəzalı nəqliyyat vasitələri hidravlik platforma ilə daşınır. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Nizami rayonunda mənzil köçürülməsi və ticarət obyektlərinin daşınması gündəlik həyata keçirilir. Qara Qarayev və Neftçilər metrosu ətrafındakı çoxsaylı yeni binalarda mebellərin qablaşdırılması, yük liftləri ilə daşınması və yeni ünvanda quraşdırılması təmin edilir.',
     evakuatorOverview:
@@ -695,9 +695,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Aeroport şossesi genişdir və sürətli hərəkət imkanı verir. Kəndarası yollarda bəzi küçələr torpaq və ya dar ola bilər, bu səbəbdən uyğun klirensli yük maşınları göndərilir.',
     responseTimeMinutes: '15–25 dəqiqə',
     directAnswerYukdasima:
-      'Sabunçu rayonunda (Bakıxanov, Zabrat, Maştağa, Bilgəh, Nardaran) yükdaşıma və bağ evi köçürülməsi necə sifariş edilir? Sabunçu rayonunun həm qəsəbə binaları, həm də Bilgəh və Maştağadakı bağ evləri üçün təmiz qapalı furqonlar, mebel ustası və fəhlə xidməti göstərilir. 2 metrdən 6 metrədək yük maşınları ayrılır. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
+      'Sabunçu rayonunda (Bakıxanov, Zabrat, Maştağa, Bilgəh, Nardaran) yükdaşıma və bağ evi köçürülməsi necə sifariş edilir? Sabunçu rayonunun həm qəsəbə binaları, həm də Bilgəh və Maştağadakı bağ evləri üçün təmiz qapalı furqonlar, mebel ustası və fəhlə xidməti göstərilir. 2 metrdən 6 metrədək yük maşınları ayrılır. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
     directAnswerEvakuator:
-      'Sabunçu rayonunda evakuator necə çağırılır? Aeroport şossesi, Zabrat dairəsi, Bakıxanov və Maştağa yolunda 24/7 növbətçi evakuatorlarımız 15–20 dəqiqəyə çatır. Minik, SUV və bağ yollarında qalan nəqliyyat vasitələri hidravlik platforma və güclü bucurqadla daşınır. Əlaqə: 050 231 17 28.',
+      'Sabunçu rayonunda evakuator necə çağırılır? Aeroport şossesi, Zabrat dairəsi, Bakıxanov və Maştağa yolunda 24/7 növbətçi evakuatorlarımız 15–20 dəqiqəyə çatır. Minik, SUV və bağ yollarında qalan nəqliyyat vasitələri hidravlik platforma və güclü bucurqadla daşınır. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Sabunçu rayonunda xüsusilə yaz-yay aylarında şəhərdən Bilgəh, Nardaran və Maştağa bağlarına mövsümi köçlər, payızda isə geriyə daşınmalar intensivləşir. Bağ mebelləri, yelləncəklər, generatorlar və məişət texnikası xüsusi ehtiyatla daşınır.',
     evakuatorOverview:
@@ -779,9 +779,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Zığ şossesi və Hövsan yolu genişdir. Yeni Günəşli massivlərində yoxuşlu relyef və binalararası pilləkənli keçidlər daşıma zamanı fəhlə təcrübəsi tələb edir.',
     responseTimeMinutes: '15–25 dəqiqə',
     directAnswerYukdasima:
-      'Suraxanı rayonunda (Qaraçuxur, Yeni Günəşli, Hövsan, Əmircan, Zığ) yükdaşıma necə sifariş edilir? Suraxanı rayonunun bütün massivləri və qəsəbələri üzrə mənzil köçürülməsi, mebel ustası və fəhlə xidməti göstərilir. 2 metrdən 6 metrədək təmiz qapalı furqonlar ayrılır. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
+      'Suraxanı rayonunda (Qaraçuxur, Yeni Günəşli, Hövsan, Əmircan, Zığ) yükdaşıma necə sifariş edilir? Suraxanı rayonunun bütün massivləri və qəsəbələri üzrə mənzil köçürülməsi, mebel ustası və fəhlə xidməti göstərilir. 2 metrdən 6 metrədək təmiz qapalı furqonlar ayrılır. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
     directAnswerEvakuator:
-      'Suraxanı rayonunda evakuator necə çağırılır? Zığ şossesi, Hövsan yolu, Qaraçuxur və Aeroport beton yolunda 24/7 növbətçi evakuatorlarımız 15–20 dəqiqəyə çatır. Minik, SUV və yük texnikaları üçün hidravlik platformalı evakuasiya təmin olunur. Əlaqə: 050 231 17 28.',
+      'Suraxanı rayonunda evakuator necə çağırılır? Zığ şossesi, Hövsan yolu, Qaraçuxur və Aeroport beton yolunda 24/7 növbətçi evakuatorlarımız 15–20 dəqiqəyə çatır. Minik, SUV və yük texnikaları üçün hidravlik platformalı evakuasiya təmin olunur. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Suraxanı rayonunda xüsusilə Yeni Günəşli və Hövsan MİDA komplekslərinə köçən gənc ailələr üçün münasib tarifli və operativ evdən-evə daşıma xidməti təşkil edilir. Mebellər ustalarımız tərəfindən səliqə ilə sökülür, bükülür və yeni mənzildə quraşdırılır.',
     evakuatorOverview:
@@ -864,9 +864,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Mərdəkan və Hava Limanı şosseləri geniş və rahatdır. Bağ massivlərində bəzi daxili küçələr qumlu və dardır, buna görə sürücülərimiz yerli relyefə bələd olan texnikalarla xidmət göstərir.',
     responseTimeMinutes: '15–25 dəqiqə',
     directAnswerYukdasima:
-      'Xəzər rayonunda (Mərdəkan, Şüvəlan, Buzovna, Qala, Şağan, Zirə) bağ evi və villa köçürülməsi necə sifariş edilir? Xəzər rayonunun bütün bağ və villa massivləri üçün mebel ustası, qablaşdırma və peşəkar fəhlə xidməti göstərilir. Bağ mebelləri, hovuz və istilik avadanlıqları, lüks mənzil əşyaları üçün 2 metrdən 6 metrədək təmiz qapalı furqonlar ayrılır. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
+      'Xəzər rayonunda (Mərdəkan, Şüvəlan, Buzovna, Qala, Şağan, Zirə) bağ evi və villa köçürülməsi necə sifariş edilir? Xəzər rayonunun bütün bağ və villa massivləri üçün mebel ustası, qablaşdırma və peşəkar fəhlə xidməti göstərilir. Bağ mebelləri, hovuz və istilik avadanlıqları, lüks mənzil əşyaları üçün 2 metrdən 6 metrədək təmiz qapalı furqonlar ayrılır. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
     directAnswerEvakuator:
-      'Xəzər rayonunda 24/7 evakuator necə çağırılır? Mərdəkan şossesi, Şüvəlan, Buzovna və Zirə yolunda növbətçi evakuatorlarımız 15–20 dəqiqəyə çatır. Minik, SUV, lüks idman avtomobilləri və bağ yollarında qumda batan nəqliyyat vasitələri hidravlik platforma və güclü bucurqadla daşınır. Əlaqə: 050 231 17 28.',
+      'Xəzər rayonunda 24/7 evakuator necə çağırılır? Mərdəkan şossesi, Şüvəlan, Buzovna və Zirə yolunda növbətçi evakuatorlarımız 15–20 dəqiqəyə çatır. Minik, SUV, lüks idman avtomobilləri və bağ yollarında qumda batan nəqliyyat vasitələri hidravlik platforma və güclü bucurqadla daşınır. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Xəzər rayonu Bakının əsas bağçılıq və villa zonasıdır. Burada daşınmalar əsasən geniş həcmli villaların, dəyərli antikvar və yumşaq mebellərin, hovuz və bağ ləvazimatlarının, kondisioner və kombi sistemlərinin daşınmasından ibarətdir.',
     evakuatorOverview:
@@ -948,9 +948,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Magistral yollar genişdir və ağır tonnajlı maşınlar üçün idealdır. Sədərək və Binə bazarlarının girişlərində səhər saatlarında kommersiya nəqliyyatı sıxlığı olur.',
     responseTimeMinutes: '20–30 dəqiqə',
     directAnswerYukdasima:
-      'Qaradağ rayonunda (Lökbatan, Sədərək, Binə bazarı, Sahil, Ələt, Qobustan) yükdaşıma və kommersiya mallarının daşınması necə sifariş edilir? Qaradağ rayonunda həm fərdi mənzil köçləri, həm də Sədərək və Binə bazarlarından topdan kommersiya yükləri üçün 2 metrdən 7 metrədək qapalı və bortlu yük maşınları təqdim edilir. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp-dan yaza bilərsiniz.',
+      'Qaradağ rayonunda (Lökbatan, Sədərək, Binə bazarı, Sahil, Ələt, Qobustan) yükdaşıma və kommersiya mallarının daşınması necə sifariş edilir? Qaradağ rayonunda həm fərdi mənzil köçləri, həm də Sədərək və Binə bazarlarından topdan kommersiya yükləri üçün 2 metrdən 7 metrədək qapalı və bortlu yük maşınları təqdim edilir. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp-dan yaza bilərsiniz.',
     directAnswerEvakuator:
-      'Qaradağ rayonunda evakuator necə çağırılır? Bakı–Ələt magistralı, Sədərək dairəsi, Sahil, Sanqaçal və Ələt liman yolunda 24/7 növbətçi evakuatorlarımız mövcuddur. Minik, SUV, mikroavtobus və ağır kommersiya maşınları üçün gücləndirilmiş platforma təmin edilir. Əlaqə: 050 231 17 28.',
+      'Qaradağ rayonunda evakuator necə çağırılır? Bakı–Ələt magistralı, Sədərək dairəsi, Sahil, Sanqaçal və Ələt liman yolunda 24/7 növbətçi evakuatorlarımız mövcuddur. Minik, SUV, mikroavtobus və ağır kommersiya maşınları üçün gücləndirilmiş platforma təmin edilir. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Qaradağ rayonu Bakının ən böyük logistika və kommersiya mərkəzidir. Sədərək və Binə ticarət mərkəzlərindən ölkənin bütün regionlarına və Bakı mağazalarına gündəlik mal paylanması, həmçinin Sahil və Lökbatan qəsəbələrində yaşayış evlərinin köçürülməsi həyata keçirilir.',
     evakuatorOverview:
@@ -1029,9 +1029,9 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       'Müasir Pirallahı körpüsü vasitəsilə adaya rahat və maneəsiz çıxış təmin olunur. Sahil küləkləri və rütubət nəzərə alınaraq yüklər qapalı furqonlarda tam qorunur.',
     responseTimeMinutes: '25–35 dəqiqə',
     directAnswerYukdasima:
-      'Pirallahı rayonunda (Pirallahı adası, Gürgən) yükdaşıma necə sifariş edilir? Pirallahı rayonunun bütün qəsəbələri üzrə mənzil əşyaları, məişət texnikası və sənaye yüklərinin təhlükəsiz daşınması təmin edilir. Qapalı furqonlar və fəhlə briqadası ilə xidmət göstərilir. Sifariş üçün 050 231 17 28 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
+      'Pirallahı rayonunda (Pirallahı adası, Gürgən) yükdaşıma necə sifariş edilir? Pirallahı rayonunun bütün qəsəbələri üzrə mənzil əşyaları, məişət texnikası və sənaye yüklərinin təhlükəsiz daşınması təmin edilir. Qapalı furqonlar və fəhlə briqadası ilə xidmət göstərilir. Sifariş üçün 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə müraciət edə bilərsiniz.',
     directAnswerEvakuator:
-      'Pirallahı rayonunda evakuator necə çağırılır? Qala–Pirallahı yolu, Pirallahı körpüsü və adanın bütün ərazisində 24/7 növbətçi evakuator xidməti fəaliyyət göstərir. Minik və yolsuzluq avtomobilləri alçaq bucaqlı platforma ilə daşınır. Əlaqə: 050 231 17 28.',
+      'Pirallahı rayonunda evakuator necə çağırılır? Qala–Pirallahı yolu, Pirallahı körpüsü və adanın bütün ərazisində 24/7 növbətçi evakuator xidməti fəaliyyət göstərir. Minik və yolsuzluq avtomobilləri alçaq bucaqlı platforma ilə daşınır. Əlaqə: 050 250 31 70.',
     yukdasimaOverview:
       'Pirallahı rayonuna daşımalar Bakı mərkəzindən və Abşeronun digər rayonlarından təşkil olunur. Dəniz iqlimi şəraitində əşyaların nəm və tozdan qorunması üçün hermetik qapalı furqonlardan istifadə edilir.',
     evakuatorOverview:
@@ -1077,7 +1077,7 @@ export const BAKU_DISTRICTS: BakuDistrictGeoProfile[] = [
       {
         question: 'Pirallahı körpüsündə qalan avtomobilə evakuator necə çağırılır?',
         answer:
-          '050 231 17 28 nömrəsinə zəng edərək və ya WhatsApp-dan məkan göndərərək dərhal növbətçi evakuator sifariş edə bilərsiniz.',
+          '050 250 31 70 nömrəsinə zəng edərək və ya WhatsApp-dan məkan göndərərək dərhal növbətçi evakuator sifariş edə bilərsiniz.',
       },
     ],
   },

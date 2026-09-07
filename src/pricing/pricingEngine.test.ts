@@ -69,7 +69,7 @@ function createMockForm(overrides: Partial<YukdasimaFormData> = {}): YukdasimaFo
     toFloor: '1',
     hasElevator: 'yes',
     itemsFitElevator: 'yes',
-    phone: '+994502311728',
+    phone: '+994502503170',
     ...overrides,
   };
 }
@@ -265,7 +265,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'Sedan',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     };
     const result = calculateEvakuasiyaEstimate(evacForm);
     assert(
@@ -285,7 +285,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'SUV / Jeep',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     };
     const result = calculateEvakuasiyaEstimate(evacForm);
     assert(
@@ -305,7 +305,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'Sedan',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     };
     const result = calculateEvakuasiyaEstimate(evacForm);
     assert(
@@ -325,7 +325,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'Sedan',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     };
     const result = calculateEvakuasiyaEstimate(evacForm);
     assert(
@@ -345,7 +345,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'Sedan',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     };
     const result = calculateEvakuasiyaEstimate(evacForm);
     assert(
@@ -365,7 +365,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'Sedan',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     };
     const result = calculateEvakuasiyaEstimate(evacForm);
     assert(
@@ -385,7 +385,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'Sedan',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     });
     const sumqayitRes = calculateEvakuasiyaEstimate({
       fromAddress: 'Bakı',
@@ -393,7 +393,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'Sedan',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     });
     assert(
       xirdalanRes.estimatedPrice === '40 AZN' && sumqayitRes.estimatedPrice === '55 AZN',
@@ -573,7 +573,7 @@ export function runPricingEngineVerificationTests(): boolean {
       carType: 'Sedan',
       canMove: 'Bəli',
       conditionNotes: '',
-      phone: '+994502311728',
+      phone: '+994502503170',
     });
 
     assert(
