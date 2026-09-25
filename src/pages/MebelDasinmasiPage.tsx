@@ -118,7 +118,7 @@ export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCa
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Niyə Mebel Daşınmasını Peşəkar Ustaya Həvalə Etməlisiniz?
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600 leading-relaxed">
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
               <div className="font-bold text-slate-900 text-base flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-blue-600" />
@@ -136,6 +136,16 @@ export const MebelDasinmasiPage: React.FC<MebelDasinmasiPageProps> = ({ onOpenCa
               </div>
               <p>
                 Böyük qarderob və ya mətbəx mebelinin sökülüb-yığılması günlərlə vaxt apara bilər. Təcrübəli briqadamız bütün prosesi bir neçə saat ərzində tamamlayır.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>Qapalı Banla Daşınma</span>
+              </div>
+              <p>
+                Sökülmüş və qablaşdırılmış mebel hissələrinin tozdan və yağışdan qorunması üçün xüsusi kəmərlərlə təchiz edilmiş qapalı <Link href="/yuk-masini" className="text-blue-600 hover:underline font-semibold">yük maşını sifarişi</Link> təmin olunur.
               </p>
             </div>
           </div>

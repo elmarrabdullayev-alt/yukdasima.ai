@@ -2,11 +2,26 @@ import React, { useState } from 'react';
 import { DEFAULT_VEHICLE_CONFIG, VehicleSpec } from '../config/vehicles';
 import { DirectYukdasimaOrder } from '../components/DirectYukdasimaOrder';
 import { Link } from '../router/RouterContext';
-import { Truck, ShieldCheck, CheckCircle2, ArrowRight, Gauge, Box, Maximize2, Phone, MessageSquare } from 'lucide-react';
+import {
+  Truck,
+  ShieldCheck,
+  CheckCircle2,
+  ArrowRight,
+  Gauge,
+  Box,
+  Maximize2,
+  Phone,
+  MessageSquare,
+  ChevronDown,
+  HelpCircle,
+  Clock,
+  Layers,
+} from 'lucide-react';
 import { CONTACT_INFO } from '../constants/contact';
 import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
 import { trackConversionEvent } from '../utils/analytics';
 import { CallbackInitialData } from '../types';
+import { YUK_MASINI_FAQS } from '../seo/metadata';
 
 interface YukMasiniPageProps {
   onOpenCallback: (initialData?: string | CallbackInitialData) => void;
@@ -14,7 +29,14 @@ interface YukMasiniPageProps {
 
 export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) => {
   const [selectedVehicle, setSelectedVehicle] = useState<VehicleSpec>(DEFAULT_VEHICLE_CONFIG.vehicles[0]);
+  const [openFaqIndexes, setOpenFaqIndexes] = useState<number[]>([0, 1, 2, 3, 4]);
   const whatsappUrl = getContextualWhatsAppUrl('/yuk-masini');
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndexes((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
+  };
 
   const handleCallClick = () => {
     trackConversionEvent('mobile_call_click', {
@@ -192,7 +214,199 @@ export const YukMasiniPage: React.FC<YukMasiniPageProps> = ({ onOpenCallback }) 
             </div>
           </div>
         </section>
+
+        {/* New SEO Section: Yük maşını sifarişi necə verilir? */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-6" aria-label="Sifariş Prosesi">
+          <div className="space-y-2">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Yük maşını sifarişi necə verilir?
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Yük maşını sifarişi prosesi sistemimiz üzərindən 4 sadə addımla həyata keçirilir:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
+                1
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Uyğun yük maşınını seçin</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Daşınacaq əşyaların həcminə və ölçüsünə uyğun avtomobil növünü (2 metrdən 7 metrədək furqonlar) müəyyən edin.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
+                2
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Marşrutu qeyd edin</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Yükləmə və çatdırılma ünvanlarını daxil edin. Xidmət Bakı şəhərdaxili və rayonlararası istiqamətləri əhatə edir.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
+                3
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Əlavə xidmətləri seçin</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Yükləmə və boşaldılma üçün tələb olunduqda fəhlə briqadası və ya mebel ustası xidmətini sifarişə əlavə edin.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-sm">
+                4
+              </div>
+              <h3 className="font-bold text-slate-900 text-base">Əlaqə məlumatlarını daxil edin</h3>
+              <p className="text-xs text-slate-600 leading-relaxed">
+                Telefon nömrənizi qeyd edərək onlayn müraciət göndərin, 050 250 31 70 nömrəsinə zəng edin və ya WhatsApp ilə sifariş yaradın.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Tez-tez verilən suallar">
+          <div className="max-w-3xl space-y-2">
+            <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
+              <HelpCircle className="w-4 h-4" />
+              <span>Məlumat Mərkəzi</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Tez-tez Verilən Suallar
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
+              Yük maşını sifarişi, avtopark ölçüləri, fəhlə xidməti və qiymətləndirmə ilə bağlı sualların cavabları:
+            </p>
+          </div>
+
+          <div className="space-y-3 max-w-4xl">
+            {YUK_MASINI_FAQS.map((faq, index) => {
+              const isOpen = openFaqIndexes.includes(index);
+              return (
+                <div
+                  key={index}
+                  className="rounded-2xl border border-slate-200 overflow-hidden transition-all duration-200"
+                >
+                  <button
+                    type="button"
+                    onClick={() => toggleFaq(index)}
+                    aria-expanded={isOpen}
+                    className="w-full flex items-center justify-between p-5 text-left bg-slate-50 hover:bg-slate-100 transition-colors gap-4 cursor-pointer"
+                  >
+                    <span className="font-bold text-slate-900 text-sm sm:text-base">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className={`w-5 h-5 text-slate-500 shrink-0 transition-transform duration-200 ${
+                        isOpen ? 'rotate-180 text-blue-600' : ''
+                      }`}
+                    />
+                  </button>
+
+                  <div
+                    className={`p-5 bg-white border-t border-slate-100 text-slate-600 text-xs sm:text-sm leading-relaxed space-y-2 ${
+                      isOpen ? 'block' : 'hidden'
+                    }`}
+                  >
+                    <p>{faq.answer}</p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* Related Services Internal Links */}
+        <section className="space-y-6" aria-label="Əlaqəli Xidmətlər və Keçidlər">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h2 className="text-2xl font-bold text-slate-900">Əlaqəli Daşıma Xidmətləri</h2>
+              <p className="text-slate-600 text-xs sm:text-sm mt-1">Digər xidmətlərimizlə və qiymət tarifləri ilə tanış olun:</p>
+            </div>
+            <Link
+              href="/qiymetler"
+              className="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
+            >
+              <span>Bütün tariflər</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <Link
+              href="/yukdasima"
+              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Yükdaşıma Xidməti</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">Bakı və bütün rayonlararası peşəkar yükdaşıma platforması.</p>
+            </Link>
+
+            <Link
+              href="/evden-eve-yukdasima"
+              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Evdən Evə Yükdaşıma</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">Mənzil və bağ evlərinin tam qablaşdırma ilə köçürülməsi.</p>
+            </Link>
+
+            <Link
+              href="/mebel-dasinmasi"
+              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Mebel Daşınması & Usta</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">Mebellərin sökülməsi, qablaşdırılması və quraşdırılması.</p>
+            </Link>
+
+            <Link
+              href="/ofis-dasinmasi"
+              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Ofis Daşınması</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">Ofis avadanlıqları və arxiv sənədlərinin planlı köçürülməsi.</p>
+            </Link>
+
+            <Link
+              href="/fehle-xidmeti"
+              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Fəhlə Xidməti</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">Ağır əşyaların yüklənməsi, boşaldılması və mərtəbəyə qaldırılması.</p>
+            </Link>
+
+            <Link
+              href="/elaqe"
+              className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-xs transition-all group"
+            >
+              <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
+                <span>Əlaqə & Operator Dəstəyi</span>
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
+              </h3>
+              <p className="text-xs text-slate-600 mt-2">{CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsi və WhatsApp xətti ilə sürətli əlaqə.</p>
+            </Link>
+          </div>
+        </section>
       </div>
     </article>
   );
 };
+

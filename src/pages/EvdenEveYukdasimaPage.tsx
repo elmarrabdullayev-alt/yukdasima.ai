@@ -128,7 +128,7 @@ export const EvdenEveYukdasimaPage: React.FC<EvdenEveYukdasimaPageProps> = ({ on
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Evdən Evə Daşınma Zamanı Nələrə Diqqət Yetiririk?
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600 leading-relaxed">
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
               <div className="font-bold text-slate-900 text-base flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-blue-600" />
@@ -146,6 +146,16 @@ export const EvdenEveYukdasimaPage: React.FC<EvdenEveYukdasimaPageProps> = ({ on
               </div>
               <p>
                 Bütün növ mürəkkəb dolablar, mətbəx mebelləri və yataq dəstləri peşəkar şəkildə sökülür, yeni mənzildə səliqə ilə yenidən qurulur.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>Uyğun Tutumlu Yük Maşını</span>
+              </div>
+              <p>
+                Mənzilin otaq sayına və əşyaların həcminə görə <Link href="/yuk-masini" className="text-blue-600 hover:underline font-semibold">uyğun yük maşını seçimi</Link> edilərək köçürülmə bir gedişlə, vaxt itkisi olmadan həyata keçirilir.
               </p>
             </div>
           </div>

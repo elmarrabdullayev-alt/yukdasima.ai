@@ -118,7 +118,7 @@ export const OfisDasinmasiPage: React.FC<OfisDasinmasiPageProps> = ({ onOpenCall
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Ofis Daşınması Prosesi Necə Təşkil Olunur?
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-600 leading-relaxed">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-600 leading-relaxed">
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
               <div className="font-bold text-slate-900 text-base flex items-center gap-2">
                 <CheckCircle2 className="w-4 h-4 text-blue-600" />
@@ -136,6 +136,16 @@ export const OfisDasinmasiPage: React.FC<OfisDasinmasiPageProps> = ({ onOpenCall
               </div>
               <p>
                 Hüquqi şəxslərlə rəsmi müqavilə bağlanır, köçürmə zamanı bütün əmlaka görə maddi məsuliyyət daşıyırıq və köçürmə sonrası rəsmi elektron qaimə-faktura təqdim edilir.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
+              <div className="font-bold text-slate-900 text-base flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                <span>Nəqliyyat Dəstəyi</span>
+              </div>
+              <p>
+                Ofis inventarının həcminə uyğun 4, 5 və ya 7 metrlik <Link href="/yuk-masini" className="text-blue-600 hover:underline font-semibold">yük maşını icarəsi</Link> ilə bütün texnika və sənədlər qrafik üzrə daşınır.
               </p>
             </div>
           </div>

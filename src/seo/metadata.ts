@@ -106,6 +106,34 @@ export const EVAKUATOR_FAQS: PageFaqItem[] = [
   },
 ];
 
+export const YUK_MASINI_FAQS: PageFaqItem[] = [
+  {
+    question: 'Yük maşını necə sifariş edə bilərəm?',
+    answer:
+      'Saytımızda təqdim olunan avtoparkdan yükünüzün həcminə uyğun maşını seçərək sifariş formasını doldura, 050 250 31 70 nömrəsinə zəng edə və ya WhatsApp vasitəsilə əlaqə saxlayaraq sifariş verə bilərsiniz.',
+  },
+  {
+    question: 'Hansı ölçüdə yük maşını seçməliyəm?',
+    answer:
+      'Tək-tək əşyalar və kiçik daşımalar üçün 2 və ya 3 metrlik furqonlar, standart mənzil və ofis köçürülməsi üçün 4 və ya 5 metrlik böyük furqonlar, daha irihəcmli daşımalar üçün isə 6-7 metrlik və ya TIR kateqoriyalı nəqliyyat vasitələri uyğundur.',
+  },
+  {
+    question: 'Bakıdan rayonlara yük maşını sifariş etmək mümkündür?',
+    answer:
+      'Bəli, Bakı daxilində olduğu kimi, Bakıdan Azərbaycanın bütün şəhər və rayonlarına və əks istiqamətdə daşıma üçün yük maşını sifariş etmək mümkündür.',
+  },
+  {
+    question: 'Yük maşını ilə birlikdə fəhlə xidməti sifariş etmək olar?',
+    answer:
+      'Bəli, sifariş zamanı tələbatınıza uyğun olaraq əşyaların yüklənməsi, boşaldılması və mərtəbəyə qaldırılması üçün fəhlə xidməti və ya mebel ustası xidmətini də əlavə edə bilərsiniz.',
+  },
+  {
+    question: 'Yükdaşıma qiyməti necə müəyyən olunur?',
+    answer:
+      'Qiymət seçilən yük maşınının növünə, daşınma marşrutuna (Bakı şəhərdaxili və ya rayonlararası məsafəyə), fəhlə sayına və əlavə xidmətlərə əsasən hesablanır.',
+  },
+];
+
 // Backwards compatibility alias
 export const EVAKUASIYA_FAQS = EVAKUATOR_FAQS;
 
@@ -217,13 +245,29 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
   '/yuk-masini': {
     path: '/yuk-masini',
     title: 'Yük Maşını Sifarişi Bakı | Ford Transit və İsuzu İcarəsi',
-    metaDescription: 'Bakı daxili və rayonlararası yük maşını sifarişi. 2 metrlik Transit-dən 7 metrlik böyük tutumlu maşınlaradək geniş avtopark xidmətinizdədir.',
+    metaDescription: 'Bakıda və rayonlara yük maşını sifarişi: yükünüzə uyğun yük maşınının seçilməsi, şəffaf hesablama və operativ yükdaşıma xidməti.',
     h1: 'Yük Maşını Sifarişi və İcarəsi',
     canonicalUrl: 'https://yukdasima.ai/yuk-masini',
-    keywords: ['yük maşını', 'yük maşını sifarişi', 'ford transit sifarişi', 'isuzu yük maşını', 'yük taksisi'],
+    keywords: [
+      'yük maşını',
+      'yük maşını sifarişi',
+      'Bakıda yük maşını',
+      'rayonlara yük maşını',
+      'ford transit sifarişi',
+      'isuzu yük maşını',
+      'yük taksisi',
+      'yükdaşıma',
+      'uyğun yük maşınının seçilməsi',
+    ],
     ogType: 'website',
     schemaType: 'Service',
     serviceName: 'Yük Maşını Sifarişi',
+    serviceTypeDetail: 'Freight Truck Rental and Moving Service',
+    breadcrumbs: [
+      { name: 'Ana səhifə', item: 'https://yukdasima.ai/' },
+      { name: 'Yük maşını sifarişi', item: 'https://yukdasima.ai/yuk-masini' },
+    ],
+    faqs: YUK_MASINI_FAQS,
   },
   '/fehle-xidmeti': {
     path: '/fehle-xidmeti',

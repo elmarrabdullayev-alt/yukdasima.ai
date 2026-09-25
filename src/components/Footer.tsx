@@ -31,7 +31,7 @@ export const Footer: React.FC<FooterProps> = ({ onSelectService, onOpenCallback 
             </Link>
 
             <p className="text-sm text-slate-500 leading-relaxed max-w-sm">
-              Azərbaycan üzrə yükdaşıma və 24/7 operativ evakuasiya xidmətlərinin ilkin qiymətləndirilməsi və sürətli sifariş platforması.
+              Azərbaycan üzrə yükdaşıma və 24/7 operativ evakuator xidmətinin ilkin qiymətləndirilməsi və sürətli sifariş platforması.
             </p>
 
             <div className="flex items-center gap-4 pt-2">
