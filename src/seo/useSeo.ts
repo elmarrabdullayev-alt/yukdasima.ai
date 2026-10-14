@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { getPageSeo, SITE_NAME } from './metadata';
+import { getPageSeo, SITE_NAME, OG_IMAGE } from './metadata';
 import { buildStructuredData } from './structuredData';
 
 export function useSeo(pathname: string, isNotFound = false) {
@@ -33,12 +33,17 @@ export function useSeo(pathname: string, isNotFound = false) {
     setMetaTag('property', 'og:type', seo.ogType || 'website');
     setMetaTag('property', 'og:site_name', SITE_NAME);
     setMetaTag('property', 'og:locale', 'az_AZ');
+    setMetaTag('property', 'og:image', OG_IMAGE.url);
+    setMetaTag('property', 'og:image:width', String(OG_IMAGE.width));
+    setMetaTag('property', 'og:image:height', String(OG_IMAGE.height));
+    setMetaTag('property', 'og:image:alt', OG_IMAGE.alt);
 
     // 4. Twitter / X Card Meta Tags
     setMetaTag('name', 'twitter:card', 'summary_large_image');
     setMetaTag('name', 'twitter:title', seo.title);
     setMetaTag('name', 'twitter:description', seo.metaDescription);
     setMetaTag('name', 'twitter:url', seo.canonicalUrl);
+    setMetaTag('name', 'twitter:image', OG_IMAGE.url);
 
     // 5. Canonical Tag
     let canonicalTag = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;

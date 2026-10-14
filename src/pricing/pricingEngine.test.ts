@@ -43,6 +43,7 @@ import {
 import { PAGE_SEO_CONFIGS, getPageSeo } from '../seo/metadata';
 import { buildStructuredData } from '../seo/structuredData';
 import { injectSeoIntoHtml } from '../../scripts/prerender';
+import { buildLlmsTxt } from '../seo/llms';
 
 
 function createMockAnalysis(minVol: number, maxVol: number, items: Array<{ name: string; qty: number; vol: number }> = []): CargoAnalysisData {
@@ -1179,6 +1180,69 @@ export function runPricingEngineVerificationTests(): boolean {
     assert(
       valid.every((p) => isValidPhoneNumber(p)) && invalid.every((p) => !isValidPhoneNumber(p)),
       'Test 63: Real phone formats are accepted, text and too short/long numbers are rejected'
+    );
+  }
+
+  // Test 64: Business structured data is linked to the Google Business Profile
+  {
+    const graph = (buildStructuredData(getPageSeo('/')) as { '@graph': Array<Record<string, any>> })['@graph'];
+    const business = graph.find((n) => n['@id'] === 'https://yukdasima.ai/#business');
+    const types = business ? ([] as string[]).concat(business['@type']) : [];
+    assert(
+      !!business &&
+        types.includes('MovingCompany') &&
+        types.includes('AutoTowing') &&
+        business.hasMap === 'https://www.google.com/maps?cid=10094931144560140412' &&
+        Array.isArray(business.sameAs) &&
+        business.sameAs.includes(business.hasMap) &&
+        business.logo?.url === 'https://yukdasima.ai/icon-512.png',
+      'Test 64: MovingCompany + AutoTowing business with Google Maps (hasMap/sameAs) and logo'
+    );
+  }
+
+  // Test 65: Home page FAQ schema matches the FAQ shown on the page
+  {
+    const homeSeo = getPageSeo('/');
+    const graph = (buildStructuredData(homeSeo) as { '@graph': Array<Record<string, any>> })['@graph'];
+    const faqNode = graph.find((n) => n['@type'] === 'FAQPage');
+    assert(
+      !!faqNode &&
+        (homeSeo.faqs || []).length >= 4 &&
+        faqNode.mainEntity.length === (homeSeo.faqs || []).length &&
+        homeSeo.title === 'Yükdaşıma Bakı | Yükdaşıma və Evakuasiya Xidməti' &&
+        homeSeo.canonicalUrl === 'https://yukdasima.ai/',
+      'Test 65: Home FAQPage schema present; home title and canonical unchanged'
+    );
+  }
+
+  // Test 66: Share image is in the prerendered head of every page type
+  {
+    const html = injectSeoIntoHtml(
+      '<html><head><title>x</title><meta property="og:image" content="old"></head><body><div id="root"></div></body></html>',
+      '/yukdasima/baki-gence',
+      '<main>body</main>'
+    );
+    assert(
+      (html.match(/property="og:image"/g) || []).length === 1 &&
+        html.includes('content="https://yukdasima.ai/og-image.jpg"') &&
+        html.includes('name="twitter:image"') &&
+        html.includes('og:image:width" content="1200"'),
+      'Test 66: og:image / twitter:image injected exactly once'
+    );
+  }
+
+  // Test 67: llms.txt is generated from site data and publishes no route tariffs
+  {
+    const llms = buildLlmsTxt();
+    assert(
+      llms.startsWith('# yukdasima.ai') &&
+        llms.includes('050 250 31 70') &&
+        llms.includes('https://www.google.com/maps?cid=10094931144560140412') &&
+        llms.includes('https://yukdasima.ai/yukdasima/baki-gence') &&
+        llms.includes('https://yukdasima.ai/evakuator/baki-gence') &&
+        !llms.includes('280 AZN') &&
+        !/\| *Bakı \(şəhərdaxili\) *\|/.test(llms),
+      'Test 67: llms.txt lists contact, Google profile and route pages, without tariff tables'
     );
   }
 

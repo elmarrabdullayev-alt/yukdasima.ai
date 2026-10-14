@@ -13,7 +13,9 @@ import {
   SITE_NAME,
   SITE_URL,
   PageSeoConfig,
+  OG_IMAGE,
 } from '../src/seo/metadata';
+import { buildLlmsTxt } from '../src/seo/llms';
 import { buildStructuredData } from '../src/seo/structuredData';
 
 function escapeHtml(str: string): string {
@@ -88,12 +90,17 @@ export function injectSeoIntoHtml(
   headElements.push(`<meta property="og:type" content="${escapeAttr(seo.ogType || 'website')}">`);
   headElements.push(`<meta property="og:site_name" content="${escapeAttr(SITE_NAME)}">`);
   headElements.push(`<meta property="og:locale" content="az_AZ">`);
+  headElements.push(`<meta property="og:image" content="${escapeAttr(OG_IMAGE.url)}">`);
+  headElements.push(`<meta property="og:image:width" content="${OG_IMAGE.width}">`);
+  headElements.push(`<meta property="og:image:height" content="${OG_IMAGE.height}">`);
+  headElements.push(`<meta property="og:image:alt" content="${escapeAttr(OG_IMAGE.alt)}">`);
 
   // Twitter
   headElements.push(`<meta name="twitter:card" content="summary_large_image">`);
   headElements.push(`<meta name="twitter:title" content="${escapeAttr(seo.title)}">`);
   headElements.push(`<meta name="twitter:description" content="${escapeAttr(seo.metaDescription)}">`);
   headElements.push(`<meta name="twitter:url" content="${escapeAttr(seo.canonicalUrl)}">`);
+  headElements.push(`<meta name="twitter:image" content="${escapeAttr(OG_IMAGE.url)}">`);
 
   // JSON-LD Structured Data
   headElements.push(
@@ -175,6 +182,10 @@ export function runPrerender(): PrerenderResult {
   if (fs.existsSync(path.join(publicDir, 'robots.txt'))) {
     fs.copyFileSync(path.join(publicDir, 'robots.txt'), path.join(distDir, 'robots.txt'));
   }
+
+  // llms.txt: short, factual summary of the business for AI assistants (ChatGPT, Gemini, Perplexity...),
+  // generated from the same tariff and route data the site uses, so it never goes out of date.
+  fs.writeFileSync(path.join(distDir, 'llms.txt'), buildLlmsTxt(), 'utf-8');
 
   const durationMs = Date.now() - startTime;
 
