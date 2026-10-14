@@ -5,6 +5,7 @@ import { createServer as createViteServer } from "vite";
 
 import { GoogleGenAI, Type } from "@google/genai";
 import dotenv from "dotenv";
+import { isValidPhoneNumber } from "./src/utils/phone";
 
 dotenv.config();
 
@@ -17,13 +18,90 @@ process.on("uncaughtException", (err) => {
   console.error("[Server Process] Uncaught exception:", err);
 });
 
+/**
+ * Simple in-memory rate limiter (per client IP, per route).
+ * Protects the Telegram lead channel from spam and the Gemini key from abuse.
+ */
+function createRateLimiter(options: { windowMs: number; max: number; message: string }) {
+  const hits = new Map<string, { count: number; resetAt: number }>();
+
+  // Periodically drop expired entries so the map does not grow forever
+  const cleanup = setInterval(() => {
+    const now = Date.now();
+    for (const [key, entry] of hits) {
+      if (entry.resetAt <= now) hits.delete(key);
+    }
+  }, options.windowMs);
+  (cleanup as unknown as { unref?: () => void }).unref?.();
+
+  return (req: express.Request, res: express.Response, next: express.NextFunction) => {
+    // Cloudflare sends the visitor IP in CF-Connecting-IP; fall back to Express' proxy-aware req.ip
+    const cfIp = req.headers["cf-connecting-ip"];
+    const key = (typeof cfIp === "string" && cfIp) || req.ip || req.socket.remoteAddress || "unknown";
+    const now = Date.now();
+    const entry = hits.get(key);
+
+    if (!entry || entry.resetAt <= now) {
+      hits.set(key, { count: 1, resetAt: now + options.windowMs });
+      return next();
+    }
+
+    entry.count += 1;
+    if (entry.count > options.max) {
+      res.setHeader("Retry-After", String(Math.ceil((entry.resetAt - now) / 1000)));
+      return res.status(429).json({ success: false, error: options.message });
+    }
+    return next();
+  };
+}
+
+/** Telegram rejects messages over 4096 characters, so every free-text field is capped. */
+function limitText(text: string, maxLength: number): string {
+  return text.length > maxLength ? `${text.slice(0, maxLength - 1)}…` : text;
+}
+
+/**
+ * Builds the 404 page from the built index.html: noindex, a "not found" title and an empty
+ * #root, so the browser renders the "Səhifə tapılmadı" page instead of a copy of the home page.
+ */
+function buildNotFoundHtml(template: string): string {
+  let html = template;
+  html = html.replace(/<meta\s+name="robots"[^>]*>/gi, "");
+  html = html.replace("</head>", '  <meta name="robots" content="noindex, follow">\n  </head>');
+  html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>Səhifə tapılmadı | yukdasima.ai</title>");
+  html = html.replace(/<link\s+rel="canonical"[^>]*>/gi, "");
+  html = html.replace(/<script\s+id="seo-structured-data-jsonld"[\s\S]*?<\/script>/gi, "");
+
+  const rootStart = html.indexOf('<div id="root">');
+  const bodyEnd = html.lastIndexOf("</body>");
+  const rootEnd = bodyEnd === -1 ? -1 : html.lastIndexOf("</div>", bodyEnd);
+  if (rootStart !== -1 && rootEnd > rootStart) {
+    html = html.slice(0, rootStart) + '<div id="root"></div>' + html.slice(rootEnd + "</div>".length);
+  }
+  return html;
+}
+
 async function startServer() {
   const app = express();
   const PORT = 3000;
 
-  // Middleware with large payload support for images
-  app.use(express.json({ limit: "50mb" }));
-  app.use(express.urlencoded({ extended: true, limit: "50mb" }));
+  // The site runs behind Cloudflare / a hosting proxy: use the real visitor IP for rate limiting
+  app.set("trust proxy", true);
+
+  // JSON body limit: up to 10 compressed photos fit comfortably in 25 MB
+  app.use(express.json({ limit: "25mb" }));
+  app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+
+  const callbackRateLimit = createRateLimiter({
+    windowMs: 10 * 60 * 1000,
+    max: 5,
+    message: "Çox sayda müraciət göndərildi. Zəhmət olmasa bir neçə dəqiqə sonra yenidən cəhd edin və ya 878 ilə əlaqə saxlayın.",
+  });
+  const analyzeRateLimit = createRateLimiter({
+    windowMs: 10 * 60 * 1000,
+    max: 10,
+    message: "Çox sayda analiz sorğusu göndərildi. Zəhmət olmasa bir neçə dəqiqə sonra yenidən cəhd edin.",
+  });
 
   // Shared Gemini client lazy initialization
   let aiClient: GoogleGenAI | null = null;
@@ -52,7 +130,7 @@ async function startServer() {
   });
 
   // API Route: Telegram Callback & Lead Delivery
-  app.post("/api/callback", async (req, res) => {
+  app.post("/api/callback", callbackRateLimit, async (req, res) => {
     try {
       const { name, phone, service, message, source, route, vehicle, estimatedPrice, notes } = req.body || {};
 
@@ -64,19 +142,27 @@ async function startServer() {
         });
       }
 
-      const trimmedName = typeof name === "string" ? name.trim() : "";
-      const trimmedService = typeof service === "string" ? service.trim() : "";
-      const trimmedMessage = typeof message === "string" ? message.trim() : "";
-      const trimmedSource = typeof source === "string" ? source.trim() : "";
-      const trimmedRoute = typeof route === "string" ? route.trim() : "";
-      const trimmedVehicle = typeof vehicle === "string" ? vehicle.trim() : "";
+      if (!isValidPhoneNumber(trimmedPhone)) {
+        return res.status(400).json({
+          success: false,
+          error: "Telefon nömrəsi düzgün deyil. Məsələn: 050 123 45 67",
+        });
+      }
+
+      // Each field is capped so the whole message always stays under Telegram's 4096 character limit
+      const trimmedName = typeof name === "string" ? limitText(name.trim(), 100) : "";
+      const trimmedService = typeof service === "string" ? limitText(service.trim(), 50) : "";
+      const trimmedMessage = typeof message === "string" ? limitText(message.trim(), 1500) : "";
+      const trimmedSource = typeof source === "string" ? limitText(source.trim(), 200) : "";
+      const trimmedRoute = typeof route === "string" ? limitText(route.trim(), 200) : "";
+      const trimmedVehicle = typeof vehicle === "string" ? limitText(vehicle.trim(), 100) : "";
       const trimmedEstimatedPrice =
         typeof estimatedPrice === "string"
-          ? estimatedPrice.trim()
+          ? limitText(estimatedPrice.trim(), 100)
           : typeof estimatedPrice === "number"
           ? String(estimatedPrice).trim()
           : "";
-      const trimmedNotes = typeof notes === "string" ? notes.trim() : "";
+      const trimmedNotes = typeof notes === "string" ? limitText(notes.trim(), 1200) : "";
 
       const escapeHtml = (text: string): string =>
         text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -134,7 +220,7 @@ async function startServer() {
       });
       lines.push(`⏱️ <b>Tarix:</b> ${formattedDate}`);
 
-      const telegramText = lines.join("\n");
+      const telegramText = limitText(lines.join("\n"), 4000);
 
       const botToken = process.env.TELEGRAM_BOT_TOKEN;
       const chatId = process.env.TELEGRAM_CHAT_ID;
@@ -214,7 +300,8 @@ async function startServer() {
   app.use((req, res, next) => {
     const url = req.originalUrl;
     if (url === '/evakuasiya' || url.startsWith('/evakuasiya/') || url.startsWith('/evakuasiya?')) {
-      const redirectedUrl = url.replace(/^\/evakuasiya(\/|\?|$)/, '/evakuator$1');
+      // Single 301 straight to the canonical address (no trailing slash)
+      const redirectedUrl = url.replace(/^\/evakuasiya(\/|\?|$)/, '/evakuator$1').replace(/^([^?]+?)\/+(\?|$)/, '$1$2');
       return res.redirect(301, redirectedUrl);
     }
     next();
@@ -228,9 +315,7 @@ async function startServer() {
         const timer = setTimeout(() => {
           reject(new Error(timeoutMsg));
         }, timeoutMs);
-        if (typeof timer.unref === "function") {
-          timer.unref();
-        }
+        (timer as unknown as { unref?: () => void }).unref?.();
       }),
     ]);
   }
@@ -268,7 +353,7 @@ async function startServer() {
   }
 
   // API Route: Gemini Cargo Multimodal Analysis with Resilience, Validation & Diagnostic Logging
-  app.post("/api/analyze-cargo", async (req, res) => {
+  app.post("/api/analyze-cargo", analyzeRateLimit, async (req, res) => {
     const startTime = Date.now();
     const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
     const { images, details } = req.body || {};
@@ -300,7 +385,8 @@ async function startServer() {
       // Filter and validate images (strip broken/empty items, normalize MIME types)
       const validInlineParts: Array<{ inlineData: { mimeType: string; data: string } }> = [];
 
-      for (const img of images) {
+      // At most 10 photos per analysis (the page enforces the same limit)
+      for (const img of images.slice(0, 10)) {
         let rawData = typeof img?.base64 === "string" ? img.base64 : typeof img?.url === "string" ? img.url : "";
         let detectedMime = typeof img?.mimeType === "string" ? img.mimeType.toLowerCase().trim() : "image/jpeg";
 
@@ -330,8 +416,8 @@ async function startServer() {
         } else if (detectedMime === "image/webp") {
           finalMime = "image/webp";
         } else if (detectedMime === "image/heic" || detectedMime === "image/heif") {
-          // Standardize HEIC/HEIF payload MIME to jpeg for maximum multimodal model compatibility
-          finalMime = "image/jpeg";
+          // Gemini reads HEIC/HEIF natively; labelling HEIC bytes as JPEG makes the analysis fail
+          finalMime = detectedMime;
         } else {
           finalMime = "image/jpeg";
         }
@@ -356,7 +442,7 @@ async function startServer() {
 
       const userPrompt = `Aşağıdakı ${validInlineParts.length} ədəd fotoşəkili analiz et. Müştərinin köçürülməsi/yükdaşınması üçün daşınacaq bütün əşyaları siyahıya al və onların təxmini həcmini hesabla.${
         details && typeof details === "string" && details.trim().length > 0
-          ? `\nMüştərinin əlavə qeydləri: "${details.trim()}"`
+          ? `\nMüştərinin əlavə qeydləri: "${limitText(details.trim(), 1000)}"`
           : ""
       }`;
 
@@ -614,9 +700,50 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (_req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
+
+    // SEO: canonical URLs and the sitemap use addresses WITHOUT a trailing slash
+    // (https://yukdasima.ai/yukdasima). express.static used to answer those with a 301 to
+    // "/yukdasima/". Now both forms are served directly with 200 (the page's canonical tag points
+    // to the address without the slash). No new redirect is added on purpose: browsers have
+    // cached the old 301, and a reverse redirect would send those visitors into a loop.
+
+    // The server bundle lives in dist/ too: never serve it (or its source map) to browsers
+    app.use((req, res, next) => {
+      if (/^\/server\.(c?js)(\.map)?$/i.test(req.path)) {
+        return res.status(404).type("text/plain").send("Not found");
+      }
+      next();
+    });
+
+    // Real files only (JS, CSS, images, sitemap...). Folders are handled below without redirects.
+    app.use(express.static(distPath, { index: false, redirect: false }));
+
+    let notFoundHtml: string | null = null;
+    const getNotFoundHtml = (): string => {
+      if (notFoundHtml === null) {
+        const template = fs.readFileSync(path.join(distPath, "index.html"), "utf-8");
+        notFoundHtml = buildNotFoundHtml(template);
+      }
+      return notFoundHtml;
+    };
+
+    app.get("*", (req, res) => {
+      // Every valid page is prerendered at build time as dist/<route>/index.html
+      let relativePath = "";
+      try {
+        relativePath = decodeURIComponent(req.path).replace(/^\/+/, "");
+      } catch {
+        relativePath = "\u0000invalid";
+      }
+      const pageFile = path.resolve(distPath, relativePath, "index.html");
+      const isInsideDist = pageFile.startsWith(path.resolve(distPath) + path.sep);
+
+      if (isInsideDist && fs.existsSync(pageFile)) {
+        return res.sendFile(pageFile);
+      }
+
+      // Unknown address: real 404 status (+ noindex) so Google does not index copies of the home page
+      res.status(404).type("html").send(getNotFoundHtml());
     });
   }
 

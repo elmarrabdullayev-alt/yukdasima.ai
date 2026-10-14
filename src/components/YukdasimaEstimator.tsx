@@ -72,6 +72,25 @@ const SAMPLE_DEMO_IMAGES = [
   },
 ];
 
+/** MIME type of an uploaded file; some phones send HEIC photos with an empty type. */
+function getFileMimeType(file: File): string {
+  if (file.type) return file.type.toLowerCase();
+  const ext = (file.name.split('.').pop() || '').toLowerCase();
+  if (ext === 'png') return 'image/png';
+  if (ext === 'webp') return 'image/webp';
+  if (ext === 'heic') return 'image/heic';
+  if (ext === 'heif') return 'image/heif';
+  return 'image/jpeg';
+}
+
+/** Maximum photos per analysis (keeps the request small and the AI answer fast). */
+const MAX_IMAGES = 10;
+
+/** Rounds a volume to one decimal place (e.g. 3.44 -> 3.4). */
+function roundVolume(value: number): number {
+  return Math.round(value * 10) / 10;
+}
+
 // Helper function to resize and compress uploaded images before sending to AI
 function compressImageFile(file: File, maxDim = 900, quality = 0.72): Promise<{ base64: string; mimeType: string }> {
   return new Promise((resolve) => {
@@ -103,7 +122,7 @@ function compressImageFile(file: File, maxDim = 900, quality = 0.72): Promise<{ 
                 const fallbackResult = (readerEvent.target?.result as string) || '';
                 resolve({
                   base64: fallbackResult.length > 50 ? fallbackResult : '',
-                  mimeType: file.type || 'image/jpeg',
+                  mimeType: getFileMimeType(file),
                 });
                 return;
               }
@@ -120,7 +139,7 @@ function compressImageFile(file: File, maxDim = 900, quality = 0.72): Promise<{ 
               const fallbackResult = (readerEvent.target?.result as string) || '';
               resolve({
                 base64: fallbackResult.length > 50 ? fallbackResult : '',
-                mimeType: file.type || 'image/jpeg',
+                mimeType: getFileMimeType(file),
               });
             }
           };
@@ -128,7 +147,7 @@ function compressImageFile(file: File, maxDim = 900, quality = 0.72): Promise<{ 
             const fallbackResult = (readerEvent.target?.result as string) || '';
             resolve({
               base64: fallbackResult.length > 50 ? fallbackResult : '',
-              mimeType: file.type || 'image/jpeg',
+              mimeType: getFileMimeType(file),
             });
           };
           img.src = (readerEvent.target?.result as string) || '';
@@ -137,14 +156,14 @@ function compressImageFile(file: File, maxDim = 900, quality = 0.72): Promise<{ 
           const fallbackResult = (readerEvent.target?.result as string) || '';
           resolve({
             base64: fallbackResult.length > 50 ? fallbackResult : '',
-            mimeType: file.type || 'image/jpeg',
+            mimeType: getFileMimeType(file),
           });
         }
       };
       reader.onerror = () => {
         resolve({
           base64: '',
-          mimeType: file.type || 'image/jpeg',
+          mimeType: getFileMimeType(file),
         });
       };
       reader.readAsDataURL(file);
@@ -152,7 +171,7 @@ function compressImageFile(file: File, maxDim = 900, quality = 0.72): Promise<{ 
       console.warn('[compressImageFile] FileReader fallback:', err);
       resolve({
         base64: '',
-        mimeType: file.type || 'image/jpeg',
+        mimeType: getFileMimeType(file),
       });
     }
   });
@@ -252,6 +271,12 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
       const filesArray = Array.from(e.target.files) as File[];
       const validFiles: File[] = [];
 
+      const freeSlots = Math.max(0, MAX_IMAGES - formData.images.length);
+      if (filesArray.length > freeSlots) {
+        setUploadError(`Bir analiz üçün ən çox ${MAX_IMAGES} şəkil əlavə etmək olar.`);
+        filesArray.splice(freeSlots);
+      }
+
       for (const file of filesArray) {
         if (!allowedTypes.includes(file.type.toLowerCase()) && !file.name.match(/\.(jpg|jpeg|png|webp|heic|heif)$/i)) {
           setUploadError('Bu şəkil formatı dəstəklənmir. Zəhmət olmasa JPG, PNG və ya WEBP formatlı şəkillər seçin.');
@@ -264,11 +289,8 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
         validFiles.push(file);
       }
 
-      if (validFiles.length === 0) {
-        return;
-      }
-
-      // Convert and optimize files to lightweight base64
+      // Convert and optimize files to lightweight base64 (the input is reset below even when
+      // nothing was valid, so picking the same file again still triggers onChange)
       for (const file of validFiles) {
         try {
           const { base64, mimeType } = await compressImageFile(file, 1600, 0.85);
@@ -277,7 +299,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
               id: Math.random().toString(36).substring(2, 9),
               url: base64,
               base64: base64,
-              mimeType: mimeType || file.type || 'image/jpeg',
+              mimeType: mimeType || getFileMimeType(file),
               name: file.name,
               size: Math.round((base64.length * 3) / 4),
             };
@@ -344,14 +366,26 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
     }));
   };
 
+  // AI's original total range and the item volumes it was based on. Manual edits scale the AI
+  // range proportionally instead of replacing it with a plain sum of item volumes (the AI total
+  // also accounts for small things it doesn't list one by one).
+  const aiVolumeBaselineRef = useRef<{ itemsVolume: number; min: number; max: number } | null>(null);
+
   // Recalculate total volume range when items change
   const recalculateVolume = (items: CargoItem[]) => {
     const totalVolume = items.reduce((acc, item) => acc + item.quantity * item.estimatedVolumeM3, 0);
     if (totalVolume <= 0) {
       return { min: 0, max: 0 };
     }
-    const min = Math.max(1, Math.round(totalVolume * 0.85));
-    const max = Math.max(min + 1, Math.round(totalVolume * 1.15));
+    const baseline = aiVolumeBaselineRef.current;
+    if (baseline && baseline.itemsVolume > 0) {
+      const ratio = totalVolume / baseline.itemsVolume;
+      const min = Math.max(0.5, roundVolume(baseline.min * ratio));
+      const max = Math.max(min, roundVolume(baseline.max * ratio));
+      return { min, max };
+    }
+    const min = Math.max(0.5, roundVolume(totalVolume * 0.85));
+    const max = Math.max(min, roundVolume(totalVolume * 1.15));
     return { min, max };
   };
 
@@ -539,13 +573,19 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
         isSpecialOrHeavy: Boolean(item.isSpecialOrHeavy),
       }));
 
+      // Keep one decimal: rounding 3.4 m³ down to 3 m³ would pick a vehicle that is too small
+      const aiMin = Math.max(0.5, roundVolume(Number(data?.estimatedTotalVolumeMinM3) || 3));
+      const aiMax = Math.max(aiMin, roundVolume(Number(data?.estimatedTotalVolumeMaxM3) || 5));
+      aiVolumeBaselineRef.current = {
+        itemsVolume: formattedItems.reduce((acc, item) => acc + item.quantity * item.estimatedVolumeM3, 0),
+        min: aiMin,
+        max: aiMax,
+      };
+
       const finalResult: CargoAnalysisData = {
         items: formattedItems,
-        estimatedTotalVolumeMinM3: Math.max(1, Math.round(data?.estimatedTotalVolumeMinM3 || 3)),
-        estimatedTotalVolumeMaxM3: Math.max(
-          Math.max(1, Math.round(data?.estimatedTotalVolumeMinM3 || 3)) + 1,
-          Math.round(data?.estimatedTotalVolumeMaxM3 || 5)
-        ),
+        estimatedTotalVolumeMinM3: aiMin,
+        estimatedTotalVolumeMaxM3: aiMax,
         analysisConfidence:
           data?.analysisConfidence === 'low' ? 'low' : data?.analysisConfidence === 'high' ? 'high' : 'medium',
         notes: Array.isArray(data?.notes) ? data.notes : [],

@@ -2,12 +2,12 @@ import { useEffect } from 'react';
 import { getPageSeo, SITE_NAME } from './metadata';
 import { buildStructuredData } from './structuredData';
 
-export function useSeo(pathname: string) {
+export function useSeo(pathname: string, isNotFound = false) {
   useEffect(() => {
     const seo = getPageSeo(pathname);
 
     // 1. Update Title
-    document.title = seo.title;
+    document.title = isNotFound ? `Səhifə tapılmadı | ${SITE_NAME}` : seo.title;
 
     // Helper to create or update meta tag
     const setMetaTag = (attrName: string, attrValue: string, content: string) => {
@@ -61,6 +61,6 @@ export function useSeo(pathname: string) {
 
     const structuredData = buildStructuredData(seo);
     scriptTag.text = JSON.stringify(structuredData);
-  }, [pathname]);
+  }, [pathname, isNotFound]);
 }
 

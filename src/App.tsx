@@ -11,6 +11,7 @@ import { ContactCallbackModal } from './components/ContactCallbackModal';
 import { Footer } from './components/Footer';
 import { RouterProvider, useRouter } from './router/RouterContext';
 import { useSeo } from './seo/useSeo';
+import { PAGE_SEO_CONFIGS } from './seo/metadata';
 
 // Page Components
 import { HomePage } from './pages/HomePage';
@@ -25,6 +26,10 @@ import { QiymetlerPage } from './pages/QiymetlerPage';
 import { ElaqePage } from './pages/ElaqePage';
 import { EvakuatorRoutePage } from './pages/EvakuatorRoutePage';
 import { YukdasimaRoutePage } from './pages/YukdasimaRoutePage';
+import { NotFoundPage } from './pages/NotFoundPage';
+
+/** Static pages (same list that is prerendered and listed in the sitemap). */
+const STATIC_PAGE_PATHS = new Set(Object.keys(PAGE_SEO_CONFIGS));
 
 function AppContent() {
   const { pathname } = useRouter();
@@ -38,8 +43,12 @@ function AppContent() {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
+  const isDynamicRoute =
+    pathname.startsWith('/evakuator/') || (pathname.startsWith('/yukdasima/') && pathname !== '/yukdasima');
+  const isNotFound = !isDynamicRoute && !STATIC_PAGE_PATHS.has(pathname);
+
   // Dynamically update document head (meta tags, title, canonical link, JSON-LD)
-  useSeo(pathname);
+  useSeo(pathname, isNotFound);
 
   const handleOpenCallback = (data?: string | CallbackInitialData) => {
     if (typeof data === 'string') {
@@ -91,7 +100,6 @@ function AppContent() {
       case '/elaqe':
         return <ElaqePage onOpenCallback={handleOpenCallback} />;
       case '/':
-      default:
         return (
           <HomePage
             activeService={activeService}
@@ -99,6 +107,9 @@ function AppContent() {
             onOpenCallback={handleOpenCallback}
           />
         );
+      default:
+        // Unknown address: "page not found" instead of a copy of the home page
+        return <NotFoundPage />;
     }
   };
 

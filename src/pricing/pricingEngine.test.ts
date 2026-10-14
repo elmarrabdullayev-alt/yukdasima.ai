@@ -18,7 +18,8 @@
  * 14. Tovuz / Gazakh / Shusha regional V1 tariffs lookup
  */
 
-import { calculateTransportationPricing } from './pricingEngine';
+import { calculateTransportationPricing, mentionsKeyword, parseFloorNumber } from './pricingEngine';
+import { isValidPhoneNumber } from '../utils/phone';
 import { CargoAnalysisData, YukdasimaFormData, EvakuasiyaFormData } from '../types';
 import { calculateEvakuasiyaEstimate } from '../utils/calculator';
 import { lookupEvacuatorTariff, lookupRouteTariff } from '../services/tariffService';
@@ -1089,6 +1090,95 @@ export function runPricingEngineVerificationTests(): boolean {
       unsupportedRoute.hasMissingTariff === true &&
       unsupportedRoute.estimatedPrice === 'Dəqiq qiymət üçün bizimlə əlaqə saxlayın.',
       'Test 57: Unsupported route never invents a price despite minivan/condition selections'
+    );
+  }
+
+  // Test 58: A street named after a city is inside Bakı ("Gəncə prospekti" is NOT Gəncə)
+  {
+    const toStreet = lookupRouteTariff('Nəsimi', 'Gəncə prospekti 25');
+    const fromStreet = lookupRouteTariff('Gəncə prospekti 25', 'Yasamal');
+    const otherStreets = ['Lənkəran küçəsi 4, Nərimanov', 'Quba meydanı', 'Həsən bəy Zərdabi pr. 10', 'Qara Qarayev pr.'].map(
+      (to) => lookupRouteTariff('Bakı', to)?.id
+    );
+    const realCity = lookupRouteTariff('Bakı', 'Gəncə şəhəri, Atatürk pr.');
+    assert(
+      toStreet?.id === 'route-baku-local' &&
+        fromStreet?.id === 'route-baku-local' &&
+        otherStreets.every((id) => id === 'route-baku-local') &&
+        realCity?.destination === 'Gəncə',
+      'Test 58: Street names (Gəncə prospekti, Lənkəran küçəsi, Zərdabi pr.) stay in Bakı; "Gəncə şəhəri, Atatürk pr." is Gəncə'
+    );
+  }
+
+  // Test 59: Place names match as whole words only ("Qalaaltı" is not "Qala")
+  {
+    const qalaalti = lookupRouteTariff('Bakı', 'Qalaaltı');
+    const qala = lookupRouteTariff('Bakı', 'Qala kəndi');
+    const withSuffix = lookupRouteTariff('Bakıdan', 'Qəbələyə');
+    assert(
+      qalaalti === null &&
+        qala?.id === 'route-absheron-peninsula' &&
+        withSuffix?.destination === 'Qəbələ',
+      'Test 59: Qalaaltı gets no Abşeron price, "Qala kəndi" and "Qəbələyə" still resolve'
+    );
+  }
+
+  // Test 60: Popular Bakı / Abşeron areas are recognised
+  {
+    const local = ['Qaraçuxur', 'Günəşli', 'Şıxov'].map((to) => lookupRouteTariff('Bakı', to)?.id);
+    const absheron = ['Mehdiabad', 'Ceyranbatan'].map((to) => lookupRouteTariff('Bakı', to)?.id);
+    assert(
+      local.every((id) => id === 'route-baku-local') && absheron.every((id) => id === 'route-xirdalan'),
+      'Test 60: Qaraçuxur, Günəşli, Şıxov -> Bakı daxili; Mehdiabad, Ceyranbatan -> Xırdalan zonası'
+    );
+  }
+
+  // Test 61: Special items need a whole word and are ignored when negated
+  {
+    const negated = calculateTransportationPricing(
+      createMockAnalysis(1, 2),
+      createMockForm({ details: 'piano yoxdur, seyf də yoxdur' })
+    );
+    const name = calculateTransportationPricing(
+      createMockAnalysis(1, 2),
+      createMockForm({ details: 'Seyfəddin adlı qonşu kömək edəcək' })
+    );
+    const real = calculateTransportationPricing(
+      createMockAnalysis(1, 2, [{ name: 'Pianino', qty: 1, vol: 1 }]),
+      createMockForm({ details: 'seyfi də aparmaq lazımdır' })
+    );
+    assert(
+      negated.specialItems.length === 0 &&
+        name.specialItems.length === 0 &&
+        real.specialItems.some((s) => s.type === 'piano') &&
+        real.specialItems.some((s) => s.type === 'safe') &&
+        mentionsKeyword('boyuk soyuducu var', 'böyük soyuducu', true),
+      'Test 61: "piano yoxdur" and "Seyfəddin" are not special items; "Pianino" and "seyfi" are'
+    );
+  }
+
+  // Test 62: Floors typed as words or with suffixes are understood
+  {
+    const stairs = calculateTransportationPricing(
+      createMockAnalysis(1, 2),
+      createMockForm({ fromFloor: 'beşinci', hasElevator: 'no' })
+    );
+    assert(
+      parseFloorNumber('5-ci') === 5 &&
+        parseFloorNumber('beşinci') === 5 &&
+        parseFloorNumber('') === 1 &&
+        stairs.workerServiceStatus === 'stairs_extra_required',
+      'Test 62: "5-ci" and "beşinci" floor values trigger the stairs rule'
+    );
+  }
+
+  // Test 63: Phone validation used by the forms and the server
+  {
+    const valid = ['050 123 45 67', '+994 50 123 45 67', '(050) 123-45-67', '994501234567', '501234567'];
+    const invalid = ['', 'abc', '123', '050abc4567', '1234567890123456'];
+    assert(
+      valid.every((p) => isValidPhoneNumber(p)) && invalid.every((p) => !isValidPhoneNumber(p)),
+      'Test 63: Real phone formats are accepted, text and too short/long numbers are rejected'
     );
   }
 

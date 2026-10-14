@@ -50,6 +50,74 @@ export function normalizeDestinationName(input: string): string {
 }
 
 /**
+ * Street / landmark markers (normalized form). A place name directly before one of these
+ * words is a street name inside a city (e.g. "Gəncə prospekti" is in Bakı, not in Gəncə).
+ */
+const STREET_MARKERS = new Set([
+  'prospekti', 'prospekt', 'pr', 'kucesi', 'kuce', 'kuc', 'kucesinde', 'kucede',
+  'meydani', 'meydan', 'dongesi', 'donge', 'dalani', 'dalan', 'sossesi', 'sosesi', 'sosse',
+  'bulvari', 'bulvar', 'metrosu', 'metro', 'stansiyasi', 'parki', 'tini', 'ms',
+]);
+
+/** Words that mark the previous word as a real settlement (stop stripping there). */
+const PLACE_DESCRIPTORS = new Set([
+  'seheri', 'seher', 'rayonu', 'rayon', 'r', 'qesebesi', 'qesebe', 'qes', 'kendi', 'kend', 'k',
+]);
+
+/**
+ * Removes street names (e.g. "Gəncə prospekti 25", "Qara Qarayev pr.") from an address so that
+ * a street named after a city is not mistaken for that city. Works per comma-separated segment.
+ * Returns the remaining normalized text and whether any street marker was found.
+ */
+export function stripStreetNames(input: string): { text: string; hadStreetMarker: boolean } {
+  if (!input) return { text: '', hadStreetMarker: false };
+  let hadStreetMarker = false;
+  const segments = input.split(/[,;\n]/);
+  const kept: string[] = [];
+
+  for (const segment of segments) {
+    const tokens = normalizeDestinationName(segment).split(' ').filter(Boolean);
+    const out: string[] = [];
+    for (let i = 0; i < tokens.length; i++) {
+      const tok = tokens[i];
+      if (STREET_MARKERS.has(tok)) {
+        hadStreetMarker = true;
+        // Remove up to two words before the marker, stopping at a place descriptor ("Gəncə şəhəri")
+        let removed = 0;
+        while (removed < 2 && out.length > 0 && !PLACE_DESCRIPTORS.has(out[out.length - 1])) {
+          out.pop();
+          removed++;
+        }
+        // Skip a house number directly after the marker ("prospekti 25")
+        if (i + 1 < tokens.length && /^\d+[a-z]?$/.test(tokens[i + 1])) i++;
+        continue;
+      }
+      out.push(tok);
+    }
+    if (out.length) kept.push(out.join(' '));
+  }
+
+  return { text: kept.join(' ').trim(), hadStreetMarker };
+}
+
+/** Common Azerbaijani case suffixes (normalized), e.g. "Qəbələyə", "Bakıdan", "Gəncənin". */
+const CASE_SUFFIX = '(?:ya|ye|a|e|da|de|ta|te|dan|den|tan|ten|in|un|nin|nun|i|u|ni|nu|ya qeder|ye qeder)?';
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * True when `alias` appears in `text` as a whole word (optionally followed by a case suffix).
+ * "qala" matches "qala kendi" and "qalada", but not "qalaalti".
+ */
+export function containsPlaceWord(text: string, alias: string): boolean {
+  if (!text || !alias) return false;
+  const re = new RegExp(`(?:^|\\s)${escapeRegex(alias)}${CASE_SUFFIX}(?=\\s|$)`);
+  return re.test(text);
+}
+
+/**
  * Strips all spaces for compact phonetic comparisons
  */
 export function compactNormalize(input: string): string {
@@ -74,11 +142,15 @@ const CURATED_DESTINATION_ALIASES: Record<string, string[]> = {
     'köhnə günəşli', 'kohne gunesli', 'yeni günəşli', 'yeni gunesli', 'badamdar', 'bayıl', 'bayil',
     'bibiheybət', 'bibiheybet', 'lökbatan', 'lokbatan', 'hövsan', 'hovsan', 'zığ', 'zig',
     'bülbülə', 'bulbule', 'əmircan', 'emircan', 'ramana', 'zabrat', 'kürdəxanı', 'kurdexani',
-    'pirşağı', 'pirsagi', 'nardaran', 'biləcəri', 'bileceri', 'binə', 'bine'
+    'pirşağı', 'pirsagi', 'nardaran', 'biləcəri', 'bileceri', 'binə', 'bine',
+    'qaraçuxur', 'qaracuxur', 'karachukhur', 'günəşli', 'gunesli', 'şıxov', 'sixov', 'shikhov',
+    'keşlə', 'kesle', 'ağ şəhər', 'ag seher', 'ağşəhər', 'agseher', 'montin', 'bakmil',
+    'yeni yasamal', 'sahil qəsəbəsi', 'sahil qesebesi'
   ],
   'Xırdalan': [
     'xırdalan', 'xirdalan', 'khirdalan', 'hirdalan', 'khyrdalan', 'xirdalan seheri',
-    'masazır', 'masazir', 'saray', 'qobu', 'hökməli', 'hokmeli', 'sulutəpə', 'sulutepe'
+    'masazır', 'masazir', 'saray', 'qobu', 'hökməli', 'hokmeli', 'sulutəpə', 'sulutepe',
+    'mehdiabad', 'ceyranbatan', 'jeyranbatan', 'digah', 'fatmayı', 'fatmayi', 'abşeron rayonu', 'abseron rayonu'
   ],
   'Sumqayıt': [
     'sumqayıt', 'sumqayit', 'sumgayit', 'sumgait', 'sumqait', 'sumqait city',
@@ -463,14 +535,39 @@ class DestinationResolverService {
       }
     }
 
-    // 4. Token / Substring matching for conversational phrases (e.g. "Bakıdan Qəbələyə", "Ağdaş şəhəri")
+    // 4. Token matching for conversational phrases (e.g. "Bakıdan Qəbələyə", "Ağdaş şəhəri").
+    // Street names are removed first ("Gəncə prospekti" is a street in Bakı, not the city Gəncə),
+    // and names must match as whole words ("Qalaaltı" must not match "Qala").
+    const { text: phraseInput, hadStreetMarker } = stripStreetNames(rawTrimmed);
+    if (!phraseInput) {
+      return null;
+    }
+
+    // An address that is entirely a street name + a district (e.g. "Gəncə prospekti 25, Nərimanov")
+    // may now be an exact alias.
+    const strippedAliasMatch = hadStreetMarker
+      ? this.aliasToCanonicalMap.get(phraseInput) || this.aliasToCanonicalMap.get(phraseInput.replace(/\s+/g, ''))
+      : undefined;
+    if (strippedAliasMatch) {
+      return {
+        canonicalName: strippedAliasMatch.canonicalName,
+        zone: strippedAliasMatch.zone,
+        isIntercity: strippedAliasMatch.isIntercity,
+        distanceKm: strippedAliasMatch.distanceKm,
+        matchType: 'exact_alias',
+        matchedQuery: rawTrimmed,
+        confidence: 0.96,
+        matchedAlias: phraseInput,
+      };
+    }
+
     // Test regional destinations first, sorted by length descending so longer specific names match first
     const sortedDestinations = [...this.destinations].sort((a, b) => b.canonicalName.length - a.canonicalName.length);
-    
+
     for (const dest of sortedDestinations) {
       // Check canonical in phrase
       const normCanonical = normalizeDestinationName(dest.canonicalName);
-      if (normalizedInput.includes(normCanonical) && normCanonical.length >= 3) {
+      if (normCanonical.length >= 3 && containsPlaceWord(phraseInput, normCanonical)) {
         return {
           canonicalName: dest.canonicalName,
           zone: dest.zone,
@@ -486,9 +583,8 @@ class DestinationResolverService {
       for (const alias of dest.curatedAliases) {
         const normAlias = normalizeDestinationName(alias);
         if (normAlias.length >= 3) {
-          // Word boundary or containment
-          const regex = new RegExp(`\\b${normAlias}\\b`, 'i');
-          if (regex.test(normalizedInput) || normalizedInput.includes(normAlias)) {
+          // Whole-word match (with optional case suffix), never a bare substring
+          if (containsPlaceWord(phraseInput, normAlias)) {
             return {
               canonicalName: dest.canonicalName,
               zone: dest.zone,
@@ -506,7 +602,9 @@ class DestinationResolverService {
 
     // 5. Safe Fuzzy Match (Typo Tolerance)
     // Only applied on single or double words, with strict Levenshtein threshold
-    if (normalizedInput.length >= 4 && normalizedInput.split(' ').length <= 2) {
+    // Skipped for street addresses: a leftover word like "qara" (from "Qara Qarayev pr.")
+    // must not be fuzzy-matched to a different place.
+    if (!hadStreetMarker && normalizedInput.length >= 4 && normalizedInput.split(' ').length <= 2) {
       let bestMatch: DestinationInfo | null = null;
       let minDistance = 999;
       let matchedAliasName = '';
@@ -674,7 +772,8 @@ export function isBakuOrigin(originAddress?: string): boolean {
     return resolved.canonicalName === 'Bakı (şəhərdaxili)';
   }
 
-  const norm = normalizeDestinationName(clean);
+  // Street names such as "Gəncə prospekti" are inside Bakı and must not count as other cities
+  const { text: norm, hadStreetMarker } = stripStreetNames(clean);
 
   // Check if string contains any non-Baku regional or suburban keywords
   const nonBakuKeywords = [
@@ -688,17 +787,25 @@ export function isBakuOrigin(originAddress?: string): boolean {
     'bilasuvar', 'celilabad', 'jalilabad', 'naxcivan', 'nakhchivan', 'susa', 'shusha'
   ];
 
-  if (nonBakuKeywords.some((kw) => norm.includes(kw))) {
+  if (nonBakuKeywords.some((kw) => containsPlaceWord(norm, kw))) {
     return false;
   }
 
   // Check for Baku markers
-  const bakuMarkers = ['baki', 'baku', 'seherdaxili', 'kuc', 'prospekt', 'pr ', 'mkr', 'mikrorayon', 'bina', 'merkez'];
-  if (bakuMarkers.some((m) => norm.includes(m))) {
+  if (hadStreetMarker || hasBakuAddressMarker(norm)) {
     return true;
   }
 
   return false;
+}
+
+/**
+ * Generic Baku address markers (micro-district, building, "Bakı" itself).
+ * Expects normalized text.
+ */
+export function hasBakuAddressMarker(normalizedText: string): boolean {
+  const markerWords = ['baki', 'baku', 'seherdaxili', 'mkr', 'mikrorayon', 'mikrorayonu', 'bina', 'binasi', 'merkez'];
+  return markerWords.some((m) => containsPlaceWord(normalizedText, m));
 }
 
 /**
@@ -735,10 +842,9 @@ export function classifyRoute(fromAddress?: string, toAddress?: string): RouteCl
   const resolvedTo = resolveDestination(normTo);
 
   if (!resolvedTo) {
-    // Check if destination has Baku markers
-    const norm = normalizeDestinationName(normTo);
-    const bakuMarkers = ['baki', 'baku', 'seherdaxili', 'kuc', 'prospekt', 'pr ', 'mkr', 'mikrorayon', 'bina', 'merkez'];
-    if (bakuMarkers.some((m) => norm.includes(m))) {
+    // Check if destination has Baku markers (street address or district markers)
+    const { text: norm, hadStreetMarker } = stripStreetNames(normTo);
+    if (hadStreetMarker || hasBakuAddressMarker(norm)) {
       return { type: 'baku_local', description: 'Bakı şəhərdaxili' };
     }
     return { type: 'unsupported', description: 'Naməlum təyinat məntəqəsi' };

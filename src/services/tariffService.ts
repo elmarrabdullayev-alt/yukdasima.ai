@@ -16,6 +16,10 @@ import {
   getCanonicalDestinations,
   isBakuOrigin,
   classifyRoute,
+  stripStreetNames,
+  containsPlaceWord,
+  hasBakuAddressMarker,
+  normalizeDestinationName,
   DestinationResolutionResult
 } from './destinationResolver';
 
@@ -137,7 +141,9 @@ function loadActiveTariffDatabase(): TariffDatabase {
       'köhnə günəşli', 'kohne gunesli', 'yeni günəşli', 'yeni gunesli', 'badamdar', 'bayıl', 'bayil',
       'bibiheybət', 'bibiheybet', 'lökbatan', 'lokbatan', 'hövsan', 'hovsan', 'zığ', 'zig',
       'bülbülə', 'bulbule', 'əmircan', 'emircan', 'ramana', 'zabrat', 'kürdəxanı', 'kurdexani',
-      'pirşağı', 'pirsagi', 'nardaran', 'biləcəri', 'bileceri', 'binə', 'bine'
+      'pirşağı', 'pirsagi', 'nardaran', 'biləcəri', 'bileceri', 'binə', 'bine',
+      'qaraçuxur', 'qaracuxur', 'günəşli', 'gunesli', 'şıxov', 'sixov', 'keşlə', 'kesle',
+      'ağ şəhər', 'ag seher', 'montin', 'bakmil', 'yeni yasamal'
     ],
   });
 
@@ -158,7 +164,10 @@ function loadActiveTariffDatabase(): TariffDatabase {
       evacuator: 40,
       tir: 190,
     },
-    aliases: ['xırdalan', 'xirdalan', 'khirdalan', 'masazır', 'masazir', 'saray', 'qobu', 'hökməli', 'hokmeli', 'sulutəpə', 'sulutepe'],
+    aliases: [
+      'xırdalan', 'xirdalan', 'khirdalan', 'masazır', 'masazir', 'saray', 'qobu', 'hökməli', 'hokmeli', 'sulutəpə', 'sulutepe',
+      'mehdiabad', 'ceyranbatan', 'digah', 'fatmayı', 'fatmayi'
+    ],
   });
 
   routes.push({
@@ -331,12 +340,13 @@ export function lookupRouteTariff(fromAddress: string, toAddress: string): Unifi
       }
     }
 
-    // Check Baku local districts/markers
+    // Check Baku local districts/markers. Street names are removed first and names must match
+    // as whole words, so "Gəncə prospekti" counts as Bakı and "Qalaaltı" does not match "Qala".
     const localBaku = ACTIVE_TARIFF_DATABASE.routes.find((r) => r.id === 'route-baku-local');
     if (localBaku) {
-      const isToLocal = localBaku.aliases.some((alias) => normTo === alias || normTo.includes(alias));
-      const bakuMarkers = ['küç', 'kuc', 'pr ', 'prospekt', 'mkr', 'mikrorayon', 'bina', 'otaq', 'mərkəz', 'merkez'];
-      const hasMarker = bakuMarkers.some((m) => normTo.includes(m));
+      const { text: strippedTo, hadStreetMarker } = stripStreetNames(toAddress);
+      const isToLocal = localBaku.aliases.some((alias) => containsPlaceWord(strippedTo, normalizeDestinationName(alias)));
+      const hasMarker = hadStreetMarker || hasBakuAddressMarker(strippedTo);
 
       if (isToLocal || hasMarker) {
         return localBaku;

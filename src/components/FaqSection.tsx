@@ -68,11 +68,10 @@ export const FaqSection: React.FC<FaqSectionProps> = ({ onOpenCallback }) => {
                   </div>
                 </button>
 
-                {isOpen && (
-                  <div className="px-5 sm:px-6 pb-5 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100">
-                    {faq.answer}
-                  </div>
-                )}
+                {/* Answer stays in the HTML (visible to search engines) and is only hidden when closed */}
+                <div hidden={!isOpen} className="px-5 sm:px-6 pb-5 pt-1 text-slate-600 text-sm sm:text-base leading-relaxed border-t border-slate-100">
+                  {faq.answer}
+                </div>
               </div>
             );
           })}

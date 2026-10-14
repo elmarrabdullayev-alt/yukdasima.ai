@@ -6,6 +6,7 @@ import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
 import { trackConversionEvent } from '../utils/analytics';
 import { Link } from '../router/RouterContext';
 import { CallbackInitialData } from '../types';
+import { isValidPhoneNumber } from '../utils/phone';
 
 interface ElaqePageProps {
   onOpenCallback: (initialData?: string | CallbackInitialData) => void;
@@ -39,6 +40,10 @@ export const ElaqePage: React.FC<ElaqePageProps> = ({ onOpenCallback }) => {
     const cleanPhone = formPhone.trim();
     if (!cleanPhone) {
       setErrorMessage('Zəhmət olmasa telefon nömrənizi daxil edin.');
+      return;
+    }
+    if (!isValidPhoneNumber(cleanPhone)) {
+      setErrorMessage('Telefon nömrəsi düzgün deyil. Məsələn: 050 123 45 67');
       return;
     }
 

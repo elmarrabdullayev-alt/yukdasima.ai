@@ -806,7 +806,7 @@ export const YukdasimaRoutePage: React.FC<YukdasimaRoutePageProps> = ({
           </div>
 
           <div className="space-y-3 max-w-4xl">
-            {seoConfig.faqs.map((faq, index) => {
+            {(seoConfig.faqs || []).map((faq, index) => {
               const isOpen = openFaqIndexes.includes(index);
               return (
                 <div

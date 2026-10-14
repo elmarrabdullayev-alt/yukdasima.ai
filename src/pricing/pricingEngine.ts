@@ -32,6 +32,7 @@ import {
   lookupVehiclePrice,
   UnifiedRouteTariff,
 } from '../services/tariffService';
+import { normalizeDestinationName } from '../services/destinationResolver';
 
 export interface PricingEngineOptions {
   vehicleConfig?: VehicleConfig;
@@ -104,13 +105,13 @@ export function calculateTransportationPricing(
   const detectedSpecialItems: SpecialItemDetected[] = [];
   let hasLargeItemFitRisk = false;
 
-  const allItemsAndDetails = [
-    ...(analysis?.items.map((i) => i.name) || []),
-    formData.details,
-  ].join(' ').toLowerCase();
+  const itemNamesText = normalizeDestinationName((analysis?.items.map((i) => i.name) || []).join(' , '));
+  const detailsText = normalizeDestinationName(formData.details || '');
 
   for (const rule of pricingRules.specialItemRules) {
-    const matched = rule.keywords.some((kw) => allItemsAndDetails.includes(kw.toLowerCase()));
+    const matched = rule.keywords.some(
+      (kw) => mentionsKeyword(itemNamesText, kw, false) || mentionsKeyword(detailsText, kw, true)
+    );
     if (matched) {
       detectedSpecialItems.push({
         type: rule.type,
@@ -177,8 +178,8 @@ export function calculateTransportationPricing(
     requiresOperatorConfirmation = true;
   } else {
     // Local job: Evaluate floor and elevator rules
-    const fromFloorNum = parseInt(formData.fromFloor, 10) || 1;
-    const toFloorNum = parseInt(formData.toFloor, 10) || 1;
+    const fromFloorNum = parseFloorNumber(formData.fromFloor);
+    const toFloorNum = parseFloorNumber(formData.toFloor);
     const hasElevator = formData.hasElevator;
     const itemsFit = formData.itemsFitElevator;
 
@@ -267,8 +268,49 @@ export function calculateTransportationPricing(
       : (formData.fromAddress || formData.toAddress
           ? `${formData.fromAddress || 'Bakı'} → ${formData.toAddress || 'Təyin edilməyib'}`
           : undefined),
-    distanceKm: matchedRoute?.distanceKm,
+    distanceKm: matchedRoute?.distanceKm ?? undefined,
   };
+}
+
+const NEGATION_WORDS = new Set(['yoxdur', 'yox', 'deyil', 'olmayacaq', 'olmayacag', 'yoxdu']);
+
+/**
+ * True when `text` (normalized) mentions `keyword` as a whole word, allowing a short
+ * Azerbaijani suffix ("seyfi", "pianonu") but not a different word ("Seyfəddin").
+ * When `checkNegation` is set, "piano yoxdur" / "seyf deyil" do not count.
+ */
+export function mentionsKeyword(text: string, keyword: string, checkNegation: boolean): boolean {
+  const kw = normalizeDestinationName(keyword);
+  if (!text || !kw) return false;
+  const escaped = kw.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`(?:^|\\s)${escaped}[a-z]{0,3}(?=\\s|$)`, 'g');
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text)) !== null) {
+    if (!checkNegation) return true;
+    const following = text.slice(m.index + m[0].length).trim().split(' ').slice(0, 2);
+    if (!following.some((w) => NEGATION_WORDS.has(w))) return true;
+  }
+  return false;
+}
+
+/**
+ * Parses a floor value typed by the user ("5", "5-ci", "beşinci", "zirzəmi").
+ * Unknown values fall back to 1.
+ */
+export function parseFloorNumber(value: string | undefined): number {
+  const raw = (value || '').toString().trim().toLowerCase();
+  const digits = raw.match(/-?\d+/);
+  if (digits) return parseInt(digits[0], 10);
+  const norm = normalizeDestinationName(raw);
+  const words: Record<string, number> = {
+    birinci: 1, ikinci: 2, ucuncu: 3, dorduncu: 4, besinci: 5, altinci: 6, yeddinci: 7,
+    sekkizinci: 8, doqquzuncu: 9, onuncu: 10, bir: 1, iki: 2, uc: 3, dord: 4, bes: 5,
+    alti: 6, yeddi: 7, sekkiz: 8, doqquz: 9, on: 10,
+  };
+  for (const token of norm.split(' ')) {
+    if (words[token] !== undefined) return words[token];
+  }
+  return 1;
 }
 
 /**
