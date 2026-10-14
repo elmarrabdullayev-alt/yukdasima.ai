@@ -2,6 +2,7 @@ import { REGIONAL_DESTINATIONS, RegionalDestination } from './regionalData';
 import { BATCH3_REGIONAL_CONTENT } from './batch3RegionalContent';
 import { BATCH4_REGIONAL_CONTENT } from './batch4RegionalContent';
 import { BATCH5_REGIONAL_CONTENT } from './batch5RegionalContent';
+import { BATCH6_REGIONAL_CONTENT } from './batch6RegionalContent';
 
 export type DestinationCategory =
   | 'major_city'
@@ -99,6 +100,9 @@ export interface PilotContent {
   yukdasimaReverseOverview?: string;
   evakuatorOverview?: string;
   evakuatorReverseOverview?: string;
+  yukdasimaVehicleNotes?: string;
+  yukdasimaLoadingNotes?: string;
+  evakuatorPlatformNotes?: string;
 }
 
 const PILOT_REGIONAL_CONTENT: Record<string, PilotContent> = {
@@ -1120,7 +1124,8 @@ export function generateRouteContentProfile(dest: RegionalDestination): RouteCon
     PILOT_REGIONAL_CONTENT[dest.slug] ||
     BATCH3_REGIONAL_CONTENT[dest.slug] ||
     BATCH4_REGIONAL_CONTENT[dest.slug] ||
-    BATCH5_REGIONAL_CONTENT[dest.slug];
+    BATCH5_REGIONAL_CONTENT[dest.slug] ||
+    BATCH6_REGIONAL_CONTENT[dest.slug];
 
   // --- 1. Yükdaşıma Descriptions & Text ---
   let yukOverview = '';
@@ -1146,6 +1151,11 @@ export function generateRouteContentProfile(dest: RegionalDestination): RouteCon
     yukVehicleNotes = `Uzun məsafələrdə tam qapalı izotermik və ya tentli 5–7 metrlik yük avtomobilləri seçilməlidir. Böyük həcmli köçlərdə 20–35 kubmetrlik furqonlar əşyaların bir reyslə çatdırılmasını təmin edir.`;
     yukLoadingNotes = `Uzun yol rejimi üçün həssas mebellərin qablaşdırılması, texniki avadanlıqların bərkidilməsi və ağırlığın oxlar üzrə düzgün paylanması zəruridir.`;
   }
+
+  // Route-specific texts written for this destination replace the generated ones
+  if (pilot?.yukdasimaReverseOverview) yukReverse = pilot.yukdasimaReverseOverview;
+  if (pilot?.yukdasimaVehicleNotes) yukVehicleNotes = pilot.yukdasimaVehicleNotes;
+  if (pilot?.yukdasimaLoadingNotes) yukLoadingNotes = pilot.yukdasimaLoadingNotes;
 
   if (isMountain && !pilot?.yukdasimaOverview) {
     yukOverview += ` Dağlıq və dağətəyi relyef nəzərə alınaraq nəqliyyatın texniki sazlığına və əyləc sisteminə ciddi nəzarət edilir.`;
@@ -1208,6 +1218,9 @@ export function generateRouteContentProfile(dest: RegionalDestination): RouteCon
     evacReverse = `${dName} və ətraf rayonlardan paytaxt Bakıya zədəli və ya texniki nasaz nəqliyyat vasitələrinin etibarlı daşınması təmin edilir.`;
     evacPlatformNotes = `Uzun məsafəli daşımalarda ağır yolsuzluq avtomobilləri, mikroavtobuslar və ya xüsusi texnikalar üçün gücləndirilmiş platforma və elektrikli bucurqad (lebyodka) tətbiq olunur.`;
   }
+
+  if (pilot?.evakuatorReverseOverview) evacReverse = pilot.evakuatorReverseOverview;
+  if (pilot?.evakuatorPlatformNotes) evacPlatformNotes = pilot.evakuatorPlatformNotes;
 
   // --- 4. Evakuator FAQs ---
   let evacFaqs: RouteFaqItem[] = [];
