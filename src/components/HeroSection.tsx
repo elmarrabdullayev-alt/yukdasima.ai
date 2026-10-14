@@ -53,7 +53,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
           </div>
 
           <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Daşıma qiymətinizi <span className="text-blue-600">asanlıqla</span> öyrənin
+            Bakıda <span className="text-blue-600">Yükdaşıma</span> və Evakuator Xidməti{' '}
+            <span className="block mt-2 text-xl sm:text-3xl font-bold text-slate-600">
+              <span className="sr-only">— </span>Qiyməti onlayn öyrənin
+            </span>
           </h1>
 
           <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
