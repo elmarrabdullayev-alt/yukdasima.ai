@@ -3,6 +3,7 @@ import { BATCH3_REGIONAL_CONTENT } from './batch3RegionalContent';
 import { BATCH4_REGIONAL_CONTENT } from './batch4RegionalContent';
 import { BATCH5_REGIONAL_CONTENT } from './batch5RegionalContent';
 import { BATCH6_REGIONAL_CONTENT } from './batch6RegionalContent';
+import { BATCH7_REGIONAL_CONTENT } from './batch7RegionalContent';
 
 export type DestinationCategory =
   | 'major_city'
@@ -1125,7 +1126,8 @@ export function generateRouteContentProfile(dest: RegionalDestination): RouteCon
     BATCH3_REGIONAL_CONTENT[dest.slug] ||
     BATCH4_REGIONAL_CONTENT[dest.slug] ||
     BATCH5_REGIONAL_CONTENT[dest.slug] ||
-    BATCH6_REGIONAL_CONTENT[dest.slug];
+    BATCH6_REGIONAL_CONTENT[dest.slug] ||
+    BATCH7_REGIONAL_CONTENT[dest.slug];
 
   // --- 1. Yükdaşıma Descriptions & Text ---
   let yukOverview = '';
