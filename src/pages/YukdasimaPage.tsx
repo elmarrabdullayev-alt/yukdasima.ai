@@ -876,11 +876,10 @@ export const YukdasimaPage: React.FC<YukdasimaPageProps> = ({ onOpenCallback }) 
                     />
                   </button>
 
-                  {isOpen && (
-                    <div className="p-5 bg-white border-t border-slate-100 text-slate-600 text-xs sm:text-sm leading-relaxed space-y-2">
-                      <p>{faq.answer}</p>
-                    </div>
-                  )}
+                  {/* Answer stays in the HTML (visible to search engines) and is only hidden when closed */}
+                  <div hidden={!isOpen} className="p-5 bg-white border-t border-slate-100 text-slate-600 text-xs sm:text-sm leading-relaxed space-y-2">
+                    <p>{faq.answer}</p>
+                  </div>
                 </div>
               );
             })}

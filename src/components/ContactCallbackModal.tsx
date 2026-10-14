@@ -3,6 +3,7 @@ import { X, Phone, User, CheckCircle2, MessageSquare, AlertCircle, Loader2 } fro
 import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { CallbackInitialData } from '../types';
+import { isValidPhoneNumber } from '../utils/phone';
 
 interface ContactCallbackModalProps {
   isOpen: boolean;
@@ -30,20 +31,27 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
   const [submitted, setSubmitted] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Every time the modal opens, start from a clean form: show the form (not the previous
+  // "success" screen) and only carry the route/price details passed for THIS request.
+  // Name and phone are kept so a returning visitor doesn't have to retype them.
   useEffect(() => {
-    if (initialData) {
-      if (initialData.phone) setPhone(initialData.phone);
-      if (initialData.name) setName(initialData.name);
-      if (initialData.service) setService(initialData.service);
-      if (initialData.source) setSource(initialData.source);
-      if (initialData.route) setRoute(initialData.route);
-      if (initialData.vehicle) setVehicle(initialData.vehicle);
-      if (initialData.estimatedPrice) setEstimatedPrice(initialData.estimatedPrice);
-      if (initialData.notes) setNotes(initialData.notes);
+    if (!isOpen) return;
+    setSubmitted(false);
+    setIsSubmitting(false);
+    setErrorMessage(null);
+    setService(initialData?.service || 'yukdasima');
+    setSource(initialData?.source || '');
+    setRoute(initialData?.route || '');
+    setVehicle(initialData?.vehicle || '');
+    setEstimatedPrice(initialData?.estimatedPrice || '');
+    setNotes(initialData?.notes || '');
+    if (initialData?.name) setName(initialData.name);
+    if (initialData?.phone) {
+      setPhone(initialData.phone);
     } else if (initialPhone) {
       setPhone(initialPhone);
     }
-  }, [initialPhone, initialData]);
+  }, [isOpen, initialPhone, initialData]);
 
   if (!isOpen) return null;
 
@@ -52,6 +60,10 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
     const cleanPhone = phone.trim();
     if (!cleanPhone) {
       setErrorMessage('Zəhmət olmasa telefon nömrənizi qeyd edin.');
+      return;
+    }
+    if (!isValidPhoneNumber(cleanPhone)) {
+      setErrorMessage('Telefon nömrəsi düzgün deyil. Məsələn: 050 123 45 67');
       return;
     }
 

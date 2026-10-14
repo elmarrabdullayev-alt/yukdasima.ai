@@ -27,16 +27,27 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
 
     const lower = query.toLowerCase();
 
+    // 1. Explicit evacuation words always mean evacuation
+    const isExplicitEvacuation = ['evakuas', 'evakuator', 'jeep', 'sedan', 'qəza', 'qeza'].some((kw) =>
+      lower.includes(kw)
+    );
+    // 2. Cargo words: "yük maşını", "mebel", "köçmək" are moving questions even though they contain "maşın"
+    const isCargoQuestion = [
+      'yük', 'yuk', 'mebel', 'köç', 'koc', 'əşya', 'esya', 'divan', 'soyuducu',
+      'otaq', 'ofis', 'fəhlə', 'fehle', 'qutu', 'pianino', 'kamaz', 'furqon', 'qazel',
+    ].some((kw) => lower.includes(kw));
+    // 3. A car on its own ("maşınım xarab olub") means evacuation
+    const mentionsCar =
+      /(^|\s)maşın/.test(lower) ||
+      lower.includes('avtomobil') ||
+      lower.includes('minik') ||
+      lower.includes('işə düşmür') ||
+      lower.includes('ise dusmur');
+
+    const isEvacuationQuestion = isExplicitEvacuation || (!isCargoQuestion && mentionsCar);
+
     // Check if evacuation question
-    if (
-      lower.includes('evakuas') ||
-      lower.includes('evakuator') ||
-      lower.includes('maşın') ||
-      lower.includes('jeep') ||
-      lower.includes('sedan') ||
-      lower.includes('qəza') ||
-      lower.includes('xırdalan')
-    ) {
+    if (isEvacuationQuestion) {
       setActiveAnswer({
         question: query,
         answer:
