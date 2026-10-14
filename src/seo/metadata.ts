@@ -167,7 +167,7 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
     path: '/',
     title: 'Yükdaşıma Bakı | Yükdaşıma və Evakuasiya Xidməti',
     metaDescription: 'Bakı və Azərbaycan üzrə peşəkar yükdaşıma və 24/7 evakuasiya xidməti. AI ilə həcm analizi, şəffaf tariflər və sürətli sifariş.',
-    h1: 'Bakıda Yükdaşıma və Evakuasiya Xidməti',
+    h1: 'Bakıda Yükdaşıma və Evakuator Xidməti — Qiyməti Onlayn Öyrənin',
     canonicalUrl: 'https://yukdasima.ai/',
     keywords: ['yükdaşıma', 'yükdaşıma xidməti', 'yükdaşıma Bakı', 'yük daşıma', 'yük maşını', 'evakuasiya', 'evakuator'],
     ogType: 'website',
