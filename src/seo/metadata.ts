@@ -1,3 +1,4 @@
+import { FAQ_DATA } from '../data/mockData';
 import {
   getApprovedEvakuatorRoute,
   generateRouteSeoConfig,
@@ -34,6 +35,30 @@ export interface PageSeoConfig {
 
 export const SITE_URL = 'https://yukdasima.ai';
 export const SITE_NAME = 'yukdasima.ai';
+
+/** Social share image (Facebook, WhatsApp, Telegram, X). 1200×630. */
+export const OG_IMAGE = {
+  url: `${SITE_URL}/og-image.jpg`,
+  width: 1200,
+  height: 630,
+  alt: 'yukdasima.ai — Bakı və regionlarda yükdaşıma və evakuator xidməti, 050 250 31 70',
+};
+
+/** Square logo used in structured data. */
+export const LOGO_URL = `${SITE_URL}/icon-512.png`;
+
+/**
+ * Google Business Profile ("Yukdasima.ai", Nakliyat / Moving company).
+ * Linking the site and the profile helps Google and AI search treat them as one business.
+ */
+export const GOOGLE_BUSINESS_PROFILE = {
+  name: 'Yukdasima.ai',
+  mapsUrl: 'https://www.google.com/maps?cid=10094931144560140412',
+  knowledgeGraphId: '/g/11zf72f2d5',
+};
+
+/** Home page FAQ: the same questions and answers that are shown in the FAQ section on the page. */
+export const HOME_FAQS: PageFaqItem[] = FAQ_DATA.map((faq) => ({ question: faq.question, answer: faq.answer }));
 
 export const YUKDASIMA_FAQS: PageFaqItem[] = [
   {
@@ -147,6 +172,7 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
     keywords: ['yükdaşıma', 'yükdaşıma xidməti', 'yükdaşıma Bakı', 'yük daşıma', 'yük maşını', 'evakuasiya', 'evakuator'],
     ogType: 'website',
     schemaType: 'WebSite',
+    faqs: HOME_FAQS,
   },
   '/yukdasima': {
     path: '/yukdasima',

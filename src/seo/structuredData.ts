@@ -1,4 +1,4 @@
-import { PageSeoConfig, SITE_NAME, SITE_URL } from './metadata';
+import { PageSeoConfig, SITE_NAME, SITE_URL, OG_IMAGE, LOGO_URL, GOOGLE_BUSINESS_PROFILE } from './metadata';
 import { CONTACT_INFO } from '../constants/contact';
 
 export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown> {
@@ -10,12 +10,29 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
       name: SITE_NAME,
       description: 'Bakı və Azərbaycan üzrə operativ yükdaşıma və 24/7 evakuasiya xidməti platforması',
       inLanguage: 'az',
+      publisher: {
+        '@id': `${SITE_URL}/#business`,
+      },
     },
     {
-      '@type': 'LocalBusiness',
+      // Moving company + tow service. The same business as the Google Business Profile
+      // (linked through hasMap / sameAs), so search engines and AI assistants see one entity.
+      '@type': ['MovingCompany', 'AutoTowing'],
       '@id': `${SITE_URL}/#business`,
       name: SITE_NAME,
+      alternateName: [GOOGLE_BUSINESS_PROFILE.name, 'Yükdaşıma AI'],
+      description:
+        'Bakı və regionlarda yükdaşıma və evakuator xidməti: ev və ofis köçürülməsi, mebel daşınması, yük maşını sifarişi, fəhlə xidməti və 24/7 evakuator. Şəkillərlə AI həcm analizi və onlayn ilkin qiymət.',
       url: SITE_URL,
+      logo: {
+        '@type': 'ImageObject',
+        url: LOGO_URL,
+        width: 512,
+        height: 512,
+      },
+      image: OG_IMAGE.url,
+      hasMap: GOOGLE_BUSINESS_PROFILE.mapsUrl,
+      sameAs: [GOOGLE_BUSINESS_PROFILE.mapsUrl],
       telephone: CONTACT_INFO.PRIMARY_PHONE_RAW,
       areaServed: [
         {
@@ -59,6 +76,15 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
         contactType: 'customer service',
         availableLanguage: 'Azerbaijani',
       },
+      knowsAbout: [
+        'Yükdaşıma',
+        'Evdən evə köçürülmə',
+        'Ofis daşınması',
+        'Mebel daşınması',
+        'Yük maşını sifarişi',
+        'Fəhlə xidməti',
+        'Evakuator xidməti',
+      ],
     },
   ];
 
