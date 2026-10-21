@@ -1,6 +1,7 @@
 // Rus dili lüğəti: açar — Azərbaycan dilindəki orijinal mətn (trim edilmiş), dəyər — rusca tərcümə.
 // {0}, {1}... — dinamik hissələr üçün şablon yerləri.
 export const RU_DICTIONARY: Record<string, string> = {
+  "Dil": "Язык",
   "(Çoxlu foto dəstəklənir)": "(Можно несколько фото)",
   "(İstəyə görə)": "(необязательно)",
   ") nəzərə alınmaqla ilkin hesablanmışdır. Yekun qiymət operator təsdiqi ilə qüvvəyə minir.": "). Окончательная цена действует после подтверждения оператором.",
