@@ -195,7 +195,8 @@ export const Navbar: React.FC<NavbarProps> = ({
 
           {/* Mobile menu button */}
           <div className="flex lg:hidden items-center gap-2">
-            <LanguageSwitcher />
+            {/* Narrow phones (< 400px): the switch moves into the menu so the header does not overflow */}
+            <LanguageSwitcher className="hidden min-[400px]:flex" />
             <a
               id="mobile-phone-btn"
               href={CONTACT_INFO.HOTLINE_TEL}
@@ -226,6 +227,10 @@ export const Navbar: React.FC<NavbarProps> = ({
           className="lg:hidden fixed inset-x-0 top-18 sm:top-20 z-50 bg-white border-b border-slate-200 shadow-2xl overflow-y-auto overscroll-contain h-[calc(100dvh-4.5rem)] px-4 pt-2 pb-[calc(3rem+env(safe-area-inset-bottom,0px))] flex flex-col justify-between"
         >
           <div className="grid grid-cols-2 gap-2 pt-2 pb-2">
+            <div className="col-span-2 flex min-[400px]:hidden items-center justify-between px-1 pb-1">
+              <span className="text-xs font-semibold text-slate-500">{t("Dil")}</span>
+              <LanguageSwitcher />
+            </div>
             <Link
               href="/yukdasima"
               onClick={() => {

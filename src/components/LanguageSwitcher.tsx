@@ -13,12 +13,12 @@ const LANGS: Array<{ code: Lang; label: string; name: string }> = [
  * page has no Russian version yet). Uses a normal link so the page loads with the right
  * language from the start.
  */
-export const LanguageSwitcher: React.FC<{ className?: string }> = ({ className = '' }) => {
+export const LanguageSwitcher: React.FC<{ className?: string }> = ({ className = 'flex' }) => {
   const { fullPath, lang } = useRouter();
 
   return (
     <div
-      className={`flex items-center rounded-lg border border-slate-200 bg-white p-0.5 text-xs font-bold ${className}`}
+      className={`items-center rounded-lg border border-slate-200 bg-white p-0.5 text-xs font-bold ${className}`}
       role="group"
       aria-label="Dil / Язык"
     >
