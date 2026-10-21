@@ -12,6 +12,7 @@ import { Footer } from './components/Footer';
 import { RouterProvider, useRouter } from './router/RouterContext';
 import { useSeo } from './seo/useSeo';
 import { PAGE_SEO_CONFIGS } from './seo/metadata';
+import { setLang } from './i18n';
 
 // Page Components
 import { HomePage } from './pages/HomePage';
@@ -32,7 +33,9 @@ import { NotFoundPage } from './pages/NotFoundPage';
 const STATIC_PAGE_PATHS = new Set(Object.keys(PAGE_SEO_CONFIGS));
 
 function AppContent() {
-  const { pathname } = useRouter();
+  const { pathname, lang } = useRouter();
+  // Every text rendered below is translated for this language (Azerbaijani renders unchanged)
+  setLang(lang);
   const [activeService, setActiveService] = useState<ServiceType>('yukdasima');
   const [isCallbackOpen, setIsCallbackOpen] = useState(false);
   const [callbackData, setCallbackData] = useState<CallbackInitialData | undefined>(undefined);
@@ -45,10 +48,11 @@ function AppContent() {
 
   const isDynamicRoute =
     pathname.startsWith('/evakuator/') || (pathname.startsWith('/yukdasima/') && pathname !== '/yukdasima');
-  const isNotFound = !isDynamicRoute && !STATIC_PAGE_PATHS.has(pathname);
+  // Route pages (e.g. /yukdasima/baki-gence) exist only in Azerbaijani for now
+  const isNotFound = lang === 'ru' ? !STATIC_PAGE_PATHS.has(pathname) : !isDynamicRoute && !STATIC_PAGE_PATHS.has(pathname);
 
   // Dynamically update document head (meta tags, title, canonical link, JSON-LD)
-  useSeo(pathname, isNotFound);
+  useSeo(pathname, isNotFound, lang);
 
   const handleOpenCallback = (data?: string | CallbackInitialData) => {
     if (typeof data === 'string') {
@@ -68,6 +72,10 @@ function AppContent() {
 
   // Route router switcher
   const renderCurrentPage = () => {
+    if (lang === 'ru' && isNotFound) {
+      return <NotFoundPage />;
+    }
+
     // 1. Programmatic dynamic evacuator routes (e.g. /evakuator/baki-agdas)
     if (pathname.startsWith('/evakuator/')) {
       const slug = pathname.replace('/evakuator/', '');

@@ -30,6 +30,7 @@ import { ECONOMIC_REGION_GROUPS } from '../seo/regionalData';
 import { lookupEvacuatorTariff } from '../services/tariffService';
 import { CallbackInitialData } from '../types';
 import { BakuDistrictsGeoSection } from '../components/BakuDistrictsGeoSection';
+import { t } from '../i18n';
 
 interface EvakuasiyaPageProps {
   onOpenCallback: (initialData?: string | CallbackInitialData) => void;
@@ -71,17 +72,13 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
     <article className="py-6 sm:py-10 bg-slate-50 min-h-screen text-slate-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 sm:space-y-16">
         {/* Breadcrumb Navigation */}
-        <nav aria-label="Breadcrumb" className="text-xs sm:text-sm text-slate-500">
+        <nav aria-label={t("Breadcrumb")} className="text-xs sm:text-sm text-slate-500">
           <ol className="flex items-center gap-2 flex-wrap">
             <li>
-              <Link href="/" className="hover:text-blue-600 transition-colors">
-                Ana səhifə
-              </Link>
+              <Link href="/" className="hover:text-blue-600 transition-colors">{t("Ana səhifə")}</Link>
             </li>
             <li aria-hidden="true" className="text-slate-400">/</li>
-            <li className="font-semibold text-slate-800" aria-current="page">
-              Evakuator
-            </li>
+            <li className="font-semibold text-slate-800" aria-current="page">{t("Evakuator")}</li>
           </ol>
         </nav>
 
@@ -89,16 +86,12 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
         <header className="text-center max-w-3xl mx-auto space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold">
             <Car className="w-4 h-4" />
-            <span>24/7 Təcili Evakuator Xidməti</span>
+            <span>{t("24/7 Təcili Evakuator Xidməti")}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Evakuator Xidməti – Bakı və Regionlar
-          </h1>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">{t("Evakuator Xidməti – Bakı və Regionlar")}</h1>
 
-          <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
-            Bakı şəhəri, Abşeron və bütün regionlar üzrə 24/7 peşəkar <strong>evakuator xidməti</strong>. Nasaz, qəzalı və ya hərəkətsiz qalmış avtomobillərin təhlükəsiz daşınması, onlayn ilkin qiymət hesablanması və operativ operator əlaqəsi.
-          </p>
+          <p className="text-slate-600 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">{t("Bakı şəhəri, Abşeron və bütün regionlar üzrə 24/7 peşəkar ")}<strong>{t("evakuator xidməti")}</strong>{t(". Nasaz, qəzalı və ya hərəkətsiz qalmış avtomobillərin təhlükəsiz daşınması, onlayn ilkin qiymət hesablanması və operativ operator əlaqəsi.")}</p>
 
           {/* Quick Hotline and WhatsApp Action Buttons */}
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
@@ -106,21 +99,21 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               href={CONTACT_INFO.PRIMARY_PHONE_TEL}
               onClick={handleHotlineClick}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold shadow-xs transition-colors"
-              title={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
-              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              title={t(`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`)}
+              aria-label={t(`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`)}
             >
               <Phone className="w-4 h-4" />
-              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+              <span>{t("Zəng et: ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}</span>
             </a>
 
             <button
               onClick={handleWhatsApp}
               type="button"
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-xs transition-colors cursor-pointer"
-              title="WhatsApp vasitəsilə yaz"
+              title={t("WhatsApp vasitəsilə yaz")}
             >
               <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp ilə Sifariş</span>
+              <span>{t("WhatsApp ilə Sifariş")}</span>
             </button>
 
             <a
@@ -128,7 +121,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-sm font-bold transition-colors"
             >
               <Calculator className="w-4 h-4 text-blue-600" />
-              <span>Qiyməti Hesabla</span>
+              <span>{t("Qiyməti Hesabla")}</span>
             </a>
           </div>
         </header>
@@ -136,7 +129,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
         {/* Section 1: Embedded Interactive Evakuasiya Estimator */}
         <section
           id="evakuasiya-calculator-section"
-          aria-label="Evakuator Qiymət Kalkulyatoru və Sifariş"
+          aria-label={t("Evakuator Qiymət Kalkulyatoru və Sifariş")}
           className="space-y-4"
         >
           <div className="bg-gradient-to-r from-blue-900 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-lg space-y-4">
@@ -144,14 +137,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="space-y-1 max-w-2xl">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-blue-500/20 text-blue-200 text-xs font-semibold uppercase tracking-wide">
                   <Calculator className="w-3.5 h-3.5" />
-                  <span>Onlayn Qiymət Hesablama</span>
+                  <span>{t("Onlayn Qiymət Hesablama")}</span>
                 </div>
-                <h2 className="text-xl sm:text-2xl font-bold text-white">
-                  Evakuator qiymətini dərhal hesablayın
-                </h2>
-                <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">
-                  Çıxış və təyinat ünvanını daxil edərək, avtomobilin tipini və texniki vəziyyətini seçin; rəsmi tarif bazamız əsasında ilkin <strong>evakuator qiymətini</strong> dərhal onlayn öyrənin.
-                </p>
+                <h2 className="text-xl sm:text-2xl font-bold text-white">{t("Evakuator qiymətini dərhal hesablayın")}</h2>
+                <p className="text-blue-100 text-xs sm:text-sm leading-relaxed">{t("Çıxış və təyinat ünvanını daxil edərək, avtomobilin tipini və texniki vəziyyətini seçin; rəsmi tarif bazamız əsasında ilkin ")}<strong>{t("evakuator qiymətini")}</strong>{t(" dərhal onlayn öyrənin.")}</p>
               </div>
 
               <div className="shrink-0">
@@ -161,7 +150,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-bold text-sm shadow-sm transition-all cursor-pointer"
                 >
                   <Phone className="w-4 h-4 text-blue-600" />
-                  <span>Operator Zəngi Sifariş Et</span>
+                  <span>{t("Operator Zəngi Sifariş Et")}</span>
                 </button>
               </div>
             </div>
@@ -174,18 +163,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
         </section>
 
         {/* Section 2: H2 - Evakuator xidməti necə işləyir? */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Xidmət Prosesi">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label={t("Xidmət Prosesi")}>
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
               <Layers className="w-4 h-4" />
-              <span>Sadə və Şəffaf Proses</span>
+              <span>{t("Sadə və Şəffaf Proses")}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Evakuator xidməti necə işləyir?
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Yolda nasazlıq və ya qəza baş verdikdə peşəkar <strong>evakuator xidməti</strong> almaq bir neçə sadə və aydın mərhələdən ibarətdir:
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Evakuator xidməti necə işləyir?")}</h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{t("Yolda nasazlıq və ya qəza baş verdikdə peşəkar ")}<strong>{t("evakuator xidməti")}</strong>{t(" almaq bir neçə sadə və aydın mərhələdən ibarətdir:")}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -193,57 +178,45 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
                 1
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Məlumatın Qəbulu</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Kalkulyatorda marşrutu seçin və ya {CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəmizə zəng edərək avtomobilin markasını, yerləşdiyi ünvanı və nasazlıq detallarını bildirin.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Məlumatın Qəbulu")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Kalkulyatorda marşrutu seçin və ya ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}{t(" nömrəmizə zəng edərək avtomobilin markasını, yerləşdiyi ünvanı və nasazlıq detallarını bildirin.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative">
               <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
                 2
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Növbətçi Təyini</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Dispetçerimiz dərhal ən yaxın ərazidəki növbətçi evakuatoru təyin edir və sürücü operativ şəkildə ünvanınıza istiqamətlənir.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Növbətçi Təyini")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Dispetçerimiz dərhal ən yaxın ərazidəki növbətçi evakuatoru təyin edir və sürücü operativ şəkildə ünvanınıza istiqamətlənir.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative">
               <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
                 3
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Təhlükəsiz Yükləmə</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Hidravlik sürüşən platforma və etibarlı bərkitmə kəmərləri vasitəsilə avtomobiliniz heç bir zədə almadan platformaya qaldırılır və bərkidilir.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Təhlükəsiz Yükləmə")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Hidravlik sürüşən platforma və etibarlı bərkitmə kəmərləri vasitəsilə avtomobiliniz heç bir zədə almadan platformaya qaldırılır və bərkidilir.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3 relative">
               <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-base shadow-sm">
                 4
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Təyinat Yerinə Çatdırılma</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Avtomobiliniz tələb olunan ünvana, rəsmi servis mərkəzinə və ya fərdi qaraja təhlükəsiz çatdırılaraq səliqəli şəkildə boşaldılır.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Təyinat Yerinə Çatdırılma")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Avtomobiliniz tələb olunan ünvana, rəsmi servis mərkəzinə və ya fərdi qaraja təhlükəsiz çatdırılaraq səliqəli şəkildə boşaldılır.")}</p>
             </div>
           </div>
         </section>
 
         {/* Section 3: H2 - Evakuator qiyməti necə hesablanır? */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Qiymət Hesablama Qaydaları">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label={t("Qiymət Hesablama Qaydaları")}>
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
               <BadgePercent className="w-4 h-4" />
-              <span>Şəffaf və Rəsmi Tariflər</span>
+              <span>{t("Şəffaf və Rəsmi Tariflər")}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Evakuator qiyməti necə hesablanır?
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Platformamızda <strong>evakuator qiyməti</strong> qabaqcadan tam şəffaf şəkildə formalaşır. Daşınma haqqı heç bir gizli xərc olmadan aşağıdakı real meyarlar əsasında hesablanır:
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Evakuator qiyməti necə hesablanır?")}</h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{t("Platformamızda ")}<strong>{t("evakuator qiyməti")}</strong>{t(" qabaqcadan tam şəffaf şəkildə formalaşır. Daşınma haqqı heç bir gizli xərc olmadan aşağıdakı real meyarlar əsasında hesablanır:")}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -252,11 +225,9 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <MapPin className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Məsafə və Marşrut</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">{t("Məsafə və Marşrut")}</h3>
               </div>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bakı şəhərdaxili marşrutlar üzrə sabit başlanğıc tarifi, şəhərətrafı qəsəbələrə və Azərbaycan rayonlarına isə rəsmi bazamızdakı dəqiq kilometraj əsasında tarif hesablanır.
-              </p>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Bakı şəhərdaxili marşrutlar üzrə sabit başlanğıc tarifi, şəhərətrafı qəsəbələrə və Azərbaycan rayonlarına isə rəsmi bazamızdakı dəqiq kilometraj əsasında tarif hesablanır.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
@@ -264,11 +235,9 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <Car className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Nəqliyyat Növü və Çəkisi</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">{t("Nəqliyyat Növü və Çəkisi")}</h3>
               </div>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Standart sedan və hetçbeklər üçün standart platforma, iri krossoverlər (SUV / Cip) və minivanlar üçün isə müvafiq yükgötürmə qabiliyyətinə malik evakuator təyin edilir (+10 AZN minivan tarif fərqi).
-              </p>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Standart sedan və hetçbeklər üçün standart platforma, iri krossoverlər (SUV / Cip) və minivanlar üçün isə müvafiq yükgötürmə qabiliyyətinə malik evakuator təyin edilir (+10 AZN minivan tarif fərqi).")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
@@ -276,11 +245,9 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <Wrench className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Təkərlərin Hərəkət Qabiliyyəti</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">{t("Təkərlərin Hərəkət Qabiliyyəti")}</h3>
               </div>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Təkərləri sərbəst fırlanan maşınlar standart bucurqadla asanlıqla yüklənir. Təkəri kilidlənmiş, sükanı dönməyən və ya qəzalı nəqliyyat üçün əlavə xüsusi avadanlıq və köməkçi təkər arabacıqları tələb olunur (+5 AZN texniki xidmət haqqı).
-              </p>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Təkərləri sərbəst fırlanan maşınlar standart bucurqadla asanlıqla yüklənir. Təkəri kilidlənmiş, sükanı dönməyən və ya qəzalı nəqliyyat üçün əlavə xüsusi avadanlıq və köməkçi təkər arabacıqları tələb olunur (+5 AZN texniki xidmət haqqı).")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
@@ -288,41 +255,33 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                 <div className="w-9 h-9 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
                   <Clock className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base sm:text-lg">Günün Saatı və Təcililik</h3>
+                <h3 className="font-bold text-slate-900 text-base sm:text-lg">{t("Günün Saatı və Təcililik")}</h3>
               </div>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Xidmətimiz 24/7 fasiləsiz işləyir. Gecə və ya gündüz sifarişlərində qiymətlər rəsmi tarif cədvəlinə uyğun olaraq öncədən bildirilir və sifarişdən sonra dəyişmir.
-              </p>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Xidmətimiz 24/7 fasiləsiz işləyir. Gecə və ya gündüz sifarişlərində qiymətlər rəsmi tarif cədvəlinə uyğun olaraq öncədən bildirilir və sifarişdən sonra dəyişmir.")}</p>
             </div>
           </div>
 
           <div className="p-4 rounded-2xl bg-blue-50 border border-blue-100 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p className="text-blue-900 text-xs sm:text-sm">
-              Bütün rayonlar və xidmət növləri üzrə rəsmi tarif cədvəlinə baxmaq istəyirsiniz?
-            </p>
+            <p className="text-blue-900 text-xs sm:text-sm">{t("Bütün rayonlar və xidmət növləri üzrə rəsmi tarif cədvəlinə baxmaq istəyirsiniz?")}</p>
             <Link
               href="/qiymetler"
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm transition-colors whitespace-nowrap"
             >
-              <span>Şəffaf Tariflər Cədvəli</span>
+              <span>{t("Şəffaf Tariflər Cədvəli")}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </section>
 
         {/* Section 4: H2 - Ucuz evakuator seçərkən nələrə diqqət etmək lazımdır? */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Sərfəli və Etibarlı Evakuator">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label={t("Sərfəli və Etibarlı Evakuator")}>
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-amber-600 uppercase tracking-wider">
               <AlertTriangle className="w-4 h-4" />
-              <span>Sərfəli və Təhlükəsiz Seçim</span>
+              <span>{t("Sərfəli və Təhlükəsiz Seçim")}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Ucuz evakuator seçərkən nələrə diqqət etmək lazımdır?
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              İstifadəçilər tez-tez <strong>ucuz evakuator</strong> axtararkən yalnız qiymət rəqəminə baxırlar. Lakin avtomobilin zədələnmədən daşınması və sonradan gözlənilməz əlavə xərclərin çıxmaması üçün bir neçə mühüm məqamı nəzərə almaq vacibdir:
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Ucuz evakuator seçərkən nələrə diqqət etmək lazımdır?")}</h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{t("İstifadəçilər tez-tez ")}<strong>{t("ucuz evakuator")}</strong>{t(" axtararkən yalnız qiymət rəqəminə baxırlar. Lakin avtomobilin zədələnmədən daşınması və sonradan gözlənilməz əlavə xərclərin çıxmaması üçün bir neçə mühüm məqamı nəzərə almaq vacibdir:")}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -330,128 +289,96 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
                 <BadgePercent className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Gizli Xərclərin Olmaması</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bəzi fərdi sürücülər telefonda çox aşağı qiymət deyib, çatdıqda yükləmə və ya məsafə bəhanəsi ilə əlavə ödəniş tələb edirlər. yukdasima.ai-də qiymət əvvəlcədən dəqiq hesablanır.
-              </p>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">{t("Gizli Xərclərin Olmaması")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Bəzi fərdi sürücülər telefonda çox aşağı qiymət deyib, çatdıqda yükləmə və ya məsafə bəhanəsi ilə əlavə ödəniş tələb edirlər. yukdasima.ai-də qiymət əvvəlcədən dəqiq hesablanır.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Texniki Təhlükəsizlik</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Köhnə tros və nasaz bucurqadla aparılan daşıma avtomobilin bamperinə və asqı sisteminə ciddi ziyan vura bilər. Müasir hidravlik platforma təhlükəsizliyin qarantıdır.
-              </p>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">{t("Texniki Təhlükəsizlik")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Köhnə tros və nasaz bucurqadla aparılan daşıma avtomobilin bamperinə və asqı sisteminə ciddi ziyan vura bilər. Müasir hidravlik platforma təhlükəsizliyin qarantıdır.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
                 <Calculator className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-base sm:text-lg">Real Qiymət Şəffaflığı</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Ən uyğun qiymət real marşrut məsafəsi, avtomobilin tipi və texniki vəziyyəti nəzərə alınaraq təyin olunur. Onlayn kalkulyatorumuz bu balansı dərhal təmin edir.
-              </p>
+              <h3 className="font-bold text-slate-900 text-base sm:text-lg">{t("Real Qiymət Şəffaflığı")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Ən uyğun qiymət real marşrut məsafəsi, avtomobilin tipi və texniki vəziyyəti nəzərə alınaraq təyin olunur. Onlayn kalkulyatorumuz bu balansı dərhal təmin edir.")}</p>
             </div>
           </div>
         </section>
 
         {/* Section 5: H2 - Bakı və regionlara evakuator xidməti */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Xidmət Coğrafiyası">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label={t("Xidmət Coğrafiyası")}>
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
               <MapPin className="w-4 h-4" />
-              <span>Geniş Coğrafi Əhatə</span>
+              <span>{t("Geniş Coğrafi Əhatə")}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Bakı və regionlara evakuator xidməti
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Paytaxt Bakının bütün rayon və qəsəbələrində, eləcə də respublikanın bütün magistral yollarında növbətçi <strong>Bakı evakuator</strong> və şəhərlərarası daşıma heyətlərimiz fəaliyyət göstərir:
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Bakı və regionlara evakuator xidməti")}</h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{t("Paytaxt Bakının bütün rayon və qəsəbələrində, eləcə də respublikanın bütün magistral yollarında növbətçi ")}<strong>{t("Bakı evakuator")}</strong>{t(" və şəhərlərarası daşıma heyətlərimiz fəaliyyət göstərir:")}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-              <h3 className="font-bold text-slate-900 text-base">Bakı və Abşeron Ərazisi</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Yasamal, Nəsimi, Səbail, Nərimanov, Xətai, Binəqədi, Xırdalan, Masazır, Nizami, Sabunçu, Suraxanı, Xəzər və Qaradağ üzrə 15–20 dəqiqəyə operativ yaxınlaşma.
-              </p>
+              <h3 className="font-bold text-slate-900 text-base">{t("Bakı və Abşeron Ərazisi")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Yasamal, Nəsimi, Səbail, Nərimanov, Xətai, Binəqədi, Xırdalan, Masazır, Nizami, Sabunçu, Suraxanı, Xəzər və Qaradağ üzrə 15–20 dəqiqəyə operativ yaxınlaşma.")}</p>
             </div>
 
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-              <h3 className="font-bold text-slate-900 text-base">Qərb və Mərkəzi Magistrallar</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bakı – Gəncə, Mingəçevir, Yevlax, Şəmkir, Tovuz, Qazax, Bərdə, Ağdam, Ağdaş, Göyçay, Ucar və Kürdəmir istiqamətlərində fasiləsiz avtomobil daşıma.
-              </p>
+              <h3 className="font-bold text-slate-900 text-base">{t("Qərb və Mərkəzi Magistrallar")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Bakı – Gəncə, Mingəçevir, Yevlax, Şəmkir, Tovuz, Qazax, Bərdə, Ağdam, Ağdaş, Göyçay, Ucar və Kürdəmir istiqamətlərində fasiləsiz avtomobil daşıma.")}</p>
             </div>
 
             <div className="p-5 rounded-2xl bg-slate-50 border border-slate-100 space-y-2">
-              <h3 className="font-bold text-slate-900 text-base">Şimal və Cənub Dəhlizləri</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Sumqayıt, Quba, Qusar, Xaçmaz, Şamaxı, İsmayıllı, Qəbələ, Şəki, Zaqatala, Salyan, Biləsuvar, Cəlilabad, Masallı, Lənkəran və Astara marşrutları.
-              </p>
+              <h3 className="font-bold text-slate-900 text-base">{t("Şimal və Cənub Dəhlizləri")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Sumqayıt, Quba, Qusar, Xaçmaz, Şamaxı, İsmayıllı, Qəbələ, Şəki, Zaqatala, Salyan, Biləsuvar, Cəlilabad, Masallı, Lənkəran və Astara marşrutları.")}</p>
             </div>
           </div>
         </section>
 
         {/* Section 6: H2 - Hansı avtomobillər evakuasiya olunur? */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Daşına Bilən Nəqliyyat Vasitələri">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label={t("Daşına Bilən Nəqliyyat Vasitələri")}>
           <div className="max-w-3xl space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Hansı avtomobillər daşına bilər?
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Müasir texniki bazamız və fərqli daşıma gücünə malik evakuatorlarımızla geniş kateqoriyalı nəqliyyat vasitələrinə xidmət göstəririk:
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Hansı avtomobillər daşına bilər?")}</h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{t("Müasir texniki bazamız və fərqli daşıma gücünə malik evakuatorlarımızla geniş kateqoriyalı nəqliyyat vasitələrinə xidmət göstəririk:")}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
               <div className="text-3xl">🚗</div>
-              <h3 className="font-bold text-slate-900 text-lg">Sedan və Hetçbek</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Bütün minik avtomobillərinin şəhərdaxili və şəhərlərarası operativ və təhlükəsiz daşınması.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Sedan və Hetçbek")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Bütün minik avtomobillərinin şəhərdaxili və şəhərlərarası operativ və təhlükəsiz daşınması.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
               <div className="text-3xl">🚙</div>
-              <h3 className="font-bold text-slate-900 text-lg">SUV və Krossoverlər</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Ağır çəkili və tam ötürücülü (4x4) ciplərin gücləndirilmiş platforma ilə etibarlı evakuasiyası.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("SUV və Krossoverlər")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Ağır çəkili və tam ötürücülü (4x4) ciplərin gücləndirilmiş platforma ilə etibarlı evakuasiyası.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
               <div className="text-3xl">🚐</div>
-              <h3 className="font-bold text-slate-900 text-lg">Minivan və Mikroavtobus</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Sprinter, Vito, Ford Transit kimi uzun bazalı və hündür nəqliyyat vasitələrinin daşınması.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Minivan və Mikroavtobus")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Sprinter, Vito, Ford Transit kimi uzun bazalı və hündür nəqliyyat vasitələrinin daşınması.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-50 border border-slate-100 space-y-3">
               <div className="text-3xl">🛠️</div>
-              <h3 className="font-bold text-slate-900 text-lg">Qəzalı və Nasaz Nəqliyyat</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Təkəri kilidlənmiş, mühərriki işə düşməyən və ya qəzaya uğramış nəqliyyat vasitələrinin xüsusi avadanlıqla daşınması.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Qəzalı və Nasaz Nəqliyyat")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Təkəri kilidlənmiş, mühərriki işə düşməyən və ya qəzaya uğramış nəqliyyat vasitələrinin xüsusi avadanlıqla daşınması.")}</p>
             </div>
           </div>
         </section>
 
         {/* Section 7: H2 - Evakuator sifarişi necə verilir? */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Sifariş Qaydaları">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label={t("Sifariş Qaydaları")}>
           <div className="max-w-3xl space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Evakuator sifarişi necə verilir?
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Təcili və ya planlaşdırılmış <strong>avtomobil daşıma</strong> üçün sizə ən uyğun əlaqə kanalını seçə bilərsiniz:
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Evakuator sifarişi necə verilir?")}</h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{t("Təcili və ya planlaşdırılmış ")}<strong>{t("avtomobil daşıma")}</strong>{t(" üçün sizə ən uyğun əlaqə kanalını seçə bilərsiniz:")}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -459,16 +386,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold">
                 <Phone className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Telefonla Sifariş</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Günün 24 saatı zəng edərək operatorumuza ünvanı və nasazlığı bildirin. Növbətçi maşın dərhal yola düşsün.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Telefonla Sifariş")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Günün 24 saatı zəng edərək operatorumuza ünvanı və nasazlığı bildirin. Növbətçi maşın dərhal yola düşsün.")}</p>
               <a
                 href={CONTACT_INFO.PRIMARY_PHONE_TEL}
-                aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+                aria-label={t(`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`)}
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-blue-700 hover:text-blue-900"
               >
-                <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+                <span>{t("Zəng et: ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -477,16 +402,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center font-bold">
                 <MessageSquare className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">WhatsApp Lokasiya</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Yol kənarında dəqiq ünvanı bilmədikdə canlı yerləşmə (location) göndərərək ən sürətli dəstəyi əldə edin.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("WhatsApp Lokasiya")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Yol kənarında dəqiq ünvanı bilmədikdə canlı yerləşmə (location) göndərərək ən sürətli dəstəyi əldə edin.")}</p>
               <button
                 onClick={handleWhatsApp}
                 type="button"
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-emerald-700 hover:text-emerald-900 cursor-pointer"
               >
-                <span>WhatsApp ilə Yaz</span>
+                <span>{t("WhatsApp ilə Yaz")}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -495,16 +418,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold">
                 <Calculator className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-slate-900 text-lg">Onlayn Kalkulyator</h3>
-              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">
-                Səhifənin yuxarı hissəsindəki kalkulyatordan istifadə edərək qiyməti hesablayın və bir kliklə geri zəng sifariş edin.
-              </p>
+              <h3 className="font-bold text-slate-900 text-lg">{t("Onlayn Kalkulyator")}</h3>
+              <p className="text-slate-600 text-xs sm:text-sm leading-relaxed">{t("Səhifənin yuxarı hissəsindəki kalkulyatordan istifadə edərək qiyməti hesablayın və bir kliklə geri zəng sifariş edin.")}</p>
               <button
                 onClick={() => onOpenCallback()}
                 type="button"
                 className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-indigo-700 hover:text-indigo-900 cursor-pointer"
               >
-                <span>Geri zəng sifarişi</span>
+                <span>{t("Geri zəng sifarişi")}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -512,18 +433,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
         </section>
 
         {/* Section 8: H2 - Niyə yukdasima.ai? */}
-        <section className="bg-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl space-y-8" aria-label="Üstünlüklərimiz">
+        <section className="bg-slate-900 text-white rounded-3xl p-6 sm:p-10 shadow-xl space-y-8" aria-label={t("Üstünlüklərimiz")}>
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-400 uppercase tracking-wider">
               <Sparkles className="w-4 h-4" />
-              <span>Etibarlı Xidmət Standartları</span>
+              <span>{t("Etibarlı Xidmət Standartları")}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-              Niyə yukdasima.ai evakuator xidməti?
-            </h2>
-            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
-              Yolda qaldığınız zaman operativlik və etibarlılıq ən mühüm amildir. Platformamız sizə aşağıdakı real üstünlükləri təqdim edir:
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">{t("Niyə yukdasima.ai evakuator xidməti?")}</h2>
+            <p className="text-slate-300 text-sm sm:text-base leading-relaxed">{t("Yolda qaldığınız zaman operativlik və etibarlılıq ən mühüm amildir. Platformamız sizə aşağıdakı real üstünlükləri təqdim edir:")}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -531,77 +448,61 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
                 <Clock className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Operativ Yaxınlaşma</h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Bakı və Abşeron ərazisindəki növbətçi məntəqələrimiz sayəsində çağırış daxil olan kimi ən yaxın avtomobil operativ yönləndirilir.
-              </p>
+              <h3 className="font-bold text-white text-base sm:text-lg">{t("Operativ Yaxınlaşma")}</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{t("Bakı və Abşeron ərazisindəki növbətçi məntəqələrimiz sayəsində çağırış daxil olan kimi ən yaxın avtomobil operativ yönləndirilir.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
                 <BadgePercent className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Şəffaf Tarif Zəmanəti</h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Sifariş zamanı bildirilən qiymət sondur. Daşınma başa çatdıqdan sonra heç bir gözlənilməz əlavə xərc tələb edilmir.
-              </p>
+              <h3 className="font-bold text-white text-base sm:text-lg">{t("Şəffaf Tarif Zəmanəti")}</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{t("Sifariş zamanı bildirilən qiymət sondur. Daşınma başa çatdıqdan sonra heç bir gözlənilməz əlavə xərc tələb edilmir.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Təhlükəsiz Hidravlik Platforma</h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Alçaq asqılı (low clearance) sport və ya lüks avtomobillərin belə bamper və asqı sistemləri zədələnmədən səliqəli yüklənməsi.
-              </p>
+              <h3 className="font-bold text-white text-base sm:text-lg">{t("Təhlükəsiz Hidravlik Platforma")}</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{t("Alçaq asqılı (low clearance) sport və ya lüks avtomobillərin belə bamper və asqı sistemləri zədələnmədən səliqəli yüklənməsi.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
                 <Phone className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">7/24 Fasiləsiz Qaynar Xətt</h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Günün və gecənin istənilən saatında hava şəraitindən asılı olmayaraq fasiləsiz çağrı qəbulu və texniki kömək.
-              </p>
+              <h3 className="font-bold text-white text-base sm:text-lg">{t("7/24 Fasiləsiz Qaynar Xətt")}</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{t("Günün və gecənin istənilən saatında hava şəraitindən asılı olmayaraq fasiləsiz çağrı qəbulu və texniki kömək.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
                 <Navigation className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Bütün Azərbaycan Rayonları</h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Təkcə Bakıda deyil, regionlararası bütün magistral yollarda uzaq məsafəli təhlükəsiz avtomobil daşıma.
-              </p>
+              <h3 className="font-bold text-white text-base sm:text-lg">{t("Bütün Azərbaycan Rayonları")}</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{t("Təkcə Bakıda deyil, regionlararası bütün magistral yollarda uzaq məsafəli təhlükəsiz avtomobil daşıma.")}</p>
             </div>
 
             <div className="p-6 rounded-2xl bg-slate-800/80 border border-slate-700/80 space-y-3">
               <div className="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
                 <CheckCircle2 className="w-5 h-5" />
               </div>
-              <h3 className="font-bold text-white text-base sm:text-lg">Təcrübəli Sürücü Heyəti</h3>
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">
-                Mürəkkəb qəza şəraitlərində və çətin relyefdə nəqliyyat vasitələrini düzgün bərkitmə və idarəetmə təcrübəsinə malik peşəkarlar.
-              </p>
+              <h3 className="font-bold text-white text-base sm:text-lg">{t("Təcrübəli Sürücü Heyəti")}</h3>
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed">{t("Mürəkkəb qəza şəraitlərində və çətin relyefdə nəqliyyat vasitələrini düzgün bərkitmə və idarəetmə təcrübəsinə malik peşəkarlar.")}</p>
             </div>
           </div>
         </section>
 
         {/* Section 9: H2 - Tez-tez verilən suallar (Visible FAQ Accordion) */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Tez-tez verilən suallar">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label={t("Tez-tez verilən suallar")}>
           <div className="max-w-3xl space-y-2">
             <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
               <HelpCircle className="w-4 h-4" />
-              <span>Məlumat Mərkəzi</span>
+              <span>{t("Məlumat Mərkəzi")}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Tez-tez verilən suallar
-            </h2>
-            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-              Evakuator xidməti, qiymətlər, təcili sifariş və texniki imkanlar haqqında ən çox verilən sualların cavabları:
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Tez-tez verilən suallar")}</h2>
+            <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{t("Evakuator xidməti, qiymətlər, təcili sifariş və texniki imkanlar haqqında ən çox verilən sualların cavabları:")}</p>
           </div>
 
           <div className="space-y-3 max-w-4xl">
@@ -619,7 +520,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                     className="w-full flex items-center justify-between p-5 text-left bg-slate-50 hover:bg-slate-100 transition-colors gap-4 cursor-pointer"
                   >
                     <span className="font-bold text-slate-900 text-sm sm:text-base">
-                      {faq.question}
+                      {t(faq.question)}
                     </span>
                     <ChevronDown
                       className={`w-5 h-5 text-slate-500 shrink-0 transition-transform duration-200 ${
@@ -630,7 +531,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
 
                   {/* Answer stays in the HTML (visible to search engines) and is only hidden when closed */}
                   <div hidden={!isOpen} className="p-5 bg-white border-t border-slate-100 text-slate-600 text-xs sm:text-sm leading-relaxed space-y-2">
-                    <p>{faq.answer}</p>
+                    <p>{t(faq.answer)}</p>
                   </div>
                 </div>
               );
@@ -645,23 +546,19 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
         />
 
         {/* Section 11: Complete Regional Directory by Economic Regions */}
-        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label="Bölgələr üzrə evakuator kataloqu">
+        <section className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8" aria-label={t("Bölgələr üzrə evakuator kataloqu")}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100">
             <div className="space-y-1">
               <div className="inline-flex items-center gap-2 text-xs font-bold text-blue-600 uppercase tracking-wider">
                 <Navigation className="w-4 h-4" />
-                <span>İqtisadi Rayonlar və Nəqliyyat Dəhlizləri</span>
+                <span>{t("İqtisadi Rayonlar və Nəqliyyat Dəhlizləri")}</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                Bölgələr üzrə evakuator kataloqu
-              </h2>
-              <p className="text-slate-600 text-xs sm:text-sm max-w-2xl">
-                Bakıdan və Bakıya Azərbaycanın bütün iqtisadi rayonları, şəhər və magistralları üzrə 24/7 peşəkar və operativ evakuator xidməti. İstədiyiniz istiqaməti seçərək dəqiq xidmət şərtlərini öyrənin.
-              </p>
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Bölgələr üzrə evakuator kataloqu")}</h2>
+              <p className="text-slate-600 text-xs sm:text-sm max-w-2xl">{t("Bakıdan və Bakıya Azərbaycanın bütün iqtisadi rayonları, şəhər və magistralları üzrə 24/7 peşəkar və operativ evakuator xidməti. İstədiyiniz istiqaməti seçərək dəqiq xidmət şərtlərini öyrənin.")}</p>
             </div>
             <span className="self-start sm:self-auto inline-flex items-center gap-1.5 text-xs font-bold text-slate-700 bg-slate-100 px-3.5 py-2 rounded-xl shrink-0">
               <MapPin className="w-3.5 h-3.5 text-blue-600" />
-              <span>{evacRoutes.length} Marşrut</span>
+              <span>{t(evacRoutes.length)}{t(" Marşrut")}</span>
             </span>
           </div>
 
@@ -678,15 +575,14 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                   <div className="flex flex-col sm:flex-row sm:items-baseline justify-between gap-1 pb-2 border-b border-slate-100">
                     <div>
                       <h3 className="font-extrabold text-slate-900 text-base sm:text-lg">
-                        {group.name}
+                        {t(group.name)}
                       </h3>
                       <p className="text-slate-500 text-xs mt-0.5">
-                        {group.description} • <span className="text-blue-600 font-medium">{group.corridor}</span>
+                        {t(group.description)} • <span className="text-blue-600 font-medium">{t(group.corridor)}</span>
                       </p>
                     </div>
                     <span className="text-xs font-semibold text-slate-400">
-                      {groupRoutes.length} istiqamət
-                    </span>
+                      {t(groupRoutes.length)}{t(" istiqamət")}</span>
                   </div>
 
                   <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
@@ -702,15 +598,13 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
                         >
                           <div className="flex items-center justify-between gap-1">
                             <span className="font-bold text-slate-800 group-hover:text-blue-700 text-xs sm:text-sm transition-colors truncate">
-                              {r.destination}
+                              {t(r.destination)}
                             </span>
                             <ArrowRight className="w-3 h-3 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all shrink-0" />
                           </div>
                           <div className="flex items-center justify-between text-[11px] text-slate-500 pt-1 border-t border-slate-200/50">
-                            <span>{distance ? `${distance} km` : 'Rayon'}</span>
-                            <span className="font-extrabold text-blue-600 group-hover:text-blue-700">
-                              Qiyməti öyrən
-                            </span>
+                            <span>{t(distance ? `${distance} km` : 'Rayon')}</span>
+                            <span className="font-extrabold text-blue-600 group-hover:text-blue-700">{t("Qiyməti öyrən")}</span>
                           </div>
                         </Link>
                       );
@@ -723,17 +617,17 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
         </section>
 
         {/* Section 11: Crawlable Internal Links Navigation */}
-        <section className="space-y-6" aria-label="Əlaqəli Xidmətlər və Keçidlər">
+        <section className="space-y-6" aria-label={t("Əlaqəli Xidmətlər və Keçidlər")}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900">Əlaqəli Xidmətlər və Qiymətlər</h2>
-              <p className="text-slate-600 text-xs sm:text-sm mt-1">Digər ixtisaslaşmış yükdaşıma və logistika xidmətlərimizlə tanış olun:</p>
+              <h2 className="text-2xl font-bold text-slate-900">{t("Əlaqəli Xidmətlər və Qiymətlər")}</h2>
+              <p className="text-slate-600 text-xs sm:text-sm mt-1">{t("Digər ixtisaslaşmış yükdaşıma və logistika xidmətlərimizlə tanış olun:")}</p>
             </div>
             <Link
               href="/elaqe"
               className="text-xs sm:text-sm font-bold text-blue-600 hover:text-blue-800 inline-flex items-center gap-1"
             >
-              <span>Bizimlə əlaqə</span>
+              <span>{t("Bizimlə əlaqə")}</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
@@ -744,10 +638,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Yükdaşıma Xidməti</span>
+                <span>{t("Yükdaşıma Xidməti")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">Bakı və bütün rayonlar üzrə operativ yükdaşıma xidməti və qiymətləri.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("Bakı və bütün rayonlar üzrə operativ yükdaşıma xidməti və qiymətləri.")}</p>
             </Link>
 
             <Link
@@ -755,10 +649,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Evdən Evə Yükdaşıma</span>
+                <span>{t("Evdən Evə Yükdaşıma")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">Mənzil və bağ evlərinin təhlükəsiz qablaşdırma ilə köçürülməsi.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("Mənzil və bağ evlərinin təhlükəsiz qablaşdırma ilə köçürülməsi.")}</p>
             </Link>
 
             <Link
@@ -766,10 +660,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Mebel Daşınması & Usta</span>
+                <span>{t("Mebel Daşınması & Usta")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">Mebellərin sökülməsi, qablaşdırılması, daşınması və quraşdırılması.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("Mebellərin sökülməsi, qablaşdırılması, daşınması və quraşdırılması.")}</p>
             </Link>
 
             <Link
@@ -777,10 +671,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Ofis Daşınması</span>
+                <span>{t("Ofis Daşınması")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">Korporativ ofis və arxiv avadanlıqlarının peşəkar köçürülməsi.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("Korporativ ofis və arxiv avadanlıqlarının peşəkar köçürülməsi.")}</p>
             </Link>
 
             <Link
@@ -788,10 +682,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Yük Maşını Sifarişi</span>
+                <span>{t("Yük Maşını Sifarişi")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">Ford Transit və İsuzu yük furqonlarının sərfəli icarəsi.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("Ford Transit və İsuzu yük furqonlarının sərfəli icarəsi.")}</p>
             </Link>
 
             <Link
@@ -799,10 +693,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Fəhlə Xidməti</span>
+                <span>{t("Fəhlə Xidməti")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">Yükləmə, boşaltma və mərtəbəyə qaldırma briqadası.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("Yükləmə, boşaltma və mərtəbəyə qaldırma briqadası.")}</p>
             </Link>
 
             <Link
@@ -810,10 +704,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-blue-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Bakı – Ağdaş Evakuator</span>
+                <span>{t("Bakı – Ağdaş Evakuator")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">281 km məsafəyə operativ və təhlükəsiz evakuator xidməti.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("281 km məsafəyə operativ və təhlükəsiz evakuator xidməti.")}</p>
             </Link>
 
             <Link
@@ -821,10 +715,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-blue-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Bakı – Qəbələ Evakuator</span>
+                <span>{t("Bakı – Qəbələ Evakuator")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">216 km məsafəyə operativ və təhlükəsiz evakuator xidməti.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("216 km məsafəyə operativ və təhlükəsiz evakuator xidməti.")}</p>
             </Link>
 
             <Link
@@ -832,10 +726,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-blue-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Bakı – Şəki Evakuator</span>
+                <span>{t("Bakı – Şəki Evakuator")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">297 km məsafəyə operativ və təhlükəsiz evakuator xidməti.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("297 km məsafəyə operativ və təhlükəsiz evakuator xidməti.")}</p>
             </Link>
 
             <Link
@@ -843,10 +737,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-blue-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Bakı – Gəncə Evakuator</span>
+                <span>{t("Bakı – Gəncə Evakuator")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">362 km məsafəyə operativ və təhlükəsiz evakuator xidməti.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("362 km məsafəyə operativ və təhlükəsiz evakuator xidməti.")}</p>
             </Link>
 
             <Link
@@ -854,10 +748,10 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Şəffaf Qiymətlər & Tariflər</span>
+                <span>{t("Şəffaf Qiymətlər & Tariflər")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">Evakuator və yükdaşıma üzrə rəsmi qiymətlər cədvəli.</p>
+              <p className="text-xs text-slate-600 mt-2">{t("Evakuator və yükdaşıma üzrə rəsmi qiymətlər cədvəli.")}</p>
             </Link>
 
             <Link
@@ -865,33 +759,29 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="p-5 rounded-2xl bg-white border border-slate-200 hover:border-blue-500 hover:shadow-sm transition-all group"
             >
               <h3 className="font-bold text-slate-900 group-hover:text-blue-600 transition-colors flex items-center justify-between">
-                <span>Əlaqə & Zəng Sifarişi</span>
+                <span>{t("Əlaqə & Zəng Sifarişi")}</span>
                 <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-1 transition-all" />
               </h3>
-              <p className="text-xs text-slate-600 mt-2">{CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsi, WhatsApp və operativ geri zəng mərkəzi.</p>
+              <p className="text-xs text-slate-600 mt-2">{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}{t(" nömrəsi, WhatsApp və operativ geri zəng mərkəzi.")}</p>
             </Link>
           </div>
         </section>
 
         {/* Section 12: Bottom Call to Action Banner */}
-        <section className="bg-gradient-to-r from-blue-600 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-md text-center space-y-6" aria-label="Sürətli Evakuator Çağırışı">
+        <section className="bg-gradient-to-r from-blue-600 to-slate-900 rounded-3xl p-6 sm:p-10 text-white shadow-md text-center space-y-6" aria-label={t("Sürətli Evakuator Çağırışı")}>
           <div className="max-w-2xl mx-auto space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">
-              Təcili Evakuatora Ehtiyacınız Var?
-            </h2>
-            <p className="text-blue-100 text-xs sm:text-base leading-relaxed">
-              Günün istənilən saatında bizə zəng edin və ya WhatsApp ilə yerləşmə göndərin. Növbətçi evakuatorumuz operativ şəkildə yanınızda olacaq!
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-white">{t("Təcili Evakuatora Ehtiyacınız Var?")}</h2>
+            <p className="text-blue-100 text-xs sm:text-base leading-relaxed">{t("Günün istənilən saatında bizə zəng edin və ya WhatsApp ilə yerləşmə göndərin. Növbətçi evakuatorumuz operativ şəkildə yanınızda olacaq!")}</p>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-4">
             <a
               href={CONTACT_INFO.PRIMARY_PHONE_TEL}
-              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              aria-label={t(`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`)}
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white text-blue-900 hover:bg-blue-50 font-extrabold text-sm shadow-sm transition-all"
             >
               <Phone className="w-4 h-4 text-blue-600" />
-              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+              <span>{t("Zəng et: ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}</span>
             </a>
 
             <button
@@ -900,7 +790,7 @@ export const EvakuasiyaPage: React.FC<EvakuasiyaPageProps> = ({ onOpenCallback }
               className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm shadow-sm transition-all cursor-pointer"
             >
               <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp ilə Lokasiya Göndər</span>
+              <span>{t("WhatsApp ilə Lokasiya Göndər")}</span>
             </button>
           </div>
         </section>

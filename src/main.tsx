@@ -1,6 +1,7 @@
 import {StrictMode} from 'react';
 import {createRoot, hydrateRoot} from 'react-dom/client';
 import App from './App.tsx';
+import { registerRuDictionary, splitLangPath } from './i18n';
 import './index.css';
 
 // Global error & unhandled promise rejection guard
@@ -28,19 +29,31 @@ if (typeof window !== 'undefined') {
 }
 
 const rootElement = document.getElementById('root')!;
-if (rootElement.hasChildNodes()) {
-  hydrateRoot(
-    rootElement,
-    <StrictMode>
-      <App />
-    </StrictMode>
-  );
-} else {
-  createRoot(rootElement).render(
-    <StrictMode>
-      <App />
-    </StrictMode>
-  );
+
+function renderApp() {
+  if (rootElement.hasChildNodes()) {
+    hydrateRoot(
+      rootElement,
+      <StrictMode>
+        <App />
+      </StrictMode>
+    );
+  } else {
+    createRoot(rootElement).render(
+      <StrictMode>
+        <App />
+      </StrictMode>
+    );
+  }
 }
 
-
+// Russian pages (/ru/...) need the Russian dictionary before the page starts;
+// Azerbaijani pages never download it.
+if (splitLangPath(window.location.pathname).lang === 'ru') {
+  import('./i18n/ru')
+    .then(({ RU_DICTIONARY }) => registerRuDictionary(RU_DICTIONARY))
+    .catch((err) => console.error('[i18n] Russian dictionary failed to load:', err))
+    .finally(renderApp);
+} else {
+  renderApp();
+}

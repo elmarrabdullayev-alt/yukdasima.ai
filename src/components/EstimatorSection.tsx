@@ -3,6 +3,7 @@ import { Truck, Car, ArrowDown } from 'lucide-react';
 import { ServiceType, CallbackInitialData } from '../types';
 import { YukdasimaEstimator } from './YukdasimaEstimator';
 import { EvakuasiyaEstimator } from './EvakuasiyaEstimator';
+import { t } from '../i18n';
 
 interface EstimatorSectionProps {
   activeService: ServiceType;
@@ -20,12 +21,8 @@ export const EstimatorSection: React.FC<EstimatorSectionProps> = ({
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Heading */}
         <div className="text-center max-w-2xl mx-auto mb-8">
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Hansı xidmət lazımdır?
-          </h2>
-          <p className="mt-2 text-sm sm:text-base text-slate-600">
-            Xidmət növünü seçin və birbaşa sizə uyğun hesablayıcı formanı doldurun.
-          </p>
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">{t("Hansı xidmət lazımdır?")}</h2>
+          <p className="mt-2 text-sm sm:text-base text-slate-600">{t("Xidmət növünü seçin və birbaşa sizə uyğun hesablayıcı formanı doldurun.")}</p>
         </div>
 
         {/* TWO INTERACTIVE TOGGLE BUTTONS */}
@@ -42,7 +39,7 @@ export const EstimatorSection: React.FC<EstimatorSectionProps> = ({
               }`}
             >
               <span className="text-lg">🚚</span>
-              <span>Yükdaşıma qiyməti</span>
+              <span>{t("Yükdaşıma qiyməti")}</span>
             </button>
 
             <button
@@ -56,18 +53,18 @@ export const EstimatorSection: React.FC<EstimatorSectionProps> = ({
               }`}
             >
               <span className="text-lg">🚗</span>
-              <span>Evakuasiya qiyməti</span>
+              <span>{t("Evakuasiya qiyməti")}</span>
             </button>
           </div>
         </div>
 
         {/* ACTIVE FORM RENDER */}
         <div className="transition-all duration-300">
-          {activeService === 'yukdasima' ? (
+          {t(activeService === 'yukdasima' ? (
             <YukdasimaEstimator onOpenCallback={onOpenCallback} />
           ) : (
             <EvakuasiyaEstimator onOpenCallback={onOpenCallback} />
-          )}
+          ))}
         </div>
       </div>
     </section>

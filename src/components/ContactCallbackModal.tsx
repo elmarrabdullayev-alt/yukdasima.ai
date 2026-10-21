@@ -4,6 +4,8 @@ import { CONTACT_INFO } from '../constants/contact';
 import { generateWhatsAppLink } from '../utils/calculator';
 import { CallbackInitialData } from '../types';
 import { isValidPhoneNumber } from '../utils/phone';
+import { getLang } from '../i18n';
+import { t } from '../i18n';
 
 interface ContactCallbackModalProps {
   isOpen: boolean;
@@ -59,11 +61,11 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
     e.preventDefault();
     const cleanPhone = phone.trim();
     if (!cleanPhone) {
-      setErrorMessage('Zəhmət olmasa telefon nömrənizi qeyd edin.');
+      setErrorMessage(t('Zəhmət olmasa telefon nömrənizi qeyd edin.'));
       return;
     }
     if (!isValidPhoneNumber(cleanPhone)) {
-      setErrorMessage('Telefon nömrəsi düzgün deyil. Məsələn: 050 123 45 67');
+      setErrorMessage(t('Telefon nömrəsi düzgün deyil. Məsələn: 050 123 45 67'));
       return;
     }
 
@@ -77,6 +79,8 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
+          // Lets the operator see that the customer wrote from the Russian site
+          lang: getLang(),
           name: name.trim(),
           phone: cleanPhone,
           service,
@@ -97,19 +101,19 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
       setSubmitted(true);
     } catch (err: any) {
       console.error('[Callback submit failed]:', err);
-      setErrorMessage(err.message || `Müraciəti göndərmək mümkün olmadı. Zəhmət olmasa birbaşa ${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} ilə əlaqə saxlayın.`);
+      setErrorMessage(err.message || t(`Müraciəti göndərmək mümkün olmadı. Zəhmət olmasa birbaşa ${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} ilə əlaqə saxlayın.`));
     } finally {
       setIsSubmitting(false);
     }
   };
 
   const handleWhatsAppInstant = () => {
-    const text = `Salam, adım ${name || 'Müştəri'}. ${
-      service === 'yukdasima' ? 'Yükdaşıma' : 'Evakuasiya'
-    } xidməti ilə bağlı əlaqə saxlamaq istəyirəm. Nömrəm: ${phone || 'qeyd olunmayıb'}${
-      route ? `\nMarşrut: ${route}` : ''
-    }${vehicle ? `\nAvtomobil: ${vehicle}` : ''}${estimatedPrice ? `\nİlkin qiymət: ${estimatedPrice}` : ''}`;
-    window.open(generateWhatsAppLink(text), '_blank');
+    const text = t(`Salam, adım ${name || t('Müştəri')}. ${
+      service === 'yukdasima' ? t('Yükdaşıma') : t('Evakuasiya')
+    } xidməti ilə bağlı əlaqə saxlamaq istəyirəm. Nömrəm: ${phone || t('qeyd olunmayıb')}${
+      route ? t(`\nMarşrut: ${route}`) : ''
+    }${vehicle ? t(`\nAvtomobil: ${vehicle}`) : ''}${estimatedPrice ? t(`\nİlkin qiymət: ${estimatedPrice}`) : ''}`);
+    window.open(generateWhatsAppLink(t(text)), '_blank');
   };
 
   return (
@@ -125,54 +129,48 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
           <X className="w-5 h-5" />
         </button>
 
-        {!submitted ? (
+        {t(!submitted ? (
           <div>
             <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
               <Phone className="w-6 h-6" />
             </div>
 
-            <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">
-              Mənimlə əlaqə saxlayın
-            </h3>
-            <p className="mt-1.5 text-sm text-slate-600">
-              Nömrənizi qeyd edin, 2 dəqiqə ərzində operatorumuz sizə zəng etsin.
-            </p>
+            <h3 className="text-2xl font-extrabold text-slate-900 tracking-tight">{t("Mənimlə əlaqə saxlayın")}</h3>
+            <p className="mt-1.5 text-sm text-slate-600">{t("Nömrənizi qeyd edin, 2 dəqiqə ərzində operatorumuz sizə zəng etsin.")}</p>
 
-            {(route || vehicle || estimatedPrice) && (
+            {t((route || vehicle || estimatedPrice) && (
               <div className="mt-3 p-3 rounded-xl bg-slate-50 border border-slate-200/80 text-xs font-semibold text-slate-700 space-y-1.5">
-                {route && (
+                {t(route && (
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-slate-500 font-medium">📍 Marşrut:</span>
-                    <span className="text-blue-700 font-bold text-right">{route}</span>
+                    <span className="text-slate-500 font-medium">{t("📍 Marşrut:")}</span>
+                    <span className="text-blue-700 font-bold text-right">{t(route)}</span>
                   </div>
-                )}
-                {vehicle && (
+                ))}
+                {t(vehicle && (
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-slate-500 font-medium">🚛 Avtomobil:</span>
-                    <span className="text-slate-900 font-bold text-right">{vehicle}</span>
+                    <span className="text-slate-500 font-medium">{t("🚛 Avtomobil:")}</span>
+                    <span className="text-slate-900 font-bold text-right">{t(vehicle)}</span>
                   </div>
-                )}
-                {estimatedPrice && (
+                ))}
+                {t(estimatedPrice && (
                   <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/60">
-                    <span className="text-slate-500 font-medium">💰 İlkin qiymət:</span>
-                    <span className="text-emerald-700 font-bold text-right">{estimatedPrice}</span>
+                    <span className="text-slate-500 font-medium">{t("💰 İlkin qiymət:")}</span>
+                    <span className="text-emerald-700 font-bold text-right">{t(estimatedPrice)}</span>
                   </div>
-                )}
+                ))}
               </div>
-            )}
+            ))}
 
-            {errorMessage && (
+            {t(errorMessage && (
               <div className="mt-4 p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs flex items-start gap-2">
                 <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                <span>{errorMessage}</span>
+                <span>{t(errorMessage)}</span>
               </div>
-            )}
+            ))}
 
             <form onSubmit={handleSubmit} className="mt-5 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Xidmət növü
-                </label>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">{t("Xidmət növü")}</label>
                 <div className="grid grid-cols-2 gap-2">
                   <button
                     type="button"
@@ -183,9 +181,7 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
                         ? 'border-blue-600 bg-blue-50 text-blue-800'
                         : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
-                  >
-                    🚚 Yükdaşıma
-                  </button>
+                  >{t("🚚 Yükdaşıma")}</button>
                   <button
                     type="button"
                     disabled={isSubmitting}
@@ -195,16 +191,12 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
                         ? 'border-blue-600 bg-blue-50 text-blue-800'
                         : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                     }`}
-                  >
-                    🚗 Evakuasiya
-                  </button>
+                  >{t("🚗 Evakuasiya")}</button>
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Adınız
-                </label>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">{t("Adınız")}</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <User className="w-4 h-4" />
@@ -214,16 +206,14 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
                     disabled={isSubmitting}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Məs: Elvin Əliyev"
+                    placeholder={t("Məs: Elvin Əliyev")}
                     className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 text-sm outline-none disabled:bg-slate-50"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                  Əlaqə nömrəsi *
-                </label>
+                <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">{t("Əlaqə nömrəsi *")}</label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                     <Phone className="w-4 h-4" />
@@ -246,20 +236,20 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
                   disabled={isSubmitting}
                   className="w-full py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-bold text-sm shadow-md transition-all cursor-pointer flex items-center justify-center gap-2"
                 >
-                  {isSubmitting ? (
+                  {t(isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
-                      <span>Göndərilir...</span>
+                      <span>{t("Göndərilir...")}</span>
                     </>
                   ) : (
-                    <span>Zəng sifarişi göndər</span>
-                  )}
+                    <span>{t("Zəng sifarişi göndər")}</span>
+                  ))}
                 </button>
               </div>
 
               <div className="relative flex py-1 items-center">
                 <div className="grow border-t border-slate-200"></div>
-                <span className="shrink mx-3 text-xs text-slate-400 font-semibold uppercase">və ya</span>
+                <span className="shrink mx-3 text-xs text-slate-400 font-semibold uppercase">{t("və ya")}</span>
                 <div className="grow border-t border-slate-200"></div>
               </div>
 
@@ -270,7 +260,7 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
                 className="w-full py-3 px-4 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-bold text-xs sm:text-sm border border-emerald-200 flex items-center justify-center gap-2 transition-colors cursor-pointer"
               >
                 <MessageSquare className="w-4 h-4 text-emerald-600" />
-                <span>WhatsApp ilə dərhal yaz</span>
+                <span>{t("WhatsApp ilə dərhal yaz")}</span>
               </button>
             </form>
           </div>
@@ -279,12 +269,8 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
             <div className="w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-8 h-8" />
             </div>
-            <h3 className="text-2xl font-black text-slate-900">
-              Müraciətiniz qəbul edildi!
-            </h3>
-            <p className="text-sm text-slate-600">
-              Təşəkkür edirik, <strong>{name || 'Dəyərli müştəri'}</strong>. Operatorumuz <strong>{phone}</strong> nömrəsi ilə ən qısa zamanda əlaqə saxlayacaq.
-            </p>
+            <h3 className="text-2xl font-black text-slate-900">{t("Müraciətiniz qəbul edildi!")}</h3>
+            <p className="text-sm text-slate-600">{t("Təşəkkür edirik, ")}<strong>{t(name || 'Dəyərli müştəri')}</strong>{t(". Operatorumuz ")}<strong>{t(phone)}</strong>{t(" nömrəsi ilə ən qısa zamanda əlaqə saxlayacaq.")}</p>
             <div className="pt-4">
               <button
                 type="button"
@@ -293,12 +279,10 @@ export const ContactCallbackModal: React.FC<ContactCallbackModalProps> = ({
                   onClose();
                 }}
                 className="w-full py-3 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm cursor-pointer transition-colors"
-              >
-                Bağla
-              </button>
+              >{t("Bağla")}</button>
             </div>
           </div>
-        )}
+        ))}
       </div>
     </div>
   );

@@ -1,15 +1,20 @@
 import { PageSeoConfig, SITE_NAME, SITE_URL, OG_IMAGE, LOGO_URL, GOOGLE_BUSINESS_PROFILE } from './metadata';
 import { CONTACT_INFO } from '../constants/contact';
+import { translateTo } from '../i18n';
 
 export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown> {
+  // Texts in the schema follow the page language (Russian pages get Russian descriptions)
+  const lang = seo.lang ?? 'az';
+  const tr = (text: string): string => translateTo(text, lang);
+
   const graphNodes: Record<string, unknown>[] = [
     {
       '@type': 'WebSite',
       '@id': `${SITE_URL}/#website`,
       url: SITE_URL,
       name: SITE_NAME,
-      description: 'Bakı və Azərbaycan üzrə operativ yükdaşıma və 24/7 evakuasiya xidməti platforması',
-      inLanguage: 'az',
+      description: tr('Bakı və Azərbaycan üzrə operativ yükdaşıma və 24/7 evakuasiya xidməti platforması'),
+      inLanguage: ['az', 'ru'],
       publisher: {
         '@id': `${SITE_URL}/#business`,
       },
@@ -21,8 +26,9 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
       '@id': `${SITE_URL}/#business`,
       name: SITE_NAME,
       alternateName: [GOOGLE_BUSINESS_PROFILE.name, 'Yükdaşıma AI'],
-      description:
-        'Bakı və regionlarda yükdaşıma və evakuator xidməti: ev və ofis köçürülməsi, mebel daşınması, yük maşını sifarişi, fəhlə xidməti və 24/7 evakuator. Şəkillərlə AI həcm analizi və onlayn ilkin qiymət.',
+      description: tr(
+        'Bakı və regionlarda yükdaşıma və evakuator xidməti: ev və ofis köçürülməsi, mebel daşınması, yük maşını sifarişi, fəhlə xidməti və 24/7 evakuator. Şəkillərlə AI həcm analizi və onlayn ilkin qiymət.'
+      ),
       url: SITE_URL,
       logo: {
         '@type': 'ImageObject',
@@ -37,15 +43,15 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
       areaServed: [
         {
           '@type': 'City',
-          name: 'Bakı',
+          name: tr('Bakı'),
         },
         {
           '@type': 'AdministrativeArea',
-          name: 'Abşeron',
+          name: tr('Abşeron'),
         },
         {
           '@type': 'Country',
-          name: 'Azərbaycan',
+          name: tr('Azərbaycan'),
         },
       ],
       address: {
@@ -77,13 +83,13 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
         availableLanguage: 'Azerbaijani',
       },
       knowsAbout: [
-        'Yükdaşıma',
-        'Evdən evə köçürülmə',
-        'Ofis daşınması',
-        'Mebel daşınması',
-        'Yük maşını sifarişi',
-        'Fəhlə xidməti',
-        'Evakuator xidməti',
+        tr('Yükdaşıma'),
+        tr('Evdən evə köçürülmə'),
+        tr('Ofis daşınması'),
+        tr('Mebel daşınması'),
+        tr('Yük maşını sifarişi'),
+        tr('Fəhlə xidməti'),
+        tr('Evakuator xidməti'),
       ],
     },
   ];
@@ -98,7 +104,7 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
     isPartOf: {
       '@id': `${SITE_URL}/#website`,
     },
-    inLanguage: 'az',
+    inLanguage: lang,
   });
 
   // Add Service Schema if schemaType is Service
@@ -114,15 +120,15 @@ export function buildStructuredData(seo: PageSeoConfig): Record<string, unknown>
       areaServed: [
         {
           '@type': 'City',
-          name: 'Bakı',
+          name: tr('Bakı'),
         },
         {
           '@type': 'AdministrativeArea',
-          name: 'Abşeron',
+          name: tr('Abşeron'),
         },
         {
           '@type': 'Country',
-          name: 'Azərbaycan',
+          name: tr('Azərbaycan'),
         },
       ],
       serviceType: seo.serviceTypeDetail || 'Moving and Freight Transportation Service',

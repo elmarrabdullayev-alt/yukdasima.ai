@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { AlertCircle, Truck, Car, Phone } from 'lucide-react';
 import { Link } from '../router/RouterContext';
 import { CONTACT_INFO } from '../constants/contact';
+import { t } from '../i18n';
 
 /**
  * Shown for addresses that do not exist. The server answers these with HTTP 404,
@@ -37,37 +38,33 @@ export const NotFoundPage: React.FC = () => {
         <div className="w-16 h-16 rounded-2xl bg-slate-200 text-slate-700 flex items-center justify-center mx-auto">
           <AlertCircle className="w-8 h-8" />
         </div>
-        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">Səhifə tapılmadı</h1>
-        <p className="text-slate-600 leading-relaxed text-sm sm:text-base">
-          Axtardığınız səhifə mövcud deyil və ya ünvanı dəyişib. Aşağıdakı bölmələrdən birinə keçin və ya bizimlə əlaqə saxlayın.
-        </p>
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900">{t("Səhifə tapılmadı")}</h1>
+        <p className="text-slate-600 leading-relaxed text-sm sm:text-base">{t("Axtardığınız səhifə mövcud deyil və ya ünvanı dəyişib. Aşağıdakı bölmələrdən birinə keçin və ya bizimlə əlaqə saxlayın.")}</p>
         <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
           <Link
             href="/yukdasima"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm shadow-xs transition-colors"
           >
             <Truck className="w-4 h-4" />
-            <span>Yükdaşıma</span>
+            <span>{t("Yükdaşıma")}</span>
           </Link>
           <Link
             href="/evakuator"
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-white hover:bg-slate-100 text-slate-800 border border-slate-200 font-bold text-sm transition-colors"
           >
             <Car className="w-4 h-4" />
-            <span>Evakuator</span>
+            <span>{t("Evakuator")}</span>
           </Link>
           <a
             href={CONTACT_INFO.PRIMARY_PHONE_TEL}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-sm transition-colors"
           >
             <Phone className="w-4 h-4" />
-            <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+            <span>{t("Zəng et: ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}</span>
           </a>
         </div>
         <p className="text-sm">
-          <Link href="/" className="text-blue-700 font-semibold hover:underline">
-            Ana səhifəyə qayıt
-          </Link>
+          <Link href="/" className="text-blue-700 font-semibold hover:underline">{t("Ana səhifəyə qayıt")}</Link>
         </p>
       </div>
     </article>

@@ -43,6 +43,7 @@ import { findDestinationSuggestions } from '../services/destinationResolver';
 import { BUSINESS_PRICING_RULES } from '../config/pricingRules';
 import { CONTACT_INFO } from '../constants/contact';
 import { DirectYukdasimaOrder } from './DirectYukdasimaOrder';
+import { t } from '../i18n';
 
 interface YukdasimaEstimatorProps {
   onOpenCallback: (initialData?: string | CallbackInitialData) => void;
@@ -273,17 +274,17 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
 
       const freeSlots = Math.max(0, MAX_IMAGES - formData.images.length);
       if (filesArray.length > freeSlots) {
-        setUploadError(`Bir analiz üçün ən çox ${MAX_IMAGES} şəkil əlavə etmək olar.`);
+        setUploadError(t(`Bir analiz üçün ən çox ${MAX_IMAGES} şəkil əlavə etmək olar.`));
         filesArray.splice(freeSlots);
       }
 
       for (const file of filesArray) {
         if (!allowedTypes.includes(file.type.toLowerCase()) && !file.name.match(/\.(jpg|jpeg|png|webp|heic|heif)$/i)) {
-          setUploadError('Bu şəkil formatı dəstəklənmir. Zəhmət olmasa JPG, PNG və ya WEBP formatlı şəkillər seçin.');
+          setUploadError(t('Bu şəkil formatı dəstəklənmir. Zəhmət olmasa JPG, PNG və ya WEBP formatlı şəkillər seçin.'));
           continue;
         }
         if (file.size > maxSizeBytes) {
-          setUploadError('Şəkil ölçüsü çox böyükdür (maksimum 20MB).');
+          setUploadError(t('Şəkil ölçüsü çox böyükdür (maksimum 20MB).'));
           continue;
         }
         validFiles.push(file);
@@ -498,7 +499,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
     );
 
     if (validImages.length === 0) {
-      setUploadError('Zəhmət olmasa analiz üçün ən azı bir aydın şəkil əlavə edin.');
+      setUploadError(t('Zəhmət olmasa analiz üçün ən azı bir aydın şəkil əlavə edin.'));
       return;
     }
 
@@ -603,7 +604,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
     } catch (err: any) {
       console.error('[Gemini Cargo Analysis Failed]:', err);
       // Requirement 6: Exact user-friendly Azerbaijani error message
-      setErrorMessage('Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.');
+      setErrorMessage(t('Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.'));
     } finally {
       isAnalyzingRef.current = false;
       setIsAnalyzing(false);
@@ -618,55 +619,49 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
       .map((it) => `* ${it.quantity} ${it.name}`)
       .join('\n');
 
-    let msg = `Salam. yukdasima.ai saytından müraciət edirəm.\n\n`;
+    let msg = t(`Salam. yukdasima.ai saytından müraciət edirəm.\n\n`);
     const routeText = pricingResult.routeSummary 
       ? pricingResult.routeSummary 
       : `${formData.fromAddress || 'Bakı'} → ${formData.toAddress || 'Təyin edilməyib'}`;
     
-    msg += `Marşrut: ${routeText}\n`;
-    msg += `Yük həcmi təxmini: ${pricingResult.volumeRangeDisplay}\n`;
-    msg += `Tövsiyə olunan avtomobil: ${pricingResult.vehicleCategory || '4m'}\n`;
-    msg += `Avtomobil üçün ilkin qiymət: ${pricingResult.vehicleTransportPriceDisplay}\n\n`;
+    msg += t(`Marşrut: ${routeText}\n`);
+    msg += t(`Yük həcmi təxmini: ${pricingResult.volumeRangeDisplay}\n`);
+    msg += t(`Tövsiyə olunan avtomobil: ${pricingResult.vehicleCategory || t('4m')}\n`);
+    msg += t(`Avtomobil üçün ilkin qiymət: ${pricingResult.vehicleTransportPriceDisplay}\n\n`);
 
     if (itemsSummary) {
-      msg += `Müəyyən edilən əşyalar:\n${itemsSummary}\n\n`;
+      msg += t(`Müəyyən edilən əşyalar:\n${itemsSummary}\n\n`);
     }
 
-    msg += `Əlavə xidmət:\n`;
-    msg += `Fəhlə: ${formData.workerCount && formData.workerCount > 0 ? `${formData.workerCount} nəfər tələb olunur` : 'tələb olunur'}\n`;
-    msg += `Mebel sökülməsi: ${formData.needsAssembly ? 'tələb olunur' : 'tələb olunmur'}\n`;
+    msg += t(`Əlavə xidmət:\n`);
+    msg += t(`Fəhlə: ${formData.workerCount && formData.workerCount > 0 ? t(`${formData.workerCount} nəfər tələb olunur`) : t('tələb olunur')}\n`);
+    msg += t(`Mebel sökülməsi: ${formData.needsAssembly ? t('tələb olunur') : t('tələb olunmur')}\n`);
 
     if (pricingResult.specialItems.length > 0) {
-      msg += `Xüsusi əşyalar: ${pricingResult.specialItems.map((s) => s.name).join(', ')}\n`;
+      msg += t(`Xüsusi əşyalar: ${pricingResult.specialItems.map((s) => s.name).join(', ')}\n`);
     }
 
-    msg += `\nDəqiq ümumi qiymət almaq istəyirəm.`;
+    msg += t(`\nDəqiq ümumi qiymət almaq istəyirəm.`);
 
-    window.open(generateWhatsAppLink(msg), '_blank');
+    window.open(generateWhatsAppLink(t(msg)), '_blank');
   };
 
   const getConfidenceBadge = (confidence: 'high' | 'medium' | 'low') => {
     if (confidence === 'high') {
       return (
         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
-          Yüksək
-        </span>
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>{t("Yüksək")}</span>
       );
     }
     if (confidence === 'medium') {
       return (
         <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-bold">
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>
-          Orta
-        </span>
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-600"></span>{t("Orta")}</span>
       );
     }
     return (
       <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-slate-200 text-slate-700 text-xs font-bold">
-        <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
-        Aşağı
-      </span>
+        <span className="w-1.5 h-1.5 rounded-full bg-slate-500"></span>{t("Aşağı")}</span>
     );
   };
 
@@ -696,17 +691,13 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <h3 className="font-extrabold text-base sm:text-lg text-slate-900 flex items-center gap-1.5">
-                    <span>✨ Yükümü AI ilə hesabla</span>
+                    <span>{t("✨ Yükümü AI ilə hesabla")}</span>
                   </h3>
-                  {yukdasimaMode === 'ai' && (
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-600 text-white">
-                      Seçildi
-                    </span>
-                  )}
+                  {t(yukdasimaMode === 'ai' && (
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-600 text-white">{t("Seçildi")}</span>
+                  ))}
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Əşyalarınızın şəkillərini göndərin, uyğun avtomobili və ilkin qiyməti müəyyən edək.
-                </p>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{t("Əşyalarınızın şəkillərini göndərin, uyğun avtomobili və ilkin qiyməti müəyyən edək.")}</p>
               </div>
             </div>
           </div>
@@ -732,24 +723,20 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
               <div className="space-y-1">
                 <div className="flex items-center justify-between">
                   <h3 className="font-extrabold text-base sm:text-lg text-slate-900 flex items-center gap-1.5">
-                    <span>🚚 Sadəcə maşın sifariş et</span>
+                    <span>{t("🚚 Sadəcə maşın sifariş et")}</span>
                   </h3>
-                  {yukdasimaMode === 'direct' && (
-                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-600 text-white">
-                      Seçildi
-                    </span>
-                  )}
+                  {t(yukdasimaMode === 'direct' && (
+                    <span className="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-600 text-white">{t("Seçildi")}</span>
+                  ))}
                 </div>
-                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                  Hansı avtomobilə ehtiyacınız olduğunu bilirsinizsə, birbaşa seçin və ilkin qiyməti görün.
-                </p>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">{t("Hansı avtomobilə ehtiyacınız olduğunu bilirsinizsə, birbaşa seçin və ilkin qiyməti görün.")}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {yukdasimaMode === 'direct' ? (
+      {t(yukdasimaMode === 'direct' ? (
         <DirectYukdasimaOrder
           onOpenCallback={onOpenCallback}
           onSwitchToAi={() => setYukdasimaMode('ai')}
@@ -762,14 +749,10 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-3">
               <Truck className="w-4 h-4" />
-              <span>Yükdaşıma & Mebel Analizi</span>
+              <span>{t("Yükdaşıma & Mebel Analizi")}</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
-              Əşyalarınızın şəkillərini yükləyin
-            </h2>
-            <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-              Əşyalarınızın şəkillərini yükləyin. Süni intellekt yükünüzü analiz etsin, uyğun avtomobili müəyyənləşdirsin və mövcud tariflər əsasında ilkin qiyməti hesablasın.
-            </p>
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">{t("Əşyalarınızın şəkillərini yükləyin")}</h2>
+            <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">{t("Əşyalarınızın şəkillərini yükləyin. Süni intellekt yükünüzü analiz etsin, uyğun avtomobili müəyyənləşdirsin və mövcud tariflər əsasında ilkin qiyməti hesablasın.")}</p>
           </div>
 
       <form onSubmit={handleStartAnalysis} className="mt-8 space-y-8">
@@ -778,19 +761,19 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
           <div className="flex items-center justify-between">
             <label className="text-sm font-bold text-slate-900 flex items-center gap-2">
               <Camera className="w-4 h-4 text-blue-600" />
-              <span>Əşyalarınızın şəkillərini əlavə edin</span>
-              <span className="text-xs font-normal text-slate-500">(Çoxlu foto dəstəklənir)</span>
+              <span>{t("Əşyalarınızın şəkillərini əlavə edin")}</span>
+              <span className="text-xs font-normal text-slate-500">{t("(Çoxlu foto dəstəklənir)")}</span>
             </label>
-            {formData.images.length === 0 && (
+            {t(formData.images.length === 0 && (
               <button
                 type="button"
                 onClick={handleAddSamplePhotos}
                 className="text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline inline-flex items-center gap-1 cursor-pointer"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Nümunə foto ilə sına</span>
+                <span>{t("Nümunə foto ilə sına")}</span>
               </button>
-            )}
+            ))}
           </div>
 
           <input
@@ -812,35 +795,30 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
               <Upload className="w-7 h-7 stroke-[2.2]" />
             </div>
             <div className="space-y-1">
-              <p className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
-                📸 Şəkilləri seçin və ya çəkin
-              </p>
-              <p className="text-xs sm:text-sm text-slate-500">
-                JPG, PNG, WEBP formatları (Maks. 20MB). Eyni əşyanı fərqli bucaqlardan çəkə bilərsiniz.
-              </p>
+              <p className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-blue-600 transition-colors">{t("📸 Şəkilləri seçin və ya çəkin")}</p>
+              <p className="text-xs sm:text-sm text-slate-500">{t("JPG, PNG, WEBP formatları (Maks. 20MB). Eyni əşyanı fərqli bucaqlardan çəkə bilərsiniz.")}</p>
             </div>
           </div>
 
           {/* Upload Error Message */}
-          {uploadError && (
+          {t(uploadError && (
             <div className="p-3 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
-              <span>{uploadError}</span>
+              <span>{t(uploadError)}</span>
             </div>
-          )}
+          ))}
 
           {/* Image Thumbnails */}
-          {formData.images.length > 0 && (
+          {t(formData.images.length > 0 && (
             <div className="space-y-2 pt-2">
               <div className="flex items-center justify-between text-xs text-slate-600 font-semibold">
-                <span>Yüklənmiş şəkillər ({formData.images.length} ədəd)</span>
+                <span>{t("Yüklənmiş şəkillər (")}{t(formData.images.length)}{t(" ədəd)")}</span>
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   className="text-blue-600 hover:underline flex items-center gap-1 font-bold cursor-pointer"
                 >
-                  <Plus className="w-3.5 h-3.5" /> Daha çox əlavə et
-                </button>
+                  <Plus className="w-3.5 h-3.5" />{t(" Daha çox əlavə et")}</button>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -851,7 +829,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                   >
                     <img
                       src={img.url}
-                      alt={img.name}
+                      alt={t(img.name)}
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                     />
@@ -862,31 +840,30 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                         handleRemoveImage(img.id);
                       }}
                       className="absolute top-1.5 right-1.5 p-1 rounded-full bg-slate-900/80 hover:bg-red-600 text-white transition-colors cursor-pointer"
-                      title="Şəkli sil"
+                      title={t("Şəkli sil")}
                     >
                       <X className="w-3.5 h-3.5" />
                     </button>
                     <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/75 to-transparent p-1.5 text-[10px] text-white truncate">
-                      {img.name}
+                      {t(img.name)}
                     </div>
                   </div>
                 ))}
               </div>
             </div>
-          )}
+          ))}
         </div>
 
         {/* ADDITIONAL INFORMATION TEXTAREA */}
         <div className="space-y-2">
-          <label htmlFor="yukdasima-details" className="block text-sm font-bold text-slate-900">
-            Yükünüz haqqında əlavə məlumat <span className="text-xs font-normal text-slate-500">(İstəyə görə)</span>
+          <label htmlFor="yukdasima-details" className="block text-sm font-bold text-slate-900">{t("Yükünüz haqqında əlavə məlumat ")}<span className="text-xs font-normal text-slate-500">{t("(İstəyə görə)")}</span>
           </label>
           <textarea
             id="yukdasima-details"
             rows={2}
             value={formData.details}
             onChange={(e) => setFormData({ ...formData, details: e.target.value })}
-            placeholder="Məsələn: 3 otaqlı evdir, böyük qarderob sökülməlidir, piano var..."
+            placeholder={t("Məsələn: 3 otaqlı evdir, böyük qarderob sökülməlidir, piano var...")}
             className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm text-slate-800 placeholder-slate-400 bg-slate-50/50 transition-all outline-none"
           />
         </div>
@@ -897,14 +874,14 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
           <div className="space-y-2">
             <label htmlFor="from-address" className="block text-sm font-bold text-slate-900 flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-blue-600" />
-              <span>Haradan? (Götürülmə ünvanı)</span>
+              <span>{t("Haradan? (Götürülmə ünvanı)")}</span>
             </label>
             <input
               id="from-address"
               type="text"
               value={formData.fromAddress}
               onChange={(e) => setFormData({ ...formData, fromAddress: e.target.value })}
-              placeholder="Məs: Bakı, Nərimanov r."
+              placeholder={t("Məs: Bakı, Nərimanov r.")}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm outline-none"
             />
             {/* Quick Suggestions */}
@@ -916,7 +893,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                   onClick={() => setFormData({ ...formData, fromAddress: loc })}
                   className="px-2 py-0.5 rounded-md bg-white border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-[11px] text-slate-600 hover:text-blue-700 font-medium transition-colors cursor-pointer"
                 >
-                  {loc}
+                  {t(loc)}
                 </button>
               ))}
             </div>
@@ -926,23 +903,23 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
           <div className="space-y-2">
             <label htmlFor="to-address" className="block text-sm font-bold text-slate-900 flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-emerald-600" />
-              <span>Haraya? (Çatdırılma ünvanı / Rayon)</span>
+              <span>{t("Haraya? (Çatdırılma ünvanı / Rayon)")}</span>
             </label>
             <input
               id="to-address"
               type="text"
               value={formData.toAddress}
               onChange={(e) => setFormData({ ...formData, toAddress: e.target.value })}
-              placeholder="Məs: Gəncə, Xırdalan, Sumqayıt..."
+              placeholder={t("Məs: Gəncə, Xırdalan, Sumqayıt...")}
               className="w-full px-4 py-2.5 rounded-xl border border-slate-300 bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm outline-none"
             />
             {/* Dynamic Search Suggestions */}
-            {formData.toAddress.trim().length >= 2 && (() => {
+            {t(formData.toAddress.trim().length >= 2 && (() => {
               const dynamicSuggestions = findDestinationSuggestions(formData.toAddress, 5);
               if (dynamicSuggestions.length === 0) return null;
               return (
                 <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span className="text-[11px] text-blue-700 font-bold">Təkliflər:</span>
+                  <span className="text-[11px] text-blue-700 font-bold">{t("Təkliflər:")}</span>
                   {dynamicSuggestions.map((s) => (
                     <button
                       key={s.canonicalName}
@@ -950,12 +927,12 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                       onClick={() => setFormData({ ...formData, toAddress: s.canonicalName })}
                       className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[11px] text-blue-700 font-bold hover:bg-blue-100 transition-colors cursor-pointer"
                     >
-                      {s.canonicalName}
+                      {t(s.canonicalName)}
                     </button>
                   ))}
                 </div>
               );
-            })()}
+            })())}
             {/* Quick Regional Suggestions */}
             <div className="flex flex-wrap gap-1.5 pt-0.5">
               {['Gəncə', 'Xırdalan', 'Sumqayıt', 'Şəki', 'Quba', 'Lənkəran'].map((loc) => (
@@ -965,7 +942,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                   onClick={() => setFormData({ ...formData, toAddress: loc })}
                   className="px-2 py-0.5 rounded-md bg-white border border-slate-200 hover:border-blue-300 hover:bg-blue-50 text-[11px] text-slate-600 hover:text-blue-700 font-medium transition-colors cursor-pointer"
                 >
-                  {loc}
+                  {t(loc)}
                 </button>
               ))}
             </div>
@@ -976,80 +953,72 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
         <div className="p-5 rounded-2xl bg-slate-50/80 border border-slate-200 space-y-4">
           <div className="flex items-center gap-2">
             <Building2 className="w-4 h-4 text-blue-600" />
-            <h3 className="text-sm font-bold text-slate-900">Mərtəbə və Lift məlumatları</h3>
+            <h3 className="text-sm font-bold text-slate-900">{t("Mərtəbə və Lift məlumatları")}</h3>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3.5">
             <div className="space-y-1.5">
-              <label htmlFor="from-floor" className="block text-xs font-bold text-slate-700">
-                Yük hansı mərtəbədən götürüləcək?
-              </label>
+              <label htmlFor="from-floor" className="block text-xs font-bold text-slate-700">{t("Yük hansı mərtəbədən götürüləcək?")}</label>
               <select
                 id="from-floor"
                 value={formData.fromFloor}
                 onChange={(e) => setFormData({ ...formData, fromFloor: e.target.value })}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-800 focus:border-blue-600 outline-none"
               >
-                <option value="1">1-ci mərtəbə / Həyət evi</option>
-                <option value="2">2-ci mərtəbə</option>
-                <option value="3">3-cü mərtəbə</option>
-                <option value="4">4-cü mərtəbə</option>
-                <option value="5">5-ci mərtəbə</option>
-                <option value="6">6-10-cu mərtəbə</option>
-                <option value="11">11+ mərtəbə</option>
+                <option value="1">{t("1-ci mərtəbə / Həyət evi")}</option>
+                <option value="2">{t("2-ci mərtəbə")}</option>
+                <option value="3">{t("3-cü mərtəbə")}</option>
+                <option value="4">{t("4-cü mərtəbə")}</option>
+                <option value="5">{t("5-ci mərtəbə")}</option>
+                <option value="6">{t("6-10-cu mərtəbə")}</option>
+                <option value="11">{t("11+ mərtəbə")}</option>
               </select>
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="to-floor" className="block text-xs font-bold text-slate-700">
-                Yük hansı mərtəbəyə aparılacaq?
-              </label>
+              <label htmlFor="to-floor" className="block text-xs font-bold text-slate-700">{t("Yük hansı mərtəbəyə aparılacaq?")}</label>
               <select
                 id="to-floor"
                 value={formData.toFloor}
                 onChange={(e) => setFormData({ ...formData, toFloor: e.target.value })}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-800 focus:border-blue-600 outline-none"
               >
-                <option value="1">1-ci mərtəbə / Həyət evi</option>
-                <option value="2">2-ci mərtəbə</option>
-                <option value="3">3-cü mərtəbə</option>
-                <option value="4">4-cü mərtəbə</option>
-                <option value="5">5-ci mərtəbə</option>
-                <option value="6">6-10-cu mərtəbə</option>
-                <option value="11">11+ mərtəbə</option>
+                <option value="1">{t("1-ci mərtəbə / Həyət evi")}</option>
+                <option value="2">{t("2-ci mərtəbə")}</option>
+                <option value="3">{t("3-cü mərtəbə")}</option>
+                <option value="4">{t("4-cü mərtəbə")}</option>
+                <option value="5">{t("5-ci mərtəbə")}</option>
+                <option value="6">{t("6-10-cu mərtəbə")}</option>
+                <option value="11">{t("11+ mərtəbə")}</option>
               </select>
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="has-elevator" className="block text-xs font-bold text-slate-700">
-                Lift var?
-              </label>
+              <label htmlFor="has-elevator" className="block text-xs font-bold text-slate-700">{t("Lift var?")}</label>
               <select
                 id="has-elevator"
                 value={formData.hasElevator}
                 onChange={(e) => setFormData({ ...formData, hasElevator: e.target.value as any })}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-800 focus:border-blue-600 outline-none"
               >
-                <option value="yes">Hər iki ünvanda var</option>
-                <option value="no">Lift yoxdur (Pilləkən)</option>
-                <option value="from_only">Yalnız 1-ci ünvanda var</option>
-                <option value="to_only">Yalnız 2-ci ünvanda var</option>
+                <option value="yes">{t("Hər iki ünvanda var")}</option>
+                <option value="no">{t("Lift yoxdur (Pilləkən)")}</option>
+                <option value="from_only">{t("Yalnız 1-ci ünvanda var")}</option>
+                <option value="to_only">{t("Yalnız 2-ci ünvanda var")}</option>
               </select>
             </div>
 
             <div className="space-y-1.5">
-              <label htmlFor="items-fit-elevator" className="block text-xs font-bold text-slate-700">
-                Əşyalar liftə yerləşir?
-              </label>
+              <label htmlFor="items-fit-elevator" className="block text-xs font-bold text-slate-700">{t("Əşyalar liftə yerləşir?")}</label>
               <select
                 id="items-fit-elevator"
                 value={formData.itemsFitElevator || 'yes'}
                 onChange={(e) => setFormData({ ...formData, itemsFitElevator: e.target.value as any })}
                 className="w-full px-3 py-2 rounded-xl border border-slate-300 bg-white text-xs sm:text-sm text-slate-800 focus:border-blue-600 outline-none"
               >
-                <option value="yes">Bəli, əsas əşyalar yerləşir</option>
-                <option value="no">Xeyr, pilləkənlə daşınmalıdır</option>
-                <option value="partial">Qismən (bəzi böyük əşyalar yerləşmir)</option>
+                <option value="yes">{t("Bəli, əsas əşyalar yerləşir")}</option>
+                <option value="no">{t("Xeyr, pilləkənlə daşınmalıdır")}</option>
+                <option value="partial">{t("Qismən (bəzi böyük əşyalar yerləşmir)")}</option>
               </select>
             </div>
           </div>
@@ -1062,15 +1031,13 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
             <div>
               <div className="flex items-center gap-2 font-bold text-sm text-slate-900">
                 <Users className="w-4 h-4 text-blue-600" />
-                <span>Fəhlə xidməti</span>
+                <span>{t("Fəhlə xidməti")}</span>
               </div>
-              <p className="text-xs text-slate-600 mt-1">
-                Fəhlə xidməti 1 nəfər üçün 20 AZN-dən başlayır (şəhərdaxili standart şəraitdə).
-              </p>
+              <p className="text-xs text-slate-600 mt-1">{t("Fəhlə xidməti 1 nəfər üçün 20 AZN-dən başlayır (şəhərdaxili standart şəraitdə).")}</p>
             </div>
 
             <div className="flex items-center justify-between pt-1 border-t border-blue-100">
-              <span className="text-xs font-semibold text-slate-700">Tələb olunan fəhlə sayı:</span>
+              <span className="text-xs font-semibold text-slate-700">{t("Tələb olunan fəhlə sayı:")}</span>
               <div className="flex items-center gap-2">
                 {[0, 1, 2, 3, 4].map((num) => (
                   <button
@@ -1083,7 +1050,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                         : 'bg-white border border-slate-300 text-slate-700 hover:bg-blue-50'
                     }`}
                   >
-                    {num === 0 ? '0' : num}
+                    {t(num === 0 ? '0' : num)}
                   </button>
                 ))}
               </div>
@@ -1095,11 +1062,9 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
             <div>
               <div className="flex items-center gap-2 font-bold text-sm text-slate-900">
                 <Wrench className="w-4 h-4 text-amber-600" />
-                <span>Mebel sökülməsi və yığılması</span>
+                <span>{t("Mebel sökülməsi və yığılması")}</span>
               </div>
-              <p className="text-xs text-slate-600 mt-1">
-                Mebelin sökülməsi və yığılması usta xidmətidir və ayrıca hesablanır.
-              </p>
+              <p className="text-xs text-slate-600 mt-1">{t("Mebelin sökülməsi və yığılması usta xidmətidir və ayrıca hesablanır.")}</p>
             </div>
 
             <label className="flex items-center gap-2.5 pt-1 border-t border-slate-200 cursor-pointer">
@@ -1109,17 +1074,14 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                 onChange={(e) => setFormData({ ...formData, needsAssembly: e.target.checked })}
                 className="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 cursor-pointer"
               />
-              <span className="text-xs font-bold text-slate-800">
-                Mebel ustası xidməti tələb olunur
-              </span>
+              <span className="text-xs font-bold text-slate-800">{t("Mebel ustası xidməti tələb olunur")}</span>
             </label>
           </div>
         </div>
 
         {/* PHONE NUMBER */}
         <div className="max-w-md space-y-1.5">
-          <label htmlFor="yukdasima-phone" className="block text-sm font-bold text-slate-800">
-            Əlaqə nömrəniz <span className="text-xs font-normal text-slate-500">(İstəyə görə)</span>
+          <label htmlFor="yukdasima-phone" className="block text-sm font-bold text-slate-800">{t("Əlaqə nömrəniz ")}<span className="text-xs font-normal text-slate-500">{t("(İstəyə görə)")}</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -1144,32 +1106,30 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
             disabled={isAnalyzing}
             className="w-full sm:w-auto min-w-[260px] py-4 px-8 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base shadow-lg shadow-blue-600/30 active:scale-[0.99] transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-75"
           >
-            {isAnalyzing ? (
+            {t(isAnalyzing ? (
               <>
                 <RefreshCw className="w-5 h-5 animate-spin" />
-                <span>{LOADING_MESSAGES[loadingStepIndex]}</span>
+                <span>{t(LOADING_MESSAGES[loadingStepIndex])}</span>
               </>
             ) : (
               <>
                 <Sparkles className="w-5 h-5" />
-                <span>Yükümü analiz et və qiymətləndir</span>
+                <span>{t("Yükümü analiz et və qiymətləndir")}</span>
               </>
-            )}
+            ))}
           </button>
         </div>
       </form>
 
       {/* ERROR STATE */}
-      {errorMessage && !isAnalyzing && (
+      {t(errorMessage && !isAnalyzing && (
         <div className="mt-8 p-6 rounded-2xl bg-rose-50 border border-rose-200 text-left">
           <div className="flex items-start gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0 mt-0.5">
               <AlertCircle className="w-5 h-5" />
             </div>
             <div className="space-y-3 flex-1">
-              <h4 className="font-bold text-rose-900 text-base">
-                Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.
-              </h4>
+              <h4 className="font-bold text-rose-900 text-base">{t("Şəkillərin analizi tamamlanmadı. Zəhmət olmasa yenidən cəhd edin.")}</h4>
               <button
                 type="button"
                 id="btn-retry-analysis"
@@ -1177,30 +1137,28 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                 className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm cursor-pointer transition-colors shadow-sm"
               >
                 <RefreshCw className="w-4 h-4" />
-                <span>Yenidən cəhd et</span>
+                <span>{t("Yenidən cəhd et")}</span>
               </button>
             </div>
           </div>
         </div>
-      )}
+      ))}
 
       {/* LOADING STATE ANIMATION */}
-      {isAnalyzing && (
+      {t(isAnalyzing && (
         <div className="mt-8 p-6 sm:p-8 rounded-2xl bg-blue-50 border border-blue-200/90 text-center">
           <div className="mx-auto w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center mb-4 shadow-md shadow-blue-600/30 animate-spin">
             <RefreshCw className="w-6 h-6" />
           </div>
           <h4 className="text-lg font-bold text-blue-950 transition-all duration-300">
-            {LOADING_MESSAGES[loadingStepIndex]}
+            {t(LOADING_MESSAGES[loadingStepIndex])}
           </h4>
-          <p className="mt-1 text-xs sm:text-sm text-blue-700">
-            Süni intellekt əşyaları analiz edir, uyğun avtomobil və ilkin qiymət hesablanır...
-          </p>
+          <p className="mt-1 text-xs sm:text-sm text-blue-700">{t("Süni intellekt əşyaları analiz edir, uyğun avtomobil və ilkin qiymət hesablanır...")}</p>
         </div>
-      )}
+      ))}
 
       {/* DETERMINISTIC RESULT PRESENTATION */}
-      {analysisResult && pricingResult && !isAnalyzing && (
+      {t(analysisResult && pricingResult && !isAnalyzing && (
         <div
           id="yukdasima-analysis-result"
           className="mt-10 rounded-2xl border-2 border-blue-600 bg-white p-6 sm:p-8 shadow-xl animate-in fade-in zoom-in-95 duration-300 space-y-8"
@@ -1210,62 +1168,54 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
             <div>
               <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold uppercase tracking-wide mb-1.5">
                 <CheckCircle2 className="w-3.5 h-3.5" />
-                <span>Süni İntellekt Təhlili</span>
+                <span>{t("Süni İntellekt Təhlili")}</span>
               </div>
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                Yükünüz analiz edildi
-              </h1>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Yükünüz analiz edildi")}</h1>
             </div>
 
             <div className="flex items-center gap-2 text-xs sm:text-sm text-slate-600">
-              <span className="font-semibold">Təhlilin etibarlılığı:</span>
-              {getConfidenceBadge(analysisResult.analysisConfidence)}
+              <span className="font-semibold">{t("Təhlilin etibarlılığı:")}</span>
+              {t(getConfidenceBadge(analysisResult.analysisConfidence))}
             </div>
           </div>
 
           {/* CRITICAL OPERATOR / OVERLOAD / FIT ALERTS */}
-          {pricingResult.isOverCapacity && (
+          {t(pricingResult.isOverCapacity && (
             <div className="p-4 rounded-2xl bg-amber-50 border-2 border-amber-300 text-amber-950 flex items-start gap-3">
               <ShieldAlert className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <h4 className="font-bold text-sm sm:text-base text-amber-900">
-                  {BUSINESS_PRICING_RULES.overloadMessage}
+                  {t(BUSINESS_PRICING_RULES.overloadMessage)}
                 </h4>
-                <p className="text-xs sm:text-sm text-amber-800">
-                  Ümumi yük həcmi 32 m³-dən artıqdır. Ən sərfəli variant üçün operatorumuz sizinlə xüsusi nəqliyyat və ya çoxsaylı reys planını razılaşdıracaq.
-                </p>
+                <p className="text-xs sm:text-sm text-amber-800">{t("Ümumi yük həcmi 32 m³-dən artıqdır. Ən sərfəli variant üçün operatorumuz sizinlə xüsusi nəqliyyat və ya çoxsaylı reys planını razılaşdıracaq.")}</p>
               </div>
             </div>
-          )}
+          ))}
 
-          {pricingResult.hasLargeItemFitRisk && !pricingResult.isOverCapacity && (
+          {t(pricingResult.hasLargeItemFitRisk && !pricingResult.isOverCapacity && (
             <div className="p-4 rounded-2xl bg-blue-50 border border-blue-200 text-blue-950 flex items-start gap-3">
               <Info className="w-5 h-5 text-blue-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <h4 className="font-bold text-sm text-blue-900">
-                  İri ölçülü əşya xəbərdarlığı
-                </h4>
+                <h4 className="font-bold text-sm text-blue-900">{t("İri ölçülü əşya xəbərdarlığı")}</h4>
                 <p className="text-xs sm:text-sm text-blue-800">
-                  {BUSINESS_PRICING_RULES.largeItemFitWarning}
+                  {t(BUSINESS_PRICING_RULES.largeItemFitWarning)}
                 </p>
               </div>
             </div>
-          )}
+          ))}
 
           {/* DETECTED ITEMS LIST */}
           <div className="space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
                 <Box className="w-5 h-5 text-blue-600" />
-                <span>Müəyyən edilən əşyalar ({analysisResult.items.length})</span>
+                <span>{t("Müəyyən edilən əşyalar (")}{t(analysisResult.items.length)})</span>
               </h3>
-              <span className="text-xs text-slate-500">Miqdarı dəyişə və ya yeni əşya əlavə edə bilərsiniz</span>
+              <span className="text-xs text-slate-500">{t("Miqdarı dəyişə və ya yeni əşya əlavə edə bilərsiniz")}</span>
             </div>
 
-            {analysisResult.items.length === 0 ? (
-              <p className="text-sm text-slate-500 italic p-4 bg-slate-50 rounded-xl border border-slate-200">
-                Heç bir əşya aşkarlanmadı. Aşağıdakı düymə ilə əl ilə əşya əlavə edə bilərsiniz.
-              </p>
+            {t(analysisResult.items.length === 0 ? (
+              <p className="text-sm text-slate-500 italic p-4 bg-slate-50 rounded-xl border border-slate-200">{t("Heç bir əşya aşkarlanmadı. Aşağıdakı düymə ilə əl ilə əşya əlavə edə bilərsiniz.")}</p>
             ) : (
               <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/50">
                 {analysisResult.items.map((item) => (
@@ -1275,23 +1225,19 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                   >
                     <div className="flex items-center gap-3">
                       <span className="w-8 h-8 rounded-lg bg-blue-100 text-blue-800 font-extrabold text-sm flex items-center justify-center shrink-0">
-                        {item.quantity}×
+                        {t(item.quantity)}×
                       </span>
                       <div>
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-slate-900 text-sm sm:text-base">
-                            {item.name}
+                            {t(item.name)}
                           </span>
-                          {getConfidenceBadge(item.confidence)}
-                          {item.isSpecialOrHeavy && (
-                            <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[10px] font-extrabold">
-                              Xüsusi / Ağır
-                            </span>
-                          )}
+                          {t(getConfidenceBadge(item.confidence))}
+                          {t(item.isSpecialOrHeavy && (
+                            <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[10px] font-extrabold">{t("Xüsusi / Ağır")}</span>
+                          ))}
                         </div>
-                        <span className="text-xs text-slate-500 block">
-                          Təxmini həcm: ~{(item.estimatedVolumeM3 * item.quantity).toFixed(1)} m³ ({item.estimatedVolumeM3} m³ / ədəd)
-                        </span>
+                        <span className="text-xs text-slate-500 block">{t("Təxmini həcm: ~")}{t((item.estimatedVolumeM3 * item.quantity).toFixed(1))}{t(" m³ (")}{t(item.estimatedVolumeM3)}{t(" m³ / ədəd)")}</span>
                       </div>
                     </div>
 
@@ -1301,18 +1247,18 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                         type="button"
                         onClick={() => handleQuantityDecrease(item.id)}
                         className="w-8 h-8 rounded-lg bg-white hover:bg-slate-200 border border-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm cursor-pointer transition-colors"
-                        title="Sayını azalt"
+                        title={t("Sayını azalt")}
                       >
                         <Minus className="w-3.5 h-3.5" />
                       </button>
                       <span className="w-8 text-center font-bold text-slate-900 text-sm">
-                        {item.quantity}
+                        {t(item.quantity)}
                       </span>
                       <button
                         type="button"
                         onClick={() => handleQuantityIncrease(item.id)}
                         className="w-8 h-8 rounded-lg bg-white hover:bg-slate-200 border border-slate-300 text-slate-700 flex items-center justify-center font-bold text-sm cursor-pointer transition-colors"
-                        title="Sayını artır"
+                        title={t("Sayını artır")}
                       >
                         <Plus className="w-3.5 h-3.5" />
                       </button>
@@ -1320,7 +1266,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                         type="button"
                         onClick={() => handleRemoveItem(item.id)}
                         className="w-8 h-8 ml-1 rounded-lg bg-white hover:bg-rose-50 border border-slate-200 hover:border-rose-300 text-slate-400 hover:text-rose-600 flex items-center justify-center cursor-pointer transition-colors"
-                        title="Əşyanı sil"
+                        title={t("Əşyanı sil")}
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
@@ -1328,36 +1274,34 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                   </div>
                 ))}
               </div>
-            )}
+            ))}
 
             {/* Add Custom Item */}
-            {!showAddForm ? (
+            {t(!showAddForm ? (
               <button
                 type="button"
                 onClick={() => setShowAddForm(true)}
                 className="w-full py-2.5 px-4 rounded-xl border border-dashed border-slate-300 hover:border-blue-500 hover:bg-blue-50/40 text-xs sm:text-sm font-bold text-blue-600 flex items-center justify-center gap-2 cursor-pointer transition-colors"
               >
                 <Plus className="w-4 h-4" />
-                <span>Əşya əlavə et</span>
+                <span>{t("Əşya əlavə et")}</span>
               </button>
             ) : (
               <form onSubmit={handleAddNewItem} className="p-4 rounded-2xl bg-blue-50/60 border border-blue-200 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-900">Yeni əşya əlavə edin:</span>
+                  <span className="text-xs font-bold text-slate-900">{t("Yeni əşya əlavə edin:")}</span>
                   <button
                     type="button"
                     onClick={() => setShowAddForm(false)}
                     className="text-xs text-slate-500 hover:text-slate-700 cursor-pointer"
-                  >
-                    Ləğv et
-                  </button>
+                  >{t("Ləğv et")}</button>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
                   <div>
                     <input
                       type="text"
                       required
-                      placeholder="Əşyanın adı"
+                      placeholder={t("Əşyanın adı")}
                       value={newItemName}
                       onChange={(e) => setNewItemName(e.target.value)}
                       className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 outline-none focus:border-blue-600"
@@ -1368,7 +1312,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                       type="number"
                       min={1}
                       max={99}
-                      placeholder="Sayı (ədəd)"
+                      placeholder={t("Sayı (ədəd)")}
                       value={newItemQty}
                       onChange={(e) => setNewItemQty(parseInt(e.target.value, 10) || 1)}
                       className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 outline-none focus:border-blue-600"
@@ -1380,7 +1324,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                       step={0.1}
                       min={0.1}
                       max={10}
-                      placeholder="Həcmi (m³)"
+                      placeholder={t("Həcmi (m³)")}
                       value={newItemVolume}
                       onChange={(e) => setNewItemVolume(parseFloat(e.target.value) || 0.5)}
                       className="w-full px-3 py-2 rounded-lg bg-white border border-slate-300 text-xs text-slate-800 outline-none focus:border-blue-600"
@@ -1391,12 +1335,10 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                   <button
                     type="submit"
                     className="px-4 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs cursor-pointer shadow-xs"
-                  >
-                    Əlavə et
-                  </button>
+                  >{t("Əlavə et")}</button>
                 </div>
               </form>
-            )}
+            ))}
           </div>
 
           {/* TWO CORE DETERMINISTIC CARDS: VOLUME & VEHICLE SELECTION */}
@@ -1404,22 +1346,17 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
             {/* Card 1: Volume Assessment */}
             <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-slate-50 border border-blue-200 flex flex-col justify-between">
               <div>
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 block mb-1">
-                  Təxmini yük həcmi
-                </span>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 block mb-1">{t("Təxmini yük həcmi")}</span>
                 <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight">
-                  {pricingResult.volumeRangeDisplay}
+                  {t(pricingResult.volumeRangeDisplay)}
                 </div>
-                <p className="mt-1 text-xs text-slate-600">
-                  Avtomobil seçimi üçün təhlükəsizlik nəzərə alınaraq ümumi həcm ({pricingResult.evaluatedVolumeM3} m³) əsas götürülmüşdür.
-                </p>
+                <p className="mt-1 text-xs text-slate-600">{t("Avtomobil seçimi üçün təhlükəsizlik nəzərə alınaraq ümumi həcm (")}{t(pricingResult.evaluatedVolumeM3)}{t(" m³) əsas götürülmüşdür.")}</p>
               </div>
 
               <div className="mt-4 pt-3 border-t border-blue-100 flex items-center justify-between text-xs text-slate-600">
-                <span>Daşınan əşya sayı:</span>
+                <span>{t("Daşınan əşya sayı:")}</span>
                 <span className="font-bold text-slate-900">
-                  {analysisResult.items.reduce((sum, it) => sum + it.quantity, 0)} ədəd
-                </span>
+                  {t(analysisResult.items.reduce((sum, it) => sum + it.quantity, 0))}{t(" ədəd")}</span>
               </div>
             </div>
 
@@ -1427,37 +1364,29 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
             <div className="p-6 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 text-white border border-slate-800 flex flex-col justify-between shadow-md">
               <div>
                 <div className="flex items-center justify-between gap-2 mb-1">
-                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-400 block">
-                    Tövsiyə olunan avtomobil
-                  </span>
-                  {pricingResult.vehicleCategory && (
+                  <span className="text-xs font-extrabold uppercase tracking-wider text-blue-400 block">{t("Tövsiyə olunan avtomobil")}</span>
+                  {t(pricingResult.vehicleCategory && (
                     <span className="px-2 py-0.5 rounded-full bg-blue-500/30 text-blue-200 text-[11px] font-extrabold">
-                      {pricingResult.vehicleCategory} kateqoriyası
-                    </span>
-                  )}
+                      {t(pricingResult.vehicleCategory)}{t(" kateqoriyası")}</span>
+                  ))}
                 </div>
                 <div className="text-2xl sm:text-3xl font-black tracking-tight text-white">
-                  {pricingResult.vehicleName}
+                  {t(pricingResult.vehicleName)}
                 </div>
-                <p className="mt-1.5 text-xs text-slate-300">
-                  Avtomobil seçimi yükün təxmini həcminə əsaslanır.
-                </p>
-                {pricingResult.hasLargeItemFitRisk && (
-                  <p className="mt-2 text-xs text-amber-300 font-medium bg-amber-950/50 p-2 rounded-lg border border-amber-500/30">
-                    ⚠️ İri ölçülü əşya aşkarlandığı üçün avtomobil ölçüsünün operator tərəfindən təsdiqlənməsi tövsiyə olunur.
+                <p className="mt-1.5 text-xs text-slate-300">{t("Avtomobil seçimi yükün təxmini həcminə əsaslanır.")}</p>
+                {t(pricingResult.hasLargeItemFitRisk && (
+                  <p className="mt-2 text-xs text-amber-300 font-medium bg-amber-950/50 p-2 rounded-lg border border-amber-500/30">{t("⚠️ İri ölçülü əşya aşkarlandığı üçün avtomobil ölçüsünün operator tərəfindən təsdiqlənməsi tövsiyə olunur.")}</p>
+                ))}
+                {t(pricingResult.vehicleDimensionsDisplay && (
+                  <p className="mt-2 text-xs text-slate-400 font-mono">{t("Ölçülər: ")}{t(pricingResult.vehicleDimensionsDisplay)}
                   </p>
-                )}
-                {pricingResult.vehicleDimensionsDisplay && (
-                  <p className="mt-2 text-xs text-slate-400 font-mono">
-                    Ölçülər: {pricingResult.vehicleDimensionsDisplay}
-                  </p>
-                )}
+                ))}
               </div>
 
               <div className="mt-4 pt-3 border-t border-slate-700/80 flex items-center justify-between text-xs text-slate-300">
-                <span>Praktiki tutum:</span>
+                <span>{t("Praktiki tutum:")}</span>
                 <span className="font-bold text-emerald-400">
-                  {pricingResult.vehiclePracticalCapacityM3 ? `~${pricingResult.vehiclePracticalCapacityM3} m³` : 'Xüsusi'}
+                  {t(pricingResult.vehiclePracticalCapacityM3 ? `~${pricingResult.vehiclePracticalCapacityM3} m³` : 'Xüsusi')}
                 </span>
               </div>
             </div>
@@ -1467,41 +1396,36 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
           <div className="p-6 rounded-2xl bg-blue-50/80 border-2 border-blue-600/60 space-y-3">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
               <div>
-                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 block">
-                  Avtomobil üçün ilkin qiymət
-                </span>
+                <span className="text-xs font-extrabold uppercase tracking-wider text-blue-700 block">{t("Avtomobil üçün ilkin qiymət")}</span>
                 <div className="text-3xl sm:text-4xl font-black text-slate-900">
-                  {pricingResult.vehicleTransportPriceDisplay}
+                  {t(pricingResult.vehicleTransportPriceDisplay)}
                 </div>
               </div>
 
-              {pricingResult.routeSummary && (
+              {t(pricingResult.routeSummary && (
                 <div className="sm:text-right">
-                  <span className="text-xs font-semibold text-slate-500 block">Marşrut:</span>
+                  <span className="text-xs font-semibold text-slate-500 block">{t("Marşrut:")}</span>
                   <span className="text-sm font-bold text-slate-800">
-                    {pricingResult.routeSummary} ({pricingResult.distanceKm} km)
-                  </span>
+                    {t(pricingResult.routeSummary)} ({t(pricingResult.distanceKm)}{t(" km)")}</span>
                 </div>
-              )}
+              ))}
             </div>
 
-            <p className="text-xs sm:text-sm font-medium text-slate-700">
-              ℹ️ Bu məbləğ avtomobilin sifariş/daşınma qiymətidir. Əlavə xidmətlər ayrıca hesablana bilər.
-            </p>
+            <p className="text-xs sm:text-sm font-medium text-slate-700">{t("ℹ️ Bu məbləğ avtomobilin sifariş/daşınma qiymətidir. Əlavə xidmətlər ayrıca hesablana bilər.")}</p>
 
-            {pricingResult.hasMissingTariff && (
+            {t(pricingResult.hasMissingTariff && (
               <div className="p-3 rounded-xl bg-amber-100/70 border border-amber-300 text-amber-900 text-xs font-semibold flex items-center gap-2">
                 <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
-                <span>Bu istiqamət üçün avtomatik tarif mövcud deyil. Dəqiq qiymət üçün bizimlə əlaqə saxlayın.</span>
+                <span>{t("Bu istiqamət üçün avtomatik tarif mövcud deyil. Dəqiq qiymət üçün bizimlə əlaqə saxlayın.")}</span>
               </div>
-            )}
+            ))}
           </div>
 
           {/* EXTRA SERVICES BREAKDOWN (ƏLAVƏ XİDMƏTLƏR) */}
           <div className="space-y-3">
             <h3 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
               <Layers className="w-5 h-5 text-blue-600" />
-              <span>Əlavə xidmətlər</span>
+              <span>{t("Əlavə xidmətlər")}</span>
             </h3>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
@@ -1510,22 +1434,20 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                     <Users className="w-4 h-4 text-blue-600" />
-                    <span>Fəhlə xidməti</span>
+                    <span>{t("Fəhlə xidməti")}</span>
                   </span>
                   <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-blue-100 text-blue-800">
-                    {pricingResult.isIntercity ? 'Ayrıca hesablanır' : '1 nəfər üçün 20 AZN-dən başlayır'}
+                    {t(pricingResult.isIntercity ? 'Ayrıca hesablanır' : '1 nəfər üçün 20 AZN-dən başlayır')}
                   </span>
                 </div>
                 <p className="text-xs text-slate-600">
-                  {pricingResult.isIntercity
+                  {t(pricingResult.isIntercity
                     ? 'Rayonlararası sifarişlərdə fəhlə xidmətinin qiyməti ayrıca hesablanır.'
-                    : 'Standart daşıma üçün 1 nəfər 20 AZN-dən başlayır.'}
+                    : 'Standart daşıma üçün 1 nəfər 20 AZN-dən başlayır.')}
                 </p>
-                {pricingResult.stairsNotice && (
-                  <p className="text-[11px] text-amber-800 font-medium">
-                    ⚠️ Mərtəbə, yükün ağırlığı və daşınma çətinliyinə görə əlavə xidmət haqqı tələb oluna bilər.
-                  </p>
-                )}
+                {t(pricingResult.stairsNotice && (
+                  <p className="text-[11px] text-amber-800 font-medium">{t("⚠️ Mərtəbə, yükün ağırlığı və daşınma çətinliyinə görə əlavə xidmət haqqı tələb oluna bilər.")}</p>
+                ))}
               </div>
 
               {/* Furniture Assembly Craftsman Status */}
@@ -1533,67 +1455,59 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                     <Wrench className="w-4 h-4 text-amber-600" />
-                    <span>Mebel sökülməsi / yığılması</span>
+                    <span>{t("Mebel sökülməsi / yığılması")}</span>
                   </span>
                   <span className="text-xs font-bold px-2 py-0.5 rounded-md bg-amber-100 text-amber-800">
-                    {pricingResult.assemblyServiceDisplay}
+                    {t(pricingResult.assemblyServiceDisplay)}
                   </span>
                 </div>
-                <p className="text-xs text-slate-600">
-                  Mebelin sökülməsi və yığılması usta xidmətidir və ayrıca hesablanır.
-                </p>
+                <p className="text-xs text-slate-600">{t("Mebelin sökülməsi və yığılması usta xidmətidir və ayrıca hesablanır.")}</p>
               </div>
             </div>
           </div>
 
           {/* SPECIAL / HEAVY ITEMS DETECTED SECTION */}
-          {pricingResult.specialItems.length > 0 && (
+          {t(pricingResult.specialItems.length > 0 && (
             <div className="p-4 rounded-2xl bg-amber-50/80 border border-amber-200 space-y-2.5">
               <div className="flex items-center gap-2 font-bold text-sm text-amber-950">
                 <AlertTriangle className="w-4 h-4 text-amber-600" />
-                <span>Xüsusi və Ağır Əşya Qeydləri:</span>
+                <span>{t("Xüsusi və Ağır Əşya Qeydləri:")}</span>
               </div>
               <div className="space-y-2">
                 {pricingResult.specialItems.map((sp, idx) => (
                   <div key={idx} className="text-xs text-amber-900 bg-white/80 p-2.5 rounded-xl border border-amber-200/60 flex items-start gap-2">
-                    <span className="font-bold text-amber-950 shrink-0">• {sp.name}:</span>
-                    <span>{sp.message}</span>
+                    <span className="font-bold text-amber-950 shrink-0">• {t(sp.name)}:</span>
+                    <span>{t(sp.message)}</span>
                   </div>
                 ))}
               </div>
             </div>
-          )}
+          ))}
 
           {/* AI NOTES IF ANY */}
-          {analysisResult.notes && analysisResult.notes.length > 0 && (
+          {t(analysisResult.notes && analysisResult.notes.length > 0 && (
             <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 space-y-1">
-              <span className="font-bold text-slate-700 block">Süni intellekt qeydləri:</span>
+              <span className="font-bold text-slate-700 block">{t("Süni intellekt qeydləri:")}</span>
               <ul className="list-disc pl-4 space-y-0.5">
                 {analysisResult.notes.map((note, idx) => (
-                  <li key={idx}>{note}</li>
+                  <li key={idx}>{t(note)}</li>
                 ))}
               </ul>
             </div>
-          )}
+          ))}
 
           {/* OFFICIAL CONFIRMATION NOTICE */}
           <div className="p-4 rounded-xl bg-slate-100 border border-slate-200 flex items-start gap-3 text-xs text-slate-600">
             <Info className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
             <div className="space-y-0.5">
-              <p className="font-bold text-slate-800">
-                Təxmini ilkin qiymətləndirmədir. Operator təsdiqi tələb olunur.
-              </p>
-              <p>
-                Dəqiq yekun qiymət daşınma şəraiti və xüsusi tələblər nəzərə alınaraq operator tərəfindən təsdiqlənir.
-              </p>
+              <p className="font-bold text-slate-800">{t("Təxmini ilkin qiymətləndirmədir. Operator təsdiqi tələb olunur.")}</p>
+              <p>{t("Dəqiq yekun qiymət daşınma şəraiti və xüsusi tələblər nəzərə alınaraq operator tərəfindən təsdiqlənir.")}</p>
             </div>
           </div>
 
           {/* ACTION BUTTONS: YEKUN QİYMƏTİ DƏQİQLƏŞDİRİN */}
           <div className="space-y-2.5 pt-2">
-            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider">
-              Yekun qiyməti dəqiqləşdirin
-            </h4>
+            <h4 className="text-sm font-extrabold text-slate-900 uppercase tracking-wider">{t("Yekun qiyməti dəqiqləşdirin")}</h4>
             <div className="flex flex-col sm:flex-row gap-3.5">
               <button
                 id="yukdasima-btn-whatsapp"
@@ -1602,7 +1516,7 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                 className="flex-1 py-3.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base shadow-md shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
               >
                 <MessageSquare className="w-5 h-5" />
-                <span>💬 WhatsApp ilə dəqiq qiymət al</span>
+                <span>{t("💬 WhatsApp ilə dəqiq qiymət al")}</span>
               </button>
 
               <button
@@ -1624,14 +1538,14 @@ export const YukdasimaEstimator: React.FC<YukdasimaEstimatorProps> = ({
                 className="py-3.5 px-6 rounded-xl bg-slate-900 hover:bg-blue-600 text-white font-bold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
               >
                 <Phone className="w-4 h-4" />
-                <span>📞 Mənimlə əlaqə saxlayın</span>
+                <span>{t("📞 Mənimlə əlaqə saxlayın")}</span>
               </button>
             </div>
           </div>
         </div>
-      )}
+      ))}
       </>
-      )}
+      ))}
     </div>
   );
 };

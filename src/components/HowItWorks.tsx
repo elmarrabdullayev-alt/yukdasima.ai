@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Camera, Sparkles, DollarSign, MessageCircle, MapPin, Car, Check } from 'lucide-react';
 import { ServiceType } from '../types';
+import { t } from '../i18n';
 
 interface HowItWorksProps {
   onSelectService: (service: ServiceType) => void;
@@ -78,14 +79,10 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onSelectService }) => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-3">
-            <span>Sadə 4 addım</span>
+            <span>{t("Sadə 4 addım")}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Necə işləyir?
-          </h2>
-          <p className="mt-3 text-slate-600 text-base sm:text-lg">
-            Həm yükdaşıma, həm də evakuasiya üçün şəffaf və anlaşılan sifariş prosesi.
-          </p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{t("Necə işləyir?")}</h2>
+          <p className="mt-3 text-slate-600 text-base sm:text-lg">{t("Həm yükdaşıma, həm də evakuasiya üçün şəffaf və anlaşılan sifariş prosesi.")}</p>
         </div>
 
         {/* TOGGLE TABS */}
@@ -102,7 +99,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onSelectService }) => {
               }`}
             >
               <span>🚚</span>
-              <span>Yükdaşıma</span>
+              <span>{t("Yükdaşıma")}</span>
             </button>
 
             <button
@@ -116,7 +113,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onSelectService }) => {
               }`}
             >
               <span>🚗</span>
-              <span>Evakuasiya</span>
+              <span>{t("Evakuasiya")}</span>
             </button>
           </div>
         </div>
@@ -131,27 +128,27 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onSelectService }) => {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="w-12 h-12 rounded-xl bg-white border border-slate-200 text-2xl flex items-center justify-center shadow-xs">
-                    {step.icon}
+                    {t(step.icon)}
                   </span>
                   <span className="w-8 h-8 rounded-full bg-blue-100 text-blue-800 text-xs font-black flex items-center justify-center">
-                    {step.num}
+                    {t(step.num)}
                   </span>
                 </div>
                 <h3 className="text-lg font-bold text-slate-900 tracking-tight">
-                  {step.title}
+                  {t(step.title)}
                 </h3>
                 <p className="mt-2 text-sm text-slate-600 leading-relaxed">
-                  {step.desc}
+                  {t(step.desc)}
                 </p>
               </div>
 
-              {idx < currentSteps.length - 1 && (
+              {t(idx < currentSteps.length - 1 && (
                 <div className="hidden lg:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
                   <div className="w-6 h-6 rounded-full bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600 text-xs font-bold">
                     →
                   </div>
                 </div>
-              )}
+              ))}
             </div>
           ))}
         </div>
@@ -164,7 +161,7 @@ export const HowItWorks: React.FC<HowItWorksProps> = ({ onSelectService }) => {
             onClick={handleCtaClick}
             className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-md shadow-blue-600/20 transition-all cursor-pointer"
           >
-            <span>{tab === 'yukdasima' ? 'Yükümü indi hesabla' : 'Evakuasiyanı indi hesabla'}</span>
+            <span>{t(tab === 'yukdasima' ? 'Yükümü indi hesabla' : 'Evakuasiyanı indi hesabla')}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </div>

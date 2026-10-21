@@ -1,5 +1,6 @@
 import { CONTACT_INFO } from '../constants/contact';
 import { getApprovedYukdasimaRoute, getApprovedEvakuatorRoute } from '../seo/routeRegistry';
+import { t } from '../i18n';
 
 /**
  * Parses pathname into service type and optional regional route information
@@ -103,6 +104,7 @@ export function getContextualWhatsAppMessage(pathname: string): string {
  */
 export function getContextualWhatsAppUrl(pathname: string, customMessage?: string): string {
   const message = customMessage || getContextualWhatsAppMessage(pathname);
-  const encoded = encodeURIComponent(message);
+  // On Russian pages the prefilled WhatsApp text is in Russian
+  const encoded = encodeURIComponent(t(message));
   return `https://wa.me/${CONTACT_INFO.WHATSAPP_NUMBER}?text=${encoded}`;
 }

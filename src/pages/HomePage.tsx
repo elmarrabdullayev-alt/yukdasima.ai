@@ -10,6 +10,7 @@ import { FaqSection } from '../components/FaqSection';
 import { BakuDistrictsGeoSection } from '../components/BakuDistrictsGeoSection';
 import { Link } from '../router/RouterContext';
 import { ArrowRight, ShieldCheck, Truck, Car, Home, Layers, Briefcase, Users, DollarSign } from 'lucide-react';
+import { t } from '../i18n';
 
 interface HomePageProps {
   activeService: ServiceType;
@@ -38,15 +39,11 @@ export const HomePage: React.FC<HomePageProps> = ({
       />
 
       {/* Internal SEO Hub: Key Services Crawlable Links */}
-      <section className="py-12 bg-white border-y border-slate-200" aria-label="Əsas Xidmət İstiqamətləri">
+      <section className="py-12 bg-white border-y border-slate-200" aria-label={t("Əsas Xidmət İstiqamətləri")}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-8">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Peşəkar Daşıma və Evakuasiya Xidmətləri
-            </h2>
-            <p className="mt-2 text-slate-600 text-sm sm:text-base">
-              Bakı şəhəri və bütün Azərbaycan regionları üzrə fərdi və korporativ daşıma həlləri
-            </p>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Peşəkar Daşıma və Evakuasiya Xidmətləri")}</h2>
+            <p className="mt-2 text-slate-600 text-sm sm:text-base">{t("Bakı şəhəri və bütün Azərbaycan regionları üzrə fərdi və korporativ daşıma həlləri")}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -58,15 +55,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Truck className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  Yükdaşıma Xidməti
-                </h3>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  Şəhərdaxili və rayonlararası təhlükəsiz yükdaşıma, avtopark və AI həcm təyini.
-                </p>
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">{t("Yükdaşıma Xidməti")}</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{t("Şəhərdaxili və rayonlararası təhlükəsiz yükdaşıma, avtopark və AI həcm təyini.")}</p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">
-                <span>Ətraflı məlumat</span>
+                <span>{t("Ətraflı məlumat")}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -79,15 +72,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Car className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  24/7 Evakuator
-                </h3>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  24/7 operativ və etibarlı evakuator xidməti. Bakı və bütün rayonlara təcili çıxış.
-                </p>
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">{t("24/7 Evakuator")}</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{t("24/7 operativ və etibarlı evakuator xidməti. Bakı və bütün rayonlara təcili çıxış.")}</p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">
-                <span>Tariflərə bax</span>
+                <span>{t("Tariflərə bax")}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -100,15 +89,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Home className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  Evdən Evə Daşıma
-                </h3>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  Mənzil və bağ evlərinin tam təhlükəsiz, qablaşdırmalı və zəmanətli köçürülməsi.
-                </p>
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">{t("Evdən Evə Daşıma")}</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{t("Mənzil və bağ evlərinin tam təhlükəsiz, qablaşdırmalı və zəmanətli köçürülməsi.")}</p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">
-                <span>Xidmətlə tanış ol</span>
+                <span>{t("Xidmətlə tanış ol")}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -121,15 +106,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Layers className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  Mebel Daşınması
-                </h3>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  Peşəkar mebel ustaları, sökülmə, xüsusi materiallarla bükülmə və montaj.
-                </p>
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">{t("Mebel Daşınması")}</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{t("Peşəkar mebel ustaları, sökülmə, xüsusi materiallarla bükülmə və montaj.")}</p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">
-                <span>Usta xidmətləri</span>
+                <span>{t("Usta xidmətləri")}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -142,15 +123,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Briefcase className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  Ofis Daşınması
-                </h3>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  İş fasiləsizliyi qorunmaqla şirkət, arxiv və server avadanlıqlarının operativ daşınması.
-                </p>
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">{t("Ofis Daşınması")}</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{t("İş fasiləsizliyi qorunmaqla şirkət, arxiv və server avadanlıqlarının operativ daşınması.")}</p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">
-                <span>Korporativ şərtlər</span>
+                <span>{t("Korporativ şərtlər")}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -163,15 +140,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Truck className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  Yük Maşını Sifarişi
-                </h3>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  2m-dən 7m-dək müxtəlif tutumlu təmiz və baxımlı yük maşınları birbaşa sifarişlə.
-                </p>
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">{t("Yük Maşını Sifarişi")}</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{t("2m-dən 7m-dək müxtəlif tutumlu təmiz və baxımlı yük maşınları birbaşa sifarişlə.")}</p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">
-                <span>Maşınlara bax</span>
+                <span>{t("Maşınlara bax")}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -184,15 +157,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <Users className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  Fəhlə Xidməti
-                </h3>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  Yükləmə, boşaltma, mərtəbəyə qaldırma və ağır əşyaların daşınması üzrə təcrübəli briqada.
-                </p>
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">{t("Fəhlə Xidməti")}</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{t("Yükləmə, boşaltma, mərtəbəyə qaldırma və ağır əşyaların daşınması üzrə təcrübəli briqada.")}</p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">
-                <span>Briqada sifarişi</span>
+                <span>{t("Briqada sifarişi")}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>
@@ -205,15 +174,11 @@ export const HomePage: React.FC<HomePageProps> = ({
                 <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3 group-hover:bg-blue-600 group-hover:text-white transition-colors">
                   <DollarSign className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">
-                  Şəffaf Qiymətlər
-                </h3>
-                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">
-                  Bakı və bütün rayonlar üzrə rəsmi tarif cədvəli və ilkin kalkulyasiya imkanı.
-                </p>
+                <h3 className="font-bold text-slate-900 text-base group-hover:text-blue-600 transition-colors">{t("Şəffaf Qiymətlər")}</h3>
+                <p className="text-xs text-slate-600 mt-1.5 leading-relaxed">{t("Bakı və bütün rayonlar üzrə rəsmi tarif cədvəli və ilkin kalkulyasiya imkanı.")}</p>
               </div>
               <div className="mt-4 flex items-center text-xs font-semibold text-blue-600 gap-1">
-                <span>Cədvələ bax</span>
+                <span>{t("Cədvələ bax")}</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </div>
             </Link>

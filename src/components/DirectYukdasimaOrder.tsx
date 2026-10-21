@@ -20,6 +20,7 @@ import { generateWhatsAppLink } from '../utils/calculator';
 import { POPULAR_LOCATIONS } from '../data/mockData';
 
 import { CallbackInitialData } from '../types';
+import { t } from '../i18n';
 
 interface DirectYukdasimaOrderProps {
   onOpenCallback: (initialData?: string | CallbackInitialData) => void;
@@ -93,31 +94,31 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
 
   // Handle WhatsApp Submission
   const handleWhatsAppOrder = () => {
-    let msg = `Salam. yukdasima.ai saytından ${selectedCategory === 'tir' ? 'TIR' : 'yük maşını'} sifariş etmək istəyirəm.\n\n`;
+    let msg = t(`Salam. yukdasima.ai saytından ${selectedCategory === 'tir' ? t('TIR') : t('yük maşını')} sifariş etmək istəyirəm.\n\n`);
     
     const routeDisplay = pricingResult.routeSummary
       ? pricingResult.routeSummary
       : `${fromAddress.trim() || 'Bakı'} → ${toAddress.trim() || 'Təyin edilməyib'}`;
 
-    msg += `Avtomobil: ${currentVehicle.category === 'tir' ? 'TIR' : `${currentVehicle.name} (${currentVehicle.category})`}\n`;
-    msg += `Marşrut: ${routeDisplay}\n`;
-    msg += `Avtomobil üçün ilkin qiymət: ${pricingResult.vehicleTransportPriceDisplay}\n`;
-    msg += `Fəhlə: ${needsWorkers ? `Bəli (${workerCount} nəfər)` : 'Xeyr'}\n`;
-    msg += `Mebel sökülməsi/yığılması: ${needsAssembly ? 'Bəli' : 'Xeyr'}\n`;
+    msg += t(`Avtomobil: ${currentVehicle.category === 'tir' ? t('TIR') : `${currentVehicle.name} (${currentVehicle.category})`}\n`);
+    msg += t(`Marşrut: ${routeDisplay}\n`);
+    msg += t(`Avtomobil üçün ilkin qiymət: ${pricingResult.vehicleTransportPriceDisplay}\n`);
+    msg += t(`Fəhlə: ${needsWorkers ? t(`Bəli (${workerCount} nəfər)`) : t('Xeyr')}\n`);
+    msg += t(`Mebel sökülməsi/yığılması: ${needsAssembly ? t('Bəli') : t('Xeyr')}\n`);
     if (selectedCategory === 'tir') {
-      msg += `Qeyd: TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operatorla dəqiqləşdirilir.\n`;
+      msg += t(`Qeyd: TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operatorla dəqiqləşdirilir.\n`);
     }
 
     if (customerName.trim()) {
-      msg += `Ad: ${customerName.trim()}\n`;
+      msg += t(`Ad: ${customerName.trim()}\n`);
     }
     if (customerPhone.trim()) {
-      msg += `Telefon: ${customerPhone.trim()}\n`;
+      msg += t(`Telefon: ${customerPhone.trim()}\n`);
     }
 
-    msg += `\nZəhmət olmasa sifarişi dəqiqləşdirib təsdiq edəsiniz.`;
+    msg += t(`\nZəhmət olmasa sifarişi dəqiqləşdirib təsdiq edəsiniz.`);
 
-    window.open(generateWhatsAppLink(msg), '_blank');
+    window.open(generateWhatsAppLink(t(msg)), '_blank');
   };
 
   return (
@@ -128,21 +129,17 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
           <div>
             <h3 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
               <Truck className="w-5 h-5 text-blue-600" />
-              <span>1. Avtomobili seçin</span>
+              <span>{t("1. Avtomobili seçin")}</span>
             </h3>
-            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-              Ehtiyacınıza uyğun olan yük maşınını seçin.
-            </p>
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">{t("Ehtiyacınıza uyğun olan yük maşınını seçin.")}</p>
           </div>
-          {onSwitchToAi && (
+          {t(onSwitchToAi && (
             <button
               type="button"
               onClick={onSwitchToAi}
               className="text-xs font-bold text-blue-600 hover:text-blue-700 bg-blue-50 hover:bg-blue-100 py-1.5 px-3 rounded-lg self-start sm:self-auto transition-colors cursor-pointer"
-            >
-              ✨ Avtomobili seçməkdə çətinlik çəkirsiniz? AI ilə təyin edin
-            </button>
-          )}
+            >{t("✨ Avtomobili seçməkdə çətinlik çəkirsiniz? AI ilə təyin edin")}</button>
+          ))}
         </div>
 
         {/* VEHICLE CARDS GRID */}
@@ -171,46 +168,41 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                           : 'bg-slate-100 text-slate-700'
                       }`}
                     >
-                      {isTir ? 'TIR' : v.category}
+                      {t(isTir ? 'TIR' : v.category)}
                     </span>
-                    {isSelected && (
+                    {t(isSelected && (
                       <span className="flex items-center gap-1 text-xs font-bold text-blue-700">
-                        <Check className="w-4 h-4" /> Seçildi
-                      </span>
-                    )}
+                        <Check className="w-4 h-4" />{t(" Seçildi")}</span>
+                    ))}
                   </div>
 
                   <h4 className="text-base sm:text-lg font-black text-slate-900">
-                    {v.name}
+                    {t(v.name)}
                   </h4>
 
                   {/* Specifications */}
-                  {isTir ? (
-                    <div className="mt-3 text-xs text-slate-600 bg-slate-100/70 p-2.5 rounded-xl border border-slate-200/60 font-medium">
-                      Marşrut üzrə TIR qiymətini öyrənin.
-                    </div>
+                  {t(isTir ? (
+                    <div className="mt-3 text-xs text-slate-600 bg-slate-100/70 p-2.5 rounded-xl border border-slate-200/60 font-medium">{t("Marşrut üzrə TIR qiymətini öyrənin.")}</div>
                   ) : (
                     <div className="mt-3 space-y-1.5 text-xs text-slate-600 bg-slate-100/70 p-2.5 rounded-xl border border-slate-200/60">
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Kuzov ölçüsü:</span>
+                        <span className="text-slate-500">{t("Kuzov ölçüsü:")}</span>
                         <span className="font-semibold text-slate-900">
-                          {v.lengthM.toFixed(2)} × {v.widthM.toFixed(2)} × {v.heightM.toFixed(2)} m
-                        </span>
+                          {t(v.lengthM.toFixed(2))} × {t(v.widthM.toFixed(2))} × {t(v.heightM.toFixed(2))}{t(" m")}</span>
                       </div>
                       <div className="flex justify-between">
-                        <span className="text-slate-500">Təxmini tutum:</span>
+                        <span className="text-slate-500">{t("Təxmini tutum:")}</span>
                         <span className="font-semibold text-slate-900">
-                          {v.practicalCapacityM3} m³
-                        </span>
+                          {t(v.practicalCapacityM3)}{t(" m³")}</span>
                       </div>
                     </div>
-                  )}
+                  ))}
 
-                  {!isTir && (
+                  {t(!isTir && (
                     <p className="mt-2.5 text-xs text-slate-500 line-clamp-2">
-                      {v.description}
+                      {t(v.description)}
                     </p>
-                  )}
+                  ))}
                 </div>
 
                 {/* Selection Button */}
@@ -223,7 +215,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                         : 'bg-slate-100 hover:bg-slate-200 text-slate-800'
                     }`}
                   >
-                    {isSelected ? '✓ Seçilmiş maşın' : 'Bu maşını seç'}
+                    {t(isSelected ? '✓ Seçilmiş maşın' : 'Bu maşını seç')}
                   </button>
                 </div>
               </div>
@@ -237,18 +229,16 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
         <div className="border-b border-slate-200 pb-3">
           <h3 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
             <MapPin className="w-5 h-5 text-blue-600" />
-            <span>2. Marşrutu qeyd edin</span>
+            <span>{t("2. Marşrutu qeyd edin")}</span>
           </h3>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Yükün haradan götürülüb haraya çatdırılacağını daxil edin.
-          </p>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">{t("Yükün haradan götürülüb haraya çatdırılacağını daxil edin.")}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* FROM */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <span>Haradan?</span>
+              <span>{t("Haradan?")}</span>
             </label>
             <div className="relative">
               <input
@@ -256,7 +246,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                 type="text"
                 value={fromAddress}
                 onChange={(e) => setFromAddress(e.target.value)}
-                placeholder="Məsələn: Bakı, Nərimanov"
+                placeholder={t("Məsələn: Bakı, Nərimanov")}
                 className="w-full pl-3.5 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm font-medium text-slate-900 bg-white"
               />
             </div>
@@ -265,7 +255,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
           {/* TO */}
           <div className="space-y-1.5">
             <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
-              <span>Haraya?</span>
+              <span>{t("Haraya?")}</span>
             </label>
             <div className="relative">
               <input
@@ -273,15 +263,15 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                 type="text"
                 value={toAddress}
                 onChange={(e) => setToAddress(e.target.value)}
-                placeholder="Məsələn: Gəncə, Xırdalan, Yasamal..."
+                placeholder={t("Məsələn: Gəncə, Xırdalan, Yasamal...")}
                 className="w-full pl-3.5 pr-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm font-medium text-slate-900 bg-white"
               />
             </div>
 
             {/* Suggestions */}
-            {destinationSuggestions.length > 0 && (
+            {t(destinationSuggestions.length > 0 && (
               <div className="flex flex-wrap gap-1.5 pt-1">
-                <span className="text-[11px] text-slate-400 self-center">Təkliflər:</span>
+                <span className="text-[11px] text-slate-400 self-center">{t("Təkliflər:")}</span>
                 {destinationSuggestions.map((dest) => (
                   <button
                     key={dest}
@@ -289,17 +279,17 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                     onClick={() => setToAddress(dest)}
                     className="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200/60 transition-colors cursor-pointer"
                   >
-                    {dest}
+                    {t(dest)}
                   </button>
                 ))}
               </div>
-            )}
+            ))}
           </div>
         </div>
 
         {/* Popular Locations Quick Select */}
         <div className="space-y-1.5 pt-1">
-          <span className="text-xs text-slate-500 font-medium">Tez-tez seçilən istiqamətlər:</span>
+          <span className="text-xs text-slate-500 font-medium">{t("Tez-tez seçilən istiqamətlər:")}</span>
           <div className="flex flex-wrap gap-1.5">
             {POPULAR_LOCATIONS.map((loc) => (
               <button
@@ -314,7 +304,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                     : 'bg-white text-slate-700 border-slate-200 hover:border-slate-300 hover:bg-slate-50 font-medium'
                 }`}
               >
-                {loc}
+                {t(loc)}
               </button>
             ))}
           </div>
@@ -325,49 +315,43 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
       <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-slate-50 to-blue-50/30 p-5 sm:p-6 space-y-3 shadow-xs">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div>
-            <span className="text-xs font-black uppercase tracking-wider text-slate-500 block">
-              Avtomobil üçün ilkin qiymət
-            </span>
+            <span className="text-xs font-black uppercase tracking-wider text-slate-500 block">{t("Avtomobil üçün ilkin qiymət")}</span>
             <div className="text-2xl sm:text-3xl font-black text-slate-900 mt-1">
-              {pricingResult.vehicleTransportPriceDisplay}
+              {t(pricingResult.vehicleTransportPriceDisplay)}
             </div>
           </div>
 
           <div className="text-xs text-slate-500 sm:text-right">
             <span className="font-semibold text-slate-700 block">
-              {currentVehicle.category === 'tir' ? 'TIR' : `${currentVehicle.name} (${currentVehicle.category})`}
+              {t(currentVehicle.category === 'tir' ? 'TIR' : `${currentVehicle.name} (${currentVehicle.category})`)}
             </span>
             <span>
-              {pricingResult.routeSummary || `${fromAddress || 'Bakı'} → ${toAddress || 'Təyin edilməyib'}`}
+              {t(pricingResult.routeSummary || `${fromAddress || 'Bakı'} → ${toAddress || 'Təyin edilməyib'}`)}
             </span>
           </div>
         </div>
 
-        {selectedCategory === 'tir' ? (
+        {t(selectedCategory === 'tir' ? (
           <div className="p-3 rounded-xl bg-blue-50/80 border border-blue-200/80 text-blue-900 text-xs sm:text-sm">
-            <p className="font-medium text-slate-800">
-              ℹ️ TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.
-            </p>
+            <p className="font-medium text-slate-800">{t("ℹ️ TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.")}</p>
           </div>
         ) : (
-          <p className="text-xs sm:text-sm text-slate-600 pt-1">
-            ℹ️ Bu məbləğ avtomobilin sifariş/daşınma qiymətidir. Əlavə xidmətlər ayrıca hesablana bilər.
-          </p>
-        )}
+          <p className="text-xs sm:text-sm text-slate-600 pt-1">{t("ℹ️ Bu məbləğ avtomobilin sifariş/daşınma qiymətidir. Əlavə xidmətlər ayrıca hesablana bilər.")}</p>
+        ))}
 
-        {pricingResult.hasMissingTariff && (
+        {t(pricingResult.hasMissingTariff && (
           <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs sm:text-sm space-y-1">
             <div className="font-bold flex items-center gap-1.5">
               <AlertTriangle className="w-4 h-4 text-amber-700 shrink-0" />
-              <span>Bu marşrut üçün avtomatik qiymət mövcud deyil.</span>
+              <span>{t("Bu marşrut üçün avtomatik qiymət mövcud deyil.")}</span>
             </div>
             <p className="text-amber-800">
-              {selectedCategory === 'tir'
+              {t(selectedCategory === 'tir'
                 ? 'TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.'
-                : 'Dəqiq qiymət üçün bizimlə əlaqə saxlayın.'}
+                : 'Dəqiq qiymət üçün bizimlə əlaqə saxlayın.')}
             </p>
           </div>
-        )}
+        ))}
       </div>
 
       {/* 4. OPTIONAL SERVICES */}
@@ -375,11 +359,9 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
         <div className="border-b border-slate-200 pb-3">
           <h3 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
             <Users className="w-5 h-5 text-blue-600" />
-            <span>3. Əlavə xidmətlər</span>
+            <span>{t("3. Əlavə xidmətlər")}</span>
           </h3>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Fəhlə və mebel ustası xidməti tələb olunursa qeyd edin.
-          </p>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">{t("Fəhlə və mebel ustası xidməti tələb olunursa qeyd edin.")}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -388,7 +370,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
             <div className="flex items-center justify-between">
               <label className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Users className="w-4 h-4 text-blue-600" />
-                <span>Fəhlə lazımdır?</span>
+                <span>{t("Fəhlə lazımdır?")}</span>
               </label>
               <div className="flex rounded-lg bg-slate-100 p-1">
                 <button
@@ -399,9 +381,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                       ? 'bg-white text-slate-900 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
-                >
-                  Xeyr
-                </button>
+                >{t("Xeyr")}</button>
                 <button
                   type="button"
                   onClick={() => setNeedsWorkers(true)}
@@ -410,16 +390,14 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                       ? 'bg-blue-600 text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
-                >
-                  Bəli
-                </button>
+                >{t("Bəli")}</button>
               </div>
             </div>
 
-            {needsWorkers && (
+            {t(needsWorkers && (
               <div className="space-y-2 pt-2 border-t border-slate-100">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="text-slate-600 font-medium">İşçi sayı:</span>
+                  <span className="text-slate-600 font-medium">{t("İşçi sayı:")}</span>
                   <div className="flex items-center gap-2">
                     {[1, 2, 3, 4].map((cnt) => (
                       <button
@@ -432,19 +410,19 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                             : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
                         }`}
                       >
-                        {cnt}
+                        {t(cnt)}
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <p className="text-xs text-slate-600">
-                  {pricingResult.isIntercity
+                  {t(pricingResult.isIntercity
                     ? 'Rayonlararası sifarişlərdə fəhlə xidmətinin qiyməti ayrıca hesablanır.'
-                    : 'Fəhlə xidməti 1 nəfər üçün 20 AZN-dən başlayır.'}
+                    : 'Fəhlə xidməti 1 nəfər üçün 20 AZN-dən başlayır.')}
                 </p>
               </div>
-            )}
+            ))}
           </div>
 
           {/* FURNITURE DISASSEMBLY / ASSEMBLY */}
@@ -452,7 +430,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
             <div className="flex items-center justify-between">
               <label className="text-sm font-bold text-slate-900 flex items-center gap-2">
                 <Wrench className="w-4 h-4 text-blue-600" />
-                <span>Mebelin sökülməsi/yığılması lazımdır?</span>
+                <span>{t("Mebelin sökülməsi/yığılması lazımdır?")}</span>
               </label>
               <div className="flex rounded-lg bg-slate-100 p-1">
                 <button
@@ -463,9 +441,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                       ? 'bg-white text-slate-900 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
-                >
-                  Xeyr
-                </button>
+                >{t("Xeyr")}</button>
                 <button
                   type="button"
                   onClick={() => setNeedsAssembly(true)}
@@ -474,19 +450,15 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
                       ? 'bg-blue-600 text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900'
                   }`}
-                >
-                  Bəli
-                </button>
+                >{t("Bəli")}</button>
               </div>
             </div>
 
-            {needsAssembly && (
+            {t(needsAssembly && (
               <div className="pt-2 border-t border-slate-100">
-                <p className="text-xs text-slate-600">
-                  Mebelin sökülməsi və yığılması usta xidmətidir və ayrıca hesablanır.
-                </p>
+                <p className="text-xs text-slate-600">{t("Mebelin sökülməsi və yığılması usta xidmətidir və ayrıca hesablanır.")}</p>
               </div>
-            )}
+            ))}
           </div>
         </div>
       </div>
@@ -496,28 +468,26 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
         <div className="border-b border-slate-200 pb-3">
           <h3 className="text-lg sm:text-xl font-bold text-slate-900 flex items-center gap-2">
             <Phone className="w-5 h-5 text-blue-600" />
-            <span>4. Əlaqə məlumatlarınız</span>
+            <span>{t("4. Əlaqə məlumatlarınız")}</span>
           </h3>
-          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
-            Sifarişin təsdiqlənməsi üçün adınızı və telefon nömrənizi qeyd edin.
-          </p>
+          <p className="text-xs sm:text-sm text-slate-500 mt-0.5">{t("Sifarişin təsdiqlənməsi üçün adınızı və telefon nömrənizi qeyd edin.")}</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">Adınız</label>
+            <label className="text-xs font-bold text-slate-700">{t("Adınız")}</label>
             <input
               id="direct-customer-name"
               type="text"
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
-              placeholder="Məsələn: Rəşad Məmmədov"
+              placeholder={t("Məsələn: Rəşad Məmmədov")}
               className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm font-medium text-slate-900 bg-white"
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-bold text-slate-700">Telefon nömrəniz</label>
+            <label className="text-xs font-bold text-slate-700">{t("Telefon nömrəniz")}</label>
             <input
               id="direct-customer-phone"
               type="tel"
@@ -533,54 +503,52 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
       {/* 6. ORDER SUMMARY (SIFARISINIZ) */}
       <div className="rounded-2xl border-2 border-slate-900 bg-slate-900 text-white p-5 sm:p-7 space-y-4 shadow-xl">
         <h3 className="text-lg sm:text-xl font-black tracking-tight text-white flex items-center justify-between">
-          <span>Sifarişiniz</span>
+          <span>{t("Sifarişiniz")}</span>
           <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-blue-500/30 text-blue-200">
-            {currentVehicle.category === 'tir' ? 'TIR' : currentVehicle.category}
+            {t(currentVehicle.category === 'tir' ? 'TIR' : currentVehicle.category)}
           </span>
         </h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm pt-1 border-t border-slate-800">
           <div className="space-y-1">
-            <span className="text-slate-400 block text-xs">Avtomobil:</span>
+            <span className="text-slate-400 block text-xs">{t("Avtomobil:")}</span>
             <span className="font-bold text-white text-base">
-              {currentVehicle.category === 'tir' ? 'TIR' : currentVehicle.name}
+              {t(currentVehicle.category === 'tir' ? 'TIR' : currentVehicle.name)}
             </span>
           </div>
 
           <div className="space-y-1">
-            <span className="text-slate-400 block text-xs">Marşrut:</span>
+            <span className="text-slate-400 block text-xs">{t("Marşrut:")}</span>
             <span className="font-bold text-white text-base">
-              {pricingResult.routeSummary || `${fromAddress || 'Bakı'} → ${toAddress || 'Təyin edilməyib'}`}
+              {t(pricingResult.routeSummary || `${fromAddress || 'Bakı'} → ${toAddress || 'Təyin edilməyib'}`)}
             </span>
           </div>
 
           <div className="space-y-1">
-            <span className="text-slate-400 block text-xs">Avtomobil üçün ilkin qiymət:</span>
+            <span className="text-slate-400 block text-xs">{t("Avtomobil üçün ilkin qiymət:")}</span>
             <span className="font-bold text-emerald-400 text-base">
-              {pricingResult.vehicleTransportPriceDisplay}
+              {t(pricingResult.vehicleTransportPriceDisplay)}
             </span>
           </div>
 
           <div className="space-y-1">
-            <span className="text-slate-400 block text-xs">Fəhlə:</span>
+            <span className="text-slate-400 block text-xs">{t("Fəhlə:")}</span>
             <span className="font-bold text-white">
-              {needsWorkers ? `${workerCount} nəfər (${pricingResult.workerServiceDisplay})` : 'Tələb olunmur'}
+              {t(needsWorkers ? `${workerCount} nəfər (${pricingResult.workerServiceDisplay})` : 'Tələb olunmur')}
             </span>
           </div>
 
           <div className="space-y-1 sm:col-span-2">
-            <span className="text-slate-400 block text-xs">Mebel sökülməsi/yığılması:</span>
+            <span className="text-slate-400 block text-xs">{t("Mebel sökülməsi/yığılması:")}</span>
             <span className="font-bold text-white">
-              {needsAssembly ? 'Tələb olunur (Ayrıca hesablanır)' : 'Tələb olunmur'}
+              {t(needsAssembly ? 'Tələb olunur (Ayrıca hesablanır)' : 'Tələb olunmur')}
             </span>
           </div>
         </div>
 
-        {selectedCategory === 'tir' && (
-          <div className="p-3 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300">
-            ℹ️ TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.
-          </div>
-        )}
+        {t(selectedCategory === 'tir' && (
+          <div className="p-3 rounded-xl bg-slate-800/90 border border-slate-700 text-xs text-slate-300">{t("ℹ️ TIR üçün yükün çəkisi, həcmi və uyğun avtomobil tipi operator tərəfindən dəqiqləşdirilir.")}</div>
+        ))}
 
         {/* ACTION BUTTONS: WHATSAPP & CALLBACK */}
         <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-slate-800">
@@ -591,7 +559,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
             className="flex-1 py-3.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base shadow-md shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
           >
             <MessageSquare className="w-5 h-5" />
-            <span>{selectedCategory === 'tir' ? '💬 Operatorla dəqiqləşdir' : '💬 WhatsApp ilə sifariş et'}</span>
+            <span>{t(selectedCategory === 'tir' ? '💬 Operatorla dəqiqləşdir' : '💬 WhatsApp ilə sifariş et')}</span>
           </button>
 
           <button
@@ -612,7 +580,7 @@ export const DirectYukdasimaOrder: React.FC<DirectYukdasimaOrderProps> = ({
             className="py-3.5 px-6 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-md shadow-blue-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
           >
             <Phone className="w-4 h-4" />
-            <span>{selectedCategory === 'tir' ? '📞 Operatorla əlaqə' : '📞 Zəng sifariş et'}</span>
+            <span>{t(selectedCategory === 'tir' ? '📞 Operatorla əlaqə' : '📞 Zəng sifariş et')}</span>
           </button>
         </div>
       </div>

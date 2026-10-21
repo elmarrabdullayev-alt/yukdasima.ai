@@ -4,6 +4,8 @@ import { ServiceType } from '../types';
 import { CONTACT_INFO } from '../constants/contact';
 import { Link, useRouter } from '../router/RouterContext';
 import { trackConversionEvent } from '../utils/analytics';
+import { LanguageSwitcher } from './LanguageSwitcher';
+import { t } from '../i18n';
 
 interface NavbarProps {
   activeService: ServiceType;
@@ -77,8 +79,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-sm group-hover:bg-blue-700 transition-colors shrink-0">
                 <Truck className="w-5 h-5 stroke-[2.2]" />
               </div>
-              <span className="text-xl sm:text-2xl font-bold tracking-tight text-blue-700 whitespace-nowrap">
-                yukdasima<span className="text-slate-900">.ai</span>
+              <span className="text-xl sm:text-2xl font-bold tracking-tight text-blue-700 whitespace-nowrap">{t("yukdasima")}<span className="text-slate-900">{t(".ai")}</span>
               </span>
             </Link>
           </div>
@@ -92,9 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/yukdasima' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Yükdaşıma
-            </Link>
+            >{t("Yükdaşıma")}</Link>
 
             <Link
               id="nav-evakuasiya"
@@ -103,9 +102,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/evakuator' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Evakuator
-            </Link>
+            >{t("Evakuator")}</Link>
 
             <Link
               id="nav-evden-eve"
@@ -113,9 +110,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/evden-eve-yukdasima' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Evdən Evə Daşıma
-            </Link>
+            >{t("Evdən Evə Daşıma")}</Link>
 
             <Link
               id="nav-mebel"
@@ -123,9 +118,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/mebel-dasinmasi' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Mebel Daşınması
-            </Link>
+            >{t("Mebel Daşınması")}</Link>
 
             <Link
               id="nav-ofis"
@@ -133,9 +126,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/ofis-dasinmasi' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Ofis Daşınması
-            </Link>
+            >{t("Ofis Daşınması")}</Link>
 
             <Link
               id="nav-yuk-masini"
@@ -143,9 +134,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/yuk-masini' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Yük Maşını Sifarişi
-            </Link>
+            >{t("Yük Maşını Sifarişi")}</Link>
 
             <Link
               id="nav-fehle"
@@ -153,9 +142,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/fehle-xidmeti' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Fəhlə Xidməti
-            </Link>
+            >{t("Fəhlə Xidməti")}</Link>
 
             <Link
               id="nav-qiymetler"
@@ -163,9 +150,7 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/qiymetler' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Qiymətlər
-            </Link>
+            >{t("Qiymətlər")}</Link>
 
             <Link
               id="nav-contact"
@@ -173,13 +158,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hover:text-blue-600 transition-colors py-1.5 px-1.5 xl:px-2 rounded-md ${
                 pathname === '/elaqe' ? 'text-blue-600 font-bold bg-blue-50/70' : 'text-slate-700'
               }`}
-            >
-              Əlaqə
-            </Link>
+            >{t("Əlaqə")}</Link>
           </nav>
 
           {/* Right Action: Info Center & Primary CTA */}
           <div className="hidden lg:flex items-center gap-2 xl:gap-4 shrink-0">
+            <LanguageSwitcher />
             <a
               id="header-phone-hotline"
               href={CONTACT_INFO.HOTLINE_TEL}
@@ -190,15 +174,15 @@ export const Navbar: React.FC<NavbarProps> = ({
                 });
               }}
               className="flex items-center gap-2 px-2 py-1.5 rounded-xl hover:bg-slate-100 transition-colors group"
-              title={CONTACT_INFO.HOTLINE_DISPLAY}
-              aria-label="878 qaynar xəttinə zəng et"
+              title={t(CONTACT_INFO.HOTLINE_DISPLAY)}
+              aria-label={t("878 qaynar xəttinə zəng et")}
             >
               <div className="w-8 h-8 rounded-lg bg-blue-50 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center transition-colors shrink-0">
                 <Phone className="w-4 h-4" />
               </div>
               <div className="flex flex-col items-start leading-tight">
-                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">Qaynar xətt</span>
-                <span className="text-base font-extrabold text-slate-900 leading-none group-hover:text-blue-600 transition-colors">{CONTACT_INFO.HOTLINE_SHORT_DISPLAY}</span>
+                <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">{t("Qaynar xətt")}</span>
+                <span className="text-base font-extrabold text-slate-900 leading-none group-hover:text-blue-600 transition-colors">{t(CONTACT_INFO.HOTLINE_SHORT_DISPLAY)}</span>
               </div>
             </a>
 
@@ -206,38 +190,37 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="header-calculate-cta"
               onClick={() => handleNavClick('/', 'estimator-section')}
               className="bg-blue-600 text-white px-3.5 xl:px-4 py-2 rounded-lg text-xs xl:text-sm font-semibold shadow-sm hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap"
-            >
-              Qiymət hesabla
-            </button>
+            >{t("Qiymət hesabla")}</button>
           </div>
 
           {/* Mobile menu button */}
           <div className="flex lg:hidden items-center gap-2">
+            <LanguageSwitcher />
             <a
               id="mobile-phone-btn"
               href={CONTACT_INFO.HOTLINE_TEL}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-sm transition-colors"
-              title={CONTACT_INFO.HOTLINE_DISPLAY}
-              aria-label="878 qaynar xəttinə zəng et"
+              title={t(CONTACT_INFO.HOTLINE_DISPLAY)}
+              aria-label={t("878 qaynar xəttinə zəng et")}
             >
               <Phone className="w-4 h-4" />
-              <span>{CONTACT_INFO.HOTLINE_SHORT_DISPLAY}</span>
+              <span>{t(CONTACT_INFO.HOTLINE_SHORT_DISPLAY)}</span>
             </a>
             <button
               id="mobile-menu-toggle"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2.5 rounded-lg text-slate-700 hover:bg-slate-100 focus:outline-none cursor-pointer"
-              aria-label={mobileMenuOpen ? 'Menyunu bağla' : 'Menyunu aç'}
+              aria-label={t(mobileMenuOpen ? 'Menyunu bağla' : 'Menyunu aç')}
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {t(mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />)}
             </button>
           </div>
         </div>
       </div>
 
       {/* Mobile menu dropdown */}
-      {mobileMenuOpen && (
+      {t(mobileMenuOpen && (
         <div
           id="mobile-navigation-menu"
           className="lg:hidden fixed inset-x-0 top-18 sm:top-20 z-50 bg-white border-b border-slate-200 shadow-2xl overflow-y-auto overscroll-contain h-[calc(100dvh-4.5rem)] px-4 pt-2 pb-[calc(3rem+env(safe-area-inset-bottom,0px))] flex flex-col justify-between"
@@ -253,9 +236,7 @@ export const Navbar: React.FC<NavbarProps> = ({
                 pathname === '/yukdasima' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700'
               }`}
             >
-              <Truck className="w-5 h-5 text-blue-600" />
-              Yükdaşıma
-            </Link>
+              <Truck className="w-5 h-5 text-blue-600" />{t("Yükdaşıma")}</Link>
             <Link
               href="/evakuator"
               onClick={() => {
@@ -266,60 +247,44 @@ export const Navbar: React.FC<NavbarProps> = ({
                 pathname === '/evakuator' ? 'border-blue-600 bg-blue-50 text-blue-700' : 'border-slate-200 text-slate-700'
               }`}
             >
-              <Car className="w-5 h-5 text-blue-600" />
-              Evakuator
-            </Link>
+              <Car className="w-5 h-5 text-blue-600" />{t("Evakuator")}</Link>
           </div>
 
           <Link
             href="/evden-eve-yukdasima"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
-          >
-            Evdən Evə Daşıma
-          </Link>
+          >{t("Evdən Evə Daşıma")}</Link>
           <Link
             href="/mebel-dasinmasi"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
-          >
-            Mebel Daşınması
-          </Link>
+          >{t("Mebel Daşınması")}</Link>
           <Link
             href="/ofis-dasinmasi"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
-          >
-            Ofis Daşınması
-          </Link>
+          >{t("Ofis Daşınması")}</Link>
           <Link
             href="/yuk-masini"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
-          >
-            Yük Maşını Sifarişi
-          </Link>
+          >{t("Yük Maşını Sifarişi")}</Link>
           <Link
             href="/fehle-xidmeti"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
-          >
-            Fəhlə Xidməti
-          </Link>
+          >{t("Fəhlə Xidməti")}</Link>
           <Link
             href="/qiymetler"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
-          >
-            Qiymətlər
-          </Link>
+          >{t("Qiymətlər")}</Link>
           <Link
             href="/elaqe"
             onClick={() => setMobileMenuOpen(false)}
             className="block px-4 py-2.5 rounded-lg text-sm font-semibold text-slate-800 hover:bg-slate-50"
-          >
-            Əlaqə
-          </Link>
+          >{t("Əlaqə")}</Link>
 
           <div className="pt-4 pb-2 space-y-2.5 shrink-0 border-t border-slate-100 mt-4">
             <a
@@ -331,23 +296,23 @@ export const Navbar: React.FC<NavbarProps> = ({
                   cta_location: 'navbar_mobile_drawer',
                 });
               }}
-              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              aria-label={t(`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`)}
               className="w-full py-3.5 px-4 rounded-xl bg-slate-900 text-white font-bold text-sm shadow-xs text-center flex items-center justify-center gap-2 hover:bg-slate-800 active:bg-slate-950 transition-colors"
             >
               <Phone className="w-4 h-4 text-blue-400 shrink-0" />
-              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+              <span>{t("Zəng et: ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}</span>
             </a>
 
             <button
               onClick={() => handleNavClick('/', 'estimator-section')}
               className="w-full py-3.5 px-4 rounded-xl bg-blue-600 text-white font-bold text-sm shadow-md text-center flex items-center justify-center gap-2 hover:bg-blue-700 active:bg-blue-800 transition-colors cursor-pointer"
             >
-              <span>Qiymət hesabla</span>
+              <span>{t("Qiymət hesabla")}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
         </div>
-      )}
+      ))}
     </header>
   );
 };

@@ -17,6 +17,7 @@ import { EvakuasiyaFormData, EvakuasiyaResult, CarType, CallbackInitialData } fr
 import { calculateEvakuasiyaEstimate, generateWhatsAppLink } from '../utils/calculator';
 import { findDestinationSuggestions } from '../services/destinationResolver';
 import { CONTACT_INFO } from '../constants/contact';
+import { t } from '../i18n';
 
 interface EvakuasiyaEstimatorProps {
   onOpenCallback: (initialData?: string | CallbackInitialData) => void;
@@ -179,7 +180,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
     setResult(null);
     setCalcProgress(0);
     setCalcStage(1);
-    setCalcStatusText('Marşrut hesablanır...');
+    setCalcStatusText(t('Marşrut hesablanır...'));
 
     // Smoothly scroll down towards calculation area if needed
     setTimeout(() => {
@@ -203,13 +204,13 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
 
       if (currentProgress < 35) {
         setCalcStage(1);
-        setCalcStatusText('Marşrut hesablanır...');
+        setCalcStatusText(t('Marşrut hesablanır...'));
       } else if (currentProgress < 70) {
         setCalcStage(2);
-        setCalcStatusText('Avtomobil məlumatları yoxlanılır...');
+        setCalcStatusText(t('Avtomobil məlumatları yoxlanılır...'));
       } else {
         setCalcStage(3);
-        setCalcStatusText('Qiymət hesablanır...');
+        setCalcStatusText(t('Qiymət hesablanır...'));
       }
 
       if (progressRatio >= 1) {
@@ -240,22 +241,22 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
     const notesPart = formData.conditionNotes ? `📝 Vəziyyət: ${formData.conditionNotes}\n` : '';
     const conditionText = formData.canMove === 'Bəli' ? 'Hərəkətli (İşlək)' : 'Nasaz / Kilidli';
 
-    let msg = `Salam, yukdasima.ai üzərindən evakuasiya xidməti sifariş etmək istəyirəm.\n` +
-      `📍 Marşrut: ${formData.fromAddress} ➔ ${formData.toAddress}\n` +
+    let msg = t(`Salam, yukdasima.ai üzərindən evakuasiya xidməti sifariş etmək istəyirəm.\n`) +
+      t(`📍 Marşrut: ${formData.fromAddress} ➔ ${formData.toAddress}\n`) +
       distancePart +
-      `🚗 Avtomobil: ${formData.carType}\n` +
-      `⚙️ Hərəkət vəziyyəti: ${conditionText}\n` +
+      t(`🚗 Avtomobil: ${formData.carType}\n`) +
+      t(`⚙️ Hərəkət vəziyyəti: ${conditionText}\n`) +
       notesPart;
 
     if (requiresManualConfirm) {
-      msg += `⚠️ Qiymət: Operator tərəfindən dəqiqləşdirilməlidir\n` +
-        `Zəhmət olmasa bu avtomobil növü üçün dəqiq evakuasiya qiymətini və mövcudluğunu bildirə bilərsiniz?`;
+      msg += t(`⚠️ Qiymət: Operator tərəfindən dəqiqləşdirilməlidir\n`) +
+        t(`Zəhmət olmasa bu avtomobil növü üçün dəqiq evakuasiya qiymətini və mövcudluğunu bildirə bilərsiniz?`);
     } else {
-      msg += `💰 İlkin qiymət: ${result?.estimatedPrice || '35 AZN-dən'}\n` +
-        `Zəhmət olmasa təcili evakuator göndərə bilərsiniz?`;
+      msg += t(`💰 İlkin qiymət: ${result?.estimatedPrice || t('35 AZN-dən')}\n`) +
+        t(`Zəhmət olmasa təcili evakuator göndərə bilərsiniz?`);
     }
 
-    window.open(generateWhatsAppLink(msg), '_blank');
+    window.open(generateWhatsAppLink(t(msg)), '_blank');
   };
 
   const handleCallbackClick = () => {
@@ -295,14 +296,10 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
       <div className="max-w-2xl">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-lg bg-amber-50 text-amber-800 text-xs font-bold uppercase tracking-wider mb-3">
           <Car className="w-4 h-4 text-amber-600" />
-          <span>24/7 Evakuasiya Hesablayıcısı</span>
+          <span>{t("24/7 Evakuasiya Hesablayıcısı")}</span>
         </div>
-        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">
-          Evakuasiya qiymətini hesablayın
-        </h2>
-        <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-          Avtomobilin götürüləcəyi və aparılacağı ünvanı qeyd edin. Sizə ilkin evakuasiya qiymətini göstərək.
-        </p>
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-slate-900 tracking-tight">{t("Evakuasiya qiymətini hesablayın")}</h2>
+        <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">{t("Avtomobilin götürüləcəyi və aparılacağı ünvanı qeyd edin. Sizə ilkin evakuasiya qiymətini göstərək.")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="mt-8 space-y-7">
@@ -312,7 +309,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
           <div className="space-y-2">
             <label htmlFor="evak-from-address" className="block text-sm font-bold text-slate-900 flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-blue-600" />
-              <span>Haradan götürüləcək?</span>
+              <span>{t("Haradan götürüləcək?")}</span>
             </label>
             <input
               id="evak-from-address"
@@ -321,7 +318,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               disabled={isCalculating}
               value={formData.fromAddress}
               onChange={(e) => updateFormAndRecalculate({ fromAddress: e.target.value })}
-              placeholder="Məsələn: Nərimanov, Bakı"
+              placeholder={t("Məsələn: Nərimanov, Bakı")}
               className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm bg-slate-50/50 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
             />
             {/* Quick Location Chips */}
@@ -334,7 +331,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                   onClick={() => updateFormAndRecalculate({ fromAddress: loc })}
                   className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-blue-100 text-[11px] text-slate-600 hover:text-blue-700 font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loc}
+                  {t(loc)}
                 </button>
               ))}
             </div>
@@ -344,7 +341,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
           <div className="space-y-2">
             <label htmlFor="evak-to-address" className="block text-sm font-bold text-slate-900 flex items-center gap-1.5">
               <Compass className="w-4 h-4 text-emerald-600" />
-              <span>Haraya aparılacaq?</span>
+              <span>{t("Haraya aparılacaq?")}</span>
             </label>
             <input
               id="evak-to-address"
@@ -353,16 +350,16 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               disabled={isCalculating}
               value={formData.toAddress}
               onChange={(e) => updateFormAndRecalculate({ toAddress: e.target.value })}
-              placeholder="Məsələn: Xırdalan"
+              placeholder={t("Məsələn: Xırdalan")}
               className="w-full px-4 py-3 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm bg-slate-50/50 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
             />
             {/* Dynamic Search Suggestions */}
-            {formData.toAddress.trim().length >= 2 && !isCalculating && (() => {
+            {t(formData.toAddress.trim().length >= 2 && !isCalculating && (() => {
               const dynamicSuggestions = findDestinationSuggestions(formData.toAddress, 5);
               if (dynamicSuggestions.length === 0) return null;
               return (
                 <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                  <span className="text-[11px] text-blue-700 font-bold">Təkliflər:</span>
+                  <span className="text-[11px] text-blue-700 font-bold">{t("Təkliflər:")}</span>
                   {dynamicSuggestions.map((s) => (
                     <button
                       key={s.canonicalName}
@@ -370,12 +367,12 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                       onClick={() => updateFormAndRecalculate({ toAddress: s.canonicalName })}
                       className="px-2 py-0.5 rounded-md bg-blue-50 border border-blue-200 text-[11px] text-blue-700 font-bold hover:bg-blue-100 transition-colors cursor-pointer"
                     >
-                      {s.canonicalName}
+                      {t(s.canonicalName)}
                     </button>
                   ))}
                 </div>
               );
-            })()}
+            })())}
             {/* Quick Location Chips */}
             <div className="flex flex-wrap gap-1.5 pt-1">
               {['Xırdalan', 'Sumqayıt', 'Əhmədli', 'Masazır', 'Mərdəkan', 'Gəncə', 'Quba'].map((loc) => (
@@ -386,7 +383,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                   onClick={() => updateFormAndRecalculate({ toAddress: loc })}
                   className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-blue-100 text-[11px] text-slate-600 hover:text-blue-700 font-medium transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {loc}
+                  {t(loc)}
                 </button>
               ))}
             </div>
@@ -395,9 +392,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
 
         {/* CAR TYPE SELECTOR (VISUAL CARDS) */}
         <div className="space-y-2.5">
-          <label className="block text-sm font-bold text-slate-900">
-            Avtomobil növü
-          </label>
+          <label className="block text-sm font-bold text-slate-900">{t("Avtomobil növü")}</label>
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
             {CAR_TYPES.map((item) => (
               <button
@@ -412,14 +407,14 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                     : 'border-slate-200 bg-slate-50/50 hover:bg-slate-100 text-slate-700'
                 }`}
               >
-                <span className="text-2xl">{item.icon}</span>
-                <span className="text-xs font-bold leading-tight">{item.type}</span>
-                {item.type === 'Minivan' && (
-                  <span className="text-[10px] text-blue-700 font-semibold">+10 AZN</span>
-                )}
-                {(item.type === 'Mikroavtobus' || item.type === 'Digər') && (
-                  <span className="text-[10px] text-amber-700 font-medium">Dəqiqləşdirilir</span>
-                )}
+                <span className="text-2xl">{t(item.icon)}</span>
+                <span className="text-xs font-bold leading-tight">{t(item.type)}</span>
+                {t(item.type === 'Minivan' && (
+                  <span className="text-[10px] text-blue-700 font-semibold">{t("+10 AZN")}</span>
+                ))}
+                {t((item.type === 'Mikroavtobus' || item.type === 'Digər') && (
+                  <span className="text-[10px] text-amber-700 font-medium">{t("Dəqiqləşdirilir")}</span>
+                ))}
               </button>
             ))}
           </div>
@@ -428,10 +423,8 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
         {/* DRIVABLE YES/NO TOGGLE */}
         <div className="space-y-2">
           <div className="flex items-center justify-between max-w-md">
-            <label className="block text-sm font-bold text-slate-900">
-              Avtomobil hərəkət edə bilir? (İşlək / Nasaz)
-            </label>
-            <span className="text-xs font-semibold text-slate-500">Nasaz/Kilidli: +5 AZN</span>
+            <label className="block text-sm font-bold text-slate-900">{t("Avtomobil hərəkət edə bilir? (İşlək / Nasaz)")}</label>
+            <span className="text-xs font-semibold text-slate-500">{t("Nasaz/Kilidli: +5 AZN")}</span>
           </div>
           <div className="grid grid-cols-2 gap-3 max-w-md">
             <button
@@ -446,7 +439,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               }`}
             >
               <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              <span>Bəli (Hərəkət edir)</span>
+              <span>{t("Bəli (Hərəkət edir)")}</span>
             </button>
 
             <button
@@ -461,15 +454,14 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               }`}
             >
               <AlertCircle className="w-4 h-4 text-amber-600" />
-              <span>Xeyr (Nasaz / Kilidli +5₼)</span>
+              <span>{t("Xeyr (Nasaz / Kilidli +5₼)")}</span>
             </button>
           </div>
         </div>
 
         {/* OPTIONAL CONDITION NOTES */}
         <div className="space-y-2">
-          <label htmlFor="evak-condition" className="block text-sm font-bold text-slate-900">
-            Əlavə vəziyyət <span className="text-xs font-normal text-slate-500">(İstəyə görə)</span>
+          <label htmlFor="evak-condition" className="block text-sm font-bold text-slate-900">{t("Əlavə vəziyyət ")}<span className="text-xs font-normal text-slate-500">{t("(İstəyə görə)")}</span>
           </label>
           <textarea
             id="evak-condition"
@@ -477,15 +469,14 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
             disabled={isCalculating}
             value={formData.conditionNotes}
             onChange={(e) => updateFormAndRecalculate({ conditionNotes: e.target.value })}
-            placeholder="Məsələn: avtomobil qəza edib, sükan və ya təkər kilidlənib..."
+            placeholder={t("Məsələn: avtomobil qəza edib, sükan və ya təkər kilidlənib...")}
             className="w-full px-4 py-2.5 rounded-xl border border-slate-300 focus:border-blue-600 focus:ring-2 focus:ring-blue-100 text-sm text-slate-800 placeholder-slate-400 bg-slate-50/50 outline-none disabled:opacity-70 disabled:cursor-not-allowed"
           />
         </div>
 
         {/* PHONE NUMBER (OPTIONAL) */}
         <div className="max-w-md space-y-1.5">
-          <label htmlFor="evak-phone" className="block text-sm font-bold text-slate-800">
-            Əlaqə nömrəsi <span className="text-xs font-normal text-slate-500">(İstəyə görə)</span>
+          <label htmlFor="evak-phone" className="block text-sm font-bold text-slate-800">{t("Əlaqə nömrəsi ")}<span className="text-xs font-normal text-slate-500">{t("(İstəyə görə)")}</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
@@ -511,23 +502,23 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
             disabled={isCalculating}
             className="w-full sm:w-auto min-w-[280px] py-4 px-8 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-base shadow-lg shadow-blue-600/30 active:scale-[0.99] transition-all flex items-center justify-center gap-3 cursor-pointer disabled:opacity-80 disabled:cursor-not-allowed"
           >
-            {isCalculating ? (
+            {t(isCalculating ? (
               <>
                 <div className="w-5 h-5 rounded-full border-2 border-white/30 border-t-white animate-spin" />
-                <span>Hesablanır... ({Math.round(calcProgress)}%)</span>
+                <span>{t("Hesablanır... (")}{t(Math.round(calcProgress))}%)</span>
               </>
             ) : (
               <>
                 <span className="text-xl">🚗</span>
-                <span>Evakuasiya qiymətini hesabla</span>
+                <span>{t("Evakuasiya qiymətini hesabla")}</span>
               </>
-            )}
+            ))}
           </button>
         </div>
       </form>
 
       {/* PROFESSIONAL ROUTE & PROGRESS LOADING COMPONENT */}
-      {isCalculating && (
+      {t(isCalculating && (
         <div
           id="evakuasiya-route-loader"
           aria-live="polite"
@@ -538,16 +529,16 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
             <div>
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-xs font-extrabold uppercase tracking-wide mb-1.5">
                 <span className="w-2 h-2 rounded-full bg-blue-600 animate-ping" />
-                <span>Aktiv marşrut təhlili</span>
+                <span>{t("Aktiv marşrut təhlili")}</span>
               </div>
               <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight transition-all">
-                {calcStatusText}
+                {t(calcStatusText)}
               </h3>
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">Tərəqqi</span>
+              <span className="text-xs text-slate-500 font-bold uppercase tracking-wider">{t("Tərəqqi")}</span>
               <span className="text-2xl sm:text-3xl font-black text-blue-600 font-mono">
-                {Math.round(calcProgress)}%
+                {t(Math.round(calcProgress))}%
               </span>
             </div>
           </div>
@@ -579,14 +570,10 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
 
               {/* Point A (Başlanğıc nöqtəsi) */}
               <div className="relative z-0 flex flex-col items-center text-center">
-                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-blue-600 text-white font-black text-base shadow-lg shadow-blue-600/30 flex items-center justify-center ring-4 ring-white border border-blue-700">
-                  A
-                </div>
-                <span className="text-[11px] font-extrabold text-blue-700 uppercase tracking-wider mt-2.5">
-                  Götürülmə
-                </span>
+                <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-2xl bg-blue-600 text-white font-black text-base shadow-lg shadow-blue-600/30 flex items-center justify-center ring-4 ring-white border border-blue-700">{t("A")}</div>
+                <span className="text-[11px] font-extrabold text-blue-700 uppercase tracking-wider mt-2.5">{t("Götürülmə")}</span>
                 <span className="text-xs sm:text-sm font-bold text-slate-800 max-w-[100px] sm:max-w-[160px] truncate mt-0.5">
-                  {formData.fromAddress || 'Nərimanov'}
+                  {t(formData.fromAddress || 'Nərimanov')}
                 </span>
               </div>
 
@@ -598,14 +585,10 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                       ? 'bg-emerald-600 text-white border-emerald-700 shadow-emerald-600/30 ring-emerald-200'
                       : 'bg-slate-100 text-slate-700 border-slate-300 shadow-slate-300/40'
                   }`}
-                >
-                  B
-                </div>
-                <span className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider mt-2.5">
-                  Çatdırılma
-                </span>
+                >{t("B")}</div>
+                <span className="text-[11px] font-extrabold text-slate-500 uppercase tracking-wider mt-2.5">{t("Çatdırılma")}</span>
                 <span className="text-xs sm:text-sm font-bold text-slate-800 max-w-[100px] sm:max-w-[160px] truncate mt-0.5">
-                  {formData.toAddress || 'Xırdalan'}
+                  {t(formData.toAddress || 'Xırdalan')}
                 </span>
               </div>
             </div>
@@ -623,9 +606,9 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
                 calcStage > 1 ? 'bg-blue-600 text-white' : 'bg-blue-200 text-blue-800'
               }`}>
-                {calcStage > 1 ? '✓' : '1'}
+                {t(calcStage > 1 ? '✓' : '1')}
               </span>
-              <span>Marşrut təyini</span>
+              <span>{t("Marşrut təyini")}</span>
             </div>
 
             <div
@@ -638,9 +621,9 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
                 calcStage > 2 ? 'bg-blue-600 text-white' : calcStage === 2 ? 'bg-blue-200 text-blue-800' : 'bg-slate-200 text-slate-500'
               }`}>
-                {calcStage > 2 ? '✓' : '2'}
+                {t(calcStage > 2 ? '✓' : '2')}
               </span>
-              <span>Avtomobil və vəziyyət</span>
+              <span>{t("Avtomobil və vəziyyət")}</span>
             </div>
 
             <div
@@ -653,9 +636,9 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] ${
                 calcProgress >= 100 ? 'bg-emerald-600 text-white' : calcStage === 3 ? 'bg-blue-200 text-blue-800' : 'bg-slate-200 text-slate-500'
               }`}>
-                {calcProgress >= 100 ? '✓' : '3'}
+                {t(calcProgress >= 100 ? '✓' : '3')}
               </span>
-              <span>Qiymət hesablanması</span>
+              <span>{t("Qiymət hesablanması")}</span>
             </div>
           </div>
 
@@ -663,21 +646,19 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
           <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-600 pt-2">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 font-semibold">
-                🚗 {formData.carType}
+                🚗 {t(formData.carType)}
               </span>
               <span className="px-2.5 py-1 rounded-md bg-white border border-slate-200 font-semibold">
-                ⚙️ {formData.canMove === 'Bəli' ? 'İşlək' : 'Nasaz / Kilidli (+5 AZN)'}
+                ⚙️ {t(formData.canMove === 'Bəli' ? 'İşlək' : 'Nasaz / Kilidli (+5 AZN)')}
               </span>
             </div>
-            <span className="text-[11px] text-slate-500 italic">
-              Avtomatik marşrut xətti hesablanır
-            </span>
+            <span className="text-[11px] text-slate-500 italic">{t("Avtomatik marşrut xətti hesablanır")}</span>
           </div>
         </div>
-      )}
+      ))}
 
       {/* RESULT CARD */}
-      {result && !isCalculating && (
+      {t(result && !isCalculating && (
         <div
           id="evakuasiya-result-card"
           className={`mt-10 rounded-2xl border-2 p-6 sm:p-8 shadow-xl animate-in fade-in zoom-in-95 duration-300 ${
@@ -688,87 +669,84 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
         >
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-5 border-b border-slate-200">
             <div>
-              {requiresManualConfirm ? (
+              {t(requiresManualConfirm ? (
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-100 text-amber-800 text-xs font-extrabold uppercase tracking-wide mb-1">
                   <AlertCircle className="w-3.5 h-3.5 text-amber-700" />
-                  <span>Operator dəqiqləşdirməsi</span>
+                  <span>{t("Operator dəqiqləşdirməsi")}</span>
                 </div>
               ) : (
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-xs font-extrabold uppercase tracking-wide mb-1">
                   <CheckCircle2 className="w-3.5 h-3.5" />
-                  <span>Marşrut və avtomobil təyin edildi</span>
+                  <span>{t("Marşrut və avtomobil təyin edildi")}</span>
                 </div>
-              )}
+              ))}
               <h3 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
-                {requiresManualConfirm ? 'Qiymət dəqiqləşdirilir' : 'İlkin evakuasiya qiyməti'}
+                {t(requiresManualConfirm ? 'Qiymət dəqiqləşdirilir' : 'İlkin evakuasiya qiyməti')}
               </h3>
             </div>
             <div className="text-left sm:text-right">
               <span className="text-xs text-slate-500 font-bold uppercase tracking-wider block">
-                {requiresManualConfirm ? 'Status' : 'İlkin qiymət'}
+                {t(requiresManualConfirm ? 'Status' : 'İlkin qiymət')}
               </span>
-              {requiresManualConfirm ? (
+              {t(requiresManualConfirm ? (
                 <span className="text-base sm:text-lg font-bold text-amber-700 tracking-tight block">
-                  {result.estimatedPrice}
+                  {t(result.estimatedPrice)}
                 </span>
               ) : (
                 <span className="text-3xl sm:text-4xl font-black text-blue-600 tracking-tight block">
-                  {result.estimatedPrice}
+                  {t(result.estimatedPrice)}
                 </span>
-              )}
+              ))}
             </div>
           </div>
 
           {/* SPECIFICATIONS */}
           <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs">
-              <span className="text-xs text-slate-500 font-medium block">Marşrut</span>
+              <span className="text-xs text-slate-500 font-medium block">{t("Marşrut")}</span>
               <span className="text-sm sm:text-base font-bold text-slate-900 mt-1 block">
-                {result.fromAddress} → {result.toAddress}
+                {t(result.fromAddress)} → {t(result.toAddress)}
               </span>
             </div>
 
             <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs">
-              <span className="text-xs text-slate-500 font-medium block">Təxmini məsafə</span>
+              <span className="text-xs text-slate-500 font-medium block">{t("Təxmini məsafə")}</span>
               <span className="text-base sm:text-lg font-bold text-slate-900 mt-1 block">
-                {result.distanceKm ? `${result.distanceKm} km` : 'Dəqiqləşdirilir'}
+                {t(result.distanceKm ? `${result.distanceKm} km` : 'Dəqiqləşdirilir')}
               </span>
             </div>
 
             <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs">
-              <span className="text-xs text-slate-500 font-medium block">Avtomobil və vəziyyət</span>
+              <span className="text-xs text-slate-500 font-medium block">{t("Avtomobil və vəziyyət")}</span>
               <span className="text-base sm:text-lg font-bold text-slate-900 mt-1 block">
-                {result.carType} ({result.canMove === 'Bəli' ? 'İşlək' : 'Nasaz/Kilidli'})
+                {t(result.carType)} ({t(result.canMove === 'Bəli' ? 'İşlək' : 'Nasaz/Kilidli')})
               </span>
             </div>
           </div>
 
           {/* DISCLAIMER & NOTICES */}
-          {requiresManualConfirm ? (
+          {t(requiresManualConfirm ? (
             <div className="mt-5 p-4 rounded-xl bg-amber-50 border border-amber-200/90 flex items-start gap-3 text-xs text-amber-950">
               <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
               <div className="space-y-1">
                 <p className="font-bold text-sm text-amber-900">
-                  {result.tariffDisclaimer || 'Bu avtomobil növü üçün qiymət operator tərəfindən dəqiqləşdirilir.'}
+                  {t(result.tariffDisclaimer || 'Bu avtomobil növü üçün qiymət operator tərəfindən dəqiqləşdirilir.')}
                 </p>
-                <p className="text-amber-800 leading-relaxed">
-                  Mikroavtobus, xüsusi texnika və ya qeyri-standart marşrutlarda ən uyğun evakuator növü və dəqiq qiymət dərhal operatorumuz tərəfindən təqdim olunur.
-                </p>
+                <p className="text-amber-800 leading-relaxed">{t("Mikroavtobus, xüsusi texnika və ya qeyri-standart marşrutlarda ən uyğun evakuator növü və dəqiq qiymət dərhal operatorumuz tərəfindən təqdim olunur.")}</p>
               </div>
             </div>
           ) : (
             <div className="mt-5 p-3.5 rounded-xl bg-slate-100/90 border border-slate-200/80 flex items-start gap-2.5 text-xs text-slate-600">
               <AlertCircle className="w-4 h-4 text-slate-500 shrink-0 mt-0.5" />
               <p>
-                <strong>Qeyd:</strong> Qiymət marşrut, avtomobil növü ({result.carType}) və texniki vəziyyət ({result.canMove === 'Bəli' ? 'hərəkətli' : 'nasaz/kilidli (+5 AZN)'}) nəzərə alınmaqla ilkin hesablanmışdır. Yekun qiymət operator təsdiqi ilə qüvvəyə minir.
-              </p>
+                <strong>{t("Qeyd:")}</strong>{t(" Qiymət marşrut, avtomobil növü (")}{t(result.carType)}{t(") və texniki vəziyyət (")}{t(result.canMove === 'Bəli' ? 'hərəkətli' : 'nasaz/kilidli (+5 AZN)')}{t(") nəzərə alınmaqla ilkin hesablanmışdır. Yekun qiymət operator təsdiqi ilə qüvvəyə minir.")}</p>
             </div>
-          )}
+          ))}
 
           {/* ACTION BUTTONS */}
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             {/* Primary Action Button */}
-            {requiresManualConfirm ? (
+            {t(requiresManualConfirm ? (
               <button
                 id="evak-btn-operator-confirm"
                 type="button"
@@ -776,7 +754,7 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                 className="flex-1 py-3.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-md shadow-blue-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
               >
                 <Phone className="w-4 h-4" />
-                <span>Operatorla dəqiqləşdir</span>
+                <span>{t("Operatorla dəqiqləşdir")}</span>
               </button>
             ) : (
               <button
@@ -786,19 +764,19 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
                 className="flex-1 py-3.5 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm sm:text-base shadow-md shadow-blue-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
               >
                 <Phone className="w-4 h-4" />
-                <span>Mənimlə əlaqə saxlayın</span>
+                <span>{t("Mənimlə əlaqə saxlayın")}</span>
               </button>
-            )}
+            ))}
 
             {/* Quick Dial Button */}
             <a
               id="evak-btn-call"
               href={CONTACT_INFO.PRIMARY_PHONE_TEL}
-              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              aria-label={t(`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`)}
               className="py-3.5 px-5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-sm sm:text-base shadow-md flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
             >
               <Phone className="w-4 h-4 text-emerald-400" />
-              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+              <span>{t("Zəng et: ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}</span>
             </a>
 
             {/* WhatsApp Button */}
@@ -809,11 +787,11 @@ export const EvakuasiyaEstimator: React.FC<EvakuasiyaEstimatorProps> = ({
               className="py-3.5 px-5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm sm:text-base shadow-md shadow-emerald-600/25 flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-[0.98]"
             >
               <MessageSquare className="w-4 h-4" />
-              <span>WhatsApp</span>
+              <span>{t("WhatsApp")}</span>
             </button>
           </div>
         </div>
-      )}
+      ))}
     </div>
   );
 };

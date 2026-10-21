@@ -13,8 +13,14 @@ import {
   SITE_NAME,
   SITE_URL,
   PageSeoConfig,
-  OG_IMAGE,
+  getOgImage,
 } from '../src/seo/metadata';
+import { registerRuDictionary, splitLangPath } from '../src/i18n';
+import { RU_AVAILABLE_PATHS, toRuPath } from '../src/i18n/paths';
+import { RU_DICTIONARY } from '../src/i18n/ru';
+
+// Russian pages are rendered with the Russian dictionary (Azerbaijani pages are not affected)
+registerRuDictionary(RU_DICTIONARY);
 import { buildLlmsTxt } from '../src/seo/llms';
 import { buildStructuredData } from '../src/seo/structuredData';
 
@@ -46,14 +52,16 @@ export function getAllPrerenderRoutes(): {
   staticRoutes: string[];
   evacRoutes: string[];
   yukRoutes: string[];
+  ruRoutes: string[];
   allRoutes: string[];
 } {
   const staticRoutes = Object.keys(PAGE_SEO_CONFIGS);
   const evacRoutes = getAllApprovedEvakuatorRoutes().map((r) => r.routePath);
   const yukRoutes = getAllApprovedYukdasimaRoutes().map((r) => r.routePath);
-  const allRoutes = [...staticRoutes, ...evacRoutes, ...yukRoutes];
+  const ruRoutes = RU_AVAILABLE_PATHS.map(toRuPath);
+  const allRoutes = [...staticRoutes, ...evacRoutes, ...yukRoutes, ...ruRoutes];
 
-  return { staticRoutes, evacRoutes, yukRoutes, allRoutes };
+  return { staticRoutes, evacRoutes, yukRoutes, ruRoutes, allRoutes };
 }
 
 export function injectSeoIntoHtml(
@@ -61,10 +69,15 @@ export function injectSeoIntoHtml(
   route: string,
   bodyHtml: string
 ): string {
-  const seo = getPageSeo(route);
+  const { lang, path: pagePath } = splitLangPath(route);
+  const seo = getPageSeo(pagePath, lang);
+  const ogImage = getOgImage(lang);
   const structuredData = buildStructuredData(seo);
 
   let html = templateHtml;
+
+  // 0. Page language
+  html = html.replace(/<html([^>]*?)\slang="[^"]*"/i, `<html$1 lang="${lang}"`);
 
   // 1. Replace Title
   html = html.replace(/<title>[\s\S]*?<\/title>/i, `<title>${escapeHtml(seo.title)}</title>`);
@@ -89,18 +102,25 @@ export function injectSeoIntoHtml(
   headElements.push(`<meta property="og:url" content="${escapeAttr(seo.canonicalUrl)}">`);
   headElements.push(`<meta property="og:type" content="${escapeAttr(seo.ogType || 'website')}">`);
   headElements.push(`<meta property="og:site_name" content="${escapeAttr(SITE_NAME)}">`);
-  headElements.push(`<meta property="og:locale" content="az_AZ">`);
-  headElements.push(`<meta property="og:image" content="${escapeAttr(OG_IMAGE.url)}">`);
-  headElements.push(`<meta property="og:image:width" content="${OG_IMAGE.width}">`);
-  headElements.push(`<meta property="og:image:height" content="${OG_IMAGE.height}">`);
-  headElements.push(`<meta property="og:image:alt" content="${escapeAttr(OG_IMAGE.alt)}">`);
+  headElements.push(`<meta property="og:locale" content="${lang === 'ru' ? 'ru_RU' : 'az_AZ'}">`);
+  headElements.push(`<meta property="og:image" content="${escapeAttr(ogImage.url)}">`);
+  headElements.push(`<meta property="og:image:width" content="${ogImage.width}">`);
+  headElements.push(`<meta property="og:image:height" content="${ogImage.height}">`);
+  headElements.push(`<meta property="og:image:alt" content="${escapeAttr(ogImage.alt)}">`);
 
   // Twitter
   headElements.push(`<meta name="twitter:card" content="summary_large_image">`);
   headElements.push(`<meta name="twitter:title" content="${escapeAttr(seo.title)}">`);
   headElements.push(`<meta name="twitter:description" content="${escapeAttr(seo.metaDescription)}">`);
   headElements.push(`<meta name="twitter:url" content="${escapeAttr(seo.canonicalUrl)}">`);
-  headElements.push(`<meta name="twitter:image" content="${escapeAttr(OG_IMAGE.url)}">`);
+  headElements.push(`<meta name="twitter:image" content="${escapeAttr(ogImage.url)}">`);
+
+  // hreflang: the Azerbaijani and Russian versions of the same page point to each other
+  if (seo.alternates) {
+    headElements.push(`<link rel="alternate" hreflang="az" href="${escapeAttr(seo.alternates.az)}">`);
+    headElements.push(`<link rel="alternate" hreflang="ru" href="${escapeAttr(seo.alternates.ru)}">`);
+    headElements.push(`<link rel="alternate" hreflang="x-default" href="${escapeAttr(seo.alternates.az)}">`);
+  }
 
   // JSON-LD Structured Data
   headElements.push(
@@ -113,6 +133,7 @@ export function injectSeoIntoHtml(
   html = html.replace(/<meta\s+property="og:[^"]*"[\s\S]*?>/gi, '');
   html = html.replace(/<meta\s+name="twitter:[^"]*"[\s\S]*?>/gi, '');
   html = html.replace(/<link\s+rel="canonical"[\s\S]*?>/gi, '');
+  html = html.replace(/<link\s+rel="alternate"\s+hreflang="[^"]*"[^>]*>/gi, '');
   html = html.replace(/<script\s+id="seo-structured-data-jsonld"[\s\S]*?<\/script>/gi, '');
 
   const injectedHead = '\n    ' + headElements.join('\n    ') + '\n  ';
@@ -139,7 +160,7 @@ export function runPrerender(): PrerenderResult {
   }
 
   const templateHtml = fs.readFileSync(templatePath, 'utf-8');
-  const { staticRoutes, evacRoutes, yukRoutes, allRoutes } = getAllPrerenderRoutes();
+  const { staticRoutes, evacRoutes, yukRoutes, ruRoutes, allRoutes } = getAllPrerenderRoutes();
 
   console.log(`\n======================================================`);
   console.log(`🚀 [P2 Prerender Engine] Starting Native Static Build-Time Prerendering`);
@@ -147,6 +168,7 @@ export function runPrerender(): PrerenderResult {
   console.log(`  - Static Main Pages:     ${staticRoutes.length}`);
   console.log(`  - Evakuasiya Routes:     ${evacRoutes.length}`);
   console.log(`  - Yükdaşıma Routes:      ${yukRoutes.length}`);
+  console.log(`  - Russian Pages (/ru):   ${ruRoutes.length}`);
   console.log(`  - Total Canonical Routes: ${allRoutes.length}`);
   console.log(`------------------------------------------------------`);
 
