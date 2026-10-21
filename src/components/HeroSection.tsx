@@ -5,6 +5,7 @@ import { CONTACT_INFO } from '../constants/contact';
 import { useRouter } from '../router/RouterContext';
 import { getContextualWhatsAppUrl } from '../utils/whatsappHelper';
 import { trackConversionEvent } from '../utils/analytics';
+import { t, getLang } from '../i18n';
 
 interface HeroSectionProps {
   activeService: ServiceType;
@@ -49,19 +50,15 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
         <div className="max-w-3xl mx-auto text-center mb-8 sm:mb-10 space-y-4">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs sm:text-sm font-bold">
             <Clock className="w-3.5 h-3.5" />
-            <span>24/7 Operativ Xidmət və Dərhal Əlaqə</span>
+            <span>{t("24/7 Operativ Xidmət və Dərhal Əlaqə")}</span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">
-            Bakıda <span className="text-blue-600">Yükdaşıma</span> və Evakuator Xidməti{' '}
+          <h1 className="text-3xl sm:text-5xl font-extrabold text-slate-900 tracking-tight leading-tight">{getLang() === 'ru' ? (<><span className="text-blue-600">Грузоперевозки</span> и эвакуатор в Баку{' '}</>) : (<>{t("Bakıda ")}<span className="text-blue-600">{t("Yükdaşıma")}</span>{t(" və Evakuator Xidməti")}{t(' ')}</>)}
             <span className="block mt-2 text-xl sm:text-3xl font-bold text-slate-600">
-              <span className="sr-only">— </span>Qiyməti onlayn öyrənin
-            </span>
+              <span className="sr-only">— </span>{t("Qiyməti onlayn öyrənin")}</span>
           </h1>
 
-          <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            Yükdaşıma və evakuasiya xidmətləri üçün məlumatları daxil edin, ilkin qiyməti öyrənin və sifarişinizi dərhal bizə göndərin.
-          </p>
+          <p className="text-sm sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{t("Yükdaşıma və evakuasiya xidmətləri üçün məlumatları daxil edin, ilkin qiyməti öyrənin və sifarişinizi dərhal bizə göndərin.")}</p>
 
           {/* Primary Quick Conversion CTAs for Mobile & Desktop */}
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2.5 sm:gap-4 max-w-md sm:max-w-none mx-auto">
@@ -69,11 +66,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               id="hero-call-cta-btn"
               href={CONTACT_INFO.PRIMARY_PHONE_TEL}
               onClick={handleHeroCallClick}
-              aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`}
+              aria-label={t(`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə zəng et`)}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-sm font-extrabold shadow-sm transition-all active:scale-[0.98] cursor-pointer"
             >
               <Phone className="w-4 h-4 fill-current" />
-              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+              <span>{t("Zəng et: ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}</span>
             </a>
 
             <a
@@ -82,11 +79,11 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               onClick={handleHeroWhatsAppClick}
-              aria-label="WhatsApp vasitəsilə dərhal yaz"
+              aria-label={t("WhatsApp vasitəsilə dərhal yaz")}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-6 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white text-sm font-extrabold shadow-sm transition-all active:scale-[0.98] cursor-pointer"
             >
               <MessageSquare className="w-4 h-4 fill-current" />
-              <span>WhatsApp ilə Yaz</span>
+              <span>{t("WhatsApp ilə Yaz")}</span>
             </a>
           </div>
         </div>
@@ -105,12 +102,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               🚚
             </div>
 
-            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 sm:mb-3 text-left">
-              Yükdaşıma
-            </h3>
-            <p className="text-slate-500 text-sm sm:text-base mb-6 flex-1 text-left">
-              Əşyalarınızın şəkillərini göndərin. AI yükünüzü analiz etsin və ilkin qiyməti öyrənin.
-            </p>
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 sm:mb-3 text-left">{t("Yükdaşıma")}</h3>
+            <p className="text-slate-500 text-sm sm:text-base mb-6 flex-1 text-left">{t("Əşyalarınızın şəkillərini göndərin. AI yükünüzü analiz etsin və ilkin qiyməti öyrənin.")}</p>
 
             <button
               type="button"
@@ -120,9 +113,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   ? 'bg-blue-600 text-white'
                   : 'bg-slate-900 text-white group-hover:bg-blue-600'
               }`}
-            >
-              Yükümü hesabla
-            </button>
+            >{t("Yükümü hesabla")}</button>
           </div>
 
           {/* CARD 2: EVAKUASİYA */}
@@ -137,12 +128,8 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               🚗
             </div>
 
-            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 sm:mb-3 text-left">
-              Evakuasiya
-            </h3>
-            <p className="text-slate-500 text-sm sm:text-base mb-6 flex-1 text-left">
-              Avtomobilin götürüləcəyi və aparılacağı ünvanı qeyd edin, ilkin evakuasiya qiymətini öyrənin.
-            </p>
+            <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 sm:mb-3 text-left">{t("Evakuasiya")}</h3>
+            <p className="text-slate-500 text-sm sm:text-base mb-6 flex-1 text-left">{t("Avtomobilin götürüləcəyi və aparılacağı ünvanı qeyd edin, ilkin evakuasiya qiymətini öyrənin.")}</p>
 
             <button
               type="button"
@@ -152,9 +139,7 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
                   ? 'bg-blue-600 text-white'
                   : 'bg-slate-900 text-white group-hover:bg-blue-600'
               }`}
-            >
-              Evakuasiya qiymətini hesabla
-            </button>
+            >{t("Evakuasiya qiymətini hesabla")}</button>
           </div>
         </div>
       </div>

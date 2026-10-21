@@ -64,11 +64,18 @@ function limitText(text: string, maxLength: number): string {
  * Builds the 404 page from the built index.html: noindex, a "not found" title and an empty
  * #root, so the browser renders the "Səhifə tapılmadı" page instead of a copy of the home page.
  */
-function buildNotFoundHtml(template: string): string {
+function buildNotFoundHtml(template: string, lang: "az" | "ru" = "az"): string {
   let html = template;
   html = html.replace(/<meta\s+name="robots"[^>]*>/gi, "");
   html = html.replace("</head>", '  <meta name="robots" content="noindex, follow">\n  </head>');
-  html = html.replace(/<title>[\s\S]*?<\/title>/i, "<title>Səhifə tapılmadı | yukdasima.ai</title>");
+  html = html.replace(
+    /<title>[\s\S]*?<\/title>/i,
+    lang === "ru" ? "<title>Страница не найдена | yukdasima.ai</title>" : "<title>Səhifə tapılmadı | yukdasima.ai</title>"
+  );
+  if (lang === "ru") {
+    html = html.replace(/<html([^>]*)\slang="[^"]*"/i, '<html$1 lang="ru"');
+  }
+  html = html.replace(/<link\s+rel="alternate"\s+hreflang[^>]*>\s*/gi, "");
   html = html.replace(/<link\s+rel="canonical"[^>]*>/gi, "");
   html = html.replace(/<script\s+id="seo-structured-data-jsonld"[\s\S]*?<\/script>/gi, "");
 
@@ -132,7 +139,7 @@ async function startServer() {
   // API Route: Telegram Callback & Lead Delivery
   app.post("/api/callback", callbackRateLimit, async (req, res) => {
     try {
-      const { name, phone, service, message, source, route, vehicle, estimatedPrice, notes } = req.body || {};
+      const { name, phone, service, message, source, route, vehicle, estimatedPrice, notes, lang } = req.body || {};
 
       const trimmedPhone = typeof phone === "string" ? phone.trim() : "";
       if (!trimmedPhone) {
@@ -206,6 +213,10 @@ async function startServer() {
 
       if (trimmedSource) {
         lines.push(`📄 <b>Mənbə:</b> ${escapeHtml(trimmedSource)}`);
+      }
+
+      if (lang === "ru") {
+        lines.push(`🌐 <b>Dil:</b> Rus dili (müştəriyə rusca cavab verin)`);
       }
 
       const now = new Date();
@@ -718,13 +729,13 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
     // Real files only (JS, CSS, images, sitemap...). Folders are handled below without redirects.
     app.use(express.static(distPath, { index: false, redirect: false }));
 
-    let notFoundHtml: string | null = null;
-    const getNotFoundHtml = (): string => {
-      if (notFoundHtml === null) {
+    const notFoundHtmlCache: Partial<Record<"az" | "ru", string>> = {};
+    const getNotFoundHtml = (lang: "az" | "ru" = "az"): string => {
+      if (notFoundHtmlCache[lang] === undefined) {
         const template = fs.readFileSync(path.join(distPath, "index.html"), "utf-8");
-        notFoundHtml = buildNotFoundHtml(template);
+        notFoundHtmlCache[lang] = buildNotFoundHtml(template, lang);
       }
-      return notFoundHtml;
+      return notFoundHtmlCache[lang] as string;
     };
 
     app.get("*", (req, res) => {
@@ -743,7 +754,8 @@ MÜHÜM TƏLƏBLƏR VƏ QAYDALAR:
       }
 
       // Unknown address: real 404 status (+ noindex) so Google does not index copies of the home page
-      res.status(404).type("html").send(getNotFoundHtml());
+      const notFoundLang = /^\/ru(\/|$)/.test(req.path) ? "ru" : "az";
+      res.status(404).type("html").send(getNotFoundHtml(notFoundLang));
     });
   }
 

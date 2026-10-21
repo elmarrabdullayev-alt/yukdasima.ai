@@ -12,6 +12,7 @@ import {
 import { ServiceType } from '../types';
 import { SERVICES_DATA } from '../data/mockData';
 import { Link } from '../router/RouterContext';
+import { t } from '../i18n';
 
 interface ServicesSectionProps {
   onSelectService: (service: ServiceType) => void;
@@ -61,14 +62,10 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold uppercase tracking-wider mb-3">
-            <span>Peşəkar Logistika & Daşıma</span>
+            <span>{t("Peşəkar Logistika & Daşıma")}</span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-            Xidmətlərimiz
-          </h2>
-          <p className="mt-3 text-slate-600 text-base sm:text-lg">
-            Mənzil köçürülməsindən tutmuş 24/7 qəza evakuasiyasına qədər bütün xidmətlər bir ünvanda.
-          </p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">{t("Xidmətlərimiz")}</h2>
+          <p className="mt-3 text-slate-600 text-base sm:text-lg">{t("Mənzil köçürülməsindən tutmuş 24/7 qəza evakuasiyasına qədər bütün xidmətlər bir ünvanda.")}</p>
         </div>
 
         {/* 6 SERVICES GRID */}
@@ -83,15 +80,15 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
               >
                 <div>
                   <div className="w-13 h-13 rounded-2xl bg-white border border-slate-200/90 flex items-center justify-center mb-5 group-hover:scale-105 transition-transform shadow-xs">
-                    {getIcon(srv.iconName)}
+                    {t(getIcon(srv.iconName))}
                   </div>
 
                   <h3 className="text-xl font-bold text-slate-900 tracking-tight group-hover:text-blue-600 transition-colors">
-                    {srv.title}
+                    {t(srv.title)}
                   </h3>
 
                   <p className="mt-2.5 text-sm text-slate-600 leading-relaxed">
-                    {srv.description}
+                    {t(srv.description)}
                   </p>
 
                   {/* Features list */}
@@ -99,14 +96,14 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onSelectServic
                     {srv.features.map((feat, i) => (
                       <div key={i} className="flex items-center gap-2 text-xs font-semibold text-slate-700">
                         <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                        <span>{feat}</span>
+                        <span>{t(feat)}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-slate-200/60 flex items-center justify-between text-xs font-bold text-blue-600 group-hover:text-blue-700">
-                  <span>Ətraflı və qiymət hesabla</span>
+                  <span>{t("Ətraflı və qiymət hesabla")}</span>
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>

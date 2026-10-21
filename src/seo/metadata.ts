@@ -1,4 +1,6 @@
 import { FAQ_DATA } from '../data/mockData';
+import { Lang, translateTo } from '../i18n';
+import { RU_PAGE_SEO } from './metadataRu';
 import {
   getApprovedEvakuatorRoute,
   generateRouteSeoConfig,
@@ -31,6 +33,10 @@ export interface PageSeoConfig {
   serviceTypeDetail?: string;
   breadcrumbs?: BreadcrumbItem[];
   faqs?: PageFaqItem[];
+  /** Language of this page version (default: az). */
+  lang?: Lang;
+  /** Addresses of the same page in each language, for hreflang links (only pages with both versions). */
+  alternates?: { az: string; ru: string };
 }
 
 export const SITE_URL = 'https://yukdasima.ai';
@@ -43,6 +49,18 @@ export const OG_IMAGE = {
   height: 630,
   alt: 'yukdasima.ai — Bakı və regionlarda yükdaşıma və evakuator xidməti, 050 250 31 70',
 };
+
+/** Social share image for Russian pages (same design, Russian text). */
+export const OG_IMAGE_RU = {
+  url: `${SITE_URL}/og-image-ru.jpg`,
+  width: 1200,
+  height: 630,
+  alt: 'yukdasima.ai — грузоперевозки и эвакуатор в Баку и по регионам, 050 250 31 70',
+};
+
+export function getOgImage(lang: Lang = 'az') {
+  return lang === 'ru' ? OG_IMAGE_RU : OG_IMAGE;
+}
 
 /** Square logo used in structured data. */
 export const LOGO_URL = `${SITE_URL}/icon-512.png`;
@@ -330,12 +348,57 @@ export const PAGE_SEO_CONFIGS: Record<string, PageSeoConfig> = {
   },
 };
 
-export function getPageSeo(pathname: string): PageSeoConfig {
+/** Absolute address of the Russian version of a language-neutral path. */
+export function ruCanonicalUrl(path: string): string {
+  return path === '/' ? `${SITE_URL}/ru` : `${SITE_URL}/ru${path}`;
+}
+
+function azUrlToPath(url: string): string {
+  const path = url.replace(SITE_URL, '') || '/';
+  return path.length > 1 && path.endsWith('/') ? path.slice(0, -1) : path;
+}
+
+function buildRuPageSeo(path: string, base: PageSeoConfig): PageSeoConfig {
+  const ru = RU_PAGE_SEO[path];
+  return {
+    ...base,
+    title: ru.title,
+    metaDescription: ru.metaDescription,
+    h1: ru.h1,
+    keywords: ru.keywords,
+    serviceName: ru.serviceName ?? base.serviceName,
+    canonicalUrl: ruCanonicalUrl(path),
+    breadcrumbs: base.breadcrumbs?.map((crumb, index) => ({
+      name: ru.breadcrumbNames?.[index] ?? translateTo(crumb.name, 'ru'),
+      item: ruCanonicalUrl(azUrlToPath(crumb.item)),
+    })),
+    // Same questions as on the page, translated with the page dictionary
+    faqs: base.faqs?.map((faq) => ({
+      question: translateTo(faq.question, 'ru'),
+      answer: translateTo(faq.answer, 'ru'),
+    })),
+    lang: 'ru',
+    alternates: { az: base.canonicalUrl, ru: ruCanonicalUrl(path) },
+  };
+}
+
+export function getPageSeo(pathname: string, lang: Lang = 'az'): PageSeoConfig {
   const normalizedPath = pathname.endsWith('/') && pathname.length > 1 ? pathname.slice(0, -1) : pathname;
-  
-  // 1. Check static predefined page SEO configs
+
+  // 1. Check static predefined page SEO configs (these pages exist in Azerbaijani and Russian)
   if (PAGE_SEO_CONFIGS[normalizedPath]) {
-    return PAGE_SEO_CONFIGS[normalizedPath];
+    const base = PAGE_SEO_CONFIGS[normalizedPath];
+    if (lang === 'ru' && RU_PAGE_SEO[normalizedPath]) {
+      return buildRuPageSeo(normalizedPath, base);
+    }
+    return RU_PAGE_SEO[normalizedPath]
+      ? { ...base, alternates: { az: base.canonicalUrl, ru: ruCanonicalUrl(normalizedPath) } }
+      : base;
+  }
+
+  if (lang === 'ru') {
+    // Russian route pages do not exist yet
+    return buildRuPageSeo('/', PAGE_SEO_CONFIGS['/']);
   }
 
   // 2. Check programmatic approved evacuator route SEO configs

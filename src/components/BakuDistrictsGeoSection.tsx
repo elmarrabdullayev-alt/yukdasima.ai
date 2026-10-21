@@ -24,6 +24,7 @@ import {
   Layers,
 } from 'lucide-react';
 import { CallbackInitialData } from '../types';
+import { t } from '../i18n';
 
 interface BakuDistrictsGeoSectionProps {
   initialDistrictId?: string;
@@ -78,21 +79,17 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
     <section
       id="baki-rayonlari-geo-section"
       className="bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xs space-y-8"
-      aria-label="Bakı və Bakı Daxili Rayonlar Üzrə Xidmət Zonaları"
+      aria-label={t("Bakı və Bakı Daxili Rayonlar Üzrə Xidmət Zonaları")}
     >
       {/* Header section with single unified title */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-slate-100 pb-6">
         <div className="space-y-2 max-w-3xl">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-bold uppercase tracking-wider">
             <MapPin className="w-3.5 h-3.5" />
-            <span>GEO / AI Lokallaşdırma – 12 Bakı Rayonu</span>
+            <span>{t("GEO / AI Lokallaşdırma – 12 Bakı Rayonu")}</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Bakı Daxili Rayonlar Üzrə Yükdaşıma və Evakuator Xidməti
-          </h2>
-          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
-            Bakı şəhərinin 12 inzibati rayonu üzrə məhəllə daxili ünvanlara, prospektlərə və binalara uyğunlaşdırılmış 24/7 operativ yükdaşıma, mebel ustası və evakuasiya xidmətləri.
-          </p>
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">{t("Bakı Daxili Rayonlar Üzrə Yükdaşıma və Evakuator Xidməti")}</h2>
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">{t("Bakı şəhərinin 12 inzibati rayonu üzrə məhəllə daxili ünvanlara, prospektlərə və binalara uyğunlaşdırılmış 24/7 operativ yükdaşıma, mebel ustası və evakuasiya xidmətləri.")}</p>
         </div>
 
         {/* Service mode toggle: Yükdaşıma vs Evakuator */}
@@ -107,7 +104,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
             }`}
           >
             <Truck className="w-4 h-4" />
-            <span>Yükdaşıma & Köç</span>
+            <span>{t("Yükdaşıma & Köç")}</span>
           </button>
           <button
             type="button"
@@ -119,16 +116,14 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
             }`}
           >
             <Car className="w-4 h-4" />
-            <span>Evakuator & Yol Yardımı</span>
+            <span>{t("Evakuator & Yol Yardımı")}</span>
           </button>
         </div>
       </div>
 
       {/* 12 Baku Districts Pill / Grid Selector */}
       <div className="space-y-3">
-        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
-          Rayon seçin (12 İnzibati Rayon):
-        </label>
+        <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">{t("Rayon seçin (12 İnzibati Rayon):")}</label>
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
           {BAKU_DISTRICTS.map((district) => {
             const isSelected = district.id === selectedDistrictId;
@@ -144,7 +139,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
                 }`}
               >
                 <div className="flex items-center justify-between w-full mb-1">
-                  <span className="font-bold text-sm">{district.name}</span>
+                  <span className="font-bold text-sm">{t(district.name)}</span>
                   <MapPin
                     className={`w-3.5 h-3.5 ${
                       isSelected ? 'text-white' : 'text-slate-400'
@@ -156,7 +151,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
                     isSelected ? 'text-blue-100' : 'text-slate-500'
                   }`}
                 >
-                  {district.badge}
+                  {t(district.badge)}
                 </span>
               </button>
             );
@@ -171,24 +166,24 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
           <div className="space-y-1">
             <div className="flex items-center gap-2">
               <span className="px-2.5 py-0.5 rounded-full bg-blue-600 text-white text-xs font-extrabold">
-                {currentDistrict.fullName}
+                {t(currentDistrict.fullName)}
               </span>
               <span className="text-xs text-slate-500 font-medium">
-                {currentDistrict.badge}
+                {t(currentDistrict.badge)}
               </span>
             </div>
             <h3 className="text-lg sm:text-xl font-bold text-slate-900">
-              {currentDistrict.name} üzrə{' '}
-              {activeTab === 'yukdasima'
+              {t(currentDistrict.name)}{t(" üzrə")}{t(' ')}
+              {t(activeTab === 'yukdasima'
                 ? 'Peşəkar Yükdaşıma, Mebel Montajı və Mənzil Köçü'
-                : '24/7 Operativ Evakuator və Texniki Yol Yardımı'}
+                : '24/7 Operativ Evakuator və Texniki Yol Yardımı')}
             </h3>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <div className="px-3.5 py-2 rounded-xl bg-white border border-slate-200 text-slate-800 text-xs font-bold flex items-center gap-2 shadow-xs">
               <Clock className="w-4 h-4 text-emerald-600" />
-              <span>Çatış müddəti: ~{currentDistrict.responseTimeMinutes}</span>
+              <span>{t("Çatış müddəti: ~")}{t(currentDistrict.responseTimeMinutes)}</span>
             </div>
           </div>
         </div>
@@ -197,12 +192,12 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
         <div className="p-5 sm:p-6 rounded-2xl bg-slate-900 text-white space-y-3 shadow-sm border border-slate-800">
           <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-wider">
             <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>Birbaşa Cavab / Direct Answer</span>
+            <span>{t("Birbaşa Cavab / Direct Answer")}</span>
           </div>
           <p className="text-slate-200 text-sm sm:text-base leading-relaxed">
-            {activeTab === 'yukdasima'
+            {t(activeTab === 'yukdasima'
               ? currentDistrict.directAnswerYukdasima
-              : currentDistrict.directAnswerEvakuator}
+              : currentDistrict.directAnswerEvakuator)}
           </p>
           <div className="pt-2 flex flex-wrap items-center gap-3">
             <a
@@ -211,7 +206,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs sm:text-sm font-bold transition-colors"
             >
               <Phone className="w-3.5 h-3.5" />
-              <span>Zəng et: {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}</span>
+              <span>{t("Zəng et: ")}{t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}</span>
             </a>
             <button
               type="button"
@@ -219,7 +214,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
               className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold transition-colors cursor-pointer"
             >
               <MessageSquare className="w-3.5 h-3.5" />
-              <span>WhatsApp ilə Sifariş</span>
+              <span>{t("WhatsApp ilə Sifariş")}</span>
             </button>
           </div>
         </div>
@@ -230,37 +225,33 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
           <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
             <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
               <Navigation className="w-5 h-5 text-blue-600" />
-              <span>Əsas Prospektlər və Ünvan Nöqtələri</span>
+              <span>{t("Əsas Prospektlər və Ünvan Nöqtələri")}</span>
             </div>
 
             <div className="space-y-3">
               <div>
-                <span className="text-xs font-bold text-slate-500 block mb-1">
-                  Məşhur Lokasiyalar və Metrolar:
-                </span>
+                <span className="text-xs font-bold text-slate-500 block mb-1">{t("Məşhur Lokasiyalar və Metrolar:")}</span>
                 <div className="flex flex-wrap gap-1.5">
                   {currentDistrict.landmarks.map((landmark, idx) => (
                     <span
                       key={idx}
                       className="px-2.5 py-1 rounded-lg bg-white border border-slate-200 text-slate-700 text-xs font-medium"
                     >
-                      {landmark}
+                      {t(landmark)}
                     </span>
                   ))}
                 </div>
               </div>
 
               <div>
-                <span className="text-xs font-bold text-slate-500 block mb-1">
-                  Əsas Magistral və Küçələr:
-                </span>
+                <span className="text-xs font-bold text-slate-500 block mb-1">{t("Əsas Magistral və Küçələr:")}</span>
                 <div className="flex flex-wrap gap-1.5">
                   {currentDistrict.keyStreets.map((street, idx) => (
                     <span
                       key={idx}
                       className="px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-100 text-blue-800 text-xs font-medium"
                     >
-                      {street}
+                      {t(street)}
                     </span>
                   ))}
                 </div>
@@ -272,17 +263,17 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
           <div className="p-5 sm:p-6 rounded-2xl bg-slate-50 border border-slate-200 space-y-4">
             <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
               <Building2 className="w-5 h-5 text-emerald-600" />
-              <span>Bina Tipləri və Giriş/Tıxac Xüsusiyyətləri</span>
+              <span>{t("Bina Tipləri və Giriş/Tıxac Xüsusiyyətləri")}</span>
             </div>
 
             <div className="space-y-3 text-xs sm:text-sm text-slate-600 leading-relaxed">
               <p>
-                <strong className="text-slate-800">Tikili xarakteri: </strong>
-                {currentDistrict.buildingCharacteristics}
+                <strong className="text-slate-800">{t("Tikili xarakteri: ")}</strong>
+                {t(currentDistrict.buildingCharacteristics)}
               </p>
               <p>
-                <strong className="text-slate-800">Giriş və parklanma: </strong>
-                {currentDistrict.trafficAndAccessNotes}
+                <strong className="text-slate-800">{t("Giriş və parklanma: ")}</strong>
+                {t(currentDistrict.trafficAndAccessNotes)}
               </p>
             </div>
           </div>
@@ -292,7 +283,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
         <div className="space-y-4">
           <h4 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
             <ShieldCheck className="w-5 h-5 text-blue-600" />
-            <span>{currentDistrict.fullName} Üzrə Göstərilən Xidmətlər</span>
+            <span>{t(currentDistrict.fullName)}{t(" Üzrə Göstərilən Xidmətlər")}</span>
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {currentDistrict.services.map((srv, idx) => (
@@ -302,10 +293,10 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
               >
                 <div className="flex items-center gap-2 font-bold text-slate-900 text-sm">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                  <span>{srv.title}</span>
+                  <span>{t(srv.title)}</span>
                 </div>
                 <p className="text-slate-600 text-xs leading-relaxed">
-                  {srv.description}
+                  {t(srv.description)}
                 </p>
               </div>
             ))}
@@ -316,7 +307,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
         <div className="p-5 sm:p-6 rounded-2xl bg-blue-50/60 border border-blue-100 space-y-4">
           <h4 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
             <Truck className="w-5 h-5 text-blue-600" />
-            <span>Bu Rayon Üçün Tövsiyə Olunan Nəqliyyat Texnikası</span>
+            <span>{t("Bu Rayon Üçün Tövsiyə Olunan Nəqliyyat Texnikası")}</span>
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {currentDistrict.recommendedVehicles.map((v, idx) => (
@@ -326,14 +317,14 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
               >
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-sm text-slate-900">
-                    {v.vehicle}
+                    {t(v.vehicle)}
                   </span>
                   <span className="text-[11px] font-semibold text-blue-700 bg-blue-100 px-2 py-0.5 rounded-md">
-                    {v.specs}
+                    {t(v.specs)}
                   </span>
                 </div>
                 <p className="text-slate-600 text-xs leading-relaxed">
-                  {v.reason}
+                  {t(v.reason)}
                 </p>
               </div>
             ))}
@@ -345,7 +336,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
           <div className="flex items-center justify-between">
             <h4 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
               <HelpCircle className="w-5 h-5 text-blue-600" />
-              <span>{currentDistrict.name} Rayonu Üzrə Tez-tez Verilən Suallar</span>
+              <span>{t(currentDistrict.name)}{t(" Rayonu Üzrə Tez-tez Verilən Suallar")}</span>
             </h4>
           </div>
 
@@ -363,7 +354,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
                     className="w-full p-4 text-left flex items-center justify-between gap-4 font-bold text-slate-900 text-xs sm:text-sm hover:bg-slate-50 transition-colors cursor-pointer"
                     aria-expanded={isOpen}
                   >
-                    <span>{faq.question}</span>
+                    <span>{t(faq.question)}</span>
                     <ChevronDown
                       className={`w-4 h-4 text-slate-400 shrink-0 transition-transform ${
                         isOpen ? 'rotate-180 text-blue-600' : ''
@@ -372,7 +363,7 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
                   </button>
                   {/* Answer stays in the HTML (visible to search engines) and is only hidden when closed */}
                   <div hidden={!isOpen} className="px-4 pb-4 pt-1 text-slate-600 text-xs sm:text-sm leading-relaxed border-t border-slate-100 bg-slate-50/50">
-                    <p>{faq.answer}</p>
+                    <p>{t(faq.answer)}</p>
                   </div>
                 </div>
               );
@@ -385,11 +376,9 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <h4 className="text-base sm:text-lg font-bold text-slate-900 flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-amber-500" />
-              <span>12 Bakı Rayonu Üzrə Birbaşa Xidmət və Lokasiya Xülasəsi</span>
+              <span>{t("12 Bakı Rayonu Üzrə Birbaşa Xidmət və Lokasiya Xülasəsi")}</span>
             </h4>
-            <span className="text-xs text-slate-500 font-medium">
-              24/7 Bütün Bakı qəsəbə və massivləri üzrə operativ çıxış
-            </span>
+            <span className="text-xs text-slate-500 font-medium">{t("24/7 Bütün Bakı qəsəbə və massivləri üzrə operativ çıxış")}</span>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -418,10 +407,10 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
                     <div>
                       <h5 className="font-bold text-slate-900 text-base flex items-center gap-1.5">
                         <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
-                        <span>{district.fullName}</span>
+                        <span>{t(district.fullName)}</span>
                       </h5>
                       <span className="text-xs text-slate-500 block mt-0.5">
-                        {district.badge}
+                        {t(district.badge)}
                       </span>
                     </div>
                     <button
@@ -436,23 +425,23 @@ export const BakuDistrictsGeoSection: React.FC<BakuDistrictsGeoSectionProps> = (
                           : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                       }`}
                     >
-                      {isSelected ? 'Aktiv Rayon' : 'Ətraflı Bax'}
+                      {t(isSelected ? 'Aktiv Rayon' : 'Ətraflı Bax')}
                     </button>
                   </div>
 
                   {/* Short Service Intent Description */}
                   <p className="text-slate-600 text-xs sm:text-sm leading-relaxed mb-3">
-                    {overview}
+                    {t(overview)}
                   </p>
 
                   {/* Direct Answer Paragraph */}
                   <div className="p-3.5 rounded-xl bg-white border border-slate-200/90 text-slate-800 space-y-1.5 shadow-2xs">
                     <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-700 uppercase tracking-wide">
                       <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                      <span>Direct Answer ({activeTab === 'yukdasima' ? 'Yükdaşıma' : 'Evakuator'})</span>
+                      <span>{t("Direct Answer (")}{t(activeTab === 'yukdasima' ? 'Yükdaşıma' : 'Evakuator')})</span>
                     </div>
                     <p className="text-xs text-slate-700 leading-relaxed">
-                      {directAnswer}
+                      {t(directAnswer)}
                     </p>
                   </div>
                 </article>

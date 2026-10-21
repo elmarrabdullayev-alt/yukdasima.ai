@@ -5,6 +5,7 @@ import { useRouter } from '../router/RouterContext';
 import { getContextualWhatsAppUrl, getServiceAndRouteFromPath } from '../utils/whatsappHelper';
 import { trackConversionEvent } from '../utils/analytics';
 import { ServiceType } from '../types';
+import { t } from '../i18n';
 
 interface MobileStickyBarProps {
   activeService?: ServiceType;
@@ -43,7 +44,7 @@ export const MobileStickyBar: React.FC<MobileStickyBarProps> = ({ isMobileMenuOp
   return (
     <aside
       id="mobile-sticky-bottom-bar"
-      aria-label="Mobil əlaqə paneli"
+      aria-label={t("Mobil əlaqə paneli")}
       className="fixed bottom-0 inset-x-0 z-40 lg:hidden bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_24px_rgba(15,23,42,0.12)] transition-all"
     >
       <div className="max-w-md mx-auto px-3.5 pt-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom,0px))] flex items-center gap-2.5">
@@ -52,13 +53,13 @@ export const MobileStickyBar: React.FC<MobileStickyBarProps> = ({ isMobileMenuOp
           id="mobile-sticky-call-btn"
           href={CONTACT_INFO.PRIMARY_PHONE_TEL}
           onClick={handleCallClick}
-          aria-label={`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə birbaşa zəng et`}
+          aria-label={t(`${CONTACT_INFO.PRIMARY_PHONE_DISPLAY} nömrəsinə birbaşa zəng et`)}
           className="flex-1 h-12 flex items-center justify-center gap-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-sm tracking-wide shadow-xs transition-all active:scale-[0.98] select-none cursor-pointer"
         >
           <Phone className="w-4 h-4 shrink-0 fill-current" />
-          <span className="truncate">Zəng et</span>
+          <span className="truncate">{t("Zəng et")}</span>
           <span className="text-[11px] font-bold bg-blue-700/80 px-1.5 py-0.5 rounded-md text-blue-100 hidden sm:inline">
-            {CONTACT_INFO.PRIMARY_PHONE_DISPLAY}
+            {t(CONTACT_INFO.PRIMARY_PHONE_DISPLAY)}
           </span>
         </a>
 
@@ -69,11 +70,11 @@ export const MobileStickyBar: React.FC<MobileStickyBarProps> = ({ isMobileMenuOp
           target="_blank"
           rel="noopener noreferrer"
           onClick={handleWhatsAppClick}
-          aria-label="WhatsApp vasitəsilə bizə dərhal yaz"
+          aria-label={t("WhatsApp vasitəsilə bizə dərhal yaz")}
           className="flex-1 h-12 flex items-center justify-center gap-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-sm tracking-wide shadow-xs transition-all active:scale-[0.98] select-none cursor-pointer"
         >
           <MessageSquare className="w-4 h-4 shrink-0 fill-current" />
-          <span className="truncate">WhatsApp</span>
+          <span className="truncate">{t("WhatsApp")}</span>
         </a>
       </div>
     </aside>

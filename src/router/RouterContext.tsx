@@ -1,38 +1,55 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { Lang, splitLangPath, isRuDictionaryLoaded } from '../i18n';
+import { localizeHref } from '../i18n/paths';
 
 interface RouterContextType {
+  /** Language-neutral path ("/ru/elaqe" → "/elaqe"); page routing uses this. */
   pathname: string;
+  /** Language of the current page, taken from the URL ("/ru/..." → ru). */
+  lang: Lang;
+  /** Full path as in the address bar, including the /ru prefix. */
+  fullPath: string;
   navigate: (to: string) => void;
 }
 
 const RouterContext = createContext<RouterContextType>({
   pathname: '/',
+  lang: 'az',
+  fullPath: '/',
   navigate: () => {},
 });
 
 export const useRouter = () => useContext(RouterContext);
 
+function normalizePath(p: string): string {
+  return p.endsWith('/') && p.length > 1 ? p.slice(0, -1) : p || '/';
+}
+
 export const RouterProvider: React.FC<{ children: React.ReactNode; initialPath?: string }> = ({
   children,
   initialPath,
 }) => {
-  const [pathname, setPathname] = useState<string>(() => {
+  const [fullPath, setFullPath] = useState<string>(() => {
     if (initialPath) {
-      return initialPath.endsWith('/') && initialPath.length > 1 ? initialPath.slice(0, -1) : initialPath || '/';
+      return normalizePath(initialPath);
     }
     if (typeof window !== 'undefined') {
-      const p = window.location.pathname;
-      return p.endsWith('/') && p.length > 1 ? p.slice(0, -1) : p || '/';
+      return normalizePath(window.location.pathname);
     }
     return '/';
   });
 
+  const { lang, path: pathname } = splitLangPath(fullPath);
 
   useEffect(() => {
     const handlePopState = () => {
-      const p = window.location.pathname;
-      const normalized = p.endsWith('/') && p.length > 1 ? p.slice(0, -1) : p || '/';
-      setPathname(normalized);
+      const normalized = normalizePath(window.location.pathname);
+      // Going back across languages: reload so the page is rendered with the right dictionary
+      if (splitLangPath(normalized).lang === 'ru' && !isRuDictionaryLoaded()) {
+        window.location.reload();
+        return;
+      }
+      setFullPath(normalized);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -40,33 +57,39 @@ export const RouterProvider: React.FC<{ children: React.ReactNode; initialPath?:
     return () => window.removeEventListener('popstate', handlePopState);
   }, []);
 
-  const navigate = useCallback((to: string) => {
-    let cleanTo = to;
-    if (cleanTo.startsWith('#')) {
-      const el = document.getElementById(cleanTo.slice(1));
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
+  const navigate = useCallback(
+    (to: string) => {
+      if (to.startsWith('#')) {
+        const el = document.getElementById(to.slice(1));
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        }
+        return;
       }
-      return;
-    }
 
-    if (cleanTo.endsWith('/') && cleanTo.length > 1) {
-      cleanTo = cleanTo.slice(0, -1);
-    }
+      // On Russian pages, links to pages that exist in Russian stay in Russian
+      const cleanTo = normalizePath(localizeHref(to, lang));
 
-    if (typeof window !== 'undefined') {
-      if (window.location.pathname !== cleanTo) {
-        window.history.pushState({}, '', cleanTo);
-        setPathname(cleanTo);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (typeof window !== 'undefined') {
+        // The Russian dictionary is loaded with the page; switching language needs a full page load
+        if (splitLangPath(cleanTo).lang !== lang && splitLangPath(cleanTo).lang === 'ru' && !isRuDictionaryLoaded()) {
+          window.location.assign(cleanTo);
+          return;
+        }
+        if (window.location.pathname !== cleanTo) {
+          window.history.pushState({}, '', cleanTo);
+          setFullPath(cleanTo);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       }
-    }
-  }, []);
+    },
+    [lang]
+  );
 
   return (
-    <RouterContext.Provider value={{ pathname, navigate }}>
+    <RouterContext.Provider value={{ pathname, lang, fullPath, navigate }}>
       {children}
     </RouterContext.Provider>
   );
@@ -80,8 +103,10 @@ interface LinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export const Link: React.FC<LinkProps> = ({ href, children, className, id, onClick, ...rest }) => {
-  const { navigate } = useRouter();
+export const Link: React.FC<LinkProps> = ({ href: rawHref, children, className, id, onClick, ...rest }) => {
+  const { navigate, lang } = useRouter();
+  // On Russian pages, links point to the Russian version of the page when it exists
+  const href = localizeHref(rawHref, lang);
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
     if (onClick) {

@@ -1,13 +1,18 @@
 import { useEffect } from 'react';
-import { getPageSeo, SITE_NAME, OG_IMAGE } from './metadata';
+import { getPageSeo, SITE_NAME, getOgImage } from './metadata';
 import { buildStructuredData } from './structuredData';
+import { Lang } from '../i18n';
 
-export function useSeo(pathname: string, isNotFound = false) {
+export function useSeo(pathname: string, isNotFound = false, lang: Lang = 'az') {
   useEffect(() => {
-    const seo = getPageSeo(pathname);
+    const seo = getPageSeo(pathname, lang);
+    const ogImage = getOgImage(lang);
 
-    // 1. Update Title
-    document.title = isNotFound ? `Səhifə tapılmadı | ${SITE_NAME}` : seo.title;
+    // 1. Update Title and page language
+    document.title = isNotFound
+      ? `${lang === 'ru' ? 'Страница не найдена' : 'Səhifə tapılmadı'} | ${SITE_NAME}`
+      : seo.title;
+    document.documentElement.lang = lang;
 
     // Helper to create or update meta tag
     const setMetaTag = (attrName: string, attrValue: string, content: string) => {
@@ -32,18 +37,18 @@ export function useSeo(pathname: string, isNotFound = false) {
     setMetaTag('property', 'og:url', seo.canonicalUrl);
     setMetaTag('property', 'og:type', seo.ogType || 'website');
     setMetaTag('property', 'og:site_name', SITE_NAME);
-    setMetaTag('property', 'og:locale', 'az_AZ');
-    setMetaTag('property', 'og:image', OG_IMAGE.url);
-    setMetaTag('property', 'og:image:width', String(OG_IMAGE.width));
-    setMetaTag('property', 'og:image:height', String(OG_IMAGE.height));
-    setMetaTag('property', 'og:image:alt', OG_IMAGE.alt);
+    setMetaTag('property', 'og:locale', lang === 'ru' ? 'ru_RU' : 'az_AZ');
+    setMetaTag('property', 'og:image', ogImage.url);
+    setMetaTag('property', 'og:image:width', String(ogImage.width));
+    setMetaTag('property', 'og:image:height', String(ogImage.height));
+    setMetaTag('property', 'og:image:alt', ogImage.alt);
 
     // 4. Twitter / X Card Meta Tags
     setMetaTag('name', 'twitter:card', 'summary_large_image');
     setMetaTag('name', 'twitter:title', seo.title);
     setMetaTag('name', 'twitter:description', seo.metaDescription);
     setMetaTag('name', 'twitter:url', seo.canonicalUrl);
-    setMetaTag('name', 'twitter:image', OG_IMAGE.url);
+    setMetaTag('name', 'twitter:image', ogImage.url);
 
     // 5. Canonical Tag
     let canonicalTag = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
@@ -53,6 +58,23 @@ export function useSeo(pathname: string, isNotFound = false) {
       document.head.appendChild(canonicalTag);
     }
     canonicalTag.setAttribute('href', seo.canonicalUrl);
+
+    // 5b. hreflang links between the Azerbaijani and Russian versions of the same page
+    document.querySelectorAll('link[rel="alternate"][hreflang]').forEach((el) => el.remove());
+    if (seo.alternates && !isNotFound) {
+      const links: Array<[string, string]> = [
+        ['az', seo.alternates.az],
+        ['ru', seo.alternates.ru],
+        ['x-default', seo.alternates.az],
+      ];
+      for (const [hreflang, href] of links) {
+        const link = document.createElement('link');
+        link.setAttribute('rel', 'alternate');
+        link.setAttribute('hreflang', hreflang);
+        link.setAttribute('href', href);
+        document.head.appendChild(link);
+      }
+    }
 
     // 6. JSON-LD Structured Data
     const structuredDataId = 'seo-structured-data-jsonld';
@@ -66,6 +88,6 @@ export function useSeo(pathname: string, isNotFound = false) {
 
     const structuredData = buildStructuredData(seo);
     scriptTag.text = JSON.stringify(structuredData);
-  }, [pathname, isNotFound]);
+  }, [pathname, isNotFound, lang]);
 }
 

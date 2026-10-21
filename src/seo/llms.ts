@@ -12,6 +12,8 @@ import { BUSINESS_PRICING_RULES } from '../config/pricingRules';
 import { CONTACT_INFO } from '../constants/contact';
 import { getAllApprovedYukdasimaRoutes, getAllApprovedEvakuatorRoutes } from './routeRegistry';
 import { SITE_URL, GOOGLE_BUSINESS_PROFILE, PAGE_SEO_CONFIGS } from './metadata';
+import { RU_PAGE_SEO } from './metadataRu';
+import { toRuPath } from '../i18n/paths';
 
 export function buildLlmsTxt(): string {
   const lines: string[] = [];
@@ -76,6 +78,13 @@ export function buildLlmsTxt(): string {
   lines.push('');
   for (const [path, cfg] of Object.entries(PAGE_SEO_CONFIGS)) {
     lines.push(`- [${cfg.h1}](${SITE_URL}${path === '/' ? '/' : path}): ${cfg.metaDescription}`);
+  }
+  lines.push('');
+
+  lines.push('## Rus dilində səhifələr (Русская версия)');
+  lines.push('');
+  for (const [path, cfg] of Object.entries(RU_PAGE_SEO)) {
+    lines.push(`- [${cfg.h1}](${SITE_URL}${toRuPath(path)}): ${cfg.metaDescription}`);
   }
   lines.push('');
 

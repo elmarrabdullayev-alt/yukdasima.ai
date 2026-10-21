@@ -44,6 +44,9 @@ import { PAGE_SEO_CONFIGS, getPageSeo } from '../seo/metadata';
 import { buildStructuredData } from '../seo/structuredData';
 import { injectSeoIntoHtml } from '../../scripts/prerender';
 import { buildLlmsTxt } from '../seo/llms';
+import { t, setLang, registerRuDictionary, translateTo } from '../i18n';
+import { RU_AVAILABLE_PATHS, toRuPath, localizeHref } from '../i18n/paths';
+import { RU_DICTIONARY } from '../i18n/ru';
 
 
 function createMockAnalysis(minVol: number, maxVol: number, items: Array<{ name: string; qty: number; vol: number }> = []): CargoAnalysisData {
@@ -874,12 +877,13 @@ export function runPricingEngineVerificationTests(): boolean {
     );
   }
 
-  // Test 50: Sitemap.xml contains exactly 176 URL entries matching route registry 1:1
+  // Test 50: Sitemap.xml contains exactly 186 URL entries (176 az + 10 ru) matching route registry 1:1
   {
     const staticRoutes = Object.keys(PAGE_SEO_CONFIGS);
+    const ruRoutes = RU_AVAILABLE_PATHS.map((p) => toRuPath(p));
     const allEvac = getAllApprovedEvakuatorRoutes().map((r) => r.routePath);
     const allYuk = getAllApprovedYukdasimaRoutes().map((r) => r.routePath);
-    const allCanonicalRoutes = new Set([...staticRoutes, ...allEvac, ...allYuk]);
+    const allCanonicalRoutes = new Set([...staticRoutes, ...allEvac, ...allYuk, ...ruRoutes]);
 
     let sitemapMatches = true;
     try {
@@ -892,18 +896,18 @@ export function runPricingEngineVerificationTests(): boolean {
           (m: any) => m[1] || '/'
         );
         sitemapMatches =
-          locMatches.length === 176 &&
+          locMatches.length === 186 &&
           locMatches.every((loc) => allCanonicalRoutes.has(loc)) &&
-          allCanonicalRoutes.size === 176;
+          allCanonicalRoutes.size === 186;
       }
     } catch {
       // In non-fs environment, fallback to canonical count check
-      sitemapMatches = allCanonicalRoutes.size === 176;
+      sitemapMatches = allCanonicalRoutes.size === 186;
     }
 
     assert(
       sitemapMatches,
-      'Test 50: Sitemap.xml contains exactly 176 valid canonical URL entries matching route registry 1:1'
+      'Test 50: Sitemap.xml contains exactly 186 valid canonical URL entries (176 az + 10 ru) matching route registry 1:1'
     );
   }
 
@@ -1243,6 +1247,44 @@ export function runPricingEngineVerificationTests(): boolean {
         !llms.includes('280 AZN') &&
         !/\| *Bakı \(şəhərdaxili\) *\|/.test(llms),
       'Test 67: llms.txt lists contact, Google profile and route pages, without tariff tables'
+    );
+  }
+
+  // Test 68: Russian section covers exactly the static pages, with ru canonical + hreflang alternates
+  {
+    const staticRoutes = Object.keys(PAGE_SEO_CONFIGS).sort();
+    const ruSeo = getPageSeo('/yukdasima', 'ru');
+    const azSeo = getPageSeo('/yukdasima', 'az');
+    assert(
+      JSON.stringify([...RU_AVAILABLE_PATHS].sort()) === JSON.stringify(staticRoutes) &&
+        ruSeo.canonicalUrl === 'https://yukdasima.ai/ru/yukdasima' &&
+        ruSeo.alternates?.az === 'https://yukdasima.ai/yukdasima' &&
+        ruSeo.alternates?.ru === 'https://yukdasima.ai/ru/yukdasima' &&
+        azSeo.canonicalUrl === 'https://yukdasima.ai/yukdasima' &&
+        !/[əğışçöü]/i.test(ruSeo.title + ruSeo.metaDescription) &&
+        localizeHref('/elaqe', 'ru') === '/ru/elaqe' &&
+        localizeHref('/yukdasima/baki-gence', 'ru') === '/yukdasima/baki-gence',
+      'Test 68: Russian pages mirror static pages with ru canonical and az/ru alternates; route pages stay az'
+    );
+  }
+
+  // Test 69: t() is identity for az and translates (incl. templates) for ru
+  {
+    registerRuDictionary(RU_DICTIONARY);
+    setLang('az');
+    const azOut = t<string>('Qiyməti onlayn öyrənin');
+    setLang('ru');
+    const ruOut = t<string>('Qiyməti onlayn öyrənin');
+    const ruTpl = t<string>('Bakı → Gəncə');
+    const ruSpaced = t<string>(' Qiyməti onlayn öyrənin ');
+    setLang('az');
+    assert(
+      azOut === 'Qiyməti onlayn öyrənin' &&
+        ruOut === 'Узнайте цену онлайн' &&
+        ruTpl === 'Баку → Гянджа' &&
+        ruSpaced === ' Узнайте цену онлайн ' &&
+        translateTo('Bakı', 'az') === 'Bakı',
+      `Test 69: t() keeps az text unchanged and translates ru (got "${ruOut}", "${ruTpl}")`
     );
   }
 

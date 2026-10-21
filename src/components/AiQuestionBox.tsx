@@ -3,6 +3,7 @@ import { Search, Sparkles, ArrowRight, MessageSquare, Truck, Car, HelpCircle } f
 import { ServiceType } from '../types';
 import { AI_PROMPT_SAMPLES } from '../data/mockData';
 import { generateWhatsAppLink } from '../utils/calculator';
+import { t } from '../i18n';
 
 interface AiQuestionBoxProps {
   onSelectService: (service: ServiceType) => void;
@@ -94,8 +95,8 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
   };
 
   const handleWhatsAppAsk = () => {
-    const text = `Salam, saytdan bu sual ilə bağlı dəqiqləşdirmə almaq istəyirəm:\n"${activeAnswer?.question}"`;
-    window.open(generateWhatsAppLink(text), '_blank');
+    const text = t(`Salam, saytdan bu sual ilə bağlı dəqiqləşdirmə almaq istəyirəm:\n"${activeAnswer?.question}"`);
+    window.open(generateWhatsAppLink(t(text)), '_blank');
   };
 
   return (
@@ -103,12 +104,8 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
       <div className="max-w-2xl mx-auto px-4 sm:px-6">
         <div className="w-full bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-md flex flex-col items-center gap-4">
           <div className="flex items-center justify-between w-full">
-            <h4 className="font-bold text-slate-800 text-lg sm:text-xl">
-              Daşıma ilə bağlı sualınız var?
-            </h4>
-            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
-              AI DƏSTƏK
-            </span>
+            <h4 className="font-bold text-slate-800 text-lg sm:text-xl">{t("Daşıma ilə bağlı sualınız var?")}</h4>
+            <span className="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">{t("AI DƏSTƏK")}</span>
           </div>
 
           {/* SEARCH INPUT BAR */}
@@ -118,16 +115,14 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
                 type="text"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                placeholder="Məsələn: Nərimanovdan Xırdalana evakuasiya neçəyədir?"
+                placeholder={t("Məsələn: Nərimanovdan Xırdalana evakuasiya neçəyədir?")}
                 className="flex-1 py-3 px-4 rounded-xl border border-slate-200 bg-slate-50 focus:outline-none focus:border-blue-500 focus:bg-white text-sm text-slate-800 transition-all"
               />
               <button
                 type="submit"
                 id="btn-ask-ai"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-sm transition-colors cursor-pointer shrink-0"
-              >
-                Soruş
-              </button>
+              >{t("Soruş")}</button>
             </div>
           </form>
 
@@ -140,24 +135,22 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
                 onClick={() => handleSelectSample(sample)}
                 className="bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-full border border-slate-200 text-xs text-slate-600 transition-colors cursor-pointer"
               >
-                {sample.label}
+                {t(sample.label)}
               </button>
             ))}
           </div>
 
           {/* ANSWER CARD */}
-          {activeAnswer && (
+          {t(activeAnswer && (
             <div className="w-full mt-4 rounded-xl bg-slate-50 border border-slate-200 p-5 animate-in fade-in duration-200 text-left">
               <div className="flex items-start gap-3">
                 <div className="w-8 h-8 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center shrink-0 mt-0.5">
                   <Sparkles className="w-4 h-4" />
                 </div>
                 <div className="space-y-1.5 flex-1">
-                  <p className="text-xs font-semibold text-slate-400">
-                    Cavab:
-                  </p>
+                  <p className="text-xs font-semibold text-slate-400">{t("Cavab:")}</p>
                   <p className="text-sm sm:text-base text-slate-800 font-medium leading-relaxed">
-                    {activeAnswer.answer}
+                    {t(activeAnswer.answer)}
                   </p>
                 </div>
               </div>
@@ -165,17 +158,17 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
               {/* RELEVANT CTAS */}
               <div className="mt-4 pt-4 border-t border-slate-200 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-500">
-                  {activeAnswer.service === 'yukdasima' ? (
+                  {t(activeAnswer.service === 'yukdasima' ? (
                     <>
                       <Truck className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Yükdaşıma xidməti üçün tövsiyə olunur</span>
+                      <span>{t("Yükdaşıma xidməti üçün tövsiyə olunur")}</span>
                     </>
                   ) : (
                     <>
                       <Car className="w-3.5 h-3.5 text-blue-600" />
-                      <span>Evakuasiya xidməti üçün tövsiyə olunur</span>
+                      <span>{t("Evakuasiya xidməti üçün tövsiyə olunur")}</span>
                     </>
-                  )}
+                  ))}
                 </div>
 
                 <div className="flex items-center gap-2">
@@ -185,7 +178,7 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
                     className="px-3.5 py-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
                   >
                     <MessageSquare className="w-3.5 h-3.5 text-emerald-600" />
-                    <span>WhatsApp</span>
+                    <span>{t("WhatsApp")}</span>
                   </button>
 
                   <button
@@ -193,13 +186,13 @@ export const AiQuestionBox: React.FC<AiQuestionBoxProps> = ({ onSelectService })
                     onClick={handleCtaClick}
                     className="px-4 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs transition-colors cursor-pointer"
                   >
-                    <span>{activeAnswer.service === 'yukdasima' ? 'Yükümü hesabla' : 'Evakuasiyanı hesabla'}</span>
+                    <span>{t(activeAnswer.service === 'yukdasima' ? 'Yükümü hesabla' : 'Evakuasiyanı hesabla')}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
               </div>
             </div>
-          )}
+          ))}
         </div>
       </div>
     </section>
